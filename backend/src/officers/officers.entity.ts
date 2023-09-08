@@ -1,22 +1,23 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
 export class Officer {
     @PrimaryGeneratedColumn("uuid")
     id: string;
-    
+
     @Column()
     name: string;
-    
+
     @Column()
     password: string;
 
     @Column()
     email: string;
 
-    @BeforeInsert()
-    generateUuid() {
-        this.id = `${uuidv4()}`;
-    }
+    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    created: Date;
+
+    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+    updated: Date;
 }
