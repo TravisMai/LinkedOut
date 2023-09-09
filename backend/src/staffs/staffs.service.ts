@@ -36,4 +36,9 @@ export class StaffService {
     async delete(id: string): Promise<void> {
         await this.officersRepository.delete({ id });
     }
+
+    // find an staff by email
+    async findByEmail(email: string): Promise<Staff> {
+        return await this.officersRepository.findOne({ where: { email } });
+    }
 }

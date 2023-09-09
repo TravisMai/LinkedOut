@@ -15,4 +15,4 @@ import jwtConfig from 'src/common/jwt/jwt.config';
   controllers: [OfficersController],
   providers: [StaffService, AuthService]
 })
-export class OfficersModule { }
+export class StaffModule { }
