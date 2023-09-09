@@ -1,19 +1,30 @@
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
-export class Officer {
+export class commonAttribute {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
     @Column()
+    @IsString()
     name: string;
 
     @Column()
+    @IsString()
+    @IsNotEmpty()
     password: string;
 
     @Column()
+    @IsEmail()
+    @IsNotEmpty()
     email: string;
+
+    @Column()
+    @IsString()
+    @IsNotEmpty()
+    role: string;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     created: Date;
