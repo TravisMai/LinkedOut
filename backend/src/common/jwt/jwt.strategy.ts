@@ -17,6 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // You may want to check user roles from the payload
     // and throw UnauthorizedException if the user is not authorized.
     // Example: if (payload.role !== 'admin') throw new UnauthorizedException();
+    if (payload.role !== 'staff') throw new UnauthorizedException();
 
     return payload; // Return the validated user data
   }

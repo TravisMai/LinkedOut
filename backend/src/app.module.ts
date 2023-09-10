@@ -1,19 +1,24 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { StaffModule } from './staffs/staffs.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { StudentsService } from './students/students.service';
+import { AppController } from './app.controller';
+import { StaffModule } from './staffs/staffs.module';
 import { StudentsModule } from './students/students.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RedisModule } from './redis/redis.module';
+import { Module, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
-    StaffModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      envFilePath: `.${process.env.NODE_ENV}.env`,
+    }),
     AuthModule,
+    RedisModule,
+    StaffModule,
     StudentsModule,
-    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,6 +35,11 @@ import { StudentsModule } from './students/students.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, StudentsService],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule { }

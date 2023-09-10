@@ -13,8 +13,8 @@ import { AuthService } from './auth.service';
       signOptions: { expiresIn: jwtConfig.signOptions.expiresIn },
     }),
   ],
-  providers: [JwtStrategy, AuthService],
-  exports: [JwtModule, JwtStrategy],
+  providers: [ AuthService],
+  exports: [JwtModule],
   controllers: [],
 })
 export class AuthModule {}

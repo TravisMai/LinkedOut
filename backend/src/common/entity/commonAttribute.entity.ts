@@ -22,8 +22,6 @@ export class commonAttribute {
     email: string;
 
     @Column()
-    @IsString()
-    @IsNotEmpty()
     role: string;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

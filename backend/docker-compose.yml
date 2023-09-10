@@ -1,43 +1,12 @@
-version: '3.9'
-
 services:
-  linkedout-backend:
-    container_name: linkedout-backend
-    image: linkedout/backend:1.0.0
-    build: .
+  redis:
+    container_name: linkedout-cache
+    image: redis
     ports:
-      - 3000:3000
-    environment:
-      - DB_TYPE=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
-      - DATABASE=linkedout
-    depends_on:
-      - db
-  db:
-    container_name: linkedout-db
-    image: postgres:15
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=linkedout
+      - 6379:6379
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - redis:/data
+
 volumes:
-  pgdata: {}
-
-
-
-
-
-
-      # type: process.env.DB_TYPE as any,
-      # host: process.env.DB_HOST,
-      # port: parseInt(process.env.DB_PORT),
-      # username: process.env.DB_USERNAME,
-      # password: process.env.DB_PASSWORD,
-      # database: process.env.DATABASE,
+  redis:
+    driver: local
