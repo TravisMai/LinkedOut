@@ -5,8 +5,10 @@ import { StaffModule } from './staffs/staffs.module';
 import { StudentsModule } from './students/students.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
-import { Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
+import { BlacklistMiddleware } from './middleware/middleware';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -40,6 +42,16 @@ import { APP_PIPE } from '@nestjs/core';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    AuthService
   ],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(BlacklistMiddleware)
+      .exclude(
+        { path: 'staffs/login', method: RequestMethod.POST },
+        { path: 'staffs', method: RequestMethod.POST },
+      ).forRoutes('*');
+  }
+}

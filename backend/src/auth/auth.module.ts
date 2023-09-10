@@ -4,6 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from 'src/common/jwt/jwt.config';
 import { JwtStrategy } from 'src/common/jwt/jwt.strategy';
 import { AuthService } from './auth.service';
+import { RedisService } from 'src/redis/redis.service';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [
@@ -12,6 +14,7 @@ import { AuthService } from './auth.service';
       secret: jwtConfig.secret,
       signOptions: { expiresIn: jwtConfig.signOptions.expiresIn },
     }),
+    RedisModule
   ],
   providers: [ AuthService],
   exports: [JwtModule],

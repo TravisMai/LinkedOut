@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { Staff } from './staffs.entity';
 import validate = require('uuid-validate');
 import { StaffService } from './staffs.service';
@@ -18,6 +18,22 @@ export class StaffsController {
         private readonly redisService: RedisService
     ) { }
 
+    @Get('me')
+    @UseGuards(JwtGuard)
+    async getMyProfile(@Req() req: any, @Res() response: Response): Promise<Response> {
+        try {
+            const staffId = req.user.id;
+            const findMeResult = await this.staffService.findOne(staffId);
+            if (!findMeResult) {
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+            }
+            const limitedData = StaffResponseDto.fromStaff(findMeResult);
+            return response.status(HttpStatus.OK).json(limitedData);
+        } catch (error) {
+            return response.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+        }
+    }
+
     // get all the staffs
     @Get()
     @UseGuards(JwtGuard)
@@ -33,7 +49,7 @@ export class StaffsController {
                     return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staffs list is empty!' });
                 }
                 const limitedData = StaffResponseDto.fromStaffArray(findAllResult);
-                await this.redisService.setObjectByKeyValue(StaffListKey, limitedData, expireTimeOneHour);
+                await this.redisService.setObjectByKeyValue(StaffListKey, limitedData, 120);
                 return response.status(HttpStatus.OK).json(limitedData);
             }
         } catch (error) {
@@ -65,6 +81,9 @@ export class StaffsController {
             return response.status(error.status).json({ message: error.message });
         }
     }
+
+
+
 
     // Create a new staff and return the staff along with a JWT token
     @Post()
@@ -120,9 +139,10 @@ export class StaffsController {
 
     // login
     @Post('login')
-    async login(@Body() loginData: { email: string; password: string }, @Res() response: Response): Promise<Response> {
+    async login(@Req() req: Request, @Body() loginData: { email: string; password: string }, @Res() response: Response): Promise<Response> {
         try {
-            const cachedData = await this.redisService.getObjectByKey(`AUTH:${loginData.email}`);
+            const temp = req.headers.authorization.split(' ')[1];
+            const cachedData = await this.redisService.getObjectByKey(`AUTH:${temp}`);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json({ token: cachedData });
             }
@@ -131,7 +151,7 @@ export class StaffsController {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
             const token = this.authService.generateJwtToken(staff);
-            await this.redisService.setObjectByKeyValue(`AUTH:${loginData.email}`, token, expireTimeOneDay);
+            await this.redisService.setObjectByKeyValue(`AUTH:${token}`, token, expireTimeOneDay);
             return response.status(HttpStatus.OK).json({ token });
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
@@ -141,7 +161,7 @@ export class StaffsController {
     // logout
     @Post('logout')
     @UseGuards(JwtGuard)
-    async logout(@Req() req, @Res() response: Response): Promise<Response> {
+    async logout(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             const token = req.headers.authorization.split(' ')[1];
             await this.redisService.deleteObjectByKey(`AUTH:${token}`);
