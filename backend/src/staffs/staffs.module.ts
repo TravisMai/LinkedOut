@@ -1,6 +1,5 @@
 import { Staff } from './staffs.entity';
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { StaffService } from './staffs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import jwtConfig from 'src/common/jwt/jwt.config';
@@ -8,6 +7,10 @@ import { AuthService } from 'src/auth/auth.service';
 import { RedisModule } from 'src/redis/redis.module';
 import { StaffsController } from './staffs.controller';
 import { JwtStrategy } from 'src/common/jwt/jwt.strategy';
+import { Module, Logger } from '@nestjs/common';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
+import { ConfigService } from '@nestjs/config';
+
 
 @Module({
   imports: [
@@ -22,11 +25,8 @@ import { JwtStrategy } from 'src/common/jwt/jwt.strategy';
   providers: [
     StaffService,
     AuthService,
-    {
-      provide: JwtStrategy,
-      useValue: new JwtStrategy({ allowedRoles: ['staff'] }),
-    },
+    Logger,
   ],
-  exports: [JwtModule, JwtStrategy],
+  exports: [JwtModule],
 })
 export class StaffModule { }

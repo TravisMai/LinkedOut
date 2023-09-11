@@ -9,25 +9,36 @@ import { RedisService } from 'src/redis/redis.service';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, NotFoundException, Res, HttpStatus, Req } from '@nestjs/common';
 import { StaffResponseDto } from './dto/staffResponse.dto';
 import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variable/constVariable';
+import { AllowRoles } from 'src/common/decorators/role.decorator';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('staffs')
 export class StaffsController {
     constructor(
         private readonly staffService: StaffService,
         private readonly authService: AuthService,
-        private readonly redisService: RedisService
+        private readonly redisService: RedisService,
+        private readonly jwtService: JwtService,
     ) { }
 
     @Get('me')
-    @UseGuards(JwtGuard)
+    @AllowRoles(['staff'])
+    @UseGuards(JwtGuard, RolesGuard)
     async getMyProfile(@Req() req: any, @Res() response: Response): Promise<Response> {
         try {
-            const staffId = req.user.id;
-            const findMeResult = await this.staffService.findOne(staffId);
+            const token = req.headers.authorization.split(' ')[1];
+            const decodedToken = this.jwtService.decode(token) as { id: string };
+            const cachedData = await this.redisService.getObjectByKey(`STAFF:${decodedToken.id}`);
+            if (cachedData) {
+                return response.status(HttpStatus.OK).json(cachedData);
+            }
+            const findMeResult = await this.staffService.findOne(decodedToken.id);
             if (!findMeResult) {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
             }
             const limitedData = StaffResponseDto.fromStaff(findMeResult);
+            await this.redisService.setObjectByKeyValue(`STAFF:${decodedToken.id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
             return response.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
@@ -36,8 +47,9 @@ export class StaffsController {
 
     // get all the staffs
     @Get()
-    @UseGuards(JwtGuard)
-    async findAll(@Res() response: Response): Promise<Response> {
+    @AllowRoles(['staff'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             const cachedData = await this.redisService.getObjectByKey(StaffListKey);
             if (cachedData) {
@@ -59,7 +71,8 @@ export class StaffsController {
 
     // get one staff by id
     @Get(':id')
-    @UseGuards(JwtGuard)
+    @AllowRoles(['staff'])
+    @UseGuards(JwtGuard, RolesGuard)
     async findOne(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
@@ -82,9 +95,6 @@ export class StaffsController {
         }
     }
 
-
-
-
     // Create a new staff and return the staff along with a JWT token
     @Post()
     async create(@Body() staff: Staff, @Res() response: Response): Promise<Response> {
@@ -103,7 +113,8 @@ export class StaffsController {
 
     // update an staff
     @Put(':id')
-    @UseGuards(JwtGuard)
+    @AllowRoles(['staff'])
+    @UseGuards(JwtGuard, RolesGuard)
     async update(@Param('id') id: string, @Body() staff: Staff, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
@@ -123,7 +134,8 @@ export class StaffsController {
 
     // delete an staff
     @Delete(':id')
-    @UseGuards(JwtGuard)
+    @AllowRoles(['staff'])
+    @UseGuards(JwtGuard, RolesGuard)
     async delete(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         if (!validate(id)) {
             return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
@@ -160,7 +172,8 @@ export class StaffsController {
 
     // logout
     @Post('logout')
-    @UseGuards(JwtGuard)
+    @AllowRoles(['staff'])
+    @UseGuards(JwtGuard, RolesGuard)
     async logout(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             const token = req.headers.authorization.split(' ')[1];

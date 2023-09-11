@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { commonAttribute } from 'src/common/entity/commonAttribute.entity';
+import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
 import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
