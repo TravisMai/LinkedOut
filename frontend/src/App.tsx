@@ -1,6 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './App.css'
 import NotFoundPage from "./shared/pages/NotFoundPage";
 import StudentPage from "./applications/student/Page";
 import StaffPage from "./applications/staff/Page";

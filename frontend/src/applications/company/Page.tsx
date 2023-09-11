@@ -1,6 +1,6 @@
 const CompanyPage = () => {
     return (
-        <h1>Company Page</h1>
+        <p>Company Page</p>
     )
 }
 
