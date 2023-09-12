@@ -1,12 +1,12 @@
 import React from 'react';
-import Navbar from '../../shared/limb/navbar';
-import MainContentContainer from '../../shared/layout/mainLayout';
+import Navbar from '../components/navbar';
+import MainContentContainer from './mainLayout';
 
 interface IProps {
   children?: React.ReactNode;
 }
 
-const StudentPageLayout: React.FC<IProps> = (props) => {
+const UserPageLayout: React.FC<IProps> = (props) => {
   const { children } = props;
   return (
     <div className="w-full h-full flex flex-col">
@@ -15,4 +15,4 @@ const StudentPageLayout: React.FC<IProps> = (props) => {
     </div>
   );
 };
-export default StudentPageLayout;
+export default UserPageLayout;

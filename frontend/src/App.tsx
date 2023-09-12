@@ -5,7 +5,7 @@ import StudentPage from "./applications/student";
 import StaffPage from "./applications/staff/Page";
 import CompanyPage from "./applications/company/Page";
 import { PrivateRoute } from "./shared/routes/PrivateRoute";
-import StudentPageLayout from "./shared/layout/studentLayout";
+import UserPageLayout from "./shared/layout/UserPageLayout";
 
 function App() {
 
@@ -17,13 +17,19 @@ function App() {
             <Route
               path="/student"
               element={
-                <PrivateRoute layout={StudentPageLayout}>
+                <PrivateRoute layout={UserPageLayout}>
                   <StudentPage />
                 </PrivateRoute>
               }
             />
             <Route path="/staff" element={<StaffPage />} />
-            <Route path="/company" element={<CompanyPage />} />
+            <Route
+              path="/company"
+              element={
+                <PrivateRoute layout={UserPageLayout}>
+                  <CompanyPage />
+                </PrivateRoute>
+              } />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="404" element={<NotFoundPage />} />
           </Routes>
