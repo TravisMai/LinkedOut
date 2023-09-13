@@ -1,12 +1,12 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_PIPE } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from 'src/module/auth/auth.module';
 import { AppController } from './app.controller';
-import { AuthService } from './auth/auth.service';
-import { RedisModule } from './redis/redis.module';
-import { StaffModule } from './staff/staff.module';
+import { AuthService } from 'src/module/auth/auth.service';
+import { RedisModule } from 'src/module/redis/redis.module';
+import { StaffModule } from 'src/module/staff/staff.module';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { StudentModule } from './student/student.module';
+import { StudentModule } from '../module/student/student.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({

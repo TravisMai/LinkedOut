@@ -4,9 +4,9 @@ import validate = require('uuid-validate');
 import { Student } from './student.entity';
 import { Request, Response } from 'express';
 import { StudentService } from './student.service';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/module/auth/auth.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
-import { RedisService } from 'src/redis/redis.service';
+import { RedisService } from 'src/module/redis/redis.service';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
@@ -23,7 +23,7 @@ export class StudentController {
     ) { }
 
     @Get('me')
-    @AllowRoles(['staff', 'student'])
+    @AllowRoles(['student'])
     @UseGuards(JwtGuard, RolesGuard)
     async getMyProfile(@Req() req: any, @Res() response: Response): Promise<Response> {
         try {
@@ -134,7 +134,7 @@ export class StudentController {
 
     // delete an student
     @Delete(':id')
-    @AllowRoles(['staff', 'student'])
+    @AllowRoles(['staff'])
     @UseGuards(JwtGuard, RolesGuard)
     async delete(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         if (!validate(id)) {
@@ -151,6 +151,8 @@ export class StudentController {
 
     // login
     @Post('login')
+    @AllowRoles(['student'])
+    @UseGuards(RolesGuard)
     async login(@Req() req: Request, @Body() loginData: { email: string; password: string }, @Res() response: Response): Promise<Response> {
         try {
             const authorizationHeader = req.headers.authorization;
@@ -175,7 +177,7 @@ export class StudentController {
 
     // logout
     @Post('logout')
-    @AllowRoles(['staff', 'student'])
+    @AllowRoles(['student'])
     @UseGuards(JwtGuard, RolesGuard)
     async logout(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {

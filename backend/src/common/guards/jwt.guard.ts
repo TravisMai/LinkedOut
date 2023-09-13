@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/module/auth/auth.service';
 import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
