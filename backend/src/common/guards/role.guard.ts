@@ -1,7 +1,6 @@
-// roles.guard.ts
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -13,23 +12,23 @@ export class RolesGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
       const allowedRoles = this.reflector.get<string[]>('roles', context.getHandler());
       if (!allowedRoles) {
-          return true; // If no roles are specified, allow access by default
+          return true;
         }
         
         const request = context.switchToHttp().getRequest();
-        const token = request.headers.authorization; // Assuming you store the JWT in the Authorization header
+        const token = request.headers.authorization;
         
         if (!token) {
-            return false; // No token found, deny access
+            return false;
         }
         
         try {
-            const decodedToken = this.jwtService.verify(token.replace('Bearer ', '')); // Remove 'Bearer ' prefix if present
-            const userRole = decodedToken.role; // Assuming the JWT payload contains a 'role' field
+            const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
+            const userRole = decodedToken.role;
             
-            return allowedRoles.includes(userRole); // Check if the user's role is allowed
+            return allowedRoles.includes(userRole);
     } catch (error) {
-      return false; // Invalid token, deny access
+      return false;
     }
   }
 }

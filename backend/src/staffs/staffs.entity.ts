@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { Entity, Column } from "typeorm";
 import { IsNumber, IsOptional } from "class-validator";
 import { commonAttribute } from "src/common/entities/commonAttribute.entity";
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Staff extends commonAttribute {

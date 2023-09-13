@@ -1,17 +1,17 @@
 import * as bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
 import { Staff } from './staffs.entity';
+import { JwtService } from '@nestjs/jwt';
 import validate = require('uuid-validate');
+import { Request, Response } from 'express';
 import { StaffService } from './staffs.service';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RedisService } from 'src/redis/redis.service';
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, NotFoundException, Res, HttpStatus, Req } from '@nestjs/common';
-import { StaffResponseDto } from './dto/staffResponse.dto';
-import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variable/constVariable';
-import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { RolesGuard } from 'src/common/guards/role.guard';
-import { JwtService } from '@nestjs/jwt';
+import { StaffResponseDto } from './dto/staffResponse.dto';
+import { AllowRoles } from 'src/common/decorators/role.decorator';
+import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variable/constVariable';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, NotFoundException, Res, HttpStatus, Req } from '@nestjs/common';
 
 @Controller('staffs')
 export class StaffsController {

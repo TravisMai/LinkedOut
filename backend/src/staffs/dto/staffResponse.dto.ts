@@ -1,6 +1,7 @@
 import { Staff } from '../staffs.entity';
 
 export class StaffResponseDto {
+    id: string;
     name: string;
     email: string;
     staffId: number;
@@ -8,6 +9,7 @@ export class StaffResponseDto {
 
     static fromStaff(staff: Staff): StaffResponseDto {
         const dto = new StaffResponseDto();
+        dto.id = staff.id;
         dto.name = staff.name;
         dto.email = staff.email;
         dto.staffId = staff.staffId;

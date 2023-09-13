@@ -1,8 +1,9 @@
 {
-  "name": "backend",
+  "name": "linkedout-backend",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Mai Huu Nghia <emches1976@gmail.com> (https://www.linkedin.com/in/travismai/)",
+  "homepage": "https://github.com/TravisMai/LinkedOut",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

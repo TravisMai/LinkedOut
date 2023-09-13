@@ -1,6 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
 export class commonAttribute {
