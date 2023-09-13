@@ -2,81 +2,17 @@ import React from 'react';
 
 const LeftSidebar: React.FC = () => {
   return (
-    <div className="w-auto h-auto py-3">
-      <ul className="w-auto text-gray-600 bg-[#1488db]">
-        <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
-          <div>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://random.imagecdn.app/200/200"
-              alt="user"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Saiful Islam Shihab</p>
-          </div>
-        </li>
-        <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
-          <div>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/yR/r/tInzwsw2pVX.png"
-              alt="info"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Covid-19 Information Center</p>
-          </div>
-        </li>
-        <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
-          <div>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/yx/r/-XF4FQcre_i.png"
-              alt="friends"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Friends</p>
-          </div>
-        </li>
-        <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
-          <div>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/mk4dH3FK0jT.png"
-              alt="memories"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Memories</p>
-          </div>
-        </li>
-        <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
-          <div>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/yZ/r/i7hepQ2OeZg.png"
-              alt="pages"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Pages</p>
-          </div>
-        </li>
-        <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
-          <div>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/mk4dH3FK0jT.png"
-              alt="groups"
-            />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Groups</p>
-          </div>
-        </li>
-      </ul>
+    <div className="w-4/5 mx-auto mt-6 pb-6 h-fit flex flex-col bg-[#50a6e4] rounded-xl">
+      <img
+        src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-6/273877541_4799385830176329_4891712365804515546_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1b51e3&_nc_ohc=EDDvDSGG2gsAX88T2W5&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfBnypi4b8yffb3ARBVZAFQN0Es0LctmOKEPaZrLZCQ1kA&oe=65046731"
+        className="w-20 h-20 rounded-full mx-auto mt-6 my-3"
+      />
+      <h1 className='mx-auto font-semibold text-xl text-white'>Lê Chí Hùng</h1>
+      <h1 className='mx-auto text-lg text-white'>MSSV: 19521382</h1>
+      <h1 className='mx-auto text-lg text-white'>Khoa: Công nghệ thông tin</h1>
+      <h1 className='mx-auto text-lg text-white'>Lớp: 19CTT3</h1>
+      <h1 className='mx-auto text-lg text-white'>Chuyên ngành: Kỹ thuật phần mềm</h1>
+      <h1 className='mx-auto text-lg text-white'>Điểm trung bình: 3.5</h1>  
     </div>
   );
 };

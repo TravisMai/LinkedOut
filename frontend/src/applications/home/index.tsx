@@ -16,7 +16,6 @@ import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 
-
 const cards = ["Student", "Company"];
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -24,10 +23,9 @@ const defaultTheme = createTheme();
 
 export default function HomePage() {
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={defaultTheme} >
             <CssBaseline />
             <main>
-                {/* Hero unit */}
                 <Box
                     sx={{
                         bgcolor: 'background.paper',
@@ -52,7 +50,7 @@ export default function HomePage() {
                             LinkedOut
                         </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Website to support students to find internship and job opportunities.
+                            Website for students to find internship and job opportunities
                         </Typography>
                         <Stack
                             sx={{ pt: 4 }}
@@ -64,36 +62,60 @@ export default function HomePage() {
                     </Container>
                 </Box>
                 <Container maxWidth="md">
-                    {/* End hero unit */}
                     <Grid container spacing={4} sx={{ justifyContent: 'space-evenly' }}>
-                        {cards.map((card) => (
-                            <Grid item key={card} xs={12} sm={6} md={4}>
-                                <Card
-                                    sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                                >
-                                    <CardMedia
-                                        component="div"
-                                        sx={{
-                                            // 16:9
-                                            pt: '56.25%',
-                                        }}
-                                        image="https://source.unsplash.com/random?wallpapers"
-                                    />
-                                    <CardContent sx={{ flexGrow: 1 }}>
-                                        <Typography gutterBottom variant="h5" component="h2" align='center'>
-                                            {card}
-                                        </Typography>
-                                        <Typography align='center'>
-                                            Click here if you are {card}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions sx={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 0 }}>
+                        <Grid xs={12} sm={6} md={4}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <CardMedia
+                                    component="div"
+                                    sx={{
+                                        // 16:9
+                                        pt: '56.25%',
+                                    }}
+                                    image="https://source.unsplash.com/random?wallpapers"
+                                />
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Typography gutterBottom variant="h5" component="h2" align='center'>
+                                        Student
+                                    </Typography>
+                                    <Typography align='center'>
+                                        Start finding your dream job
+                                    </Typography>
+                                </CardContent>
+                                <CardActions sx={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 0 }}>
+                                    <Link href="/login/student">
                                         <Button size="small">Login</Button>
-                                        <Button size="small">Sign up</Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        ))}
+                                    </Link>
+                                    <Button size="small">Sign up</Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                        <Grid xs={12} sm={6} md={4}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <CardMedia
+                                    component="div"
+                                    sx={{
+                                        // 16:9
+                                        pt: '56.25%',
+                                    }}
+                                    image="https://source.unsplash.com/random?wallpapers"
+                                />
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Typography gutterBottom variant="h5" component="h2" align='center'>
+                                        Company
+                                    </Typography>
+                                    <Typography align='center'>
+                                        Start finding the best employees
+                                    </Typography>
+                                </CardContent>
+                                <CardActions sx={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 0 }}>
+                                    <Link href="/login/company">
+                                        <Button size="small">Login</Button>
+                                    </Link>
+                                    <Button size="small">Sign up</Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+
                     </Grid>
                 </Container>
             </main>

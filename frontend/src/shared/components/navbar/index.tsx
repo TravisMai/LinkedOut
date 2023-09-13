@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const pathName = location?.pathname.split('/')[1];
   return (
-    <div className="w-full h-14 bg-white grid grid-cols-7 gap-4 fixed z-50 border-b-2">
+    <div className="w-full h-14 bg-white grid grid-cols-7 gap-4 fixed z-50 border-b-2 border-b-slate-200">
       <div className="h-14 col-span-2 grid grid-cols-5 items-center">
         <div className='h-14 col-span-1'>
           <Link to="/">
