@@ -1,4 +1,4 @@
-import { Staff } from '../staffs.entity';
+import { Staff } from '../staff.entity';
 
 export class StaffResponseDto {
     id: string;

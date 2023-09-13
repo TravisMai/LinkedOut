@@ -4,9 +4,9 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AuthService } from './auth/auth.service';
 import { RedisModule } from './redis/redis.module';
-import { StaffModule } from './staffs/staffs.module';
+import { StaffModule } from './staff/staff.module';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { StudentsModule } from './students/students.module';
+import { StudentModule } from './student/student.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -19,7 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     AuthModule,
     RedisModule,
     StaffModule,
-    StudentsModule,
+    StudentModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -1,67 +1,67 @@
 import * as bcrypt from 'bcrypt';
-import { Staff } from './staffs.entity';
 import { JwtService } from '@nestjs/jwt';
 import validate = require('uuid-validate');
+import { Student } from './student.entity';
 import { Request, Response } from 'express';
-import { StaffService } from './staffs.service';
+import { StudentService } from './student.service';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RedisService } from 'src/redis/redis.service';
 import { RolesGuard } from 'src/common/guards/role.guard';
-import { StaffResponseDto } from './dto/staffResponse.dto';
+import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
-import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variable/constVariable';
+import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variable/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, NotFoundException, Res, HttpStatus, Req } from '@nestjs/common';
 
-@Controller('staffs')
-export class StaffsController {
+@Controller('student')
+export class StudentController {
     constructor(
-        private readonly staffService: StaffService,
+        private readonly studentService: StudentService,
         private readonly authService: AuthService,
         private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
     ) { }
 
     @Get('me')
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async getMyProfile(@Req() req: any, @Res() response: Response): Promise<Response> {
         try {
             const token = req.headers.authorization.split(' ')[1];
             const decodedToken = this.jwtService.decode(token) as { id: string };
-            const cachedData = await this.redisService.getObjectByKey(`STAFF:${decodedToken.id}`);
+            const cachedData = await this.redisService.getObjectByKey(`STUDENT:${decodedToken.id}`);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json(cachedData);
             }
-            const findMeResult = await this.staffService.findOne(decodedToken.id);
+            const findMeResult = await this.studentService.findOne(decodedToken.id);
             if (!findMeResult) {
-                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
-            const limitedData = StaffResponseDto.fromStaff(findMeResult);
-            await this.redisService.setObjectByKeyValue(`STAFF:${decodedToken.id}`, limitedData, expireTimeOneHour);
+            const limitedData = StudentResponseDto.fromStudent(findMeResult);
+            await this.redisService.setObjectByKeyValue(`STUDENT:${decodedToken.id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
             return response.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
 
-    // get all the staffs
+    // get all the student
     @Get()
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
-            const cachedData = await this.redisService.getObjectByKey(StaffListKey);
+            const cachedData = await this.redisService.getObjectByKey(StudentListKey);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json(cachedData);
             }
             else {
-                const findAllResult = await this.staffService.findAll();
+                const findAllResult = await this.studentService.findAll();
                 if (!findAllResult || findAllResult.length === 0) {
-                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staffs list is empty!' });
+                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student list is empty!' });
                 }
-                const limitedData = StaffResponseDto.fromStaffArray(findAllResult);
-                await this.redisService.setObjectByKeyValue(StaffListKey, limitedData, 120);
+                const limitedData = StudentResponseDto.fromStudentArray(findAllResult);
+                await this.redisService.setObjectByKeyValue(StudentListKey, limitedData, 120);
                 return response.status(HttpStatus.OK).json(limitedData);
             }
         } catch (error) {
@@ -69,25 +69,25 @@ export class StaffsController {
         }
     }
 
-    // get one staff by id
+    // get one student by id
     @Get(':id')
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async findOne(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
             }
-            const cachedData = await this.redisService.getObjectByKey(`STAFF:${id}`);
+            const cachedData = await this.redisService.getObjectByKey(`STUDENT:${id}`);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json(cachedData);
             } else {
-                const staff = await this.staffService.findOne(id);
-                if (!staff) {
-                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+                const student = await this.studentService.findOne(id);
+                if (!student) {
+                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
                 }
-                const limitedData = StaffResponseDto.fromStaff(staff);
-                await this.redisService.setObjectByKeyValue(`STAFF:${id}`, limitedData, expireTimeOneHour);
+                const limitedData = StudentResponseDto.fromStudent(student);
+                await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, limitedData, expireTimeOneHour);
                 return response.status(HttpStatus.OK).json(limitedData);
             }
         } catch (error) {
@@ -95,74 +95,77 @@ export class StaffsController {
         }
     }
 
-    // Create a new staff and return the staff along with a JWT token
+    // Create a new student and return the student along with a JWT token
     @Post()
-    async create(@Body() staff: Staff, @Res() response: Response): Promise<Response> {
-        staff.role = 'staff';
-        staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
+    async create(@Body() student: Student, @Res() response: Response): Promise<Response> {
+        student.role = 'student';
+        student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
         try {
-            const newCreateStaff = await this.staffService.create(staff);
-            const limitedData = StaffResponseDto.fromStaff(newCreateStaff);
-            await this.redisService.setObjectByKeyValue(`STAFF:${newCreateStaff.id}`, limitedData, expireTimeOneHour);
-            const token = this.authService.generateJwtToken(newCreateStaff);
-            return response.status(HttpStatus.CREATED).json({ staff: limitedData, token });
+            const newCreateStudent = await this.studentService.create(student);
+            const limitedData = StudentResponseDto.fromStudent(newCreateStudent);
+            await this.redisService.setObjectByKeyValue(`STUDENT:${newCreateStudent.id}`, limitedData, expireTimeOneHour);
+            const token = this.authService.generateJwtToken(newCreateStudent);
+            return response.status(HttpStatus.CREATED).json({ student: limitedData, token });
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
         }
     }
 
-    // update an staff
+    // update an student
     @Put(':id')
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() staff: Staff, @Res() response: Response): Promise<Response> {
+    async update(@Param('id') id: string, @Body() student: Student, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
             }
-            const updateStaff = await this.staffService.update(id, staff);
-            if (!updateStaff) {
-                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+            const updateStudent = await this.studentService.update(id, student);
+            if (!updateStudent) {
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
-            const limitedData = StaffResponseDto.fromStaff(updateStaff);
-            await this.redisService.setObjectByKeyValue(`STAFF:${id}`, limitedData, expireTimeOneHour);
+            const limitedData = StudentResponseDto.fromStudent(updateStudent);
+            await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
         }
     }
 
-    // delete an staff
+    // delete an student
     @Delete(':id')
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async delete(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         if (!validate(id)) {
             return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
         }
-        const staff = await this.staffService.findOne(id);
-        if (!staff) {
-            return response.status(HttpStatus.NOT_FOUND).json({ message: 'No staff found!' });
+        const student = await this.studentService.findOne(id);
+        if (!student) {
+            return response.status(HttpStatus.NOT_FOUND).json({ message: 'No student found!' });
         }
-        await this.staffService.delete(id);
-        await this.redisService.deleteObjectByKey(`STAFF:${id}`);
-        return response.status(HttpStatus.OK).json({ message: 'Staff deleted successfully!' });
+        await this.studentService.delete(id);
+        await this.redisService.deleteObjectByKey(`STUDENT:${id}`);
+        return response.status(HttpStatus.OK).json({ message: 'Student deleted successfully!' });
     }
 
     // login
     @Post('login')
     async login(@Req() req: Request, @Body() loginData: { email: string; password: string }, @Res() response: Response): Promise<Response> {
         try {
-            const temp = req.headers.authorization.split(' ')[1];
-            const cachedData = await this.redisService.getObjectByKey(`AUTH:${temp}`);
-            if (cachedData) {
-                return response.status(HttpStatus.OK).json({ token: cachedData });
+            const authorizationHeader = req.headers.authorization;
+            if (authorizationHeader) {
+                const temp = req.headers.authorization.split(' ')[1];
+                const cachedData = await this.redisService.getObjectByKey(`AUTH:${temp}`);
+                if (cachedData) {
+                    return response.status(HttpStatus.OK).json({ token: cachedData });
+                }
             }
-            const staff = await this.staffService.findByEmail(loginData.email);
-            if (!staff || !(await bcrypt.compare(loginData.password, staff.password))) {
+            const student = await this.studentService.findByEmail(loginData.email);
+            if (!student || !(await bcrypt.compare(loginData.password, student.password))) {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
-            const token = this.authService.generateJwtToken(staff);
+            const token = this.authService.generateJwtToken(student);
             await this.redisService.setObjectByKeyValue(`AUTH:${token}`, token, expireTimeOneDay);
             return response.status(HttpStatus.OK).json({ token });
         } catch (error) {
@@ -172,7 +175,7 @@ export class StaffsController {
 
     // logout
     @Post('logout')
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async logout(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {

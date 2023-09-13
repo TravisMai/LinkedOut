@@ -5,7 +5,6 @@ import { commonAttribute } from "src/common/entities/commonAttribute.entity";
 @Entity()
 export class Staff extends commonAttribute {
     @Column({ default: false })
-    @IsOptional()
     isAdmin: boolean;
 
     @Column({ nullable: true })
