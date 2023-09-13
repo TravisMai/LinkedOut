@@ -5,8 +5,8 @@ import RightSidebar from './RightSidebar.component';
 
 const StudentPage: React.FC = () => {
   return (
-    <div className="w-full h-full grid grid-cols-7">
-      <div className="col-span-2 flex justify-center w-90 ">
+    <div className="w-auto h-auto grid grid-cols-7">
+      <div className="col-span-2 w-full bg-green-300 justify-center mx-auto">
         <LeftSidebar />
       </div>
       <div className="col-span-3 h-full">

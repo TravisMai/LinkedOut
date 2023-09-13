@@ -6,6 +6,7 @@ import StaffPage from "./applications/staff/Page";
 import CompanyPage from "./applications/company/Page";
 import { PrivateRoute } from "./shared/routes/PrivateRoute";
 import UserPageLayout from "./shared/layout/UserPageLayout";
+import HomePage from "./applications/home";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <Suspense fallback={<div>Loading...</div>}>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<HomePage />} />
             <Route
               path="/student"
               element={

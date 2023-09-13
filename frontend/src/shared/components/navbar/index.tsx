@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
       <div className="h-14 col-span-2 grid grid-cols-5 items-center">
         <div className='h-14 col-span-1'>
           <Link to="/">
-            <img src={Logo} alt='Home Page' className='h-full mx-auto ml-2' />
+            <img src={Logo} alt='Home Page' className='h-12 mt-1 mx-auto ml-4 rounded-lg' />
           </Link>
         </div>
         <div className="h-10 col-span-4">
@@ -96,13 +96,13 @@ const Navbar: React.FC = () => {
       </div>
       <div className="col-span-2 grid grid-cols-10 items-center justify-end">
         <div className='w-fit col-span-3 items-center mt-1'>
-        <Tag icon={<SyncOutlined spin />} color="processing" className='w-full overflow-hidden'>Processing
-        </Tag>
+          <Tag icon={<SyncOutlined spin />} color="processing" className='w-full overflow-hidden'>Processing
+          </Tag>
         </div>
-        <div className="h-10 w-auto col-span-7 mx-auto pr-2 ">
+        <div className="h-10 w-full col-span-7 mx-1 pr-2 ">
           <Link to="/student/profile">
             <button className="mx-4 h-10 px-2 w-fit grid grid-cols-5 space-x-1 items-center focus:outline-none hover:bg-gray-300 rounded-full">
-              <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">dat.trantri2002@hcmut.edu.vn</p>
+              <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">hung.lechpro@hcmut.edu.vn</p>
               <div>
                 <img
                   src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-6/273877541_4799385830176329_4891712365804515546_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1b51e3&_nc_ohc=EDDvDSGG2gsAX88T2W5&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfBnypi4b8yffb3ARBVZAFQN0Es0LctmOKEPaZrLZCQ1kA&oe=65046731"
