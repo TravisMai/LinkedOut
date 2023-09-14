@@ -2,12 +2,12 @@ import { Repository } from 'typeorm';
 import { Staff } from './staff.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { StaffRepository } from './staff.repository';
 
 @Injectable()
 export class StaffService {
     constructor(
-        @InjectRepository(Staff)
-        private staffRepository: Repository<Staff>
+        private staffRepository: StaffRepository
     ) { }
 
     // get all the staffs

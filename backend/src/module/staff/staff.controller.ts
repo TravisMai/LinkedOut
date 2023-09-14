@@ -4,13 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import validate = require('uuid-validate');
 import { Request, Response } from 'express';
 import { StaffService } from './staff.service';
-import { AuthService } from 'src/module/auth/auth.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
-import { RedisService } from 'src/module/redis/redis.service';
 import { RolesGuard } from 'src/common/guards/role.guard';
+import { AuthService } from 'src/module/auth/auth.service';
 import { StaffResponseDto } from './dto/staffResponse.dto';
+import { StudentService } from '../student/student.service';
+import { RedisService } from 'src/module/redis/redis.service';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
-import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variable/constVariable';
+import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, NotFoundException, Res, HttpStatus, Req } from '@nestjs/common';
 
 @Controller('staff')
@@ -20,6 +21,7 @@ export class StaffController {
         private readonly authService: AuthService,
         private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
+        private readonly studentService: StudentService
     ) { }
 
     @Get('me')
@@ -98,8 +100,10 @@ export class StaffController {
     // Create a new staff and return the staff along with a JWT token
     @Post()
     async create(@Body() staff: Staff, @Res() response: Response): Promise<Response> {
-        staff.role = 'staff';
         staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
+        if (await this.staffService.findByEmail(staff.email) || await this.studentService.findByEmail(staff.email)) {
+            return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
+        }
         try {
             const newCreateStaff = await this.staffService.create(staff);
             const limitedData = StaffResponseDto.fromStaff(newCreateStaff);

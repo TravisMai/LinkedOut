@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn, Unique } from "typeorm";
 
 @Entity()
 export class commonAttribute {

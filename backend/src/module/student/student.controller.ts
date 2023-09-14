@@ -4,14 +4,15 @@ import validate = require('uuid-validate');
 import { Student } from './student.entity';
 import { Request, Response } from 'express';
 import { StudentService } from './student.service';
-import { AuthService } from 'src/module/auth/auth.service';
+import { StaffService } from '../staff/staff.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
-import { RedisService } from 'src/module/redis/redis.service';
 import { RolesGuard } from 'src/common/guards/role.guard';
+import { AuthService } from 'src/module/auth/auth.service';
+import { RedisService } from 'src/module/redis/redis.service';
 import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
-import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variable/constVariable';
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, NotFoundException, Res, HttpStatus, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { expireTimeFourYear, expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
 
 @Controller('student')
 export class StudentController {
@@ -20,6 +21,7 @@ export class StudentController {
         private readonly authService: AuthService,
         private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
+        private readonly staffService: StaffService
     ) { }
 
     @Get('me')
@@ -98,8 +100,10 @@ export class StudentController {
     // Create a new student and return the student along with a JWT token
     @Post()
     async create(@Body() student: Student, @Res() response: Response): Promise<Response> {
-        student.role = 'student';
         student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
+        if (await this.staffService.findByEmail(student.email) || await this.studentService.findByEmail(student.email)) {
+            return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
+        }
         try {
             const newCreateStudent = await this.studentService.create(student);
             const limitedData = StudentResponseDto.fromStudent(newCreateStudent);
