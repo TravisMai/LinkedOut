@@ -1,71 +1,71 @@
 import * as bcrypt from 'bcrypt';
-import { Staff } from './staff.entity';
 import { JwtService } from '@nestjs/jwt';
+import { Company } from './company.entity';
 import validate = require('uuid-validate');
 import { Request, Response } from 'express';
-import { StaffService } from './staff.service';
+import { CompanyService } from './company.service';
+import { StaffService } from '../staff/staff.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { AuthService } from 'src/module/auth/auth.service';
-import { StaffResponseDto } from './dto/staffResponse.dto';
-import { CompanyService } from '../company/company.service';
 import { StudentService } from '../student/student.service';
 import { RedisService } from 'src/module/redis/redis.service';
+import { CompanyResponseDto } from './dto/companyResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
-import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variables/constVariable';
+import { expireTimeOneDay, expireTimeOneHour, CompanyListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
 
-@Controller('staff')
-export class StaffController {
+@Controller('company')
+export class CompanyController {
     constructor(
         private readonly jwtService: JwtService,
         private readonly authService: AuthService,
-        private readonly staffService: StaffService,
         private readonly redisService: RedisService,
+        private readonly staffService: StaffService,
         private readonly studentService: StudentService,
         private readonly companyService: CompanyService,
     ) { }
 
     @Get('me')
-    @AllowRoles(['staff'])
+    @AllowRoles(['company'])
     @UseGuards(JwtGuard, RolesGuard)
     async getMyProfile(@Req() req: any, @Res() response: Response): Promise<Response> {
         try {
             const token = req.headers.authorization.split(' ')[1];
             const decodedToken = this.jwtService.decode(token) as { id: string };
-            const cachedData = await this.redisService.getObjectByKey(`STAFF:${decodedToken.id}`);
+            const cachedData = await this.redisService.getObjectByKey(`COMPANY:${decodedToken.id}`);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json(cachedData);
             }
-            const findMeResult = await this.staffService.findOne(decodedToken.id);
+            const findMeResult = await this.companyService.findOne(decodedToken.id);
             if (!findMeResult) {
-                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company not found!' });
             }
-            const limitedData = StaffResponseDto.fromStaff(findMeResult);
-            await this.redisService.setObjectByKeyValue(`STAFF:${decodedToken.id}`, limitedData, expireTimeOneHour);
+            const limitedData = CompanyResponseDto.fromCompany(findMeResult);
+            await this.redisService.setObjectByKeyValue(`COMPANY:${decodedToken.id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
             return response.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
 
-    // get all the staffs
+    // get all the companys
     @Get()
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
-            const cachedData = await this.redisService.getObjectByKey(StaffListKey);
+            const cachedData = await this.redisService.getObjectByKey(CompanyListKey);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json(cachedData);
             }
             else {
-                const findAllResult = await this.staffService.findAll();
+                const findAllResult = await this.companyService.findAll();
                 if (!findAllResult || findAllResult.length === 0) {
-                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff list is empty!' });
+                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company list is empty!' });
                 }
-                const limitedData = StaffResponseDto.fromStaffArray(findAllResult);
-                await this.redisService.setObjectByKeyValue(StaffListKey, limitedData, 120);
+                const limitedData = CompanyResponseDto.fromCompanyArray(findAllResult);
+                await this.redisService.setObjectByKeyValue(CompanyListKey, limitedData, 120);
                 return response.status(HttpStatus.OK).json(limitedData);
             }
         } catch (error) {
@@ -73,25 +73,25 @@ export class StaffController {
         }
     }
 
-    // get one staff by id
+    // get one company by id
     @Get(':id')
-    @AllowRoles(['staff'])
+    @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
     async findOne(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
             }
-            const cachedData = await this.redisService.getObjectByKey(`STAFF:${id}`);
+            const cachedData = await this.redisService.getObjectByKey(`COMPANY:${id}`);
             if (cachedData) {
                 return response.status(HttpStatus.OK).json(cachedData);
             } else {
-                const staff = await this.staffService.findOne(id);
-                if (!staff) {
-                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+                const company = await this.companyService.findOne(id);
+                if (!company) {
+                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company not found!' });
                 }
-                const limitedData = StaffResponseDto.fromStaff(staff);
-                await this.redisService.setObjectByKeyValue(`STAFF:${id}`, limitedData, expireTimeOneHour);
+                const limitedData = CompanyResponseDto.fromCompany(company);
+                await this.redisService.setObjectByKeyValue(`COMPANY:${id}`, limitedData, expireTimeOneHour);
                 return response.status(HttpStatus.OK).json(limitedData);
             }
         } catch (error) {
@@ -99,60 +99,60 @@ export class StaffController {
         }
     }
 
-    // Create a new staff and return the staff along with a JWT token
+    // Create a new company and return the company along with a JWT token
     @Post()
-    async create(@Body() staff: Staff, @Res() response: Response): Promise<Response> {
-        staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
-        if (await this.staffService.findByEmail(staff.email) || await this.studentService.findByEmail(staff.email) || await this.companyService.findByEmail(staff.email)) {
+    async create(@Body() company: Company, @Res() response: Response): Promise<Response> {
+        company.password = await bcrypt.hash(company.password, parseInt(process.env.BCRYPT_SALT));
+        if (await this.staffService.findByEmail(company.email) || await this.studentService.findByEmail(company.email) || await this.companyService.findByEmail(company.email)) {
             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
         }
         try {
-            const newCreateStaff = await this.staffService.create(staff);
-            const limitedData = StaffResponseDto.fromStaff(newCreateStaff);
-            await this.redisService.setObjectByKeyValue(`STAFF:${newCreateStaff.id}`, limitedData, expireTimeOneHour);
-            const token = this.authService.generateJwtToken(newCreateStaff);
-            return response.status(HttpStatus.CREATED).json({ staff: limitedData, token });
+            const newCreateCompany = await this.companyService.create(company);
+            const limitedData = CompanyResponseDto.fromCompany(newCreateCompany);
+            await this.redisService.setObjectByKeyValue(`COMPANY:${newCreateCompany.id}`, limitedData, expireTimeOneHour);
+            const token = this.authService.generateJwtToken(newCreateCompany);
+            return response.status(HttpStatus.CREATED).json({ company: limitedData, token });
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
         }
     }
 
-    // update an staff
+    // update an company
     @Put(':id')
-    @AllowRoles(['staff'])
+    @AllowRoles(['company', 'staff'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() staff: Staff, @Res() response: Response): Promise<Response> {
+    async update(@Param('id') id: string, @Body() company: Company, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
             }
-            const updateStaff = await this.staffService.update(id, staff);
-            if (!updateStaff) {
-                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Staff not found!' });
+            const updateCompany = await this.companyService.update(id, company);
+            if (!updateCompany) {
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company not found!' });
             }
-            const limitedData = StaffResponseDto.fromStaff(updateStaff);
-            await this.redisService.setObjectByKeyValue(`STAFF:${id}`, limitedData, expireTimeOneHour);
+            const limitedData = CompanyResponseDto.fromCompany(updateCompany);
+            await this.redisService.setObjectByKeyValue(`COMPANY:${id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
         }
     }
 
-    // delete an staff
+    // delete an company
     @Delete(':id')
-    @AllowRoles(['staff'])
+    @AllowRoles(['company', 'staff'])
     @UseGuards(JwtGuard, RolesGuard)
     async delete(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         if (!validate(id)) {
             return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
         }
-        const staff = await this.staffService.findOne(id);
-        if (!staff) {
-            return response.status(HttpStatus.NOT_FOUND).json({ message: 'No staff found!' });
+        const company = await this.companyService.findOne(id);
+        if (!company) {
+            return response.status(HttpStatus.NOT_FOUND).json({ message: 'No company found!' });
         }
-        await this.staffService.delete(id);
-        await this.redisService.deleteObjectByKey(`STAFF:${id}`);
-        return response.status(HttpStatus.OK).json({ message: 'Staff deleted successfully!' });
+        await this.companyService.delete(id);
+        await this.redisService.deleteObjectByKey(`COMPANY:${id}`);
+        return response.status(HttpStatus.OK).json({ message: 'Company deleted successfully!' });
     }
 
     // login
@@ -167,11 +167,11 @@ export class StaffController {
                     return response.status(HttpStatus.OK).json({ token: cachedData });
                 }
             }
-            const staff = await this.staffService.findByEmail(loginData.email);
-            if (!staff || !(await bcrypt.compare(loginData.password, staff.password))) {
+            const company = await this.companyService.findByEmail(loginData.email);
+            if (!company || !(await bcrypt.compare(loginData.password, company.password))) {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
-            const token = this.authService.generateJwtToken(staff);
+            const token = this.authService.generateJwtToken(company);
             await this.redisService.setObjectByKeyValue(`AUTH:${token}`, token, expireTimeOneDay);
             return response.status(HttpStatus.OK).json({ token });
         } catch (error) {
@@ -181,7 +181,7 @@ export class StaffController {
 
     // logout
     @Post('logout')
-    @AllowRoles(['staff'])
+    @AllowRoles(['company'])
     @UseGuards(JwtGuard, RolesGuard)
     async logout(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {

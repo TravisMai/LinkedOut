@@ -8,6 +8,7 @@ import { StaffModule } from 'src/module/staff/staff.module';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { StudentModule } from '../module/student/student.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CompanyModule } from 'src/module/company/company.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     RedisModule,
     StaffModule,
     StudentModule,
+    CompanyModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

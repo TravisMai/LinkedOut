@@ -1,34 +1,34 @@
 import { JwtModule } from '@nestjs/jwt';
-import { Student } from './student.entity';
+import { Company } from './company.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import jwtConfig from 'src/common/jwt/jwt.config';
-import { StudentService } from './student.service';
+import { CompanyService } from './company.service';
 import { StaffModule } from '../staff/staff.module';
-import { StudentController } from './student.controller';
-import { StudentRepository } from './student.repository';
-import { CompanyModule } from '../company/company.module';
+import { CompanyController } from './company.controller';
+import { CompanyRepository } from './company.repository';
+import { StudentModule } from '../student/student.module';
 import { AuthService } from 'src/module/auth/auth.service';
 import { RedisModule } from 'src/module/redis/redis.module';
 import { Module, Logger, forwardRef } from '@nestjs/common';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Student]),
+    TypeOrmModule.forFeature([Company]),
     JwtModule.register({
       secret: jwtConfig.secret,
       signOptions: { expiresIn: jwtConfig.signOptions.expiresIn },
     }),
     RedisModule,
+    forwardRef(() => StudentModule),
     forwardRef(() => StaffModule),
-    forwardRef(() => CompanyModule),
   ],
-  controllers: [StudentController],
+  controllers: [CompanyController],
   providers: [
-    StudentService,
+    CompanyService,
     AuthService,
     Logger,
-    StudentRepository
+    CompanyRepository,
   ],
-  exports: [StudentService],
+  exports: [CompanyService],
 })
-export class StudentModule { }
+export class CompanyModule { }

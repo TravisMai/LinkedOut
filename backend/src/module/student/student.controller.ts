@@ -8,20 +8,22 @@ import { StaffService } from '../staff/staff.service';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { AuthService } from 'src/module/auth/auth.service';
+import { CompanyService } from '../company/company.service';
 import { RedisService } from 'src/module/redis/redis.service';
 import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
+import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
-import { expireTimeFourYear, expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
 
 @Controller('student')
 export class StudentController {
     constructor(
-        private readonly studentService: StudentService,
-        private readonly authService: AuthService,
-        private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
-        private readonly staffService: StaffService
+        private readonly authService: AuthService,
+        private readonly staffService: StaffService,
+        private readonly redisService: RedisService,
+        private readonly studentService: StudentService,
+        private readonly companyService: CompanyService,
     ) { }
 
     @Get('me')
@@ -49,7 +51,7 @@ export class StudentController {
 
     // get all the student
     @Get()
-    @AllowRoles(['staff', 'student'])
+    @AllowRoles(['staff', 'company'])
     @UseGuards(JwtGuard, RolesGuard)
     async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
@@ -73,7 +75,7 @@ export class StudentController {
 
     // get one student by id
     @Get(':id')
-    @AllowRoles(['staff', 'student'])
+    @AllowRoles(['staff', 'company'])
     @UseGuards(JwtGuard, RolesGuard)
     async findOne(@Param('id') id: string, @Res() response: Response): Promise<Response> {
         try {
@@ -101,7 +103,7 @@ export class StudentController {
     @Post()
     async create(@Body() student: Student, @Res() response: Response): Promise<Response> {
         student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
-        if (await this.staffService.findByEmail(student.email) || await this.studentService.findByEmail(student.email)) {
+        if (await this.staffService.findByEmail(student.email) || await this.studentService.findByEmail(student.email) || await this.companyService.findByEmail(student.email)) {
             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
         }
         try {
@@ -155,8 +157,6 @@ export class StudentController {
 
     // login
     @Post('login')
-    @AllowRoles(['student'])
-    @UseGuards(RolesGuard)
     async login(@Req() req: Request, @Body() loginData: { email: string; password: string }, @Res() response: Response): Promise<Response> {
         try {
             const authorizationHeader = req.headers.authorization;
