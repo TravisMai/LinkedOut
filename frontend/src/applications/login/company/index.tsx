@@ -11,39 +11,30 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function CompanyLogin() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+export default function StudentLogin() {
+  const handleSubmitSignIn = async () => {
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement).value;
+    if (email !== "" || password !== "") {
+
+
+      // navigate("/student/testSignin", {email: email, password: password});
+    }
+
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: 'auto' }} className='justify-center items-center my-auto absolute top-0 bottom-0 left-0 right- bg-[url(https://source.unsplash.com/random?wallpapers)] bg-cover'>
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className='rounded-xl'>
           <Box
             sx={{
               my: 8,
@@ -52,13 +43,17 @@ export default function CompanyLogin() {
               flexDirection: 'column',
               alignItems: 'center',
             }}
+
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            </Avatar>
+
+            <img
+              src={Logo}
+              className='w-1/5 h-1/5 rounded-full mb-4'
+            />
             <Typography component="h1" variant="h5">
-              Sign in
+              Login with company account
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleSubmitSignIn} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -84,6 +79,7 @@ export default function CompanyLogin() {
                 label="Remember me"
               />
               <Button
+                onClick={handleSubmitSignIn}
                 type="submit"
                 fullWidth
                 variant="contained"
