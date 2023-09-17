@@ -8,6 +8,7 @@ export class commonAttribute {
 
     @Column()
     @IsString()
+    @IsNotEmpty()
     name: string;
 
     @Column()
