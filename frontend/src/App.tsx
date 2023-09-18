@@ -34,6 +34,13 @@ function App() {
                   <CompanyPage />
                 </PrivateRoute>
               } />
+            <Route
+              path="/student/profile"
+              element={
+                <PrivateRoute layout={UserPageLayout}>
+                  <StaffPage />
+                </PrivateRoute>
+              } />
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/login/company" element={<CompanyLogin />} />
             <Route path="*" element={<NotFoundPage />} />

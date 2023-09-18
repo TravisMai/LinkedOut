@@ -37,7 +37,7 @@ export default function HomePage() {
                         <div className='flex flex-row justify-evenly mb-10' >
                             <img
                                 src={Logo}
-                                className='w-2/5 h-2/5 rounded-full'
+                                className='w-2/5 h-2/5 rounded-full mx-auto'
                             />
                         </div>
                         <Typography
@@ -122,7 +122,7 @@ export default function HomePage() {
             {/* Footer */}
             <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
                 <Typography variant="h6" align="center" gutterBottom>
-                    LinkOut - Graduation project
+                    LinkedOut - Graduation project
                 </Typography>
                 <Typography
                     variant="subtitle1"
