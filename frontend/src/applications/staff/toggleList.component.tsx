@@ -9,23 +9,28 @@ import Dns from '@mui/icons-material/Dns';
 import { Label } from 'recharts';
 import { PropsWithChildren } from 'react';
 
-const data = [
-    { icon: <People />, label: 'Authentication' },
-    { icon: <Dns />, label: 'Database' },
-];
-
 type DataItem = {
     icon: JSX.Element;
     label: string;
 };
 interface IProps {
+    display: (index: string) => void;
     section: string;
     subSection: DataItem[];
 }
 
 const ToggleList: React.FC<PropsWithChildren<IProps>> = (props) => {
-    const { section, subSection} = props;
+    const { section, subSection } = props;
     const [open, setOpen] = React.useState(true);
+
+    props.display
+
+    function handleDisplay(index: string) {
+        return () => {
+            props.display(index)
+        }
+    }
+
     return (<Box
         sx={{
             pb: open ? 2 : 0,
@@ -65,7 +70,7 @@ const ToggleList: React.FC<PropsWithChildren<IProps>> = (props) => {
 
                 <ListItemButton
                     key={item.label}
-
+                    onClick={handleDisplay(section + " / " + item.label)}
                 >
                     <ListItemIcon sx={{ color: '#707070' }} className='pl-6'>
                         {item.icon}

@@ -24,6 +24,16 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Dashboard from './content/Dashboard';
 import Student from './content/Student';
 import Company from './content/Company';
+import Verify from './content/action.verify';
+import Update from './content/Action.update';
+import AllJob from './content/Job.all';
+import ManageJob from './content/Job.manage';
+import InternshipProgram from './content/Internship.program';
+import InternshipRecruitment from './content/Internship.recruitment';
+import InternshipResult from './content/Internship.result';
+import InternshipReport from './content/Internship.report';
+import AllDocument from './content/Document.all';
+import UploadDocument from './content/Document.upload';
 
 function Copyright(props: any) {
     return (
@@ -90,8 +100,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 interface TabPanelProps {
     children?: React.ReactNode;
-    index: number;
-    value: number;
+    index: string;
+    value: string;
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -106,9 +116,7 @@ function CustomTabPanel(props: TabPanelProps) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
+                <Typography>{children}</Typography>
             )}
         </div>
     );
@@ -121,7 +129,7 @@ export default function StaffPage() {
     const toggleDrawer = () => {
         setOpen(!open);
     };
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState("Dashboard");
     return (
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
@@ -151,7 +159,7 @@ export default function StaffPage() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Staff Dashboard
+                            {value}
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
@@ -178,12 +186,14 @@ export default function StaffPage() {
 
                         <MainListItems display={setValue} />
                         <Divider sx={{ marginBottom: 2 }} />
-                        <ToggleList section="Action" subSection={[{ icon: <DashboardIcon />, label: 'Verify' }, { icon: <AssignmentIndIcon />, label: 'Update' },]} />
-                        <ToggleList section="Job" subSection={[{ icon: <DashboardIcon />, label: 'All jobs' }, { icon: <AssignmentIndIcon />, label: 'Manage job' },]} />
-                        <ToggleList section="Internship" subSection={[{ icon: <DashboardIcon />, label: 'Internship Program' }, { icon: <AssignmentIndIcon />, label: 'Recruitment Result' }, { icon: <AssignmentIndIcon />, label: 'Internship Result' }, { icon: <AssignmentIndIcon />, label: 'Report' }]} />
-                        <ToggleList section="Documents" subSection={[{ icon: <DashboardIcon />, label: 'All documents' }, { icon: <AssignmentIndIcon />, label: 'Upload' },]} />
+                        <ToggleList display={setValue} section="Action" subSection={[{ icon: <DashboardIcon />, label: 'Verify' }, { icon: <AssignmentIndIcon />, label: 'Update' },]} />
+                        <ToggleList display={setValue} section="Job" subSection={[{ icon: <DashboardIcon />, label: 'All jobs' }, { icon: <AssignmentIndIcon />, label: 'Manage job' },]} />
+                        <ToggleList display={setValue} section="Internship" subSection={[{ icon: <DashboardIcon />, label: 'Internship Program' }, { icon: <AssignmentIndIcon />, label: 'Recruitment Result' }, { icon: <AssignmentIndIcon />, label: 'Internship Result' }, { icon: <AssignmentIndIcon />, label: 'Report' }]} />
+                        <ToggleList display={setValue} section="Documents" subSection={[{ icon: <DashboardIcon />, label: 'All documents' }, { icon: <AssignmentIndIcon />, label: 'Upload' },]} />
 
                     </List>
+
+                    <Copyright sx={{ bottom: '0', pt: 4, pb: 4 }} />
                 </Drawer>
                 <Box
                     component="main"
@@ -193,24 +203,54 @@ export default function StaffPage() {
                                 ? theme.palette.grey[100]
                                 : theme.palette.grey[900],
                         flexGrow: 1,
-                        height: '100vh',
+                        height: 'auto',
                         overflow: 'auto',
+                        minHeight: '100vh',
                     }}
                 >
                     <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            <CustomTabPanel value={value} index={0} >
-                                <Dashboard />
+                    <Container>
+                        <Grid className='w-full'>
+                            <CustomTabPanel value={value} index={"Dashboard"} >
+                                <Dashboard display={setValue}/>
                             </CustomTabPanel>
-                            <CustomTabPanel value={value} index={1}>
+                            <CustomTabPanel value={value} index={"Student"}>
                                 <Student />
                             </CustomTabPanel>
-                            <CustomTabPanel value={value} index={2}>
+                            <CustomTabPanel value={value} index={"Company"}>
                                 <Company />
                             </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Action / Verify"}>
+                                <Verify />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Action / Update"}>
+                                <Update />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Job / All jobs"}>
+                                <AllJob />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Job / Manage job"}>
+                                <ManageJob />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Internship / Internship Program"}>
+                                <InternshipProgram />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Internship / Recruitment Result"}>
+                                <InternshipRecruitment />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Internship / Internship Result"}>
+                                <InternshipResult />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Internship / Report"}>
+                                <InternshipReport />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Documents / All documents"}>
+                                <AllDocument />
+                            </CustomTabPanel>
+                            <CustomTabPanel value={value} index={"Documents / Upload"}>
+                                <UploadDocument />
+                            </CustomTabPanel>
                         </Grid>
-                        <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>
             </Box>

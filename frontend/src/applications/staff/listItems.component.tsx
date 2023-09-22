@@ -15,7 +15,7 @@ export default function MainListItems(props: any) {
 
   props.display
 
-  function handleDisplay(index: number) {
+  function handleDisplay(index: string) {
     return () => {
       props.display(index)
     }
@@ -23,19 +23,19 @@ export default function MainListItems(props: any) {
 
   return (
     <React.Fragment>
-      <ListItemButton onClick={handleDisplay(0)}>
+      <ListItemButton onClick={handleDisplay("Dashboard")}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemButton>
-      <ListItemButton onClick={handleDisplay(1)}>
+      <ListItemButton onClick={handleDisplay("Student")}>
         <ListItemIcon>
           <AssignmentIndIcon />
         </ListItemIcon>
         <ListItemText primary="Students" />
       </ListItemButton>
-      <ListItemButton onClick={handleDisplay(2)}>
+      <ListItemButton onClick={handleDisplay("Company")}>
         <ListItemIcon>
           <BusinessIcon />
         </ListItemIcon>
