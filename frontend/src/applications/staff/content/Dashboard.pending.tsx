@@ -6,6 +6,10 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 
 // Generate Order Data
 function createData(
@@ -24,9 +28,9 @@ const rows = [
         0,
         '16 Mar, 2019',
         'NABuoi',
-        'HR nhu qq',
+        'HR qq',
         30152512,
-        "file"
+        "https://bard.google.com/chat"
     ),
     createData(
         1,
@@ -34,7 +38,7 @@ const rows = [
         'Noventiq',
         'Tran Tri Dat',
         86635523,
-        'file'
+        'https://mui.com'
     ),
     createData(
         2,
@@ -42,7 +46,7 @@ const rows = [
         'Cybozu',
         'Mai Huu Nghia',
         1008513251,
-        'file'
+        'File'
     ),
     createData(
         3,
@@ -50,7 +54,7 @@ const rows = [
         'Ampere Computing',
         'Le Chi Hung',
         6545325239,
-        'file'
+        'File'
     ),
     createData(
         4,
@@ -58,7 +62,7 @@ const rows = [
         'Rockship',
         'Dinh Xuan Mai',
         5523532323,
-        'file'
+        'File'
     ),
 ];
 
@@ -84,7 +88,8 @@ export default function Pending(props: any) {
                         <TableCell>Company Name</TableCell>
                         <TableCell>Representative</TableCell>
                         <TableCell>Phone Number</TableCell>
-                        <TableCell align="right">File</TableCell>
+                        <TableCell>File</TableCell>
+                        <TableCell align="right">Quick action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -94,10 +99,16 @@ export default function Pending(props: any) {
                             <TableCell>{row.companyName}</TableCell>
                             <TableCell>{row.representative}</TableCell>
                             <TableCell>{row.phone}</TableCell>
-                            <TableCell align="right">
-                                <Link color="primary" href="#" onClick={handleDisplay("Action / Verify")} sx={{ mt: 3 }}>
-                                    {row.file}
+                            <TableCell>
+                                <Link color="primary" href={row.file} target="_blank" onClick={handleDisplay("Action / Verify")} sx={{ mt: 3 }}>
+                                    File
                                 </Link>
+                            </TableCell>
+                            <TableCell align="right">
+                                <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
+                                    <IconButton><CheckIcon /></IconButton>
+                                    <IconButton><CloseIcon /></IconButton>
+                                </Box>
                             </TableCell>
                         </TableRow>
                     ))}
