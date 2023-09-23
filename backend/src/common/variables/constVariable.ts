@@ -5,3 +5,4 @@ export const daysOfYear = 365;
 export const StaffListKey = 'STAFFLIST';
 export const StudentListKey = 'STUDENTLIST';
 export const CompanyListKey = 'COMPANYLIST';
+export const JobListKey = 'JOBLIST';

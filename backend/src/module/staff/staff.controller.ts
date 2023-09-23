@@ -14,6 +14,7 @@ import { RedisService } from 'src/module/redis/redis.service';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { StaffUpdateDto } from './dto/staffUpdate.dto';
 
 @Controller('staff')
 export class StaffController {
@@ -121,10 +122,22 @@ export class StaffController {
     @Put(':id')
     @AllowRoles(['staff'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() staff: Staff, @Res() response: Response): Promise<Response> {
+    async update(@Param('id') id: string, @Body() staff: StaffUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+            }
+            const findStaff = await this.staffService.findOne(id);
+            const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
+            if (!(await bcrypt.compare(staff.password, findStaff.password)) || id !== decodedToken.id) {
+                return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+            }
+            if (staff.newPassword) {
+                staff.password = await bcrypt.hash(staff.newPassword, parseInt(process.env.BCRYPT_SALT));
+                delete staff.newPassword;
+            }
+            else {
+                staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
             }
             const updateStaff = await this.staffService.update(id, staff);
             if (!updateStaff) {
@@ -134,6 +147,7 @@ export class StaffController {
             await this.redisService.setObjectByKeyValue(`STAFF:${id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
+            console.log(error);
             return response.status(error.status).json({ message: error.message });
         }
     }

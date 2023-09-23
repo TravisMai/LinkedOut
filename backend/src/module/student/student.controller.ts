@@ -14,6 +14,7 @@ import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { StudentUpdateDto } from './dto/studentUpdate.dto';
 
 @Controller('student')
 export class StudentController {
@@ -121,10 +122,22 @@ export class StudentController {
     @Put(':id')
     @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() student: Student, @Res() response: Response): Promise<Response> {
+    async update(@Param('id') id: string, @Body() student: StudentUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+            }
+            const findStudent = await this.studentService.findOne(id);
+            const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
+            if (!(await bcrypt.compare(student.password, findStudent.password)) || id !== decodedToken.id) {
+                return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+            }
+            if (student.newPassword) {
+                student.password = await bcrypt.hash(student.newPassword, parseInt(process.env.BCRYPT_SALT));
+                delete student.newPassword;
+            }
+            else {
+                student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
             }
             const updateStudent = await this.studentService.update(id, student);
             if (!updateStudent) {
@@ -134,6 +147,7 @@ export class StudentController {
             await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
+            console.log(error);
             return response.status(error.status).json({ message: error.message });
         }
     }

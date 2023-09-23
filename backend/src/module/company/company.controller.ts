@@ -14,6 +14,7 @@ import { CompanyResponseDto } from './dto/companyResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, CompanyListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { CompanyUpdateDto } from './dto/companyUpdate.dto';
 
 @Controller('company')
 export class CompanyController {
@@ -121,10 +122,22 @@ export class CompanyController {
     @Put(':id')
     @AllowRoles(['company', 'staff'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() company: Company, @Res() response: Response): Promise<Response> {
+    async update(@Param('id') id: string, @Body() company: CompanyUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+            }
+            const findCompany = await this.companyService.findOne(id);
+            const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
+            if (!(await bcrypt.compare(company.password, findCompany.password)) || id !== decodedToken.id) {
+                return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+            }
+            if (company.newPassword) {
+                company.password = await bcrypt.hash(company.newPassword, parseInt(process.env.BCRYPT_SALT));
+                delete company.newPassword;
+            }
+            else {
+                company.password = await bcrypt.hash(company.password, parseInt(process.env.BCRYPT_SALT));
             }
             const updateCompany = await this.companyService.update(id, company);
             if (!updateCompany) {

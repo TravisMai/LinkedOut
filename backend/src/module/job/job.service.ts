@@ -5,38 +5,52 @@ import { JobRepository } from './job.repository';
 @Injectable()
 export class JobService {
     constructor(
-        private companyRepository: JobRepository
+        private jobRepository: JobRepository
     ) { }
 
     // get all the jobs
     async findAll(): Promise<Job[]> {
-        return await this.companyRepository.find();
+        const jobs = await this.jobRepository
+            .createQueryBuilder('job')
+            .leftJoinAndSelect('job.company', 'company')
+            .select(['job', 'company.id', 'company.name', 'company.email', 'company.avatar', 'company.address', 'company.workField'])
+            .getMany();
+
+        return jobs;
     }
 
-    // get one job by id
+    // get a job by id
     async findOne(id: string): Promise<Job> {
-        return await this.companyRepository.findOne({ where: { id } });
+        const job = await this.jobRepository
+            .createQueryBuilder('job')
+            .leftJoinAndSelect('job.company', 'company')
+            .select(['job', 'company.id', 'company.name', 'company.email', 'company.avatar', 'company.address', 'company.workField'])
+            .where('job.id = :id', { id })
+            .getOne();
+
+        return job;
     }
+
 
     // get jobs with criteria
     async findJobsWithCriteria(criteria: Partial<Job>): Promise<Job[]> {
-        return await this.companyRepository.findJobsWithCriteria(criteria);
+        return await this.jobRepository.findJobsWithCriteria(criteria);
     }
 
     // create a new job
     async create(job: Job): Promise<Job> {
-        const newJob = this.companyRepository.create(job);
-        return await this.companyRepository.save(newJob);
+        const newJob = this.jobRepository.create(job);
+        return await this.jobRepository.save(newJob);
     }
 
     // update a job
     async update(id: string, job: Job): Promise<Job> {
-        await this.companyRepository.update(id, job);
-        return await this.companyRepository.findOne({ where: { id } });
+        await this.jobRepository.update(id, job);
+        return await this.jobRepository.findOne({ where: { id } });
     }
 
     // delete a job
     async delete(id: string): Promise<void> {
-        await this.companyRepository.delete({ id });
+        await this.jobRepository.delete({ id });
     }
 }
