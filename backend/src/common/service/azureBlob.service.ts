@@ -16,10 +16,17 @@ export class AzureBlobService {
   }
 
   async upload(file: Express.Multer.File) {
-    const uniqueFileName = uuidv4() + '_' + file.originalname;
+    const uniqueId = Date.now() + '_' + Math.floor(Math.random() * 1000);
+    const fileExtension = file.originalname.split('.').pop();
+    const uniqueFileName = uniqueId + '.' + fileExtension;
     const blobClient = this.getBlobClient(uniqueFileName);
     await blobClient.uploadData(file.buffer);
 
     return blobClient.url;
+  }
+
+  async delete(filename: string) {
+    const blobClient = this.getBlobClient(filename);
+    await blobClient.deleteIfExists();
   }
 }
