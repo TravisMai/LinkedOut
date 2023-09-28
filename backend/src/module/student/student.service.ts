@@ -1,6 +1,7 @@
 import { Student } from './student.entity';
 import { Injectable } from '@nestjs/common';
 import { StudentRepository } from './student.repository';
+import { StudentUpdateDto } from './dto/studentUpdate.dto';
 
 @Injectable()
 export class StudentService {
@@ -25,7 +26,7 @@ export class StudentService {
     }
 
     // update an student
-    async update(id: string, student: Student): Promise<Student> {
+    async update(id: string, student: StudentUpdateDto): Promise<Student> {
         await this.studentRepository.update(id, student);
         return await this.studentRepository.findOne({ where: { id } });
     }

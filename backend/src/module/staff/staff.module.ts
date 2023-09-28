@@ -10,6 +10,7 @@ import { StudentModule } from '../student/student.module';
 import { AuthService } from 'src/module/auth/auth.service';
 import { RedisModule } from 'src/module/redis/redis.module';
 import { Module, Logger, forwardRef } from '@nestjs/common';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { Module, Logger, forwardRef } from '@nestjs/common';
   providers: [
     StaffService,
     AuthService,
+    AzureBlobService,
     Logger,
     StaffRepository,
   ],

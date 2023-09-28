@@ -13,7 +13,10 @@ import { StudentService } from '../student/student.service';
 import { RedisService } from 'src/module/redis/redis.service';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, StaffListKey } from 'src/common/variables/constVariable';
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { StaffUpdateDto } from './dto/staffUpdate.dto';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('staff')
 export class StaffController {
@@ -24,6 +27,7 @@ export class StaffController {
         private readonly redisService: RedisService,
         private readonly studentService: StudentService,
         private readonly companyService: CompanyService,
+        private readonly azureBlobService: AzureBlobService,
     ) { }
 
     @Get('me')
@@ -101,18 +105,23 @@ export class StaffController {
 
     // Create a new staff and return the staff along with a JWT token
     @Post()
-    async create(@Body() staff: Staff, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileInterceptor('myfile'))
+    async create(@UploadedFile() file: Express.Multer.File, @Body() staff: Staff, @Res() response: Response): Promise<Response> {
         staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
         if (await this.staffService.findByEmail(staff.email) || await this.studentService.findByEmail(staff.email) || await this.companyService.findByEmail(staff.email)) {
             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
         }
         try {
+            if (file) {
+                staff.avatar = await this.azureBlobService.upload(file);
+            }
             const newCreateStaff = await this.staffService.create(staff);
             const limitedData = StaffResponseDto.fromStaff(newCreateStaff);
             await this.redisService.setObjectByKeyValue(`STAFF:${newCreateStaff.id}`, limitedData, expireTimeOneHour);
             const token = this.authService.generateJwtToken(newCreateStaff);
             return response.status(HttpStatus.CREATED).json({ staff: limitedData, token });
         } catch (error) {
+            console.log(error);
             return response.status(error.status).json({ message: error.message });
         }
     }
@@ -121,10 +130,27 @@ export class StaffController {
     @Put(':id')
     @AllowRoles(['staff'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() staff: Staff, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileInterceptor('myfile'))
+    async update(@Param('id') id: string, @UploadedFile() file: Express.Multer.File, @Body() staff: StaffUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+            }
+            const findStaff = await this.staffService.findOne(id);
+            const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
+            if (!(await bcrypt.compare(staff.password, findStaff.password)) || id !== decodedToken.id) {
+                return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+            }
+            if (staff.newPassword) {
+                staff.password = await bcrypt.hash(staff.newPassword, parseInt(process.env.BCRYPT_SALT));
+                delete staff.newPassword;
+            }
+            else {
+                staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
+            }
+            if (file) {
+                findStaff.avatar && await this.azureBlobService.delete(findStaff.avatar.split('/').pop());
+                staff.avatar = await this.azureBlobService.upload(file);
             }
             const updateStaff = await this.staffService.update(id, staff);
             if (!updateStaff) {
@@ -134,6 +160,7 @@ export class StaffController {
             await this.redisService.setObjectByKeyValue(`STAFF:${id}`, limitedData, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(limitedData);
         } catch (error) {
+            console.log(error);
             return response.status(error.status).json({ message: error.message });
         }
     }

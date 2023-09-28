@@ -1,133 +1,156 @@
-// import * as bcrypt from 'bcrypt';
-// import { JwtService } from '@nestjs/jwt';
-// import { Company } from './company.entity';
-// import validate = require('uuid-validate');
-// import { Request, Response } from 'express';
-// import { CompanyService } from './company.service';
-// import { StaffService } from '../staff/staff.service';
-// import { JwtGuard } from 'src/common/guards/jwt.guard';
-// import { RolesGuard } from 'src/common/guards/role.guard';
-// import { AuthService } from 'src/module/auth/auth.service';
-// import { StudentService } from '../student/student.service';
-// import { RedisService } from 'src/module/redis/redis.service';
-// import { AllowRoles } from 'src/common/decorators/role.decorator';
-// import { expireTimeOneDay, expireTimeOneHour, CompanyListKey } from 'src/common/variables/constVariable';
-// import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import validate = require('uuid-validate');
+import { Request, Response } from 'express';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import { expireTimeOneDay, expireTimeOneHour, CompanyListKey, JobListKey } from 'src/common/variables/constVariable';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { Job } from './job.entity';
+import { CompanyService } from "../company/company.service";
+import { StudentService } from "../student/student.service";
+import { StaffService } from "../staff/staff.service";
+import { RedisService } from "../redis/redis.service";
+import { AuthService } from "../auth/auth.service";
+import { JwtService } from "@nestjs/jwt";
+import { AllowRoles } from "src/common/decorators/role.decorator";
+import { JobService } from './job.service';
+import { JobResponseDto } from './dto/JobResponse.dto';
+import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
 
-// @Controller('company')
-// export class CompanyController {
-//     constructor(
-//         private readonly jwtService: JwtService,
-//         private readonly authService: AuthService,
-//         private readonly redisService: RedisService,
-//         private readonly staffService: StaffService,
-//         private readonly studentService: StudentService,
-//         private readonly companyService: CompanyService,
-//     ) { }
 
-//     // get all the companys
-//     @Get()
-//     @AllowRoles(['staff', 'student'])
-//     @UseGuards(JwtGuard, RolesGuard)
-//     async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
-//         try {
-//             const cachedData = await this.redisService.getObjectByKey(CompanyListKey);
-//             if (cachedData) {
-//                 return response.status(HttpStatus.OK).json(cachedData);
-//             }
-//             else {
-//                 const findAllResult = await this.companyService.findAll();
-//                 if (!findAllResult || findAllResult.length === 0) {
-//                     return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company list is empty!' });
-//                 }
-//                 const limitedData = CompanyResponseDto.fromCompanyArray(findAllResult);
-//                 await this.redisService.setObjectByKeyValue(CompanyListKey, limitedData, 120);
-//                 return response.status(HttpStatus.OK).json(limitedData);
-//             }
-//         } catch (error) {
-//             return response.status(error.status).json({ message: error.message });
-//         }
-//     }
+@Controller('job')
+export class JobController {
+    constructor(
+        private readonly jwtService: JwtService,
+        private readonly authService: AuthService,
+        private readonly redisService: RedisService,
+        private readonly staffService: StaffService,
+        private readonly studentService: StudentService,
+        private readonly companyService: CompanyService,
+        private readonly jobService: JobService,
+    ) { }
 
-//     // get one company by id
-//     @Get(':id')
-//     @AllowRoles(['staff', 'student'])
-//     @UseGuards(JwtGuard, RolesGuard)
-//     async findOne(@Param('id') id: string, @Res() response: Response): Promise<Response> {
-//         try {
-//             if (!validate(id)) {
-//                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
-//             }
-//             const cachedData = await this.redisService.getObjectByKey(`COMPANY:${id}`);
-//             if (cachedData) {
-//                 return response.status(HttpStatus.OK).json(cachedData);
-//             } else {
-//                 const company = await this.companyService.findOne(id);
-//                 if (!company) {
-//                     return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company not found!' });
-//                 }
-//                 const limitedData = CompanyResponseDto.fromCompany(company);
-//                 await this.redisService.setObjectByKeyValue(`COMPANY:${id}`, limitedData, expireTimeOneHour);
-//                 return response.status(HttpStatus.OK).json(limitedData);
-//             }
-//         } catch (error) {
-//             return response.status(error.status).json({ message: error.message });
-//         }
-//     }
+    // get all the jobs
+    @Get()
+    @AllowRoles(['staff', 'student'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
+        try {
+            const cachedData = await this.redisService.getObjectByKey(JobListKey);
+            if (cachedData) {
+                return response.status(HttpStatus.OK).json(cachedData);
+            }
+            else {
+                const findAllResult = await this.jobService.findAll();
+                if (!findAllResult || findAllResult.length === 0) {
+                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Job list is empty!' });
+                }
 
-//     // Create a new company and return the company along with a JWT token
-//     @Post()
-//     async create(@Body() company: Company, @Res() response: Response): Promise<Response> {
-//         company.password = await bcrypt.hash(company.password, parseInt(process.env.BCRYPT_SALT));
-//         if (await this.staffService.findByEmail(company.email) || await this.studentService.findByEmail(company.email) || await this.companyService.findByEmail(company.email)) {
-//             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
-//         }
-//         try {
-//             const newCreateCompany = await this.companyService.create(company);
-//             const limitedData = CompanyResponseDto.fromCompany(newCreateCompany);
-//             await this.redisService.setObjectByKeyValue(`COMPANY:${newCreateCompany.id}`, limitedData, expireTimeOneHour);
-//             const token = this.authService.generateJwtToken(newCreateCompany);
-//             return response.status(HttpStatus.CREATED).json({ company: limitedData, token });
-//         } catch (error) {
-//             return response.status(error.status).json({ message: error.message });
-//         }
-//     }
+                const limitedData = JobResponseDto.fromJobArray(findAllResult);
+                await this.redisService.setObjectByKeyValue(JobListKey, limitedData, 120);
+                return response.status(HttpStatus.OK).json(limitedData);
+            }
+        } catch (error) {
+            return response.status(error.status).json({ message: error.message });
+        }
+    }
 
-//     // update an company
-//     @Put(':id')
-//     @AllowRoles(['company', 'staff'])
-//     @UseGuards(JwtGuard, RolesGuard)
-//     async update(@Param('id') id: string, @Body() company: Company, @Res() response: Response): Promise<Response> {
-//         try {
-//             if (!validate(id)) {
-//                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
-//             }
-//             const updateCompany = await this.companyService.update(id, company);
-//             if (!updateCompany) {
-//                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Company not found!' });
-//             }
-//             const limitedData = CompanyResponseDto.fromCompany(updateCompany);
-//             await this.redisService.setObjectByKeyValue(`COMPANY:${id}`, limitedData, expireTimeOneHour);
-//             return response.status(HttpStatus.OK).json(limitedData);
-//         } catch (error) {
-//             return response.status(error.status).json({ message: error.message });
-//         }
-//     }
+    // create a job
+    @Post()
+    @AllowRoles(['company'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async create(@Body() job: Job, @Req() req: Request, @Res() response: Response): Promise<Response> {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            const decodedToken = this.jwtService.decode(token) as { id: string };
+            job.company = CompanyResponseDto.fromCompany(await this.companyService.findOne(decodedToken.id));
+            const newCreateJob = await this.jobService.create(job);
+            const limitedData = JobResponseDto.fromJob(newCreateJob);
+            await this.redisService.setObjectByKeyValue(`JOB:${newCreateJob.id}`, limitedData, expireTimeOneHour);
+            return response.status(HttpStatus.CREATED).json({ job: newCreateJob });
+        } catch (error) {
+            return response.status(error.status).json({ message: error.message });
+        }
+    }
 
-//     // delete an company
-//     @Delete(':id')
-//     @AllowRoles(['company', 'staff'])
-//     @UseGuards(JwtGuard, RolesGuard)
-//     async delete(@Param('id') id: string, @Res() response: Response): Promise<Response> {
-//         if (!validate(id)) {
-//             return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
-//         }
-//         const company = await this.companyService.findOne(id);
-//         if (!company) {
-//             return response.status(HttpStatus.NOT_FOUND).json({ message: 'No company found!' });
-//         }
-//         await this.companyService.delete(id);
-//         await this.redisService.deleteObjectByKey(`COMPANY:${id}`);
-//         return response.status(HttpStatus.OK).json({ message: 'Company deleted successfully!' });
-//     }
-// }
+    // get job by id
+    @Get(':id')
+    @AllowRoles(['staff', 'student'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async findOne(@Param('id') id: string, @Res() response: Response): Promise<Response> {
+        try {
+            if (!validate(id)) {
+                return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+            }
+            const cachedData = await this.redisService.getObjectByKey(`JOB:${id}`);
+            if (cachedData) {
+                return response.status(HttpStatus.OK).json(cachedData);
+            } else {
+                const job = await this.jobService.findOne(id);
+                if (!job) {
+                    return response.status(HttpStatus.NOT_FOUND).json({ message: 'Job not found!' });
+                }
+                const limitedData = JobResponseDto.fromJob(job);
+                await this.redisService.setObjectByKeyValue(`JOB:${id}`, limitedData, expireTimeOneHour);
+                return response.status(HttpStatus.OK).json(limitedData);
+            }
+        } catch (error) {
+            return response.status(error.status).json({ message: error.message });
+        }
+    }
+
+    // update a job
+    @Put(':id')
+    @AllowRoles(['company'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async update(@Param('id') id: string, @Body() job: Job, @Res() response: Response): Promise<Response> {
+        try {
+            if (!validate(id)) {
+                return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+            }
+            const updateJob = await this.jobService.update(id, job);
+            if (!updateJob) {
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'Job not found!' });
+            }
+            const limitedData = JobResponseDto.fromJob(updateJob);
+            await this.redisService.setObjectByKeyValue(`JOB:${id}`, limitedData, expireTimeOneHour);
+            return response.status(HttpStatus.OK).json(limitedData);
+        } catch (error) {
+            return response.status(error.status).json({ message: error.message });
+        }
+    }
+
+    // delete a job
+    @Delete(':id')
+    @AllowRoles(['company', 'staff'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async delete(@Param('id') id: string, @Res() response: Response): Promise<Response> {
+        if (!validate(id)) {
+            return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
+        }
+        const job = await this.jobService.findOne(id);
+        if (!job) {
+            return response.status(HttpStatus.NOT_FOUND).json({ message: 'No job found!' });
+        }
+        await this.jobService.delete(id);
+        await this.redisService.deleteObjectByKey(`JOB:${id}`);
+        return response.status(HttpStatus.OK).json({ message: 'Job deleted successfully!' });
+    }
+
+    // get jobs with criteria
+    @Post('search')
+    @AllowRoles(['staff', 'student'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async findJobsWithCriteria(@Body() criteria: Partial<Job>, @Res() response: Response): Promise<Response> {
+        try {
+            const findJobsWithCriteriaResult = await this.jobService.findJobsWithCriteria(criteria);
+            if (!findJobsWithCriteriaResult || findJobsWithCriteriaResult.length === 0) {
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'No job found!' });
+            }
+            const limitedData = JobResponseDto.fromJobArray(findJobsWithCriteriaResult);
+            return response.status(HttpStatus.OK).json(limitedData);
+        } catch (error) {
+            return response.status(error.status).json({ message: error.message });
+        }
+    }
+}

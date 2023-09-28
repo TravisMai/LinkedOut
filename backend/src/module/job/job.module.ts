@@ -1,4 +1,4 @@
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import jwtConfig from 'src/common/jwt/jwt.config';
 import { StaffModule } from '../staff/staff.module';
@@ -8,6 +8,9 @@ import { RedisModule } from 'src/module/redis/redis.module';
 import { Module, Logger, forwardRef } from '@nestjs/common';
 import { Job } from './job.entity';
 import { CompanyModule } from '../company/company.module';
+import { JobController } from './job.controller';
+import { JobService } from './job.service';
+import { JobRepository } from './job.repository';
 
 @Module({
   imports: [
@@ -17,12 +20,16 @@ import { CompanyModule } from '../company/company.module';
       signOptions: { expiresIn: jwtConfig.signOptions.expiresIn },
     }),
     RedisModule,
-    CompanyModule
+    CompanyModule,
+    StaffModule,
+    StudentModule,
   ],
-  controllers: [],
+  controllers: [JobController],
   providers: [
     AuthService,
     Logger,
+    JobService,
+    JobRepository
   ],
   exports: [],
 })
