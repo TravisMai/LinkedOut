@@ -1,6 +1,7 @@
 import { Company } from './company.entity';
 import { Injectable } from '@nestjs/common';
 import { CompanyRepository } from './company.repository';
+import { CompanyUpdateDto } from './dto/companyUpdate.dto';
 
 @Injectable()
 export class CompanyService {
@@ -20,12 +21,12 @@ export class CompanyService {
 
     // create a new company
     async create(company: Company): Promise<Company> {
-        const newCompany = this.companyRepository.create(company);
+        const newCompany = await this.companyRepository.createCompany(company);
         return await this.companyRepository.save(newCompany);
     }
 
     // update an company
-    async update(id: string, company: Company): Promise<Company> {
+    async update(id: string, company: CompanyUpdateDto): Promise<Company> {
         await this.companyRepository.update(id, company);
         return await this.companyRepository.findOne({ where: { id } });
     }

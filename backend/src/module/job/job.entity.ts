@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { commonAttribute } from "src/common/entities/commonAttribute.entity";
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, Length, Min } from "class-validator";
 import { PostDescription } from "src/common/interfaces/postDescription.interface";
 import { Company } from "../company/company.entity";
+import { CompanyResponseDto } from "../company/dto/companyResponse.dto";
 
 @Entity()
 export class Job {
@@ -11,7 +12,7 @@ export class Job {
 
     @ManyToOne(() => Company, { eager: true })
     @JoinColumn({ name: 'companyId' })
-    company: Company;
+    company: CompanyResponseDto;
 
     @Column()
     @IsString()
@@ -24,7 +25,7 @@ export class Job {
     @IsOptional()
     image: string[];
 
-    @Column()
+    @Column({ nullable: true })
     @IsOptional()
     @IsNumber()
     salary: number;
@@ -42,11 +43,11 @@ export class Job {
     @Column()
     @IsNotEmpty()
     @IsNumber()
-    @Length(1)
+    @Min(0, { message: "Quantity must be a positive number" })
     quantity: number;
 
-    @Column('json')
-    @IsNotEmpty()
+    @Column('json', { nullable: true })
+    @IsOptional()
     descriptions: PostDescription;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

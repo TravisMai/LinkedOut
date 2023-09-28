@@ -1,6 +1,7 @@
 import { Staff } from './staff.entity';
 import { Injectable } from '@nestjs/common';
 import { StaffRepository } from './staff.repository';
+import { StaffUpdateDto } from './dto/staffUpdate.dto';
 
 @Injectable()
 export class StaffService {
@@ -20,12 +21,12 @@ export class StaffService {
 
     // create a new staff
     async create(staff: Staff): Promise<Staff> {
-        const newStaff = this.staffRepository.create(staff);
+        const newStaff = await this.staffRepository.createStaff(staff);
         return await this.staffRepository.save(newStaff);
     }
 
     // update an staff
-    async update(id: string, staff: Staff): Promise<Staff> {
+    async update(id: string, staff: StaffUpdateDto): Promise<Staff> {
         await this.staffRepository.update(id, staff);
         return await this.staffRepository.findOne({ where: { id } });
     }
