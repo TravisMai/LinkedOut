@@ -13,8 +13,10 @@ import { RedisService } from 'src/module/redis/redis.service';
 import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { StudentUpdateDto } from './dto/studentUpdate.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Controller('student')
 export class StudentController {
@@ -25,6 +27,7 @@ export class StudentController {
         private readonly redisService: RedisService,
         private readonly studentService: StudentService,
         private readonly companyService: CompanyService,
+        private readonly azureBlobService: AzureBlobService,
     ) { }
 
     @Get('me')
@@ -102,12 +105,16 @@ export class StudentController {
 
     // Create a new student and return the student along with a JWT token
     @Post()
-    async create(@Body() student: Student, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileInterceptor('myfile'))
+    async create(@UploadedFile() file: Express.Multer.File, @Body() student: Student, @Res() response: Response): Promise<Response> {
         student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
         if (await this.staffService.findByEmail(student.email) || await this.studentService.findByEmail(student.email) || await this.companyService.findByEmail(student.email)) {
             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
         }
         try {
+            if (file) {
+                student.avatar = await this.azureBlobService.upload(file);
+            }
             const newCreateStudent = await this.studentService.create(student);
             const limitedData = StudentResponseDto.fromStudent(newCreateStudent);
             await this.redisService.setObjectByKeyValue(`STUDENT:${newCreateStudent.id}`, limitedData, expireTimeOneHour);
@@ -122,7 +129,8 @@ export class StudentController {
     @Put(':id')
     @AllowRoles(['staff', 'student'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() student: StudentUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileInterceptor('myfile'))
+    async update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() student: StudentUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
@@ -138,6 +146,10 @@ export class StudentController {
             }
             else {
                 student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
+            }
+            if (file) {
+                findStudent.avatar && await this.azureBlobService.delete(findStudent.avatar.split('/').pop());
+                student.avatar = await this.azureBlobService.upload(file);
             }
             const updateStudent = await this.studentService.update(id, student);
             if (!updateStudent) {
@@ -166,6 +178,7 @@ export class StudentController {
         }
         await this.studentService.delete(id);
         await this.redisService.deleteObjectByKey(`STUDENT:${id}`);
+        await this.azureBlobService.delete(student.avatar.split('/').pop());
         return response.status(HttpStatus.OK).json({ message: 'Student deleted successfully!' });
     }
 

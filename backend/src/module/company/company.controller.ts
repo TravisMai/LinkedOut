@@ -13,8 +13,10 @@ import { RedisService } from 'src/module/redis/redis.service';
 import { CompanyResponseDto } from './dto/companyResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, CompanyListKey } from 'src/common/variables/constVariable';
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { CompanyUpdateDto } from './dto/companyUpdate.dto';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('company')
 export class CompanyController {
@@ -25,6 +27,7 @@ export class CompanyController {
         private readonly staffService: StaffService,
         private readonly studentService: StudentService,
         private readonly companyService: CompanyService,
+        private readonly azureBlobService: AzureBlobService,
     ) { }
 
     @Get('me')
@@ -102,12 +105,16 @@ export class CompanyController {
 
     // Create a new company and return the company along with a JWT token
     @Post()
-    async create(@Body() company: Company, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileInterceptor('myfile'))
+    async create(@UploadedFile() file: Express.Multer.File, @Body() company: Company, @Res() response: Response): Promise<Response> {
         company.password = await bcrypt.hash(company.password, parseInt(process.env.BCRYPT_SALT));
         if (await this.staffService.findByEmail(company.email) || await this.studentService.findByEmail(company.email) || await this.companyService.findByEmail(company.email)) {
             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
         }
         try {
+            if (file) {
+                company.avatar = await this.azureBlobService.upload(file);
+            }
             const newCreateCompany = await this.companyService.create(company);
             const limitedData = CompanyResponseDto.fromCompany(newCreateCompany);
             await this.redisService.setObjectByKeyValue(`COMPANY:${newCreateCompany.id}`, limitedData, expireTimeOneHour);
@@ -122,7 +129,8 @@ export class CompanyController {
     @Put(':id')
     @AllowRoles(['company', 'staff'])
     @UseGuards(JwtGuard, RolesGuard)
-    async update(@Param('id') id: string, @Body() company: CompanyUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileInterceptor('myfile'))
+    async update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() company: CompanyUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
@@ -138,6 +146,10 @@ export class CompanyController {
             }
             else {
                 company.password = await bcrypt.hash(company.password, parseInt(process.env.BCRYPT_SALT));
+            }
+            if (file) {
+                findCompany.avatar && await this.azureBlobService.delete(findCompany.avatar.split('/').pop());
+                company.avatar = await this.azureBlobService.upload(file);
             }
             const updateCompany = await this.companyService.update(id, company);
             if (!updateCompany) {
@@ -165,6 +177,7 @@ export class CompanyController {
         }
         await this.companyService.delete(id);
         await this.redisService.deleteObjectByKey(`COMPANY:${id}`);
+        await this.azureBlobService.delete(company.avatar.split('/').pop());
         return response.status(HttpStatus.OK).json({ message: 'Company deleted successfully!' });
     }
 

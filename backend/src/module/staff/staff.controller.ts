@@ -179,6 +179,7 @@ export class StaffController {
         }
         await this.staffService.delete(id);
         await this.redisService.deleteObjectByKey(`STAFF:${id}`);
+        await this.azureBlobService.delete(staff.avatar.split('/').pop());
         return response.status(HttpStatus.OK).json({ message: 'Staff deleted successfully!' });
     }
 
