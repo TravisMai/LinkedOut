@@ -12,7 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import Alert from '@mui/material/Alert';
+import { useState } from 'react';
 
 function Copyright(props: any) {
     return (
@@ -30,14 +33,57 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignUpPage() {
+export default function SignUp() {
+    const navigate = useNavigate();
+    const [error, setError] = useState<Array<string>>([]);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+    });
 
-    /* Handle form submission */
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
-    
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const { name, email, phone, password } = formData;
+        if (!name || !email || !phone || !password) {
+            setError(["Please fill in all fields."]);
+            return;
+        }
 
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/student', {
+                name,
+                email,
+                password,
+                phoneNumber: phone,
+            });
 
-    /* Render form */
+            // Handle the response here, e.g., show success message or redirect.
+            navigate('/login');
+            console.log('Response:', response.data);
+        } catch (error: any) {
+            // Handle errors here, e.g., show error message.
+            console.log('Error:', error);
+            setError(error.response.data.message);
+        }
+    };
+
+    // Check if there are any errors and if any required fields are empty
+    const isButtonDisabled =
+        error.length > 0 ||
+        !formData.name ||
+        !formData.email ||
+        !formData.phone ||
+        !formData.password;
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -57,7 +103,7 @@ export default function SignUpPage() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -67,6 +113,8 @@ export default function SignUpPage() {
                                     label="Full Name"
                                     name="name"
                                     autoComplete="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -77,6 +125,8 @@ export default function SignUpPage() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -87,6 +137,8 @@ export default function SignUpPage() {
                                     label="Phone Number"
                                     name="phone"
                                     autoComplete="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -98,18 +150,25 @@ export default function SignUpPage() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
                                 />
                             </Grid>
-
                         </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign Up
-                        </Button>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                            <Typography className='text-red-500' variant="body2" mt={2} mb={-2}>
+                                {isButtonDisabled && "*Please fill in all fields."}
+                            </Typography>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 2, mb: 2 }}
+                                disabled={isButtonDisabled}
+                            >
+                                Sign Up
+                            </Button>
+                        </Box>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Link href="#" variant="body2">
