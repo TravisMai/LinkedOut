@@ -9,6 +9,7 @@ import UserPageLayout from "./shared/layout/UserPageLayout";
 import HomePage from "./applications/home";
 import StudentLogin from "./applications/login/student";
 import CompanyLogin from "./applications/login/company";
+import SignUpPage from "./applications/signup";
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
               } />
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/login/company" element={<CompanyLogin />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="404" element={<NotFoundPage />} />
 
