@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useMutation } from "react-query";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
@@ -33,13 +34,35 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
+type ResponeType = {
+    data: {
+        student: {
+            id: string;
+            name: string;
+            email: string;
+            phoneNumber: string;
+            avatar: string;
+            isGoogle: boolean;
+            isVerify: boolean;
+        };
+        token: string;
+    };
+}
+
+interface newForm {
+    name: string;
+    email: string;
+    phoneNumber: number;
+    password: string;
+}
+
 export default function SignUp() {
     const navigate = useNavigate();
-    const [error, setError] = useState<Array<string>>([]);
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        phone: '',
+        phoneNumber: 0,
         password: '',
     });
 
@@ -51,39 +74,36 @@ export default function SignUp() {
         }));
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const { name, email, phone, password } = formData;
-        if (!name || !email || !phone || !password) {
-            setError(["Please fill in all fields."]);
-            return;
-        }
+    const mutation = useMutation<ResponeType, Error, newForm>(
+        (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm)
+    );
 
-        try {
-            const response = await axios.post('http://localhost:5000/api/v1/student', {
-                name,
-                email,
-                password,
-                phoneNumber: phone,
-            });
-
-            // Handle the response here, e.g., show success message or redirect.
-            navigate('/login');
-            console.log('Response:', response.data);
-        } catch (error: any) {
-            // Handle errors here, e.g., show error message.
-            console.log('Error:', error);
-            setError(error.response.data.message);
-        }
+    // Function to store JWT token in cookie
+    const storeJwtToken = (token: string) => {
+        document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
     };
 
-    // Check if there are any errors and if any required fields are empty
-    const isButtonDisabled =
-        error.length > 0 ||
-        !formData.name ||
-        !formData.email ||
-        !formData.phone ||
-        !formData.password;
+    // Handlde submission
+    const handleSubmit = () => {
+        console.log(formData);
+        mutation.mutate(formData);
+    };
+    if (mutation.isLoading) {
+        return <span>Submitting...</span>;
+    }
+
+    if (mutation.isError) {
+        console.log(mutation.error);
+        return <span>Error: {mutation.error?.message}</span>;
+    }
+
+    if (mutation.isSuccess) {
+        const token = mutation.data?.data.token;
+        // Store token in cookie
+        storeJwtToken(token);
+        navigate('/student/testGet');
+        return <span>Post submitted!</span>;
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -133,11 +153,11 @@ export default function SignUp() {
                                 <TextField
                                     required
                                     fullWidth
-                                    id="phone"
+                                    id="phoneNumber"
                                     label="Phone Number"
-                                    name="phone"
+                                    name="phoneNumber"
                                     autoComplete="phone"
-                                    value={formData.phone}
+                                    value={formData.phoneNumber !== 0 ? formData.phoneNumber : ''}
                                     onChange={handleInputChange}
                                 />
                             </Grid>
@@ -156,15 +176,15 @@ export default function SignUp() {
                             </Grid>
                         </Grid>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-                            <Typography className='text-red-500' variant="body2" mt={2} mb={-2}>
+                            {/* <Typography className='text-red-500' variant="body2" mt={2} mb={-2}>
                                 {isButtonDisabled && "*Please fill in all fields."}
-                            </Typography>
+                            </Typography> */}
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 2, mb: 2 }}
-                                disabled={isButtonDisabled}
+                            // disabled={isButtonDisabled}
                             >
                                 Sign Up
                             </Button>

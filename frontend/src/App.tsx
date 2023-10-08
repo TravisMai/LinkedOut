@@ -10,11 +10,16 @@ import HomePage from "./applications/home";
 import StudentLogin from "./applications/login/student";
 import CompanyLogin from "./applications/login/company";
 import SignUpPage from "./applications/signup";
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import TestGet from "./applications/student/testGetAllStudent";
+
+const queryClient = new QueryClient()
 
 function App() {
 
   return (
-    <>
+
+    <QueryClientProvider client={queryClient}>
       <Suspense fallback={<div>Loading...</div>}>
         <BrowserRouter>
           <Routes>
@@ -45,13 +50,14 @@ function App() {
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/login/company" element={<CompanyLogin />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/student/testGet" element={<TestGet />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="404" element={<NotFoundPage />} />
 
           </Routes>
         </BrowserRouter>
       </Suspense>
-    </>
+    </QueryClientProvider>
   )
 }
 
