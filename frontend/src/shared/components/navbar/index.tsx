@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BellRing, Briefcase, MessagesSquare, Home } from 'lucide-react';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
@@ -11,8 +11,33 @@ import {
   MinusCircleOutlined,
   SyncOutlined,
 } from '@ant-design/icons';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const Navbar: React.FC = () => {
+  const [studentEmail, setStudentEmail] = useState("");
+
+  // Fetch for student info
+  const getJwtToken = () => {
+    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
+  };
+
+  const token = getJwtToken();
+  const getStudentInfo = useQuery({
+    queryKey: "studentInfo",
+    queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  });
+
+  useEffect(() => {
+    if (getStudentInfo.isSuccess) {
+      setStudentEmail(getStudentInfo.data.data.email);
+    }
+  }, [getStudentInfo.isSuccess]);
+
   const location = useLocation();
   const pathName = location?.pathname.split('/')[1];
   return (
@@ -102,7 +127,7 @@ const Navbar: React.FC = () => {
         <div className="h-10 w-full col-span-7 mx-1 pr-2 ">
           <Link to="/student/profile">
             <button className="mx-4 h-10 px-2 w-fit grid grid-cols-5 space-x-1 items-center focus:outline-none hover:bg-gray-300 rounded-full">
-              <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">hung.lechpro@hcmut.edu.vn</p>
+              <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">{studentEmail}</p>
               <div>
                 <img
                   src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-6/273877541_4799385830176329_4891712365804515546_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1b51e3&_nc_ohc=EDDvDSGG2gsAX88T2W5&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfBnypi4b8yffb3ARBVZAFQN0Es0LctmOKEPaZrLZCQ1kA&oe=65046731"

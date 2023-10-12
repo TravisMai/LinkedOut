@@ -50,7 +50,6 @@ function App() {
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/login/company" element={<CompanyLogin />} />
             <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/student/testGet" element={<TestGet />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="404" element={<NotFoundPage />} />
 

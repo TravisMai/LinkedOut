@@ -1,11 +1,36 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import DividerWithText from '../../shared/components/DividerWithText';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const LeftSidebar: React.FC = () => {
   const [showContent, setShowContent] = useState(false);
+  const [studentName, setStudentName] = useState("");
+
+  // Fetch for student info
+  const getJwtToken = () => {
+    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
+  };
+
+  const token = getJwtToken();
+    const getStudentInfo = useQuery({
+        queryKey: "student",
+        queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+    });
+
+    useEffect(() => {
+        if (getStudentInfo.isSuccess) {
+            setStudentName(getStudentInfo.data.data.name);
+        }
+    }, [getStudentInfo.isSuccess]);
+
 
   const toggleContent = () => {
     setShowContent(!showContent);
@@ -23,7 +48,7 @@ const LeftSidebar: React.FC = () => {
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>
-        <h1 className='mx-auto font-semibold text-base lg:text-2xl text-black pb-5'>Lê Chí Hùng</h1>
+        <h1 className='mx-auto font-semibold text-base lg:text-2xl text-black pb-5'>{studentName}</h1>
       </div>
       <div className={`w-full border-b-4 bg-white rounded-lg border-[#f3f2f0] lg:flex lg:flex-col items-center justify-center py-6 ${showContent ? 'block' : 'hidden'}`}>
         <h1 className='mx-auto text-lg text-black'>MSSV: 19521382</h1>

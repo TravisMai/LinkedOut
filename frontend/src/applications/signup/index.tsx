@@ -17,6 +17,10 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useState } from 'react';
+import LoadingButton from '@mui/lab/LoadingButton';
+import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
+import InputAdornment from '@mui/material/InputAdornment';
 
 function Copyright(props: any) {
     return (
@@ -52,20 +56,42 @@ type ResponeType = {
 interface newForm {
     name: string;
     email: string;
-    phoneNumber: number;
+    phoneNumber: string;
     password: string;
 }
 
+const countryCode = [
+    {
+        label: 'VNM',
+        numberPrefix: '+84',
+    },
+    {
+        label: 'AUS',
+        numberPrefix: '+61',
+    },
+    {
+        label: 'USA',
+        numberPrefix: '+1',
+    },
+    {
+        label: 'JPN',
+        numberPrefix: '+81',
+    },
+];
+
 export default function SignUp() {
     const navigate = useNavigate();
+    const [sending, setSending] = useState(false);
 
+    const [country, countryChange] = useState(0);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        phoneNumber: 0,
+        phoneNumber: '',
         password: '',
     });
 
+    // Handle input change
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
@@ -74,24 +100,33 @@ export default function SignUp() {
         }));
     };
 
-    const mutation = useMutation<ResponeType, Error, newForm>(
-        (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm)
-    );
-
     // Function to store JWT token in cookie
     const storeJwtToken = (token: string) => {
         document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
     };
 
+    // Handle country selection change
+    const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
+        countryChange(selectedCountryIndex);
+    };
+
+    // Mutation to send form data to server    
+    const mutation = useMutation<ResponeType, Error, newForm>(
+        (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm)
+    );
+
     // Handlde submission
-    const handleSubmit = () => {
-        console.log(formData);
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        // Add country code to phone number
+        formData.phoneNumber = '0' + formData.phoneNumber;
+        
         mutation.mutate(formData);
     };
     if (mutation.isLoading) {
         return <span>Submitting...</span>;
     }
-
     if (mutation.isError) {
         console.log(mutation.error);
         return <span>Error: {mutation.error?.message}</span>;
@@ -99,10 +134,11 @@ export default function SignUp() {
 
     if (mutation.isSuccess) {
         const token = mutation.data?.data.token;
+
         // Store token in cookie
         storeJwtToken(token);
-        navigate('/student/testGet');
-        return <span>Post submitted!</span>;
+        navigate('/student/');
+        return <div>Yeah</div>
     }
 
     return (
@@ -123,7 +159,7 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -142,6 +178,7 @@ export default function SignUp() {
                                     required
                                     fullWidth
                                     id="email"
+                                    type="email"
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
@@ -149,7 +186,25 @@ export default function SignUp() {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+                                    id="selectCountry"
+                                    select
+                                    label="Country"
+                                    defaultValue={countryCode[country].label}
+                                    fullWidth
+                                    value={countryCode[country].label} // Use the selected country from state
+                                    onChange={handleCountryChange} // Handle country selection change
+
+                                >
+                                    {countryCode.map((option) => (
+                                        <MenuItem key={option.label} value={option.label}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} sm={9}>
                                 <TextField
                                     required
                                     fullWidth
@@ -157,10 +212,21 @@ export default function SignUp() {
                                     label="Phone Number"
                                     name="phoneNumber"
                                     autoComplete="phone"
-                                    value={formData.phoneNumber !== 0 ? formData.phoneNumber : ''}
+                                    value={formData.phoneNumber}
                                     onChange={handleInputChange}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                {countryCode[country].numberPrefix} {/* Use the selected country's number prefix */}
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    inputProps={{
+                                        pattern: "^[0-9]{9,10}$" // Only allows numeric characters
+                                    }}
                                 />
                             </Grid>
+
                             <Grid item xs={12}>
                                 <TextField
                                     required
@@ -179,15 +245,15 @@ export default function SignUp() {
                             {/* <Typography className='text-red-500' variant="body2" mt={2} mb={-2}>
                                 {isButtonDisabled && "*Please fill in all fields."}
                             </Typography> */}
-                            <Button
-                                type="submit"
+                            <LoadingButton
+                                loading={sending}
                                 fullWidth
+                                type="submit"
                                 variant="contained"
                                 sx={{ mt: 2, mb: 2 }}
-                            // disabled={isButtonDisabled}
                             >
-                                Sign Up
-                            </Button>
+                                Submit
+                            </LoadingButton>
                         </Box>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
@@ -200,6 +266,6 @@ export default function SignUp() {
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
