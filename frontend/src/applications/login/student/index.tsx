@@ -13,21 +13,88 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
+import axios from 'axios';
+import { useMutation } from 'react-query';
+import { useState } from 'react';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function StudentLogin() {
-  const handleSubmitSignIn = async () => {
-    const email = (document.getElementById("email") as HTMLInputElement).value;
-    const password = (document.getElementById("password") as HTMLInputElement).value;
-    if (email !== "" || password !== "") {
-
-
-      // navigate("/student/testSignin", {email: email, password: password});
-    }
-
+type ResponeType = {
+  data: {
+    student: {
+      id: string;
+      name: string;
+      email: string;
+      phoneNumber: string;
+      avatar: string;
+      isGoogle: boolean;
+      isVerify: boolean;
+    };
+    token: string;
   };
+}
+
+interface loginForm {
+  email: string;
+  password: string;
+}
+
+export default function StudentLogin() {
+  const navigate = useNavigate();
+  const [sending, setSending] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  // Handle input change
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Mutation to send login information
+  const mutation = useMutation<ResponeType, Error, loginForm>({
+    mutationFn: (loginForm) => axios.post("http://localhost:5000/api/v1/student/login", loginForm),
+    onSuccess: (data) => {
+      console.log(data);
+      const token = data.data.token;
+      document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
+      setSending(false);
+      setShowError(false);
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false); // Hide the success message
+        navigate('/student'); // Navigate to the next screen
+      }, 5000);
+    },
+    onError: (error) => {
+      setSending(false);
+      setShowError(true);
+      console.log(error);
+    },
+    onMutate: () => {
+      console.log(formData);
+      setSending(true);
+      setShowError(false);
+    }
+  }
+  );
+
+  // Handle submit
+  const handleSubmitSignIn = (event: React.FormEvent) => {
+    event.preventDefault();
+    mutation.mutate(formData);
+  };
+
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -53,7 +120,10 @@ export default function StudentLogin() {
             <Typography component="h1" variant="h5">
               Login with student account
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmitSignIn} sx={{ mt: 1 }}>
+            {sending && <div>Submitting...........</div>}
+            {showSuccess && <div>Success</div>}
+            {showError && <div>Errrrrr</div>}
+            <Box component="form" onSubmit={handleSubmitSignIn} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -61,8 +131,9 @@ export default function StudentLogin() {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
+                type="email"
                 autoFocus
+                onChange={handleInputChange}
               />
               <TextField
                 margin="normal"
@@ -72,7 +143,7 @@ export default function StudentLogin() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                onChange={handleInputChange}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
