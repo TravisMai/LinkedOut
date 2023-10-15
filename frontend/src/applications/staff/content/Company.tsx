@@ -32,16 +32,16 @@ function createData(
 
 
 type companyType = {
-        "id": string,
-        "name": string,
-        "email": string,
-        "phoneNumber": string,
-        "avatar": string,
-        "workField": string,
-        "address": string,
-        "website": null,
-        "description": string,
-        "taxId": null
+    "id": string,
+    "name": string,
+    "email": string,
+    "phoneNumber": string,
+    "avatar": string,
+    "workField": string,
+    "address": string,
+    "website": null,
+    "description": string,
+    "taxId": null
 }
 
 const rows = [
@@ -63,9 +63,9 @@ export default function Company() {
 
     const token = getJwtToken();
 
-    // Fetch all students
+    // Fetch all companies
     useQuery({
-        queryKey: "allStudent",
+        queryKey: "allCompany",
         queryFn: () => axios.get("http://localhost:5000/api/v1/company", {
             headers: {
                 Authorization: `Bearer ${token}`,
