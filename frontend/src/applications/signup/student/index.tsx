@@ -53,6 +53,14 @@ type ResponeType = {
     };
 }
 
+type ErrorType = {
+    response: {
+        data: {
+            message: string;
+        }
+    }
+}
+
 interface newForm {
     name: string;
     email: string;
@@ -79,7 +87,7 @@ const countryCode = [
     },
 ];
 
-export default function SignUp() {
+export default function StudentSignUp() {
     const navigate = useNavigate();
     const [sending, setSending] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -109,7 +117,7 @@ export default function SignUp() {
     };
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResponeType, Error, newForm>({
+    const mutation = useMutation<ResponeType, ErrorType, newForm>({
         mutationFn: (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm),
         onSuccess: (data) => {
             console.log(data);
@@ -121,10 +129,10 @@ export default function SignUp() {
                 navigate('/'); // Navigate to the next screen
             }, 5000);
         },
-        onError: (error) => {
+        onError: () => {
+            console.log(mutation.error);
             setSending(false);
             setShowError(true);
-            console.log(error);
         },
         onMutate: () => {
             setSending(true);
@@ -141,11 +149,10 @@ export default function SignUp() {
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        console.log(formData);
         // Add country code to phone number
         if (formData.phoneNumber.charAt(0) !== '0')
             formData.phoneNumber = '0' + formData.phoneNumber;
-        else
-            formData.phoneNumber = formData.phoneNumber.substring(1);
 
         mutation.mutate(formData);
     };
@@ -169,9 +176,6 @@ export default function SignUp() {
                         <Typography component="h1" variant="h5">
                             Sign up
                         </Typography>
-                        {sending && <div>Submitting...........</div>}
-                        {showSuccess && <div>Success</div>}
-                        {showError && <div>Errrrrr</div>}
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -254,17 +258,21 @@ export default function SignUp() {
                                     />
                                 </Grid>
                             </Grid>
+
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                                 <LoadingButton
                                     loading={sending}
                                     fullWidth
                                     type="submit"
                                     variant="contained"
+                                    disabled={showSuccess}
                                     sx={{ mt: 2, mb: 2 }}
                                 >
                                     Submit
                                 </LoadingButton>
                             </Box>
+                            {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+                            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Create acccount successfully! Navigating back to login page.......</Alert>}
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link href="#" variant="body2">

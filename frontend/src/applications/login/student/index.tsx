@@ -16,6 +16,7 @@ import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 import axios from 'axios';
 import { useMutation } from 'react-query';
 import { useState } from 'react';
+import { Alert, LoadingButton } from '@mui/lab';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -33,6 +34,14 @@ type ResponeType = {
     };
     token: string;
   };
+}
+
+type ErrorType = {
+  response: {
+    data: {
+      message: string;
+    }
+  }
 }
 
 interface loginForm {
@@ -60,7 +69,7 @@ export default function StudentLogin() {
   };
 
   // Mutation to send login information
-  const mutation = useMutation<ResponeType, Error, loginForm>({
+  const mutation = useMutation<ResponeType, ErrorType, loginForm>({
     mutationFn: (loginForm) => axios.post("http://localhost:5000/api/v1/student/login", loginForm),
     onSuccess: (data) => {
       console.log(data);
@@ -72,7 +81,7 @@ export default function StudentLogin() {
       setTimeout(() => {
         setShowSuccess(false); // Hide the success message
         navigate('/student'); // Navigate to the next screen
-      }, 5000);
+      }, 1000);
     },
     onError: (error) => {
       setSending(false);
@@ -120,9 +129,6 @@ export default function StudentLogin() {
             <Typography component="h1" variant="h5">
               Login with student account
             </Typography>
-            {sending && <div>Submitting...........</div>}
-            {showSuccess && <div>Success</div>}
-            {showError && <div>Errrrrr</div>}
             <Box component="form" onSubmit={handleSubmitSignIn} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
@@ -149,15 +155,18 @@ export default function StudentLogin() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
-                onClick={handleSubmitSignIn}
-                type="submit"
+              <LoadingButton
+                loading={sending}
                 fullWidth
+                type="submit"
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                disabled={showSuccess}
+                sx={{ mt: 2, mb: 2 }}
               >
-                Sign In
-              </Button>
+                Log in
+              </LoadingButton>
+              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Success</Alert>}
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

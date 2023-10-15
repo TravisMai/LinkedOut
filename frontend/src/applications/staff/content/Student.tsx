@@ -15,6 +15,9 @@ import IconButton from '@mui/material/IconButton';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Link from '@mui/material/Link';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 function createData(
     studentId: number,
@@ -27,6 +30,16 @@ function createData(
     return { studentId, email, name, status, company, companyLink };
 }
 
+type studentType = {
+    "id": string,
+    "name": string,
+    "email": string,
+    "phoneNumber": string,
+    "avatar": string,
+    "isGoogle": boolean,
+    "isVerify": boolean,
+}
+
 const rows = [
     createData(2052443, 'Trần Trí Đạt', 'dat.trantri2002@gmail.com', 'Intern', 'Noventiq', 'https://mui.com'),
     createData(2052612, 'Mai Hữu Nghĩa', 'nghia.maiemches@hcmut.edu.vn', 'Fresher', 'Cybozu', 'https://mui.com'),
@@ -36,6 +49,29 @@ const rows = [
 
 
 export default function Student() {
+    const [allStudent, setAllStudent] = useState<studentType[]>([]);
+
+    // Get jwt token
+    const getJwtToken = () => {
+        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
+    };
+
+    const token = getJwtToken();
+
+    // Fetch all students
+    useQuery({
+        queryKey: "allStudent",
+        queryFn: () => axios.get("http://localhost:5000/api/v1/student", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data.data);
+            setAllStudent(data.data);
+        }
+    });
+
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
         <div className='mt-10'>
@@ -63,32 +99,30 @@ export default function Student() {
                     <TableHead>
                         <TableRow>
                             <TableCell align='center'>No.</TableCell>
-                            <TableCell align='center'>Student ID</TableCell>
-                            <TableCell align="center">Name</TableCell>
+                            <TableCell align='center'>Name</TableCell>
                             <TableCell align="center">Email</TableCell>
-                            <TableCell align="center">Status</TableCell>
-                            <TableCell align="center">Company</TableCell>
+                            <TableCell align="center">Phone</TableCell>
+                            <TableCell align="center">Action</TableCell>
                             <TableCell align="center"></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, index) => (
+                        {allStudent.map((row, index) => (
                             <TableRow
-                                key={row.studentId}
+                                key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
 
                                 <TableCell align='center'>{++index}</TableCell>
-                                <TableCell align="center">{row.studentId}</TableCell>
                                 <TableCell align="center">{row.name}</TableCell>
                                 <TableCell align="center">{row.email}</TableCell>
-                                <TableCell align="center">{row.status}</TableCell>
+                                <TableCell align="center">{row.phoneNumber}</TableCell>
 
-                                <TableCell align="center">
+                                {/* <TableCell align="center">
                                     <Link color="primary" href={row.companyLink} target="_blank" sx={{ mt: 3 }}>
                                         {row.company}
                                     </Link>
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="center">
                                     <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
                                         <IconButton><AccountBoxIcon /></IconButton>

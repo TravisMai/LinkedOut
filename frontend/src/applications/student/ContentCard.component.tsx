@@ -15,23 +15,46 @@ const bull = (
   </Box>
 );
 
-export default function ContentCard() {
+type jobType = {
+  "id": string,
+  "company": {
+    "id": string,
+    "name": string,
+    "email": string,
+    "avatar": string,
+    "workField": string,
+    "address": string,
+  },
+  "title": string,
+  "image": null,
+  "salary": null,
+  "level": string,
+  "workType": string,
+  "quantity": number,
+  "descriptions": {
+    "aboutUs": string,
+    "responsibilities": [string],
+    "requirements": [string],
+  }
+}
+
+export default function ContentCard({ job }: { job: jobType }){
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Word of the Day
+          {job.title}
         </Typography>
         <Typography variant="h5" component="div">
-          be{bull}nev{bull}o{bull}lent
+          {job.company.name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
+          {job.company.workField}
         </Typography>
         <Typography variant="body2">
-          well meaning and kindly.
+          {job.descriptions.aboutUs}
           <br />
-          {'"a benevolent smile"'}
+          {job.descriptions.responsibilities[0]}
         </Typography>
       </CardContent>
       <CardActions>

@@ -9,9 +9,9 @@ import UserPageLayout from "./shared/layout/UserPageLayout";
 import HomePage from "./applications/home";
 import StudentLogin from "./applications/login/student";
 import CompanyLogin from "./applications/login/company";
-import SignUpPage from "./applications/signup";
+import StudentSignup from "./applications/signup/student";
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import TestGet from "./applications/student/testGetAllStudent";
+import CompanySignup from "./applications/signup/company";
 
 const queryClient = new QueryClient()
 
@@ -49,7 +49,8 @@ function App() {
               } />
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/login/company" element={<CompanyLogin />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/signup/student" element={<StudentSignup />} />
+            <Route path="/signup/company" element={<CompanySignup />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="404" element={<NotFoundPage />} />
 

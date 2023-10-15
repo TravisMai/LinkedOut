@@ -85,7 +85,9 @@ export default function HomePage() {
                                     <Link href="/login/student">
                                         <Button size="small">Login</Button>
                                     </Link>
-                                    <Button size="small">Sign up</Button>
+                                    <Link href="/signup/student">
+                                        <Button size="small">Sign up</Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -111,7 +113,9 @@ export default function HomePage() {
                                     <Link href="/login/company">
                                         <Button size="small">Login</Button>
                                     </Link>
-                                    <Button size="small">Sign up</Button>
+                                    <Link href="/signup/company">
+                                        <Button size="small">Sign up</Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </Grid>

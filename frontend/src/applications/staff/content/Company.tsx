@@ -14,6 +14,9 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 function createData(
     companyId: number,
@@ -27,6 +30,20 @@ function createData(
     return { companyId, logoLink, name, representative, phone, email, companyLink };
 }
 
+
+type companyType = {
+        "id": string,
+        "name": string,
+        "email": string,
+        "phoneNumber": string,
+        "avatar": string,
+        "workField": string,
+        "address": string,
+        "website": null,
+        "description": string,
+        "taxId": null
+}
+
 const rows = [
     createData(926382, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
     createData(396283, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
@@ -36,6 +53,30 @@ const rows = [
 
 
 export default function Company() {
+
+    const [allCompany, setAllCompany] = useState<companyType[]>([]);
+
+    // Get jwt token
+    const getJwtToken = () => {
+        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
+    };
+
+    const token = getJwtToken();
+
+    // Fetch all students
+    useQuery({
+        queryKey: "allStudent",
+        queryFn: () => axios.get("http://localhost:5000/api/v1/company", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data.data);
+            setAllCompany(data.data);
+        }
+    });
+
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
         <div className='mt-10'>
@@ -68,26 +109,26 @@ export default function Company() {
                             <TableCell align="center">Representative</TableCell>
                             <TableCell align="center">Phone</TableCell>
                             <TableCell align="center">Email</TableCell>
-                            <TableCell align="center"></TableCell>
+                            <TableCell align="center">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, index) => (
+                        {allCompany.map((row, index) => (
                             <TableRow
-                                key={row.companyId}
+                                key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
 
                                 <TableCell align='center'>{++index}</TableCell>
                                 <TableCell align="center">
                                     <img
-                                        src={row.logoLink}
+                                        src={row.avatar}
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell>
                                 <TableCell align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.representative}</TableCell>
-                                <TableCell align="center">{row.phone}</TableCell>
+                                <TableCell align="center">{row.description}</TableCell>
+                                <TableCell align="center">{row.phoneNumber}</TableCell>
                                 <TableCell align="center">{row.email}</TableCell>
                                 <TableCell align="center">
                                     <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
