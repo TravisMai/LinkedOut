@@ -38,7 +38,7 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResponeType = {
+type ResposeType = {
     data: {
         student: {
             id: string;
@@ -117,7 +117,7 @@ export default function StudentSignUp() {
     };
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResponeType, ErrorType, newForm>({
+    const mutation = useMutation<ResposeType, ErrorType, newForm>({
         mutationFn: (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm),
         onSuccess: (data) => {
             console.log(data);

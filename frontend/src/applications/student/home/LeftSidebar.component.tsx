@@ -2,7 +2,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import DividerWithText from '../../shared/components/DividerWithText';
+import DividerWithText from '../../../shared/components/DividerWithText';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';

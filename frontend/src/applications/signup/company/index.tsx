@@ -38,14 +38,14 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResponeType = {
+type ResposeType = {
     data: {
         student: {
             id: string;
             name: string;
             email: string;
             phoneNumber: string;
-            avatar: string;
+            // avatar: string;
             isGoogle: boolean;
             isVerify: boolean;
         };
@@ -53,8 +53,22 @@ type ResponeType = {
     };
 }
 
+type ErrorType = {
+    response: {
+        data: {
+            message: string;
+        }
+    }
+}
+
 interface newForm {
     name: string;
+    taxId: number | null;
+    workField: string | null;
+    address: string | null;
+    website: string | null;
+    // avatar: File | null;
+    description: string | null;
     email: string;
     phoneNumber: string;
     password: string;
@@ -79,7 +93,7 @@ const countryCode = [
     },
 ];
 
-export default function CompanySignup() {
+export default function CompanySignUp() {
     const navigate = useNavigate();
     const [sending, setSending] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -91,6 +105,12 @@ export default function CompanySignup() {
         email: '',
         phoneNumber: '',
         password: '',
+        taxId: null as number | null,
+        workField: null as string | null,
+        address: null as string | null,
+        website: null as string | null,
+        // avatar: null as File | null,
+        description: null as string | null,
     });
 
     // Handle input change
@@ -109,8 +129,10 @@ export default function CompanySignup() {
     };
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResponeType, Error, newForm>({
-        mutationFn: (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm),
+    const mutation = useMutation<ResposeType, ErrorType, newForm>({
+        mutationFn: (formData) => {
+            return axios.post("http://localhost:5000/api/v1/company", formData);
+        },
         onSuccess: (data) => {
             console.log(data);
             setSending(false);
@@ -121,10 +143,10 @@ export default function CompanySignup() {
                 navigate('/'); // Navigate to the next screen
             }, 5000);
         },
-        onError: (error) => {
+        onError: () => {
+            console.log(mutation.error);
             setSending(false);
             setShowError(true);
-            console.log(error);
         },
         onMutate: () => {
             setSending(true);
@@ -133,19 +155,18 @@ export default function CompanySignup() {
     }
     );
 
-    // Function to store JWT token in cookie
-    const storeJwtToken = (token: string) => {
-        document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-    };
-
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        console.log(formData);
         // Add country code to phone number
         if (formData.phoneNumber.charAt(0) !== '0')
             formData.phoneNumber = '0' + formData.phoneNumber;
-        else
-            formData.phoneNumber = formData.phoneNumber.substring(1);
+
+        // Convert taxId to number
+        formData.taxId = Number(formData.taxId); //HERE
+
+
 
         mutation.mutate(formData);
     };
@@ -167,11 +188,8 @@ export default function CompanySignup() {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign up
+                            Sign up company account
                         </Typography>
-                        {sending && <div>Submitting...........</div>}
-                        {showSuccess && <div>Success</div>}
-                        {showError && <div>Errrrrr</div>}
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -179,7 +197,7 @@ export default function CompanySignup() {
                                         required
                                         fullWidth
                                         id="name"
-                                        label="Full Name"
+                                        label="Company Name"
                                         name="name"
                                         autoComplete="name"
                                         value={formData.name}
@@ -196,6 +214,19 @@ export default function CompanySignup() {
                                         name="email"
                                         autoComplete="email"
                                         value={formData.email}
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="new-password"
+                                        value={formData.password}
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
@@ -244,27 +275,90 @@ export default function CompanySignup() {
                                     <TextField
                                         required
                                         fullWidth
-                                        name="password"
-                                        label="Password"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="new-password"
-                                        value={formData.password}
+                                        id="address"
+                                        type="text"
+                                        label="Address"
+                                        name="address"
+                                        value={formData.address}
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="workField"
+                                        type="text"
+                                        label="Work Field"
+                                        name='workField'
+                                        value={formData.workField}
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="description"
+                                        type="text"
+                                        label="Description"
+                                        name='description'
+                                        value={formData.description}
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="tax"
+                                        type="number"
+                                        name='taxId'
+                                        label="Tax ID"
+                                        value={formData.taxId}
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="website"
+                                        type="url"
+                                        label="Website"
+                                        name='website'
+                                        value={formData.website}
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                {/* <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="avatar"
+                                        type="file"
+                                        label="Avatar"
+                                        name='avatar'
+                                        value={formData.avatar}
+                                        onChange={handleInputChange}
+                                        inputProps={{ accept: 'image/png' }}
+                                    />
+                                </Grid> */}
+
+
                             </Grid>
+
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                                 <LoadingButton
                                     loading={sending}
                                     fullWidth
                                     type="submit"
                                     variant="contained"
+                                    disabled={showSuccess}
                                     sx={{ mt: 2, mb: 2 }}
                                 >
                                     Submit
                                 </LoadingButton>
                             </Box>
+                            {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+                            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Create acccount successfully! Navigating back to login page.......</Alert>}
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link href="#" variant="body2">

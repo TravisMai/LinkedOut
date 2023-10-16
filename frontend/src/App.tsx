@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFoundPage from "./shared/pages/NotFoundPage";
-import StudentPage from "./applications/student";
+import StudentPage from "./applications/student/home";
 import StaffPage from "./applications/staff/Page";
 import CompanyPage from "./applications/company/Page";
 import { PrivateRoute } from "./shared/routes/PrivateRoute";
@@ -12,6 +12,7 @@ import CompanyLogin from "./applications/login/company";
 import StudentSignup from "./applications/signup/student";
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import CompanySignup from "./applications/signup/company";
+import StudentProfile from "./applications/student/profile";
 
 const queryClient = new QueryClient()
 
@@ -44,7 +45,7 @@ function App() {
               path="/student/profile"
               element={
                 <PrivateRoute layout={UserPageLayout}>
-                  <StaffPage />
+                  <StudentProfile />
                 </PrivateRoute>
               } />
             <Route path="/login/student" element={<StudentLogin />} />
