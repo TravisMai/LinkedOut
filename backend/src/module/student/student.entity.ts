@@ -13,6 +13,5 @@ export class Student extends commonAttribute {
   @Column({ nullable: true })
   @IsNumber()
   @IsOptional()
-  @Length(7, 7)
   studentId: number;
 }

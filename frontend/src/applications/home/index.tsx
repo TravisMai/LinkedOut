@@ -63,7 +63,7 @@ export default function HomePage() {
                 </Box>
                 <Container maxWidth="md">
                     <Grid container spacing={4} sx={{ justifyContent: 'space-evenly' }}>
-                        <Grid xs={12} sm={6} md={4}>
+                        <Grid xs={12} sm={6} md={4} item>
                             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                                 <CardMedia
                                     component="div"
@@ -91,7 +91,7 @@ export default function HomePage() {
                                 </CardActions>
                             </Card>
                         </Grid>
-                        <Grid xs={12} sm={6} md={4}>
+                        <Grid xs={12} sm={6} md={4} item>
                             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                                 <CardMedia
                                     component="div"

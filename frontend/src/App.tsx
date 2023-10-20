@@ -15,6 +15,7 @@ import StudentProfile from "./applications/student/profile";
 import { CompanyPage } from "./applications/company";
 import { AllJobPage } from "./applications/company/AllJobPage";
 import { CompanySettingPage } from "./applications/company/CompanySetting";
+import Providers from "./Providers";
 
 const queryClient = new QueryClient()
 
@@ -24,37 +25,39 @@ function App() {
 
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<div>Loading...</div>}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="/student"
-              element={
-                <PrivateRoute layout={UserPageLayout}>
-                  <StudentPage />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/staff" element={<StaffPage />} />
-            <Route path="/company" element={<CompanyPage />} />
-            <Route path="/company/jobs" element={<AllJobPage />} />
-            <Route path="/company/setting" element={<CompanySettingPage />} />
-            <Route
-              path="/student/profile"
-              element={
-                <PrivateRoute layout={UserPageLayout}>
-                  <StudentProfile />
-                </PrivateRoute>
-              } />
-            <Route path="/login/student" element={<StudentLogin />} />
-            <Route path="/login/company" element={<CompanyLogin />} />
-            <Route path="/signup/student" element={<StudentSignup />} />
-            <Route path="/signup/company" element={<CompanySignup />} />
-            <Route path="*" element={<NotFoundPage />} />
-            <Route path="404" element={<NotFoundPage />} />
+        <Providers>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route
+                path="/student"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="/staff" element={<StaffPage />} />
+              <Route path="/company" element={<CompanyPage />} />
+              <Route path="/company/jobs" element={<AllJobPage />} />
+              <Route path="/company/setting" element={<CompanySettingPage />} />
+              <Route
+                path="/student/profile"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentProfile />
+                  </PrivateRoute>
+                } />
+              <Route path="/login/student" element={<StudentLogin />} />
+              <Route path="/login/company" element={<CompanyLogin />} />
+              <Route path="/signup/student" element={<StudentSignup />} />
+              <Route path="/signup/company" element={<CompanySignup />} />
+              <Route path="*" element={<NotFoundPage />} />
+              <Route path="404" element={<NotFoundPage />} />
 
-          </Routes>
-        </BrowserRouter>
+            </Routes>
+          </BrowserRouter>
+        </Providers>
       </Suspense>
     </QueryClientProvider>
   )

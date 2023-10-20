@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -17,6 +15,7 @@ import axios from 'axios';
 import { useMutation } from 'react-query';
 import { useState } from 'react';
 import { Alert, LoadingButton } from '@mui/lab';
+import GoogleLoginButton from '../../../shared/components/GoogleLoginButton.tsx';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -179,6 +178,8 @@ export default function StudentLogin() {
                   </Link>
                 </Grid>
               </Grid>
+              {/* Add the Google Login button */}
+              <GoogleLoginButton role="student" />
             </Box>
           </Box>
         </Grid>
