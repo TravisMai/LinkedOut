@@ -16,4 +16,15 @@ export class AuthService {
         const blackListedTokens = await this.redisService.getObjectByKey(`BLACKLIST:${token}`);
         return !!blackListedTokens;
     }
+
+    googleLogin(req) {
+        if (!req.user) {
+            return 'No user from google';
+        }
+
+        return {
+            message: 'User information from google',
+            user: req.user,
+        };
+    }
 }
