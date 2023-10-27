@@ -38,27 +38,27 @@ type jobType = {
   }
 }
 
-export default function ContentCard({ job }: { job: jobType }){
+export default function ContentCard({ job }: { job: jobType }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {job.title}
-        </Typography>
-        <Typography variant="h5" component="div">
           {job.company.name}
         </Typography>
+        <Typography variant="h5" component="div">
+          {job.title}
+        </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {job.company.workField}
+          {job.descriptions.aboutUs}
         </Typography>
         <Typography variant="body2">
-          {job.descriptions.aboutUs}
+          {job.descriptions.requirements[0]}
           <br />
           {job.descriptions.responsibilities[0]}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button size="small">More details</Button>
       </CardActions>
     </Card>
   );

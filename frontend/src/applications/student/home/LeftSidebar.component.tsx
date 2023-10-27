@@ -110,21 +110,21 @@ const LeftSidebar: React.FC = () => {
             className="w-full h-24 rounded-t-lg"
           />
           <img
-            src="https://scontent.fsgn14-1.fna.fbcdn.net/v/t1.18169-9/22046122_1959802640904562_1679173393777949798_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=17jWHmJVCOIAX8SbNDi&_nc_ht=scontent.fsgn14-1.fna&oh=00_AfAcQzj3E28SiqhowMcyP7WVDtXROeacJHY4MbRisThGSw&oe=652F4283"
+            src="https://media.licdn.com/dms/image/D5603AQE5blAsuMMong/profile-displayphoto-shrink_800_800/0/1687611208998?e=1703721600&v=beta&t=QujDAtWLKuAbw0PoP4OJat_t8UlD9CzuK_BpNNSnXHc"
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>
         <h1 className='mx-auto font-semibold text-base lg:text-2xl text-black pb-5'>{token? studentName: <div>Not Logged In</div>}</h1>
       </div>
       <div className={`w-full border-b-4 bg-white rounded-lg border-[#f3f2f0] lg:flex lg:flex-col items-center justify-center py-6 ${showContent ? 'block' : 'hidden'}`}>
-        <h1 className='mx-auto text-lg text-black'>MSSV: 19521382</h1>
-        <h1 className='mx-auto text-lg text-black'>Khoa: Công nghệ thông tin</h1>
-        <h1 className='mx-auto text-lg text-black'>Lớp: 19CTT3</h1>
-        <h1 className='mx-auto text-lg text-black'>Chuyên ngành: Kỹ thuật phần mềm</h1>
-        <h1 className='mx-auto text-lg text-black'>Điểm trung bình: 3.5</h1>
-        <Button sx={{ mt: 2 }} variant="outlined" color="error" onClick={handleLogout}>
+        <h1 className='mx-auto text-lg text-black'>MSSV: 2052508</h1>
+        <h1 className='mx-auto text-lg text-black'>Khoa: Khoa học và Kỹ thuật Máy tính</h1>
+        <h1 className='mx-auto text-lg text-black'>Ngành: Kỹ thuật Máy tính</h1>
+        <h1 className='mx-auto text-lg text-black'>Lớp: CC20KTM1</h1>
+        <h1 className='mx-auto text-lg text-black'>Điểm trung bình: 8.51</h1>
+        {/* <Button sx={{ mt: 2 }} variant="outlined" color="error" onClick={handleLogout}>
           Log out
-        </Button>
+        </Button> */}
       </div>
       {!showContent && (
         <Button variant="text" className="lg:invisible text-center mt-2" onClick={toggleContent}>
