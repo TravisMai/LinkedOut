@@ -1,5 +1,6 @@
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { Database } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
 const GoogleLoginButton = (params: { 'role': string }) => {
@@ -8,6 +9,7 @@ const GoogleLoginButton = (params: { 'role': string }) => {
     return (
         <GoogleLogin
             useOneTap
+            locale="en"
             onSuccess={async (credentialResponse) => {
                 const response = await axios.post(
                     'http://localhost:5000/api/v1/auth/google-login',
@@ -18,7 +20,7 @@ const GoogleLoginButton = (params: { 'role': string }) => {
                 );
                 const data = response.data;
 
-                localStorage.setItem('authData', JSON.stringify(data));
+                document.cookie = `jwtToken=${data.token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
                 navigate("/")
             }}
             onError={() => {

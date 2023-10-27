@@ -21,6 +21,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
+import Logo from "@/shared/assets/LinkedOut-Logo.svg";
+import { Paper } from '@mui/material';
 
 function Copyright(props: any) {
     return (
@@ -174,203 +176,206 @@ export default function CompanySignUp() {
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
-                <Container component="main" maxWidth="xs" >
+                <Grid container component="main" sx={{ height: '100vh' }}>
                     <CssBaseline />
-                    <Box
+                    <Grid
+                        item
+                        xs={false}
+                        sm={4}
+                        md={7}
                         sx={{
-                            marginTop: 8,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
+                            backgroundImage: 'url(https://www.singhalonline.com/assets/images/photos/header-2.jpg)',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: (t) =>
+                                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
                         }}
-                    >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign up company account
-                        </Typography>
-                        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="name"
-                                        label="Company Name"
-                                        name="name"
-                                        autoComplete="name"
-                                        value={formData.name}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="email"
-                                        type="email"
-                                        label="Email Address"
-                                        name="email"
-                                        autoComplete="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        name="password"
-                                        label="Password"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="new-password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField
-                                        id="selectCountry"
-                                        select
-                                        label="Country"
-                                        defaultValue={countryCode[country].label}
-                                        fullWidth
-                                        value={countryCode[country].label} // Use the selected country from state
-                                        onChange={handleCountryChange} // Handle country selection change
+                    />
+                    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                        <Box
+                            sx={{
+                                my: 8,
+                                mx: 4,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <img
+                                src={Logo}
+                                className='w-1/5 h-1/5 rounded-full mb-4'
+                            />
+                            <Typography component="h1" variant="h5">
+                                Sign up company account
+                            </Typography>
+                            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="name"
+                                            label="Company Name"
+                                            name="name"
+                                            autoComplete="name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="email"
+                                            type="email"
+                                            label="Email Address"
+                                            name="email"
+                                            autoComplete="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="password"
+                                            label="Password"
+                                            type="password"
+                                            id="password"
+                                            autoComplete="new-password"
+                                            value={formData.password}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField
+                                            id="selectCountry"
+                                            select
+                                            label="Country"
+                                            defaultValue={countryCode[country].label}
+                                            fullWidth
+                                            value={countryCode[country].label} // Use the selected country from state
+                                            onChange={handleCountryChange} // Handle country selection change
 
+                                        >
+                                            {countryCode.map((option) => (
+                                                <MenuItem key={option.label} value={option.label}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={12} sm={9}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="phoneNumber"
+                                            label="Phone Number"
+                                            name="phoneNumber"
+                                            autoComplete="phone"
+                                            value={formData.phoneNumber}
+                                            onChange={handleInputChange}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        {countryCode[country].numberPrefix} {/* Use the selected country's number prefix */}
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                            inputProps={{
+                                                pattern: "^[0-9]{9,10}$" // Only allows numeric characters
+                                            }}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="address"
+                                            type="text"
+                                            label="Address"
+                                            name="address"
+                                            value={formData.address}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="workField"
+                                            type="text"
+                                            label="Work Field"
+                                            name='workField'
+                                            value={formData.workField}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="description"
+                                            type="text"
+                                            label="Description"
+                                            name='description'
+                                            value={formData.description}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            id="tax"
+                                            type="number"
+                                            name='taxId'
+                                            label="Tax ID"
+                                            value={formData.taxId}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            id="website"
+                                            type="url"
+                                            label="Website"
+                                            name='website'
+                                            value={formData.website}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                                    <LoadingButton
+                                        loading={sending}
+                                        fullWidth
+                                        type="submit"
+                                        variant="contained"
+                                        disabled={showSuccess}
+                                        sx={{ mt: 2, mb: 2 }}
                                     >
-                                        {countryCode.map((option) => (
-                                            <MenuItem key={option.label} value={option.label}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
+                                        Submit
+                                    </LoadingButton>
+                                </Box>
+                                {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+                                {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Create acccount successfully! Navigating back to login page.......</Alert>}
+                                <Grid container justifyContent="flex-end">
+                                    <Grid item>
+                                        <Link href="/login/company" variant="body2">
+                                            Already have an account? Log in
+                                        </Link>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={9}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="phoneNumber"
-                                        label="Phone Number"
-                                        name="phoneNumber"
-                                        autoComplete="phone"
-                                        value={formData.phoneNumber}
-                                        onChange={handleInputChange}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    {countryCode[country].numberPrefix} {/* Use the selected country's number prefix */}
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                        inputProps={{
-                                            pattern: "^[0-9]{9,10}$" // Only allows numeric characters
-                                        }}
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="address"
-                                        type="text"
-                                        label="Address"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="workField"
-                                        type="text"
-                                        label="Work Field"
-                                        name='workField'
-                                        value={formData.workField}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="description"
-                                        type="text"
-                                        label="Description"
-                                        name='description'
-                                        value={formData.description}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        id="tax"
-                                        type="number"
-                                        name='taxId'
-                                        label="Tax ID"
-                                        value={formData.taxId}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        id="website"
-                                        type="url"
-                                        label="Website"
-                                        name='website'
-                                        value={formData.website}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-                                {/* <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        id="avatar"
-                                        type="file"
-                                        label="Avatar"
-                                        name='avatar'
-                                        value={formData.avatar}
-                                        onChange={handleInputChange}
-                                        inputProps={{ accept: 'image/png' }}
-                                    />
-                                </Grid> */}
-
-
-                            </Grid>
-
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-                                <LoadingButton
-                                    loading={sending}
-                                    fullWidth
-                                    type="submit"
-                                    variant="contained"
-                                    disabled={showSuccess}
-                                    sx={{ mt: 2, mb: 2 }}
-                                >
-                                    Submit
-                                </LoadingButton>
                             </Box>
-                            {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-                            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Create acccount successfully! Navigating back to login page.......</Alert>}
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Link href="#" variant="body2">
-                                        Already have an account? Sign in
-                                    </Link>
-                                </Grid>
-                            </Grid>
                         </Box>
-                    </Box>
-                    <Copyright sx={{ mt: 5 }} />
-                </Container>
-            </ThemeProvider >
+                    </Grid>
+                </Grid>
+            </ThemeProvider>
 
         </>
     );
