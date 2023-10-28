@@ -28,4 +28,7 @@ export class Company extends commonAttribute {
     @IsNumber()
     @IsOptional()
     taxId: number;
+
+    @Column({ default: false })
+    isVerify: boolean;
 }

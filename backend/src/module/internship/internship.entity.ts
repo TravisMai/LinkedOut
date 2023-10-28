@@ -1,9 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToOne, ManyToMany } from "typeorm";
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, Length, Min } from "class-validator";
-import { Student } from "../student/student.entity";
-import { Job } from "../job/job.entity";
 import { JobApplicants } from "../jobApplicants/jobApplicants.entity";
-import { Staff } from "../staff/staff.entity";
 
 @Entity()
 export class Internship {
@@ -13,10 +9,6 @@ export class Internship {
     @OneToOne(() => JobApplicants, { eager: true })
     @JoinColumn({ name: 'jobId' })
     jobApplicants: JobApplicants;
-
-    @ManyToOne(() => Staff, { eager: true })
-    @JoinColumn({ name: 'staffId' })
-    staff: Staff;
 
     @Column({ default: "Recieved" })
     process: string;
