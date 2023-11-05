@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 import { ThemeProvider, createTheme } from '@mui/material';
 import { indigo, purple } from '@mui/material/colors';
+import FormDialog from './UpdateDialog.component';
 
 const pages = ['Home', 'Jobs', 'Messages', 'Notifications'];
 const settings = ['Settings', 'Logout'];
@@ -31,6 +32,9 @@ const CompanyAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
+  // Setting dialog state
+  const [open, setOpen] = React.useState(false);
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -45,6 +49,15 @@ const CompanyAppBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleOpenSettings = () => {
+    setOpen(true);
+    handleCloseUserMenu();
+  }
+
+  const handleCloseSettings = () => {
+    setOpen(false);
+  }
 
   return (
     <ThemeProvider theme={theme} >
@@ -158,13 +171,18 @@ const CompanyAppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem key="settings" onClick={handleOpenSettings}>
+                  <Typography textAlign="center">Settings</Typography>
+                </MenuItem>
+                <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
+
+            {/* Dialog */}
+            <FormDialog state={open} onClose={handleCloseSettings} />
+
           </Toolbar>
         </Container>
       </AppBar>
