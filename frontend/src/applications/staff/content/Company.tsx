@@ -104,7 +104,7 @@ export default function Company() {
                     <TableHead>
                         <TableRow>
                             <TableCell align='center'>No.</TableCell>
-                            <TableCell align='center'>Logo</TableCell>
+                            {/* <TableCell align='center'>Logo</TableCell> */}
                             <TableCell align="center">Name</TableCell>
                             <TableCell align="center">Representative</TableCell>
                             <TableCell align="center">Phone</TableCell>
@@ -120,12 +120,12 @@ export default function Company() {
                             >
 
                                 <TableCell align='center'>{++index}</TableCell>
-                                <TableCell align="center">
+                                {/* <TableCell align="center">
                                     <img
                                         src={row.avatar}
                                         className='h-10 mx-auto'
                                     />
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="center">{row.name}</TableCell>
                                 <TableCell align="center">{row.description}</TableCell>
                                 <TableCell align="center">{row.phoneNumber}</TableCell>

@@ -131,7 +131,7 @@ const Navbar: React.FC = () => {
               <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">{studentEmail}</p>
               <div>
                 <img
-                  src="https://media.licdn.com/dms/image/D5603AQE5blAsuMMong/profile-displayphoto-shrink_400_400/0/1687611208998?e=1703721600&v=beta&t=H0XcbVoD65BSRmHTYneobVHr2U9N4R0D0--EF7q3Ju0"
+                  src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
                   className="w-8 h-8 rounded-full col-span-1"
                   alt="dp"
                 />

@@ -25,22 +25,26 @@ type studentType = {
   "isVerify": boolean,
 }
 
-export default function StudentCard({ student }: { student: studentType }){
+export default function StudentCard({ student }: { student: studentType }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+
+        <Typography variant="h5" component="div">
           {student.name}
         </Typography>
-        <Typography variant="h5" component="div">
+        <Typography sx={{ mb: 1.5, mt:1.5 }} color="text.secondary">
+          {student.phoneNumber}
+        </Typography>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {student.email}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {student.phoneNumber}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button size="small">Contact this student</Button>
       </CardActions>
     </Card>
   );

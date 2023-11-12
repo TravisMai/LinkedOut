@@ -110,18 +110,18 @@ const LeftSidebar: React.FC = () => {
             className="w-full h-24 rounded-t-lg"
           />
           <img
-            src="https://media.licdn.com/dms/image/D5603AQE5blAsuMMong/profile-displayphoto-shrink_800_800/0/1687611208998?e=1703721600&v=beta&t=QujDAtWLKuAbw0PoP4OJat_t8UlD9CzuK_BpNNSnXHc"
+            src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>
         <h1 className='mx-auto font-semibold text-base lg:text-2xl text-black pb-5'>{token? studentName: <div>Not Logged In</div>}</h1>
       </div>
       <div className={`w-full border-b-4 bg-white rounded-lg border-[#f3f2f0] lg:flex lg:flex-col items-center justify-center py-6 ${showContent ? 'block' : 'hidden'}`}>
-        <h1 className='mx-auto text-lg text-black'>MSSV: 2052508</h1>
-        <h1 className='mx-auto text-lg text-black'>Khoa: Khoa học và Kỹ thuật Máy tính</h1>
-        <h1 className='mx-auto text-lg text-black'>Ngành: Kỹ thuật Máy tính</h1>
-        <h1 className='mx-auto text-lg text-black'>Lớp: CC20KTM1</h1>
-        <h1 className='mx-auto text-lg text-black'>Điểm trung bình: 8.51</h1>
+        <h1 className='mx-auto text-lg text-black'>Student Id: 2052508</h1>
+        <h1 className='mx-auto text-lg text-black'>Faculty: Computer Science and Engineering</h1>
+        <h1 className='mx-auto text-lg text-black'>Major: Computer Engineering</h1>
+        <h1 className='mx-auto text-lg text-black'>Class: CC20KTM1</h1>
+        <h1 className='mx-auto text-lg text-black'>GPA: 8.51</h1>
         {/* <Button sx={{ mt: 2 }} variant="outlined" color="error" onClick={handleLogout}>
           Log out
         </Button> */}
