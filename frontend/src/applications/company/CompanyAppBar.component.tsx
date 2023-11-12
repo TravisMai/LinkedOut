@@ -17,7 +17,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { indigo, purple } from '@mui/material/colors';
 import FormDialog from './UpdateDialog.component';
 
-const pages = ['Home', 'Jobs', 'Messages', 'Notifications'];
+const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Messages', ''], ['Notifications', '']];
 const settings = ['Settings', 'Logout'];
 
 const theme = createTheme({
@@ -69,7 +69,7 @@ const CompanyAppBar = () => {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="/company"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -113,8 +113,10 @@ const CompanyAppBar = () => {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                  <MenuItem key={page[0]} onClick={handleCloseNavMenu}>
+                    <Link to={page[1]}>
+                      <Typography textAlign="center">{page[0]}</Typography>
+                    </Link>
                   </MenuItem>
                 ))}
               </Menu>
@@ -140,11 +142,13 @@ const CompanyAppBar = () => {
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                 <Button
-                  key={page}
+                  key={page[0]}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  {page}
+                  <Link to={page[1]}>
+                    {page[0]}
+                  </Link>
                 </Button>
               ))}
             </Box>
