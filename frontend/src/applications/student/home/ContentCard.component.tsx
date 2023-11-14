@@ -5,6 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from '@mui/material';
 
 const bull = (
   <Box
@@ -42,24 +43,33 @@ export default function ContentCard({ job }: { job: jobType }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {job.company.name}
-        </Typography>
-        <Typography variant="h5" component="div">
-          {job.title}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {job.descriptions.aboutUs}
-        </Typography>
-        <Typography variant="body2">
-          {job.descriptions.requirements[0]}
-          <br />
-          {job.descriptions.responsibilities[0]}
-        </Typography>
+        <div className='flex flex-row'>
+          <div className='mr-4 basis-1/6 center'>
+            <img
+              src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/46190b63764575.5abb892616e9e.jpg"
+              className='w-full h-3/4 mt-3 object-cover rounded-xl'
+              alt="company avatar" />
+          </div>
+          <div className='basis-5/6'>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              {job.company.name}
+            </Typography>
+            <Link href="#">
+              <Typography variant="h5" component="div">
+                {job.title}
+              </Typography>
+            </Link>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {job.descriptions.aboutUs}
+            </Typography>
+            <Typography variant="body2">
+              {job.descriptions.requirements[0]}
+              <br />
+              {job.descriptions.responsibilities[0]}
+            </Typography>
+          </div>
+        </div>
       </CardContent>
-      <CardActions>
-        <Button size="small">More details</Button>
-      </CardActions>
     </Card>
   );
 }

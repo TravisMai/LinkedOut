@@ -6,6 +6,7 @@ import DividerWithText from '../../../shared/components/DividerWithText';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Container, Divider, IconButton, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 
 type ResponeType = {
   data: {
@@ -102,7 +103,7 @@ const LeftSidebar: React.FC = () => {
 
   return (
     <div className="w-4/5 mx-auto mt-6 pb-6 h-fit lg:min-h-[500px] flex flex-col rounded-xl space-y-2">
-      
+
       <div className='flex flex-col bg-white rounded-lg '>
         <div className='flex flex-col'>
           <img
@@ -114,19 +115,36 @@ const LeftSidebar: React.FC = () => {
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>
-        <h1 className='mx-auto font-semibold text-base lg:text-2xl text-black pb-5'>{token? studentName: <div>Not Logged In</div>}</h1>
+        <Container className='pb-2 pt-2'>
+          <Typography variant="h5" component="div" className='text-center'> {token ? studentName : <div>Not Logged In</div>}</Typography>
+          <Typography variant="body2" className='text-center text-gray-400'>Computer Engineering Student</Typography>
+        </Container>
+        <List component="nav" aria-label="mailbox folders" hidden={showContent}>
+          <Divider />
+          <ListItem button secondaryAction={
+            <Typography>23</Typography>
+          }>
+            <ListItemText primary="Applied" >
+            </ListItemText>
+          </ListItem>
+          <ListItem button secondaryAction={
+            <Typography>2</Typography>
+          }>
+            <ListItemText primary="Approved" />
+          </ListItem>
+          <ListItem button secondaryAction={
+            <Typography>153</Typography>
+          }>
+            <ListItemText primary="Message" />
+          </ListItem>
+          <ListItem button secondaryAction={
+            <Typography>512</Typography>
+          }>
+            <ListItemText primary="Following" />
+          </ListItem>
+        </List>
       </div>
-      <div className={`w-full border-b-4 bg-white rounded-lg border-[#f3f2f0] lg:flex lg:flex-col items-center justify-center py-6 ${showContent ? 'block' : 'hidden'}`}>
-        <h1 className='mx-auto text-lg text-black'>Student Id: 2052508</h1>
-        <h1 className='mx-auto text-lg text-black'>Faculty: Computer Science and Engineering</h1>
-        <h1 className='mx-auto text-lg text-black'>Major: Computer Engineering</h1>
-        <h1 className='mx-auto text-lg text-black'>Class: CC20KTM1</h1>
-        <h1 className='mx-auto text-lg text-black'>GPA: 8.51</h1>
-        {/* <Button sx={{ mt: 2 }} variant="outlined" color="error" onClick={handleLogout}>
-          Log out
-        </Button> */}
-      </div>
-      {!showContent && (
+      {/* {!showContent && (
         <Button variant="text" className="lg:invisible text-center mt-2" onClick={toggleContent}>
           <DividerWithText
             text='Show more'
@@ -141,7 +159,7 @@ const LeftSidebar: React.FC = () => {
             muiElementIcon={<KeyboardArrowUpIcon />}
           />
         </Button>
-      )}
+      )} */}
     </div>
   );
 };

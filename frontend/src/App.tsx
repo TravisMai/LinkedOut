@@ -16,6 +16,8 @@ import { CompanyPage } from "./applications/company";
 import { AllJobPage } from "./applications/company/AllJobPage";
 import { CompanySettingPage } from "./applications/company/CompanySetting";
 import Providers from "./Providers";
+import StudentJobsPage from "./applications/student/jobs";
+import StudentMessage from "./applications/student/message";
 
 const queryClient = new QueryClient()
 
@@ -46,6 +48,20 @@ function App() {
                 element={
                   <PrivateRoute layout={UserPageLayout}>
                     <StudentProfile />
+                  </PrivateRoute>
+                } />
+              <Route
+                path="/student/jobs"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentJobsPage />
+                  </PrivateRoute>
+                } />
+                <Route
+                path="/student/message"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentMessage />
                   </PrivateRoute>
                 } />
               <Route path="/login/student" element={<StudentLogin />} />
