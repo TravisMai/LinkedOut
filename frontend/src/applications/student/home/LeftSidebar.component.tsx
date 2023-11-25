@@ -52,6 +52,7 @@ const LeftSidebar: React.FC = () => {
       },
     }),
     onSuccess: (data) => {
+      console.log(data);
       setStudentName(data.data.name);
     }
   });
