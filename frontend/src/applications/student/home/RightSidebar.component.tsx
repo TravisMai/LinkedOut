@@ -42,21 +42,6 @@ const RightSidebar: React.FC = () => {
   });
 
 
-  // Generate random images
-  const getRandomImage = () => {
-    const images = [
-      "https://source.unsplash.com/random/?people",
-      "https://source.unsplash.com/random/?animals",
-      "https://source.unsplash.com/random/?nature",
-      "https://source.unsplash.com/random/?water",
-      "https://source.unsplash.com/random/?sky",
-      "https://source.unsplash.com/random/?mountain",
-    ];
-
-    const randomIndex = Math.floor(Math.random() * images.length);
-    return images[randomIndex];
-  };
-
   return (
     <div className="w-4/5 mx-auto my-6 pb-6 h-fit flex flex-col rounded-xl border-2 items-center bg-white">
       <div className='w-full border-b-2 flex justify-evenly'>
@@ -74,7 +59,7 @@ const RightSidebar: React.FC = () => {
               >
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={getRandomImage()}
+                  src={"/src/shared/assets/" + row.avatar}
                   alt="user"
                 />
                 <p className="text-sm font-semibold">{row.name}</p>

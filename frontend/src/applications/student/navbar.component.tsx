@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </Link>
-        <Link to="/student/notification">
+        {/* <Link to="/student/notification">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
               <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
@@ -118,7 +118,7 @@ const Navbar: React.FC = () => {
               </div>
             </div>
           </div>
-        </Link>
+        </Link> */}
       </div>
       <div className="col-span-2 grid grid-cols-10 items-center justify-end">
         <div className='w-fit col-span-3 items-center mt-1'>

@@ -67,7 +67,7 @@ const JobDisplay: React.FC = () => {
                             <div className='flex flex-row mt-5 mb-3'>
                                 <div className='mr-4 basis-1/12 center'>
                                     <img
-                                        src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/46190b63764575.5abb892616e9e.jpg"
+                                        src={"/src/shared/assets/" + job.company.avatar}
                                         className='w-full h-3/4 object-cover rounded-xl'
                                         alt="company avatar" />
                                 </div>
@@ -109,7 +109,7 @@ const JobDisplay: React.FC = () => {
                             <div className='flex flex-row mt-5 mb-3'>
                                 <div className='mr-4 basis-1/12 center'>
                                     <img
-                                        src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/46190b63764575.5abb892616e9e.jpg"
+                                        src={"/src/shared/assets/" + job.company.avatar}
                                         className='w-full h-3/4 object-cover rounded-xl'
                                         alt="company avatar" />
                                 </div>
@@ -151,7 +151,7 @@ const JobDisplay: React.FC = () => {
                             <div className='flex flex-row mt-5 mb-3'>
                                 <div className='mr-4 basis-1/12 center'>
                                     <img
-                                        src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/46190b63764575.5abb892616e9e.jpg"
+                                        src={"/src/shared/assets/" + job.company.avatar}
                                         className='w-full h-3/4 object-cover rounded-xl'
                                         alt="company avatar" />
                                 </div>
@@ -193,7 +193,7 @@ const JobDisplay: React.FC = () => {
                             <div className='flex flex-row mt-5 mb-3'>
                                 <div className='mr-4 basis-1/12 center'>
                                     <img
-                                        src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/46190b63764575.5abb892616e9e.jpg"
+                                        src={"/src/shared/assets/" + job.company.avatar}
                                         className='w-full h-3/4 object-cover rounded-xl'
                                         alt="company avatar" />
                                 </div>

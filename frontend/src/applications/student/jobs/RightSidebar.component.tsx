@@ -67,7 +67,7 @@ const RightSidebar: React.FC = () => {
                                     <Grid container spacing={1}>
                                         <Grid item xs={2}>
                                             <img
-                                                src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/46190b63764575.5abb892616e9e.jpg"
+                                                src={"/src/shared/assets/" + job.company.avatar}
                                                 className='w-fit h-fit'
                                                 alt="company avatar" />
                                         </Grid>
