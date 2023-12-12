@@ -19,6 +19,7 @@ import Providers from "./Providers";
 import StudentJobsPage from "./applications/student/jobs";
 import StudentMessage from "./applications/student/message";
 import StudentNotification from "./applications/student/notification";
+import StudentUpdate from "./applications/student/profile/update/update";
 
 const queryClient = new QueryClient()
 
@@ -49,6 +50,13 @@ function App() {
                 element={
                   <PrivateRoute layout={UserPageLayout}>
                     <StudentProfile />
+                  </PrivateRoute>
+                } />
+              <Route
+                path="/student/profile/update"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentUpdate />
                   </PrivateRoute>
                 } />
               <Route
