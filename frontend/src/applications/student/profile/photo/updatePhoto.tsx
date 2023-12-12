@@ -67,7 +67,7 @@ const countryCode = [
   },
 ];
 
-export default function StudentProfile() {
+export default function UpdatePhoto() {
   const navigate = useNavigate();
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -191,7 +191,7 @@ export default function StudentProfile() {
             }}
           >
             <Typography component="h1" variant="h5">
-              REQUEST CHANGE
+              Change Profile Photo
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -199,68 +199,21 @@ export default function StudentProfile() {
                   <TextField
                     required
                     fullWidth
-                    id="name"
-                    label="Full Name"
-                    name="name"
-                    autoComplete="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    type="email"
-                    label="Email Address"
+                    id="photo"
+                    type="file"
+                    // Image only
                     name="email"
                     autoComplete="email"
                     value={formData.email}
                     onChange={handleInputChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={3}>
-                  <TextField
-                    id="selectCountry"
-                    select
-                    label="Country"
-                    defaultValue={countryCode[country].label}
-                    fullWidth
-                    value={countryCode[country].label} // Use the selected country from state
-                    onChange={handleCountryChange} // Handle country selection change
-
-                  >
-                    {countryCode.map((option) => (
-                      <MenuItem key={option.label} value={option.label}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={9}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="phoneNumber"
-                    label="Phone Number"
-                    name="phoneNumber"
-                    autoComplete="phone"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {countryCode[country].numberPrefix} {/* Use the selected country's number prefix */}
-                        </InputAdornment>
-                      ),
-                    }}
-                    inputProps={{
-                      pattern: "^[0-9]{9,10}$" // Only allows numeric characters
-                    }}
-                  />
-                </Grid>
               </Grid>
+                {/* Display current photo */}
+                <img
+                  src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
+                  className="my-3"
+                />
 
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                 <LoadingButton
@@ -271,7 +224,7 @@ export default function StudentProfile() {
                   disabled={showSuccess}
                   sx={{ mt: 2, mb: 2 }}
                 >
-                  Send Request
+                  Update Photo
                 </LoadingButton>
               </Box>
               {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
