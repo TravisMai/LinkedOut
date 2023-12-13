@@ -3,6 +3,33 @@ import { Box, Button, Checkbox, Chip, Container, Grid, IconButton, Link, List, L
 import React from "react";
 import FormDialog from "./update/updateDialog.component";
 import PhotoDialog from "./photo/updatePhotoDialog.component";
+import { useMutation } from "react-query";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
+type ResponeType = {
+    data: {
+        student: {
+            id: string;
+            name: string;
+            email: string;
+            phoneNumber: string;
+            avatar: string;
+            isGoogle: boolean;
+            isVerify: boolean;
+        };
+        token: string;
+    };
+}
+
+type ErrorType = {
+    response: {
+        data: {
+            message: string;
+        }
+    }
+}
 
 
 const data = {
@@ -180,6 +207,7 @@ const data = {
 }
 
 export default function StudentProfile2() {
+    const navigate = useNavigate();
     const [openInfo, setOpenInfo] = React.useState(false);
     const handleOpenRequest = () => {
         setOpenInfo(true);
@@ -194,6 +222,50 @@ export default function StudentProfile2() {
     const handleCloseUpload = () => {
         setOpenPhoto(false);
     }
+
+    const getJwtToken = () => {
+        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
+    };
+    const token = getJwtToken();
+    // Mutation to logout
+    const mutation = useMutation<ResponeType, ErrorType>({
+        mutationFn: () => axios.post("http://localhost:5000/api/v1/student/logout", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: () => {
+            document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
+            // Delete cookie
+
+            console.log("Logout successfully");
+            // setSending(false);
+            // setShowError(false);
+            // setShowSuccess(true);
+            setTimeout(() => {
+                // setShowSuccess(false); // Hide the success message
+                navigate('/'); // Navigate to the next screen
+            }, 1000);
+        },
+        onError: (error) => {
+            // setSending(false);
+            // setShowError(true);
+            console.log("Logout failed");
+            console.log(error);
+        },
+        onMutate: () => {
+            console.log(token);
+            // setSending(true);
+            // setShowError(false);
+        }
+    }
+    );
+
+
+    const handleLogout = () => {
+        mutation.mutate();
+    }
+
 
     return (
         <Grid container spacing={2} className='bg-[#f3f2f0] min-h-screen'>
@@ -278,6 +350,7 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
+                    <Button variant="outlined" color="error" sx={{ mt: 1, width: 1 / 5 }} size="small" onClick={handleLogout}>Logout</Button>
                     <FormDialog state={openInfo} onClose={handleCloseRequest} />
                     <PhotoDialog state={openPhoto} onClose={handleCloseUpload} />
 

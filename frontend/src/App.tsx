@@ -18,8 +18,8 @@ import { CompanySettingPage } from "./applications/company/CompanySetting";
 import Providers from "./Providers";
 import StudentJobsPage from "./applications/student/jobs";
 import StudentMessage from "./applications/student/message";
-import StudentNotification from "./applications/student/notification";
 import StudentUpdate from "./applications/student/profile/update/update";
+import JobDisplay from "./applications/student/jobs/JobDisplay";
 
 const queryClient = new QueryClient()
 
@@ -64,6 +64,13 @@ function App() {
                 element={
                   <PrivateRoute layout={UserPageLayout}>
                     <StudentJobsPage />
+                  </PrivateRoute>
+                } />
+                <Route
+                path="/student/jobs/jobDisplay/:jobId"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <JobDisplay/>
                   </PrivateRoute>
                 } />
               <Route

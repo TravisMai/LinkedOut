@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Divider, Grid, IconButton, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import JobDisplay from './JobDisplay.component';
 
 type ResponeType = {
   data: {
@@ -37,13 +38,18 @@ const LeftSidebar: React.FC = () => {
 
   const token = getJwtToken();
 
-  return (
-    <div className="ml-7 mt-6 pb-6 h-fit lg:min-h-[500px] flex flex-col rounded-xl space-y-2 fixed">
 
+  const handleClick = () => {
+    document.getElementById("my-section")?.scrollIntoView({ behavior: "smooth"});
+  };
+
+  return (
+    
+    <div className="ml-7 mt-6 pb-6 h-fit lg:min-h-[500px] flex flex-col rounded-xl space-y-2 fixed">
       <div className='flex flex-col bg-white rounded-lg '>
-        
+
         <List component="nav" aria-label="mailbox folders" hidden={showContent}>
-          <ListItem button secondaryAction={
+          <ListItem button onClick={handleClick} secondaryAction={
             <Typography>19</Typography>
           }>
             <ListItemText primary="Applied" >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Button, Container, Divider, IconButton, Link, Typography } from '@mui/material';
@@ -28,7 +28,7 @@ type jobType = {
 }
 
 const JobDisplay: React.FC = () => {
-
+    const mySectionRef = useRef(null);
     const [appliedJobs, setAppliedJobs] = useState<jobType[]>([]);
 
     // Get jwt token
@@ -84,7 +84,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit'>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>
@@ -100,7 +100,7 @@ const JobDisplay: React.FC = () => {
             </Container>
 
             {/* Approved jobs */}
-            <Container className='h-fit bg-white rounded-xl pb-2'>
+            <Container className='h-fit bg-white rounded-xl pb-2' ref={mySectionRef}>
                 <Typography variant='h5' className='pt-4'>Approved Jobs</Typography>
                 <Typography variant='caption'>Jobs that you have qualified</Typography>
                 {appliedJobs.length > 0 ? (
@@ -126,7 +126,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit'>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>
@@ -168,7 +168,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit'>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>
@@ -210,7 +210,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit'>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>

@@ -3,7 +3,7 @@ import { Container, TextField, Button, List, ListItem, ListItemText, Divider, Gr
 import { KeyboardArrowDown } from '@mui/icons-material';
 import ChatHistory from './chatHistory.component';
 
-const recentMessages = [{ user: "Cybuzo", message: "Hi, please reply to me", lastTime: "Nov-23" }, { user: "Not African Bank - NAB", message: "Hi, please apply to this job", lastTime: "Now" }]
+const recentMessages = [{ user: "Byzocu", message: "Hi, please reply to me", lastTime: "Nov-23" }, { user: "New American Bible - NAB", message: "Hi, please apply to this job", lastTime: "Now" }]
 
 const StudentMessage: React.FC = () => {
     return (

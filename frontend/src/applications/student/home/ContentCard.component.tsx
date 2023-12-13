@@ -57,7 +57,7 @@ export default function ContentCard({ job }: { job: jobType }) {
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
               {job.company.name}
             </Typography>
-            <Link href="#">
+            <Link href={'/student/jobs/jobDisplay/'+ job.id}>
               <Typography variant="h5" component="div">
                 {job.title}
               </Typography>

@@ -204,7 +204,6 @@ export default function UpdatePhoto() {
                     // Image only
                     name="email"
                     autoComplete="email"
-                    value={formData.email}
                     onChange={handleInputChange}
                   />
                 </Grid>
