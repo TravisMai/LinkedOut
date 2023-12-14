@@ -17,7 +17,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { indigo, purple } from '@mui/material/colors';
 import FormDialog from './UpdateDialog.component';
 
-const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Messages', ''], ['Notifications', '']];
+const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicants'], ['Messages', '/company/message']];
 const settings = ['Settings', 'Logout'];
 
 const theme = createTheme({
@@ -152,7 +152,9 @@ const CompanyAppBar = () => {
                 </Button>
               ))}
             </Box>
-
+            <Typography sx={{ mr: 3 }}>
+              CÔNG TY TNHH BYZOCU VIỆT NAM
+            </Typography>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

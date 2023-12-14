@@ -20,6 +20,11 @@ import StudentJobsPage from "./applications/student/jobs";
 import StudentMessage from "./applications/student/message";
 import StudentUpdate from "./applications/student/profile/update/update";
 import JobDisplay from "./applications/student/jobs/JobDisplay";
+import AddJob from "./applications/company/AddJob";
+import JobDisplayCompany from "./applications/company/JobDisplay";
+import { ApplicantsPage } from "./applications/company/ApplicantsPage";
+import DisplayApplicant from "./applications/company/DisplayApplicant";
+import CompanyMessage from "./applications/company/CompanyMessage";
 
 const queryClient = new QueryClient()
 
@@ -44,6 +49,11 @@ function App() {
               <Route path="/staff" element={<StaffPage />} />
               <Route path="/company" element={<CompanyPage />} />
               <Route path="/company/jobs" element={<AllJobPage />} />
+              <Route path="/company/applicants" element={<ApplicantsPage />} />
+              <Route path="/company/applicant/:applicantId" element={<DisplayApplicant />} />
+              <Route path="/company/message" element={<CompanyMessage />} />
+              <Route path="/company/jobs/add" element={<AddJob />} />
+              <Route path="/company/jobs/:jobId" element={<JobDisplayCompany />} />
               <Route path="/company/setting" element={<CompanySettingPage />} />
               <Route
                 path="/student/profile"

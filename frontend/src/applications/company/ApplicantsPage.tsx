@@ -19,7 +19,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import CompanyAppBar from './CompanyAppBar.component';
 import { Typography } from '@mui/material';
-import { Add, Launch, RecentActors } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 
 const usingtoken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhZTZjYWEzLTAwNTgtNDg3My05NjQxLTFiOGQxMWYwNGZlNCIsInVzZXJuYW1lIjoic3RhZmYgMDAwMSIsImVtYWlsIjoic3RhZmYyQGhjbXV0LmVkdS52biIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTY5NTc5NDE4NSwiZXhwIjoxNzI3MzUxNzg1fQ.bhG0pDXwTSGQ2iOSj8WN7IdP642uc6kFTAPlfeLBWMU";
 
@@ -36,25 +36,18 @@ function createData(
 }
 
 
-type companyType = {
+type studentType = {
     "id": string,
-    "title": string,
+    "name": string,
     "email": string,
     "phoneNumber": string,
     "avatar": string,
-    "workField": string,
-    "address": string,
-    "website": null,
-    "descriptions": {
-        "responsibilities": string,
-        "detailed": string
-    }
-    "taxId": null
+    
 }
 
-export function AllJobPage() {
+export function ApplicantsPage() {
 
-    const [allCompany, setAllCompany] = useState<companyType[]>([]);
+    const [allStudent, setAllStudent] = useState<studentType[]>([]);
 
     // Get jwt token
     const getJwtToken = () => {
@@ -66,14 +59,14 @@ export function AllJobPage() {
     // Fetch all companies
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/job/", {
+        queryFn: () => axios.get("http://localhost:5000/api/v1/student/", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: (data) => {
             console.log(data.data);
-            setAllCompany(data.data);
+            setAllStudent(data.data);
         }
     });
 
@@ -89,7 +82,7 @@ export function AllJobPage() {
                 gutterBottom
                 sx={{ pt: 3 }}
             >
-                All jobs
+                Applicants
             </Typography>
             <div className='mt-8 w-5/6 mx-auto'>
                 <div className='flex flex-row space-x-2'>
@@ -97,7 +90,8 @@ export function AllJobPage() {
                         id="search"
                         type="search"
                         label="Search"
-                        value={searchTerm}
+                        
+                        value={searchTerm?searchTerm:"Azure Cloud Intern"}
                         onChange={e => setSearchTerm(e.target.value)}
                         sx={{ width: 500 }}
                         InputProps={{
@@ -110,22 +104,21 @@ export function AllJobPage() {
                     />
                     <Button variant="contained">Search</Button>
                     <Button variant="outlined">Filter</Button>
-                    <Button variant="outlined" color='success' sx={{}} href='/company/jobs/add'><Add/>Add</Button>
                 </div>
                 <TableContainer component={Paper} className='mt-5'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell align='center'>No.</TableCell>
-                                <TableCell align="center">Title</TableCell>
-                                <TableCell align="center">Description</TableCell>
-                                <TableCell align="center">Close day</TableCell>
+                                <TableCell align="center">Name</TableCell>
+                                <TableCell align="center">Email</TableCell>
+                                <TableCell align="center">Phone</TableCell>
                                 <TableCell align="center">Applied</TableCell>
                                 <TableCell align="center">Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allCompany.map((row, index) => (
+                            {allStudent.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -138,14 +131,13 @@ export function AllJobPage() {
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                    <TableCell align="center">{row.title}</TableCell>
-                                    <TableCell align="center">{row.descriptions.responsibilities}</TableCell>
-                                    <TableCell align="center">21/12/2023</TableCell>
-                                    <TableCell align="center">9</TableCell>
+                                    <TableCell align="center">{row.name}</TableCell>
+                                    <TableCell align="center">{row.email}</TableCell>
+                                    <TableCell align="center">{row.phoneNumber}</TableCell>
+                                    <TableCell align="center">10/10/2023</TableCell>
                                     <TableCell align="center">
                                         <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                            <IconButton href={'/company/applicants/'}><RecentActors /></IconButton>
-                                            <IconButton href={'/company/jobs/'+row.id}><Launch /></IconButton>
+                                            <IconButton href={'/company/applicant/'+row.id}><ContactEmergencyIcon /></IconButton>
                                         </Box>
                                     </TableCell>
                                 </TableRow>
