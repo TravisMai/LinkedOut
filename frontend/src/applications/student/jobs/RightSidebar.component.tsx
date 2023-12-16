@@ -63,7 +63,7 @@ const RightSidebar: React.FC = () => {
                         appliedJobs.map((job: jobType) => (
                             <>
 
-                                <ListItemButton className='rounded-xl' href={'/student/jobs/jobDisplay/'+ job.id} >
+                                <ListItemButton className='rounded-xl' href={'/student/jobs/'+ job.id} >
                                     <Grid container spacing={1}>
                                         <Grid item xs={2}>
                                             <img

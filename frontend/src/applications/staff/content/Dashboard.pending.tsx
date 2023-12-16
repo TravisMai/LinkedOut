@@ -27,15 +27,15 @@ const rows = [
     createData(
         0,
         '16 Mar, 2019',
-        'NABuoi',
-        'HR qq',
+        'BAN',
+        'HQRQ',
         30152512,
         "https://bard.google.com/chat"
     ),
     createData(
         1,
         '16 Mar, 2019',
-        'Noventiq',
+        'Vonenteq',
         'Tran Tri Dat',
         86635523,
         'https://mui.com'
@@ -43,7 +43,7 @@ const rows = [
     createData(
         2,
         '16 Mar, 2019',
-        'Cybozu',
+        'Byzocu',
         'Mai Huu Nghia',
         1008513251,
         'File'
@@ -51,7 +51,7 @@ const rows = [
     createData(
         3,
         '16 Mar, 2019',
-        'Ampere Computing',
+        'Voltage Computing',
         'Le Chi Hung',
         6545325239,
         'File'
@@ -59,7 +59,7 @@ const rows = [
     createData(
         4,
         '15 Mar, 2019',
-        'Rockship',
+        'Shockrip',
         'Dinh Xuan Mai',
         5523532323,
         'File'

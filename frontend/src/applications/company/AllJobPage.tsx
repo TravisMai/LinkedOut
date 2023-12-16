@@ -144,7 +144,7 @@ export function AllJobPage() {
                                     <TableCell align="center">9</TableCell>
                                     <TableCell align="center">
                                         <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                            <IconButton href={'/company/applicants/'}><RecentActors /></IconButton>
+                                            <IconButton href={'/company/applicant/'}><RecentActors /></IconButton>
                                             <IconButton href={'/company/jobs/'+row.id}><Launch /></IconButton>
                                         </Box>
                                     </TableCell>

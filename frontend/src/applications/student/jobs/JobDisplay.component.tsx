@@ -84,7 +84,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>
@@ -126,7 +126,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>
@@ -168,7 +168,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>
@@ -210,7 +210,7 @@ const JobDisplay: React.FC = () => {
                                     </Typography>
 
                                 </div>
-                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/jobDisplay/'+ job.id}>
+                                <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/'+ job.id}>
                                     <MoreHoriz />
                                 </IconButton>
                             </div>

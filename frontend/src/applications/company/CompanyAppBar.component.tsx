@@ -17,7 +17,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { indigo, purple } from '@mui/material/colors';
 import FormDialog from './UpdateDialog.component';
 
-const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicants'], ['Messages', '/company/message']];
+const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicant'], ['Messages', '/company/message']];
 const settings = ['Settings', 'Logout'];
 
 const theme = createTheme({

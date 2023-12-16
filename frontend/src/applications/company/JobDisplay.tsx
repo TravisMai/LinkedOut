@@ -79,7 +79,7 @@ const JobDisplayCompany: React.FC = () => {
                         <Box display="flex" gap={3}>
                             <Typography variant="h4">{job?.title}</Typography>
                             <LoadingButton variant="outlined" color="error" onClick={handleClick} loading={loading}>{!applied ? "Close" : <Close/>}</LoadingButton>
-                            {job?.workType === "Internship" ? <Button variant="outlined" color="success" href='/company/applicants'>View applicants</Button> : null}
+                            {job?.workType === "Internship" ? <Button variant="outlined" color="success" href='/company/applicant'>View applicants</Button> : null}
                         </Box>
                         <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
                         <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>

@@ -49,7 +49,7 @@ function App() {
               <Route path="/staff" element={<StaffPage />} />
               <Route path="/company" element={<CompanyPage />} />
               <Route path="/company/jobs" element={<AllJobPage />} />
-              <Route path="/company/applicants" element={<ApplicantsPage />} />
+              <Route path="/company/applicant" element={<ApplicantsPage />} />
               <Route path="/company/applicant/:applicantId" element={<DisplayApplicant />} />
               <Route path="/company/message" element={<CompanyMessage />} />
               <Route path="/company/jobs/add" element={<AddJob />} />
@@ -77,7 +77,7 @@ function App() {
                   </PrivateRoute>
                 } />
                 <Route
-                path="/student/jobs/jobDisplay/:jobId"
+                path="/student/jobs/:jobId"
                 element={
                   <PrivateRoute layout={UserPageLayout}>
                     <JobDisplay/>
