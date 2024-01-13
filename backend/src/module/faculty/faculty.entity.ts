@@ -16,9 +16,6 @@ export class Faculty {
     @IsOptional()
     avatar: string;
 
-    @Column()
-    role: string;
-
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     created: Date;
 
