@@ -17,6 +17,7 @@ export class StudentResponseDto {
         dto.email = student.email;
         dto.phoneNumber = student.phoneNumber;
         dto.avatar = student.avatar;
+        dto.studentId = student.studentId;
         dto.isVerify = student.isVerify;
         return dto;
     }
