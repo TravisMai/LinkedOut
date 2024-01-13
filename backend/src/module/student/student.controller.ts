@@ -142,13 +142,6 @@ export class StudentController {
             id !== decodedToken.id) {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
-            if (student.newPassword) {
-                student.password = await bcrypt.hash(student.newPassword, parseInt(process.env.BCRYPT_SALT));
-                delete student.newPassword;
-            }
-            else {
-                student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
-            }
             if (file) {
                 findStudent.avatar && await this.azureBlobService.delete(findStudent.avatar.split('/').pop());
                 student.avatar = await this.azureBlobService.upload(file);
