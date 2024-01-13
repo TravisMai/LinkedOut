@@ -142,13 +142,6 @@ export class StaffController {
             if (id !== decodedToken.id) {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
-            if (staff.newPassword) {
-                staff.password = await bcrypt.hash(staff.newPassword, parseInt(process.env.BCRYPT_SALT));
-                delete staff.newPassword;
-            }
-            else {
-                staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
-            }
             if (file) {
                 findStaff.avatar && await this.azureBlobService.delete(findStaff.avatar.split('/').pop());
                 staff.avatar = await this.azureBlobService.upload(file);
