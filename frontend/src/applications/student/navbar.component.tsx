@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   const token = getJwtToken();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
+    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

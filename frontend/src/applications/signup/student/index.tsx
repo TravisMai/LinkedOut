@@ -67,7 +67,7 @@ interface newForm {
     name: string;
     email: string;
     phoneNumber: string;
-    studentId: string;
+    studentId: number;
 }
 
 const countryCode = [
@@ -100,7 +100,7 @@ export default function StudentSignUp() {
         name: '',
         email: '',
         phoneNumber: '',
-        studentId: '',
+        studentId: 0,
     });
 
     // Handle input change
@@ -120,7 +120,7 @@ export default function StudentSignUp() {
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({
-        mutationFn: (newForm) => axios.post("http://localhost:5000/api/v1/student", newForm),
+        mutationFn: (newForm) => axios.post("http://localhost:4000/api/v1/student", newForm),
         onSuccess: (data) => {
             console.log(data);
             setSending(false);
@@ -151,11 +151,15 @@ export default function StudentSignUp() {
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formData);
+        console.log(formData.studentId);
+        
         // Add country code to phone number
         if (formData.phoneNumber.charAt(0) !== '0')
             formData.phoneNumber = '0' + formData.phoneNumber;
 
+        // Change studentId to number
+        formData.studentId = Number(formData.studentId);
+        console.log(typeof formData.studentId)
         mutation.mutate(formData);
     };
 
@@ -201,7 +205,7 @@ export default function StudentSignUp() {
                                                 required
                                                 fullWidth
                                                 id="studentId"
-                                                type="text"
+                                                type="number"
                                                 label="Student ID"
                                                 name="studentId"
                                                 autoComplete="studentId"

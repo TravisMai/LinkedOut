@@ -27,7 +27,7 @@ const StudentList: React.FC = () => {
     // Fetch all students
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/student", {
+        queryFn: () => axios.get("http://localhost:4000/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

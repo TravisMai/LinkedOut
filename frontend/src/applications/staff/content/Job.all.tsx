@@ -72,7 +72,7 @@ export default function AllJob() {
     // Fetch all companies
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/job", {
+        queryFn: () => axios.get("http://localhost:4000/api/v1/job", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

@@ -59,7 +59,7 @@ export function ApplicantsPage() {
     // Fetch all companies
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/student/", {
+        queryFn: () => axios.get("http://localhost:4000/api/v1/student/", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

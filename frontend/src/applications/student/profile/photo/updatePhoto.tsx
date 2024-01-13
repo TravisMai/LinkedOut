@@ -93,7 +93,7 @@ export default function UpdatePhoto() {
   // Fetch current information
   useQuery({
     queryKey: "currentInfo",
-    queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
+    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -133,7 +133,7 @@ export default function UpdatePhoto() {
 
   // Mutation to send form data to server    
   const mutation = useMutation<ResposeType, ErrorType, updateForm>({
-    mutationFn: (updateForm) => axios.put(`http://localhost:5000/api/v1/student/${studentId}`, updateForm, {
+    mutationFn: (updateForm) => axios.put(`http://localhost:4000/api/v1/student/${studentId}`, updateForm, {
       headers: {
         Authorization: `Bearer ${token}`,
       }

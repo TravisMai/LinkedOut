@@ -131,7 +131,7 @@ export default function CompanySignUp() {
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({
         mutationFn: (formData) => {
-            return axios.post("http://localhost:5000/api/v1/company", formData);
+            return axios.post("http://localhost:4000/api/v1/company", formData);
         },
         onSuccess: (data) => {
             console.log(data);

@@ -47,7 +47,7 @@ const JobDisplayCompany: React.FC = () => {
     // Fetch all jobs
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/job/" + jobId, {
+        queryFn: () => axios.get("http://localhost:4000/api/v1/job/" + jobId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

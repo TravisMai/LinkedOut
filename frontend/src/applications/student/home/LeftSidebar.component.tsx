@@ -46,7 +46,7 @@ const LeftSidebar: React.FC = () => {
   // Fetch student info
   useQuery({
     queryKey: "student",
-    queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
+    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -60,7 +60,7 @@ const LeftSidebar: React.FC = () => {
 
   // Mutation to logout
   const mutation = useMutation<ResponeType, ErrorType>({
-    mutationFn: () => axios.post("http://localhost:5000/api/v1/student/logout", {}, {
+    mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
