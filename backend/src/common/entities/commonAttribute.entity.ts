@@ -12,11 +12,6 @@ export class commonAttribute {
     name: string;
 
     @Column()
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-
-    @Column()
     @IsEmail()
     @IsNotEmpty()
     email: string;

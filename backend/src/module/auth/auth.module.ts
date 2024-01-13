@@ -1,9 +1,12 @@
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import jwtConfig from 'src/common/jwt/jwt.config';
 import { PassportModule } from '@nestjs/passport';
 import { RedisModule } from 'src/module/redis/redis.module';
+import { AuthController } from './auth.controller';
+import {StudentModule} from "../student/student.module";
+import {StaffModule} from "../staff/staff.module";
 
 @Module({
   imports: [
@@ -12,10 +15,12 @@ import { RedisModule } from 'src/module/redis/redis.module';
       secret: jwtConfig.secret,
       signOptions: { expiresIn: jwtConfig.signOptions.expiresIn },
     }),
-    RedisModule
+    RedisModule,
+    forwardRef(() => StudentModule),
+    forwardRef(() => StaffModule),
   ],
-  providers: [ AuthService],
+  providers: [ AuthService ],
   exports: [JwtModule],
-  controllers: [],
+  controllers: [AuthController],
 })
 export class AuthModule {}

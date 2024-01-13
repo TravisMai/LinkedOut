@@ -55,4 +55,7 @@ export class Job {
 
     @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
     updated: Date;
+
+    @Column({ type: "timestamp", nullable: true })
+    expireDate: Date;
 }

@@ -1,11 +1,13 @@
-import { Entity, Column } from "typeorm";
-import { IsNumber, IsOptional, Length } from "class-validator";
+import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
+import { IsNumber, IsOptional, IsString, Length } from "class-validator";
 import { commonAttribute } from "src/common/entities/commonAttribute.entity";
+import { Faculty } from "../faculty/faculty.entity";
 
 @Entity()
 export class Student extends commonAttribute {
-  @Column({ default: false })
-  isGoogle: boolean;
+  @ManyToOne(() => Faculty, { eager: true })
+  @JoinColumn({ name: 'facultyId' })
+  faculty: Faculty;
 
   @Column({ default: false })
   isVerify: boolean;
@@ -13,6 +15,25 @@ export class Student extends commonAttribute {
   @Column({ nullable: true })
   @IsNumber()
   @IsOptional()
-  @Length(7, 7)
   studentId: number;
+
+  @Column({ nullable: true })
+  @IsNumber()
+  @IsOptional()
+  gpa: number;
+
+  @Column({ nullable: true })
+  @IsNumber()
+  @IsOptional()
+  classCode: number;
+
+  @Column('text', { array: true, nullable: true })
+  @IsString({ each: true })
+  @IsOptional()
+  resume: string[];
+
+  @Column('text', { array: true, nullable: true })
+  @IsString({ each: true })
+  @IsOptional()
+  skill: string[];
 }

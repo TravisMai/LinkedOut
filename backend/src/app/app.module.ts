@@ -10,6 +10,9 @@ import { StudentModule } from '../module/student/student.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyModule } from 'src/module/company/company.module';
 import { JobModule } from 'src/module/job/job.module';
+import { FacultyModule } from 'src/module/faculty/faculty.module';
+import { InternshipModule } from 'src/module/internship/internship.module';
+import { JobApplicantsModule } from 'src/module/jobApplicants/jobApplicants.module';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { JobModule } from 'src/module/job/job.module';
     StaffModule,
     StudentModule,
     CompanyModule,
+    FacultyModule,
+    InternshipModule,
+    JobApplicantsModule,
     JobModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
