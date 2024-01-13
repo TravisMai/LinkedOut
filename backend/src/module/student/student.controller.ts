@@ -107,7 +107,7 @@ export class StudentController {
     @Post()
     @UseInterceptors(FileInterceptor('myfile'))
     async create(@UploadedFile() file: Express.Multer.File, @Body() student: Student, @Res() response: Response): Promise<Response> {
-        student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
+        // student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
         if (await this.staffService.findByEmail(student.email) || await this.studentService.findByEmail(student.email) || await this.companyService.findByEmail(student.email)) {
             return response.status(HttpStatus.CONFLICT).json({ message: 'Email already exists!' });
         }
@@ -137,7 +137,9 @@ export class StudentController {
             }
             const findStudent = await this.studentService.findOne(id);
             const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
-            if (!(await bcrypt.compare(student.password, findStudent.password)) || id !== decodedToken.id) {
+            if (
+                // !(await bcrypt.compare(student.password, findStudent.password)) || 
+            id !== decodedToken.id) {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
             if (student.newPassword) {
@@ -195,7 +197,9 @@ export class StudentController {
                 }
             }
             const student = await this.studentService.findByEmail(loginData.email);
-            if (!student || !(await bcrypt.compare(loginData.password, student.password))) {
+            if (!student 
+                // || !(await bcrypt.compare(loginData.password, student.password))
+                ) {
                 return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
             }
             const token = this.authService.generateJwtToken(student);

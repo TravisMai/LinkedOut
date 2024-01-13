@@ -5,6 +5,11 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from "class-validat
 @Entity()
 export class Company extends commonAttribute {
     @Column()
+    @IsString()
+    @IsNotEmpty()
+    password: string;
+    
+    @Column()
     @IsNotEmpty()
     @IsString()
     workField: string;
