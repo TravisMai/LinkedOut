@@ -137,11 +137,11 @@ export class StudentController {
             }
             const findStudent = await this.studentService.findOne(id);
             const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
-            if (
-                // !(await bcrypt.compare(student.password, findStudent.password)) || 
-            id !== decodedToken.id) {
-                return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
-            }
+            // if (
+            //     // !(await bcrypt.compare(student.password, findStudent.password)) || 
+            // id !== decodedToken.id) {
+            //     return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+            // }
             if (file) {
                 findStudent.avatar && await this.azureBlobService.delete(findStudent.avatar.split('/').pop());
                 student.avatar = await this.azureBlobService.upload(file);
