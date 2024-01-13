@@ -30,7 +30,7 @@ const RightSidebar: React.FC = () => {
   // Fetch all companies
   useQuery({
     queryKey: "allCompany",
-    queryFn: () => axios.get("http://localhost:5000/api/v1/company", {
+    queryFn: () => axios.get("http://localhost:4000/api/v1/company", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -40,6 +40,7 @@ const RightSidebar: React.FC = () => {
       setAllCompany(data.data);
     }
   });
+
 
   return (
     <div className="w-4/5 mx-auto my-6 pb-6 h-fit flex flex-col rounded-xl border-2 items-center bg-white">
@@ -56,16 +57,12 @@ const RightSidebar: React.FC = () => {
                 key={idx}
                 className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
               >
-                <div>
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={row.avatar}
-                    alt="user"
-                  />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">{row.name}</p>
-                </div>
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src={"/src/shared/assets/" + row.avatar}
+                  alt="user"
+                />
+                <p className="text-sm font-semibold">{row.name}</p>
               </li>
             ))}
         </ul>

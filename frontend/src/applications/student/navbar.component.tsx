@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   const token = getJwtToken();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
+    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </Link>
-        <Link to="/student/notification">
+        {/* <Link to="/student/notification">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
               <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
@@ -118,7 +118,7 @@ const Navbar: React.FC = () => {
               </div>
             </div>
           </div>
-        </Link>
+        </Link> */}
       </div>
       <div className="col-span-2 grid grid-cols-10 items-center justify-end">
         <div className='w-fit col-span-3 items-center mt-1'>
@@ -131,7 +131,7 @@ const Navbar: React.FC = () => {
               <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">{studentEmail}</p>
               <div>
                 <img
-                  src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-6/273877541_4799385830176329_4891712365804515546_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1b51e3&_nc_ohc=EDDvDSGG2gsAX88T2W5&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfBnypi4b8yffb3ARBVZAFQN0Es0LctmOKEPaZrLZCQ1kA&oe=65046731"
+                  src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
                   className="w-8 h-8 rounded-full col-span-1"
                   alt="dp"
                 />

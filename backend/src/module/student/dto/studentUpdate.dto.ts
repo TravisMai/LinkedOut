@@ -5,14 +5,6 @@ export class StudentUpdateDto {
     @IsOptional()
     name: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-
-    @IsString()
-    @IsOptional()
-    newPassword: string;
-
     @IsEmail()
     @IsOptional()
     email: string;

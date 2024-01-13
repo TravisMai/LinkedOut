@@ -5,6 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from '@mui/material';
 
 const bull = (
   <Box
@@ -38,28 +39,40 @@ type jobType = {
   }
 }
 
-export default function ContentCard({ job }: { job: jobType }){
+
+
+
+export default function ContentCard({ job }: { job: jobType }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {job.title}
-        </Typography>
-        <Typography variant="h5" component="div">
-          {job.company.name}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {job.company.workField}
-        </Typography>
-        <Typography variant="body2">
-          {job.descriptions.aboutUs}
-          <br />
-          {job.descriptions.responsibilities[0]}
-        </Typography>
+        <div className='flex flex-row'>
+          <div className='mr-4 basis-1/6 center'>
+            <img
+                src={"/src/shared/assets/" + job.company.avatar}
+              className='w-full h-3/4 mt-3 object-cover rounded-xl'
+              alt="company avatar" />
+          </div>
+          <div className='basis-5/6'>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              {job.company.name}
+            </Typography>
+            <Link href={'/student/jobs/'+ job.id}>
+              <Typography variant="h5" component="div">
+                {job.title}
+              </Typography>
+            </Link>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {job.descriptions.aboutUs}
+            </Typography>
+            <Typography variant="body2">
+              {job.descriptions.requirements[0]}
+              <br />
+              {job.descriptions.responsibilities[0]}
+            </Typography>
+          </div>
+        </div>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 }

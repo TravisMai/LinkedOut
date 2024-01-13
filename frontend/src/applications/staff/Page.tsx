@@ -186,14 +186,14 @@ export default function StaffPage() {
 
                         <MainListItems display={setValue} />
                         <Divider sx={{ marginBottom: 2 }} />
-                        <ToggleList display={setValue} section="Action" subSection={[{ icon: <DashboardIcon />, label: 'Verify' }, { icon: <AssignmentIndIcon />, label: 'Update' },]} />
-                        <ToggleList display={setValue} section="Job" subSection={[{ icon: <DashboardIcon />, label: 'All jobs' }, { icon: <AssignmentIndIcon />, label: 'Manage job' },]} />
-                        <ToggleList display={setValue} section="Internship" subSection={[{ icon: <DashboardIcon />, label: 'Internship Program' }, { icon: <AssignmentIndIcon />, label: 'Recruitment Result' }, { icon: <AssignmentIndIcon />, label: 'Internship Result' }, { icon: <AssignmentIndIcon />, label: 'Report' }]} />
-                        <ToggleList display={setValue} section="Documents" subSection={[{ icon: <DashboardIcon />, label: 'All documents' }, { icon: <AssignmentIndIcon />, label: 'Upload' },]} />
+                        <ToggleList display={setValue} section="Action" subSection={[{ icon: <DashboardIcon />, label: 'Verify' }]} />
+                        <ToggleList display={setValue} section="Job" subSection={[{ icon: <DashboardIcon />, label: 'All jobs' }, ]} />
+                        {/* <ToggleList display={setValue} section="Internship" subSection={[{ icon: <DashboardIcon />, label: 'Internship Program' }, { icon: <AssignmentIndIcon />, label: 'Recruitment Result' }, { icon: <AssignmentIndIcon />, label: 'Internship Result' }, { icon: <AssignmentIndIcon />, label: 'Report' }]} />
+                        <ToggleList display={setValue} section="Documents" subSection={[{ icon: <DashboardIcon />, label: 'All documents' }, { icon: <AssignmentIndIcon />, label: 'Upload' },]} /> */}
 
                     </List>
 
-                    <Copyright sx={{ bottom: '0', pt: 4, pb: 4 }} />
+                    <Copyright sx={{ position:'absolute', bottom: '0', pt: 4, pb: 4, pl:2 }} />
                 </Drawer>
                 <Box
                     component="main"

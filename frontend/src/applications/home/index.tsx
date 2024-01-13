@@ -7,19 +7,18 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
-
-const cards = ["Student", "Company"];
+import Typewriter from 'typewriter-effect';
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme(
+
+);
 
 export default function HomePage() {
     return (
@@ -28,16 +27,16 @@ export default function HomePage() {
             <main>
                 <Box
                     sx={{
-                        bgcolor: 'background.paper',
-                        pt: 8,
-                        pb: 6,
+                        bgcolor: 'inherit',
+                        pt: 4,
+                        pb: 4,
                     }}
                 >
-                    <Container maxWidth="sm">
-                        <div className='flex flex-row justify-evenly mb-10' >
+                    <Container maxWidth="md">
+                        <div className='flex flex-row justify-evenly mb-4' >
                             <img
                                 src={Logo}
-                                className='w-2/5 h-2/5 rounded-full mx-auto'
+                                className='w-1/5 h-1/5 rounded-full mx-auto'
                             />
                         </div>
                         <Typography
@@ -46,19 +45,26 @@ export default function HomePage() {
                             align="center"
                             color="text.primary"
                             gutterBottom
+                            sx={{ pt: 2 }}
                         >
                             LinkedOut
                         </Typography>
-                        <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Website for students to find internship and job opportunities
-                        </Typography>
-                        <Stack
-                            sx={{ pt: 4 }}
-                            direction="row"
-                            spacing={2}
-                            justifyContent="center"
-                        >
-                        </Stack>
+                        <Typewriter
+                            options={{
+                                strings: ['Website for students to find internship and job opportunities'],
+                                autoStart: true,
+                                pauseFor: 3000,
+                                delay: 10,
+                                deleteSpeed: 10,
+                                loop: true,
+                                cursor: '...',
+                                wrapperClassName: 'text-2xl text-gray-500 text-center pl-20 ml-4',
+                                // cursorClassName: 'text-xs',
+                            }}
+                        />
+                            {/* <Typography variant="h5" align="center" color="text.secondary" paragraph>
+                                Website for students to find internship and job opportunities
+                            </Typography> */}                        
                     </Container>
                 </Box>
                 <Container maxWidth="md">
@@ -71,7 +77,7 @@ export default function HomePage() {
                                         // 16:9
                                         pt: '56.25%',
                                     }}
-                                    image="https://source.unsplash.com/random?wallpapers"
+                                    image="https://www.seatssoftware.com/wp-content/uploads/2022/07/Full-class-student-attendance-and-boosted-retention-rates.png"
                                 />
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="h2" align='center'>
@@ -99,14 +105,14 @@ export default function HomePage() {
                                         // 16:9
                                         pt: '56.25%',
                                     }}
-                                    image="https://source.unsplash.com/random?wallpapers"
+                                    image="https://www.insureon.com/-/jssmedia/blog/posts/2021/photo_group-of-employees-working-on-project.png?h=370&iar=0&w=750&rev=3faabd3c0f7c4e11966caaa037fa4fc8"
                                 />
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="h2" align='center'>
                                         Company
                                     </Typography>
                                     <Typography align='center'>
-                                        Start finding the best employees
+                                        Start finding good candidates
                                     </Typography>
                                 </CardContent>
                                 <CardActions sx={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 0 }}>
@@ -124,7 +130,7 @@ export default function HomePage() {
                 </Container>
             </main>
             {/* Footer */}
-            <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
+            <Box sx={{ bgcolor: 'inherit', pt: 6 }} component="footer">
                 <Typography variant="h6" align="center" gutterBottom>
                     LinkedOut - Graduation project
                 </Typography>

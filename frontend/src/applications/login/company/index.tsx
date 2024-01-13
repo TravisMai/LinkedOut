@@ -70,7 +70,7 @@ export default function CompanyLogin() {
 
   // Mutation to send login information
   const mutation = useMutation<ResponeType, ErrorType, loginForm>({
-    mutationFn: (loginForm) => axios.post("http://localhost:5000/api/v1/company/login", loginForm),
+    mutationFn: (loginForm) => axios.post("http://localhost:4000/api/v1/company/login", loginForm),
     onSuccess: (data) => {
       console.log(data);
       const token = data.data.token;
@@ -107,7 +107,7 @@ export default function CompanyLogin() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: 'auto' }} className='justify-center items-center my-auto absolute top-0 bottom-0 left-0 right- bg-[url(https://source.unsplash.com/random?wallpapers)] bg-cover'>
+      <Grid container component="main" sx={{ height: 'auto' }} className='justify-center items-center my-auto absolute top-0 bottom-0 left-0 right- bg-[url(https://www.singhalonline.com/assets/images/photos/header-2.jpg)] bg-cover'>
         <CssBaseline />
 
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className='rounded-xl'>
@@ -127,7 +127,7 @@ export default function CompanyLogin() {
               className='w-1/5 h-1/5 rounded-full mb-4'
             />
             <Typography component="h1" variant="h5">
-              Login with student account
+              Login with company account
             </Typography>
             <Box component="form" onSubmit={handleSubmitSignIn} sx={{ mt: 1 }}>
               <TextField
@@ -174,7 +174,7 @@ export default function CompanyLogin() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signup/company" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

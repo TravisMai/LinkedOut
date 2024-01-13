@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFoundPage from "./shared/pages/NotFoundPage";
 import StudentPage from "./applications/student/home";
@@ -9,13 +9,23 @@ import HomePage from "./applications/home";
 import StudentLogin from "./applications/login/student";
 import CompanyLogin from "./applications/login/company";
 import StudentSignup from "./applications/signup/student";
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { QueryClient, QueryClientProvider} from 'react-query'
 import CompanySignup from "./applications/signup/company";
 import StudentProfile from "./applications/student/profile";
 import { CompanyPage } from "./applications/company";
 import { AllJobPage } from "./applications/company/AllJobPage";
 import { CompanySettingPage } from "./applications/company/CompanySetting";
 import Providers from "./Providers";
+import StudentJobsPage from "./applications/student/jobs";
+import StudentMessage from "./applications/student/message";
+import StudentUpdate from "./applications/student/profile/update/update";
+import JobDisplay from "./applications/student/jobs/JobDisplay";
+import AddJob from "./applications/company/AddJob";
+import JobDisplayCompany from "./applications/company/JobDisplay";
+import { ApplicantsPage } from "./applications/company/ApplicantsPage";
+import DisplayApplicant from "./applications/company/DisplayApplicant";
+import CompanyMessage from "./applications/company/CompanyMessage";
+import StaffLogin from "./applications/login/staff";
 
 const queryClient = new QueryClient()
 
@@ -28,6 +38,7 @@ function App() {
         <Providers>
           <BrowserRouter>
             <Routes>
+            {/* Routes */}
               <Route path="/" element={<HomePage />} />
               <Route
                 path="/student"
@@ -40,6 +51,11 @@ function App() {
               <Route path="/staff" element={<StaffPage />} />
               <Route path="/company" element={<CompanyPage />} />
               <Route path="/company/jobs" element={<AllJobPage />} />
+              <Route path="/company/applicant" element={<ApplicantsPage />} />
+              <Route path="/company/applicant/:applicantId" element={<DisplayApplicant />} />
+              <Route path="/company/message" element={<CompanyMessage />} />
+              <Route path="/company/jobs/add" element={<AddJob />} />
+              <Route path="/company/jobs/:jobId" element={<JobDisplayCompany />} />
               <Route path="/company/setting" element={<CompanySettingPage />} />
               <Route
                 path="/student/profile"
@@ -48,8 +64,37 @@ function App() {
                     <StudentProfile />
                   </PrivateRoute>
                 } />
+              <Route
+                path="/student/profile/update"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentUpdate />
+                  </PrivateRoute>
+                } />
+              <Route
+                path="/student/jobs"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentJobsPage />
+                  </PrivateRoute>
+                } />
+                <Route
+                path="/student/jobs/:jobId"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <JobDisplay/>
+                  </PrivateRoute>
+                } />
+              <Route
+                path="/student/message"
+                element={
+                  <PrivateRoute layout={UserPageLayout}>
+                    <StudentMessage />
+                  </PrivateRoute>
+                } />
               <Route path="/login/student" element={<StudentLogin />} />
               <Route path="/login/company" element={<CompanyLogin />} />
+              <Route path="/login/staff" element={<StaffLogin />} />
               <Route path="/signup/student" element={<StudentSignup />} />
               <Route path="/signup/company" element={<CompanySignup />} />
               <Route path="*" element={<NotFoundPage />} />

@@ -61,7 +61,7 @@ export default function Student() {
     // Fetch all students
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/student", {
+        queryFn: () => axios.get("http://localhost:4000/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -113,10 +113,10 @@ export default function Student() {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
 
-                                <TableCell align='center'>{++index}</TableCell>
-                                <TableCell align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.email}</TableCell>
-                                <TableCell align="center">{row.phoneNumber}</TableCell>
+                                <TableCell >{++index}</TableCell>
+                                <TableCell >{row.name}</TableCell>
+                                <TableCell >{row.email}</TableCell>
+                                <TableCell >{row.phoneNumber}</TableCell>
 
                                 {/* <TableCell align="center">
                                     <Link color="primary" href={row.companyLink} target="_blank" sx={{ mt: 3 }}>

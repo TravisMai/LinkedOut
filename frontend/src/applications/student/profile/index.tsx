@@ -1,315 +1,364 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation, useQuery } from "react-query";
-import axios from 'axios';
+import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group, Launch, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium } from "@mui/icons-material";
+import { Box, Button, Checkbox, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
+import React from "react";
+import FormDialog from "./update/updateDialog.component";
+import PhotoDialog from "./photo/updatePhotoDialog.component";
+import { useMutation } from "react-query";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
 
-type ResposeType = {
-  data: {
-    id: string;
-    name: string;
-    email: string;
-    phoneNumber: string;
-    avatar: string;
-    isGoogle: boolean;
-    isVerify: boolean;
-
-  };
+type ResponeType = {
+    data: {
+        student: {
+            id: string;
+            name: string;
+            email: string;
+            phoneNumber: string;
+            avatar: string;
+            isGoogle: boolean;
+            isVerify: boolean;
+        };
+        token: string;
+    };
 }
 
 type ErrorType = {
-  response: {
-    data: {
-      message: string;
+    response: {
+        data: {
+            message: string;
+        }
     }
-  }
 }
 
-interface updateForm {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  newPassword: string;
+
+const data = {
+    name: "Tran Tri Dat",
+    email: "dat.trantri2002@hcmut.edu.vn",
+    phone: "0123456789",
+    major: "Computer Engineering",
+    year: "2020",
+    avatar: "https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg",
+    socialMedia:
+    {
+        github: "https://www.github.com/",
+        linkedin: "https://www.linkedin.com/",
+    },
+    objective: "Pursuing the role Software Engineer with a focus on using cloud technology as well as apply machine learning models to solve complex business problems. As a final-year Computer Science student, with some knowledge in cloud computing, and some experience in apply machine learning models in projects.",
+    education: [
+        {
+            school: "Ho Chi Minh City University of Technology",
+            major: "Computer Engineering",
+            startTime: "Sep 2020 ",
+            endTime: "Present",
+            gpa: "8.8",
+        },
+        {
+            school: "Le Hong Phong High School for the Gifted",
+            major: "Chemistry",
+            startTime: "Sep 2017 ",
+            endTime: "Jun 2020",
+            gpa: "8.8",
+        }
+    ],
+    workingHistory: [
+        {
+            company: "ABC",
+            position: "Software Engineer",
+            time: "Sep 2020 - Present",
+            task: "Developed and maintained custom websites and web applications using HTML, CSS, JavaScript, and PHP. Collaborated with clients and designers to ensure project accuracy and completed projects on time.",
+        },
+        {
+            company: "ABC",
+            position: "Software Engineer",
+            time: "Sep 2016 - Sep 2017",
+            task: "Developed and maintained custom websites and web applications using HTML, CSS, JavaScript, and PHP.",
+        }
+    ],
+    certificate: [
+        {
+            name: "Azure Administrator Associate",
+            time: "Sep 2020",
+        },
+        {
+            name: "AWS Certified Cloud Practitioner",
+            time: "Sep 2020",
+        }
+    ],
+    skill: [
+        {
+            name: "Python",
+            level: "80",
+        },
+        {
+            name: "Java",
+            level: "70",
+        },
+        {
+            name: "C++",
+            level: "60",
+        },
+        {
+            name: "C#",
+            level: "50",
+        },
+        {
+            name: "HTML",
+            level: "80",
+        },
+        {
+            name: "CSS",
+            level: "70",
+        },
+        {
+            name: "JavaScript",
+            level: "60",
+        },
+        {
+            name: "PHP",
+            level: "50",
+        },
+        {
+            name: "ReactJS",
+            level: "80",
+        },
+        {
+            name: "VueJS",
+            level: "70",
+        },
+        {
+            name: "AngularJS",
+            level: "60",
+        },
+        {
+            name: "NodeJS",
+            level: "50",
+        },
+        {
+            name: "MySQL",
+            level: "80",
+        },
+        {
+            name: "MongoDB",
+            level: "70",
+        },
+        {
+            name: "Firebase",
+            level: "60",
+        },
+        {
+            name: "Azure",
+            level: "50",
+        },
+        {
+            name: "AWS",
+            level: "80",
+        },
+        {
+            name: "GCP",
+            level: "70",
+        },
+        {
+            name: "Machine Learning",
+            level: "60",
+        },
+        {
+            name: "Deep Learning",
+            level: "50",
+        },
+        {
+            name: "Computer Vision",
+            level: "80",
+        },
+        {
+            name: "Natural Language Processing",
+            level: "70",
+        },
+        {
+            name: "Data Analysis",
+            level: "60",
+        },
+        {
+            name: "Data Visualization",
+            level: "50",
+        },
+    ],
+    additionalInformation: [
+        {
+            name: "English",
+            level: "IELTS 6.5",
+        },
+        {
+            name: "Japanese",
+            level: "N5",
+        },
+        {
+            name: "Chinese",
+            level: "HKS4",
+        },
+    ],
+    reference: [
+        {
+            name: "Sarah Lee (Former Manager)",
+            email: "sarahlee@email.com",
+            phone: "0123456789",
+        }
+    ],
 }
 
-const countryCode = [
-  {
-    label: 'VNM',
-    numberPrefix: '+84',
-  },
-  {
-    label: 'AUS',
-    numberPrefix: '+61',
-  },
-  {
-    label: 'USA',
-    numberPrefix: '+1',
-  },
-  {
-    label: 'JPN',
-    numberPrefix: '+81',
-  },
-];
-
-export default function StudentProfile() {
-  const navigate = useNavigate();
-  const [sending, setSending] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [studentId, setStudentId] = useState('');
-
-  const [country, countryChange] = useState(0);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    newPassword: '',
-    phoneNumber: '',
-  });
-
-  // Get jwt token
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
-
-  const token = getJwtToken();
-
-  // Fetch current information
-  useQuery({
-    queryKey: "currentInfo",
-    queryFn: () => axios.get("http://localhost:5000/api/v1/student/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-    onSuccess: (data) => {
-      console.log(data);
-      // Set student id
-      setStudentId(data.data.id);
-
-      // Set form data
-      if (formData.name === '' && formData.email === '' && formData.phoneNumber === '')
-        setFormData({
-          name: data.data.name,
-          email: data.data.email,
-          phoneNumber: data.data.phoneNumber,
-          password: '',
-          newPassword: '',
-        });
-    },
-  });
-
-
-  // Handle input change
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Handle country selection change
-  const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
-    countryChange(selectedCountryIndex);
-  };
-
-  // Mutation to send form data to server    
-  const mutation = useMutation<ResposeType, ErrorType, updateForm>({
-    mutationFn: (updateForm) => axios.put(`http://localhost:5000/api/v1/student/${studentId}`, updateForm, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }),
-    onSuccess: (data) => {
-      console.log(data);
-      setSending(false);
-      setShowError(false);
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false); // Hide the success message
-        navigate('/student'); // Navigate to the next screen
-      }, 5000);
-    },
-    onError: () => {
-      console.log(mutation.error);
-      setSending(false);
-      setShowError(true);
-    },
-    onMutate: () => {
-      console.log(token);
-      setSending(true);
-      setShowError(false);
+export default function StudentProfile2() {
+    const navigate = useNavigate();
+    const [openInfo, setOpenInfo] = React.useState(false);
+    const handleOpenRequest = () => {
+        setOpenInfo(true);
+    };
+    const handleCloseRequest = () => {
+        setOpenInfo(false);
     }
-  }
-  );
+    const [openPhoto, setOpenPhoto] = React.useState(false);
+    const handleOpenUpload = () => {
+        setOpenPhoto(true);
+    };
+    const handleCloseUpload = () => {
+        setOpenPhoto(false);
+    }
 
-  // Function to store JWT token in cookie
-  const storeJwtToken = (token: string) => {
-    document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-  };
+    const getJwtToken = () => {
+        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
+    };
+    const token = getJwtToken();
+    // Mutation to logout
+    const mutation = useMutation<ResponeType, ErrorType>({
+        mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: () => {
+            document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
+            // Delete cookie
 
-  // Handlde submission
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(formData);
-    // Add country code to phone number
-    if (formData.phoneNumber.charAt(0) !== '0')
-      formData.phoneNumber = '0' + formData.phoneNumber;
+            console.log("Logout successfully");
+            // setSending(false);
+            // setShowError(false);
+            // setShowSuccess(true);
+            setTimeout(() => {
+                // setShowSuccess(false); // Hide the success message
+                navigate('/'); // Navigate to the next screen
+            }, 1000);
+        },
+        onError: (error) => {
+            // setSending(false);
+            // setShowError(true);
+            console.log("Logout failed");
+            console.log(error);
+        },
+        onMutate: () => {
+            console.log(token);
+            // setSending(true);
+            // setShowError(false);
+        }
+    }
+    );
 
-    mutation.mutate(formData);
-  };
 
-  return (
-    <>
-      <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs" >
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              UPDATE INFORMATION
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="name"
-                    label="Full Name"
-                    name="name"
-                    autoComplete="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    type="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={3}>
-                  <TextField
-                    id="selectCountry"
-                    select
-                    label="Country"
-                    defaultValue={countryCode[country].label}
-                    fullWidth
-                    value={countryCode[country].label} // Use the selected country from state
-                    onChange={handleCountryChange} // Handle country selection change
+    const handleLogout = () => {
+        mutation.mutate();
+    }
 
-                  >
-                    {countryCode.map((option) => (
-                      <MenuItem key={option.label} value={option.label}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={9}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="phoneNumber"
-                    label="Phone Number"
-                    name="phoneNumber"
-                    autoComplete="phone"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {countryCode[country].numberPrefix} {/* Use the selected country's number prefix */}
-                        </InputAdornment>
-                      ),
-                    }}
-                    inputProps={{
-                      pattern: "^[0-9]{9,10}$" // Only allows numeric characters
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="newPassword"
-                    label="New Password"
-                    type="password"
-                    id="newPassword"
-                    autoComplete="new-password"
-                    value={formData.newPassword}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-              </Grid>
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-                <LoadingButton
-                  loading={sending}
-                  fullWidth
-                  type="submit"
-                  variant="contained"
-                  disabled={showSuccess}
-                  sx={{ mt: 2, mb: 2 }}
-                >
-                  Update
-                </LoadingButton>
-              </Box>
-              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-              <Grid container justifyContent="flex-end">
+    return (
+        <Grid container spacing={2} className='bg-[#f3f2f0] min-h-screen'>
+            <Grid item xs={3}>
+                <Container disableGutters="true"
+                    sx={{ width: 9 / 10, bgcolor: "white", display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
+                    <Container disableGutters="true"
+                        sx={{
+                            alignContent: "center",
+                            display: 'flex',
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 1,
+                        }} >
+                        <img
+                            src={data.avatar}
+                            className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
+                        />
+                        <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={handleOpenUpload}>Change photo</Button>
+                        <Chip color="success" icon={<Check />} label="Verified" />
+                    </Container>
 
-              </Grid>
-            </Box>
-          </Box>
-        </Container>
-      </ThemeProvider >
+                    <Typography variant="body2" className='pl-5'> <AccountCircle /> Name: <span className="font-bold">{data.name} </span> </Typography>
+                    <Typography variant="body2" className='pl-5'><Email /> Email: <span className="font-bold">{data.email} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{data.phone} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{data.major} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{data.year} </span></Typography>
+                    <Container disableGutters="true"
+                        sx={{
+                            alignContent: "center",
+                            display: 'flex',
+                            flexDirection: "column",
+                            alignItems: "center",
+                        }} >
+                        <Button variant="outlined" color="warning" sx={{}} size="small" onClick={handleOpenRequest}>Request to change information </Button>
+                    </Container>
 
-    </>
-  );
+
+
+                </Container>
+
+            </Grid>
+            <Grid item xs={8.8}>
+                <Container disableGutters="true"
+                    sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
+                    <Button href="/student/profile/update" variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" disabled>Update</Button>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Internship Process
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pb: 2 }}>
+                            <List>
+                                <ListItem>
+                                    <Checkbox disabled checked />
+                                    <Typography variant="body1" sx={{ textDecoration: 'line-through', color: 'gray', fontStyle: 'italic' }} >Internship Course Registered</Typography>
+                                </ListItem>
+                                <ListItem>
+                                    <Checkbox disabled checked />
+                                    <Typography variant="body1" sx={{ textDecoration: 'line-through', color: 'gray', fontStyle: 'italic' }} >Foundation test</Typography>
+                                </ListItem>
+                                <ListItem>
+                                    <Checkbox disabled checked />
+                                    <Typography variant="body1" sx={{ textDecoration: 'line-through', color: 'gray', fontStyle: 'italic' }} >Apply for Internship</Typography>
+                                </ListItem>
+                                <ListItem>
+                                    <Checkbox disabled />
+                                    <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'left', }}>
+                                        <Typography variant="body1" sx={{ fontWeight: 'bold' }} >Internship</Typography>
+                                        <Typography>ABC Company</Typography>
+                                    </Box>
+                                    <IconButton aria-label="delete">
+                                        <Launch />
+                                    </IconButton>
+                                </ListItem>
+                                <ListItem>
+                                    <Checkbox disabled />
+                                    <Typography variant="body1" sx={{}} >Internship Report</Typography>
+                                </ListItem>
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <Button variant="outlined" color="error" sx={{ mt: 1, width: 1 / 5 }} size="small" onClick={handleLogout}>Logout</Button>
+                    <FormDialog state={openInfo} onClose={handleCloseRequest} />
+                    <PhotoDialog state={openPhoto} onClose={handleCloseUpload} />
+
+                </Container>
+            </Grid>
+        </Grid>
+
+
+    )
+
 }

@@ -93,7 +93,7 @@ export default function CompanyProfile() {
     // Fetch current information
     useQuery({
         queryKey: "currentInfo",
-        queryFn: () => axios.get("http://localhost:5000/api/v1/company/me", {
+        queryFn: () => axios.get("http://localhost:4000/api/v1/company/me", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -133,7 +133,7 @@ export default function CompanyProfile() {
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm>({
-        mutationFn: (updateForm) => axios.put(`http://localhost:5000/api/v1/company/${companyId}`, updateForm, {
+        mutationFn: (updateForm) => axios.put(`http://localhost:4000/api/v1/company/${companyId}`, updateForm, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
