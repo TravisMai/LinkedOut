@@ -17,7 +17,6 @@ export class StudentRepository extends Repository<Student> {
         const newStudent = this.create({
             ...student,
             role: "student",
-            isGoogle: false,
             isVerify: false,
         });
         return await this.save(newStudent);

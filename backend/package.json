@@ -48,7 +48,7 @@
     "uuid-validate": "^0.0.3"
   },
   "devDependencies": {
-    "@nestjs/cli": "^10.0.0",
+    "@nestjs/cli": "^10.2.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
     "@types/bcrypt": "^5.0.0",
