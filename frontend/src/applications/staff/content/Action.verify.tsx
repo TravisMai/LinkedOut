@@ -10,7 +10,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { Check } from "@mui/icons-material";
 
@@ -79,7 +79,7 @@ export default function Verify() {
         }
     });
 
-
+    const queryClient = useQueryClient();
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string }>({
@@ -93,6 +93,7 @@ export default function Verify() {
         ),
         onSuccess: (data) => {
             console.log(data);
+            queryClient.invalidateQueries("allStudent");
             // setSending(false);
             // setShowError(false);
             // setShowSuccess(true);
@@ -206,10 +207,7 @@ export default function Verify() {
                                     <TableCell align="center">{row.phoneNumber}</TableCell>
                                     <TableCell align="center">
                                         <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                            if (!row.isVerify)?
                                             <IconButton onClick={() => handleSubmit(true, row.id)}><Check /></IconButton>
-                                            :
-                                            <IconButton onClick={() => handleSubmit(false, row.id)}>Verified</IconButton>
                                         </Box>
                                     </TableCell>
                                 </TableRow>

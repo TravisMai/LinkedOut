@@ -60,7 +60,7 @@ export class StudentController {
     async findAll(@Req() req: Request, @Res() response: Response): Promise<Response> {
         try {
             const cachedData = await this.redisService.getObjectByKey(StudentListKey);
-            if (cachedData) {
+            if (false) {
                 return response.status(HttpStatus.OK).json(cachedData);
             }
             else {
