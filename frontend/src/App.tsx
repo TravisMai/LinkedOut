@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFoundPage from "./shared/pages/NotFoundPage";
 import StudentPage from "./applications/student/home";
@@ -9,7 +9,7 @@ import HomePage from "./applications/home";
 import StudentLogin from "./applications/login/student";
 import CompanyLogin from "./applications/login/company";
 import StudentSignup from "./applications/signup/student";
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { QueryClient, QueryClientProvider} from 'react-query'
 import CompanySignup from "./applications/signup/company";
 import StudentProfile from "./applications/student/profile";
 import { CompanyPage } from "./applications/company";
@@ -25,6 +25,7 @@ import JobDisplayCompany from "./applications/company/JobDisplay";
 import { ApplicantsPage } from "./applications/company/ApplicantsPage";
 import DisplayApplicant from "./applications/company/DisplayApplicant";
 import CompanyMessage from "./applications/company/CompanyMessage";
+import StaffLogin from "./applications/login/staff";
 
 const queryClient = new QueryClient()
 
@@ -37,6 +38,7 @@ function App() {
         <Providers>
           <BrowserRouter>
             <Routes>
+            {/* Routes */}
               <Route path="/" element={<HomePage />} />
               <Route
                 path="/student"
@@ -92,6 +94,7 @@ function App() {
                 } />
               <Route path="/login/student" element={<StudentLogin />} />
               <Route path="/login/company" element={<CompanyLogin />} />
+              <Route path="/login/staff" element={<StaffLogin />} />
               <Route path="/signup/student" element={<StudentSignup />} />
               <Route path="/signup/company" element={<CompanySignup />} />
               <Route path="*" element={<NotFoundPage />} />

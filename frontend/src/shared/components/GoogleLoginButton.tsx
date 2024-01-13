@@ -21,7 +21,7 @@ const GoogleLoginButton = (params: { 'role': string }) => {
                 const data = response.data;
 
                 document.cookie = `jwtToken=${data.token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-                navigate("/student")
+                navigate("/"+role)
             }}
             onError={() => {
                 console.log('Login Failed');
