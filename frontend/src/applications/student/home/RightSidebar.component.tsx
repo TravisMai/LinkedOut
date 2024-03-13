@@ -59,7 +59,7 @@ const RightSidebar: React.FC = () => {
               >
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={"/src/shared/assets/" + row.avatar}
+                  src={row.avatar}
                   alt="user"
                 />
                 <p className="text-sm font-semibold">{row.name}</p>

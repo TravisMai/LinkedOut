@@ -148,7 +148,7 @@ const JobDisplay: React.FC = () => {
                 </Grid>
                 <Grid item xs={4}>
                     <img
-                        src={"/src/shared/assets/" + job?.company.avatar}
+                        src={job?.company.avatar}
                         className='w-full object-cover rounded-xl border-2 border-gray-200 mb-2'
                         alt="company avatar"
                     />

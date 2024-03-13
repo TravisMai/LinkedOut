@@ -153,7 +153,7 @@ const CompanyAppBar = () => {
               ))}
             </Box>
             <Typography sx={{ mr: 3 }}>
-              CÔNG TY TNHH BYZOCU VIỆT NAM
+              CÔNG TY TNHH TENPOINT VIỆT NAM
             </Typography>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
