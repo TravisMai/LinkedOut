@@ -48,7 +48,11 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              <Route path="/staff" element={<StaffPage />} />
+              <Route path="/staff" element={
+                <PrivateRoute layout={UserPageLayout}>
+                  <StaffPage />
+                </PrivateRoute>
+              } />
               <Route path="/company" element={<CompanyPage />} />
               <Route path="/company/jobs" element={<AllJobPage />} />
               <Route path="/company/applicant" element={<ApplicantsPage />} />

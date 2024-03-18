@@ -59,4 +59,19 @@ export class AuthController {
                 return response.status(HttpStatus.FORBIDDEN).json({ message: 'Unauthorized access' });
         }
     }
+
+    // this will receive the role:string and the jwtToken which will take from the header from the frontend and return true if the role is match with the payload.role
+    @Post('/check-role')
+    async checkRole(
+        @Body('role') role: string,
+        @Body('jwtToken') jwtToken: string,
+        @Res() response: Response
+    ): Promise<any> {
+        try {
+            const payload = this.jwtService.verify(jwtToken);
+            return response.status(HttpStatus.OK).json({ isMatch: payload.role === role });
+        } catch (error) {
+            return response.status(HttpStatus.FORBIDDEN).json({ message: 'Unauthorized access' });
+        }
+    }
 }
