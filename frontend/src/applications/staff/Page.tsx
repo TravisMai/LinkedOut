@@ -37,7 +37,6 @@ import UploadDocument from './content/Document.upload';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { getJwtToken, validateJwtToken } from './authUtils';
 import { useNavigate } from 'react-router-dom';
 import { Button, Collapse, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import ChecklistIcon from '@mui/icons-material/Checklist';
@@ -48,6 +47,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import GradingIcon from '@mui/icons-material/Grading';
 import DescriptionIcon from '@mui/icons-material/Description';
 import UploadIcon from '@mui/icons-material/Upload';
+import { getJwtToken } from '../../shared/utils/authUtils';
 
 type ResponseType = {
     response: {

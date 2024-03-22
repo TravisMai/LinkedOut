@@ -56,11 +56,6 @@ export function AllJobPage() {
 
     const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
-    // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
-
     const token = usingtoken;
 
     // Fetch all companies

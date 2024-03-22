@@ -223,9 +223,7 @@ export default function StudentProfile2() {
         setOpenPhoto(false);
     }
 
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
     const token = getJwtToken();
     // Mutation to logout
     const mutation = useMutation<ResponeType, ErrorType>({

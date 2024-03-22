@@ -1,15 +1,14 @@
-import { Suspense} from "react";
+import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFoundPage from "./shared/pages/NotFoundPage";
 import StudentPage from "./applications/student/home";
 import StaffPage from "./applications/staff/Page";
-import { PrivateRoute } from "./shared/routes/PrivateRoute";
 import UserPageLayout from "./shared/layout/UserPageLayout";
 import HomePage from "./applications/home";
 import StudentLogin from "./applications/login/student";
 import CompanyLogin from "./applications/login/company";
 import StudentSignup from "./applications/signup/student";
-import { QueryClient, QueryClientProvider} from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import CompanySignup from "./applications/signup/company";
 import StudentProfile from "./applications/student/profile";
 import { CompanyPage } from "./applications/company";
@@ -26,6 +25,7 @@ import { ApplicantsPage } from "./applications/company/ApplicantsPage";
 import DisplayApplicant from "./applications/company/DisplayApplicant";
 import CompanyMessage from "./applications/company/CompanyMessage";
 import StaffLogin from "./applications/login/staff";
+import PrivateRoute from "./shared/routes/PrivateRoute";
 
 const queryClient = new QueryClient()
 
@@ -38,71 +38,132 @@ function App() {
         <Providers>
           <BrowserRouter>
             <Routes>
-            {/* Routes */}
+
+              {/* Home route */}
               <Route path="/" element={<HomePage />} />
-              <Route
-                path="/student"
+
+              {/* Student routes */}
+              <Route path="/student"
                 element={
-                  <PrivateRoute layout={UserPageLayout}>
-                    <StudentPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/staff" element={
-                <PrivateRoute layout={UserPageLayout}>
-                  <StaffPage />
-                </PrivateRoute>
-              } />
-              <Route path="/company" element={<CompanyPage />} />
-              <Route path="/company/jobs" element={<AllJobPage />} />
-              <Route path="/company/applicant" element={<ApplicantsPage />} />
-              <Route path="/company/applicant/:applicantId" element={<DisplayApplicant />} />
-              <Route path="/company/message" element={<CompanyMessage />} />
-              <Route path="/company/jobs/add" element={<AddJob />} />
-              <Route path="/company/jobs/:jobId" element={<JobDisplayCompany />} />
-              <Route path="/company/setting" element={<CompanySettingPage />} />
-              <Route
-                path="/student/profile"
-                element={
-                  <PrivateRoute layout={UserPageLayout}>
-                    <StudentProfile />
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <StudentPage />
+                    </UserPageLayout>
                   </PrivateRoute>
                 } />
-              <Route
-                path="/student/profile/update"
+              <Route path="/student/profile"
                 element={
-                  <PrivateRoute layout={UserPageLayout}>
-                    <StudentUpdate />
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <StudentProfile />
+                    </UserPageLayout>
                   </PrivateRoute>
                 } />
-              <Route
-                path="/student/jobs"
+              <Route path="/student/profile/update"
                 element={
-                  <PrivateRoute layout={UserPageLayout}>
-                    <StudentJobsPage />
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <StudentUpdate />
+                    </UserPageLayout>
                   </PrivateRoute>
                 } />
-                <Route
-                path="/student/jobs/:jobId"
+              <Route path="/student/jobs"
                 element={
-                  <PrivateRoute layout={UserPageLayout}>
-                    <JobDisplay/>
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <StudentJobsPage />
+                    </UserPageLayout>
+                  </PrivateRoute>
+
+                } />
+              <Route path="/student/jobs/:jobId"
+                element={
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <JobDisplay />
+                    </UserPageLayout>
                   </PrivateRoute>
                 } />
-              <Route
-                path="/student/message"
+              <Route path="/student/message"
                 element={
-                  <PrivateRoute layout={UserPageLayout}>
-                    <StudentMessage />
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <StudentMessage />
+                    </UserPageLayout>
                   </PrivateRoute>
                 } />
+
+              {/* Company routes */}
+              <Route path="/company"
+                element={
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <CompanyPage />
+                    </UserPageLayout>
+                  </PrivateRoute>
+                } />
+              <Route path="/company/jobs"
+                element={
+                  <PrivateRoute>
+                    <AllJobPage />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/applicant"
+                element={
+                  <PrivateRoute>
+                    <ApplicantsPage />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/applicant/:applicantId"
+                element={
+                  <PrivateRoute>
+                    <DisplayApplicant />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/message"
+                element={
+                  <PrivateRoute>
+                    <CompanyMessage />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/jobs/add"
+                element={
+                  <PrivateRoute>
+                    <AddJob />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/jobs/:jobId"
+                element={
+                  <PrivateRoute>
+                    <JobDisplayCompany />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/setting"
+                element={
+                  <PrivateRoute>
+                    <CompanySettingPage />
+                  </PrivateRoute>
+                } />
+
+              {/* Staff routes */}
+              <Route path="/staff"
+                element={
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <StaffPage />
+                    </UserPageLayout>
+                  </PrivateRoute>
+                } />
+
+              {/* Login, signin routes */}
               <Route path="/login/student" element={<StudentLogin />} />
               <Route path="/login/company" element={<CompanyLogin />} />
               <Route path="/login/staff" element={<StaffLogin />} />
               <Route path="/signup/student" element={<StudentSignup />} />
               <Route path="/signup/company" element={<CompanySignup />} />
+
+              {/* 404 */}
               <Route path="*" element={<NotFoundPage />} />
-              <Route path="404" element={<NotFoundPage />} />
 
             </Routes>
           </BrowserRouter>

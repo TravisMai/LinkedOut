@@ -1,0 +1,3 @@
+interface JwtToken {
+    token: string;
+}

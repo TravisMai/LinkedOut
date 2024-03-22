@@ -32,9 +32,7 @@ const RightSidebar: React.FC = () => {
     const [appliedJobs, setAppliedJobs] = useState<jobType[]>([]);
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 

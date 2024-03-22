@@ -52,9 +52,7 @@ export default function Student() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 

@@ -32,9 +32,7 @@ const LeftSidebar: React.FC = () => {
   const [showContent, setShowContent] = useState(false);
 
   // Fetch for student info
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

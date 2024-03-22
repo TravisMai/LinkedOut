@@ -13,6 +13,7 @@ import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { Check } from "@mui/icons-material";
+import { getJwtToken } from "../../../shared/utils/authUtils";
 
 type studentType = {
     "id": string,
@@ -58,10 +59,6 @@ export default function Verify() {
 
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
 
-    // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
 
     const token = getJwtToken();
 

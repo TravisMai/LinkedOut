@@ -30,9 +30,7 @@ type jobType = {
 const NewsFeed: React.FC = () => {
   const [allJobs, setAllJobs] = useState<jobType[]>([]);
   // Get jwt token
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

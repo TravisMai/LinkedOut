@@ -37,9 +37,7 @@ const LeftSidebar: React.FC = () => {
   const [studentName, setStudentName] = useState("");
 
   // Fetch for student info
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

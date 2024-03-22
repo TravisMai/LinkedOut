@@ -21,9 +21,7 @@ const RightSidebar: React.FC = () => {
   const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
   // Get jwt token
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

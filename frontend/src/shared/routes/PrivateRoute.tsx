@@ -1,39 +1,44 @@
-import React, { ElementType, PropsWithChildren } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie'; // Import js-cookie
+import { getJwtToken, validateJwtToken } from '../utils/authUtils';
 
 interface IProps {
-    layout: ElementType;
+    children: React.ReactElement;
 }
 
-const PrivateRoute: React.FC<PropsWithChildren<IProps>> = (props) => {
-    const { children, layout: Layout } = props;
-    // tạo 1 list cho từng app trữ endpoint
-    // check list + location suy ra role
-    // const staffList = ['/student', '/staff', '/company'];
-    // const studentList = ['/student', '/company'];
+export default function PrivateRoute(props: IProps) {
+    const { children } = props;
     const location = useLocation();
+    const role = location.pathname.split('/')[1];
+    const [isValidToken, setIsValidToken] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    // if (staffList.includes(location.pathname)) {
-    //     const token = Cookies.get('token');
-    //     // get api gì đó để check role của token
-    //     // return true nếu role hợp lệ, ngược lại return false
-    //     return <Navigate to="/login" />;
-    // }
+    useEffect(() => {
+        const fetchValidation = async () => {
+            const jwtToken = getJwtToken();
+            if (jwtToken) {
+                const isValid = await validateJwtToken(jwtToken, role);
+                setIsValidToken(isValid);
+            }
+            setLoading(false);
+        };
 
-    const isValidToken = () => {
-        const token = Cookies.get('token');
-        // get api gì đó dể check token có hợp lệ không
-        // return true nếu token hợp lệ, ngược lại return false
-        return token && token !== '';
-    };
+        fetchValidation();
+    }, [role]);
 
-    if (!isValidToken()) {
-        const loginPath = `/login${location.pathname}`;
+    if (loading) {
+        return null; // or Loading indicator
+    }
+
+    if (!getJwtToken()) {
+        const loginPath = `/login/${role}`;
         return <Navigate to={loginPath} state={{ from: location }} replace />;
     }
 
-    return <Layout>{children}</Layout>;
-};
-
-export { PrivateRoute };
+    if (isValidToken) {
+        return children;
+    } else {
+        const loginPath = `/login/${role}`;
+        return <Navigate to={loginPath} state={{ from: location }} replace />;
+    }
+}
