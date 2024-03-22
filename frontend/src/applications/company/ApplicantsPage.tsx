@@ -20,8 +20,8 @@ import axios from 'axios';
 import CompanyAppBar from './CompanyAppBar.component';
 import { Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
+import { getJwtToken } from '../../shared/utils/authUtils';
 
-const usingtoken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhZTZjYWEzLTAwNTgtNDg3My05NjQxLTFiOGQxMWYwNGZlNCIsInVzZXJuYW1lIjoic3RhZmYgMDAwMSIsImVtYWlsIjoic3RhZmYyQGhjbXV0LmVkdS52biIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTY5NTc5NDE4NSwiZXhwIjoxNzI3MzUxNzg1fQ.bhG0pDXwTSGQ2iOSj8WN7IdP642uc6kFTAPlfeLBWMU";
 
 function createData(
     companyId: number,
@@ -50,11 +50,11 @@ export function ApplicantsPage() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
 
 
-    const token = usingtoken;
+    const token = getJwtToken();
 
-    // Fetch all companies
+    // Fetch all stdents
     useQuery({
-        queryKey: "allJobs",
+        queryKey: "allStudents",
         queryFn: () => axios.get("http://localhost:4000/api/v1/student/", {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -114,7 +114,8 @@ export function ApplicantsPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allStudent.map((row, index) => (
+                            {allStudent.length > 0 ?
+                            allStudent.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -137,7 +138,7 @@ export function ApplicantsPage() {
                                         </Box>
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )):<></>}
                         </TableBody>
                     </Table>
                 </TableContainer>
