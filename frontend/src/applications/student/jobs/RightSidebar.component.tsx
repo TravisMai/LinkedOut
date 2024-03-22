@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Container, Divider, Grid, IconButton, Link, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type jobType = {
     "id": string,

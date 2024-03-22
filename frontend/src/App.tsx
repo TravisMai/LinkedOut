@@ -97,9 +97,7 @@ function App() {
               <Route path="/company"
                 element={
                   <PrivateRoute>
-                    <UserPageLayout>
                       <CompanyPage />
-                    </UserPageLayout>
                   </PrivateRoute>
                 } />
               <Route path="/company/jobs"

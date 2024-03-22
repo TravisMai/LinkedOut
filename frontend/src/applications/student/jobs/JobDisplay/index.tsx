@@ -6,6 +6,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import { getJwtToken } from '../../../../shared/utils/authUtils';
 
 type jobType = {
     "id": string,

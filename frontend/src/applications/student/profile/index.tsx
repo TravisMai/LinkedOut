@@ -6,6 +6,7 @@ import PhotoDialog from "./photo/updatePhotoDialog.component";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getJwtToken } from "../../../shared/utils/authUtils";
 
 
 type ResponeType = {

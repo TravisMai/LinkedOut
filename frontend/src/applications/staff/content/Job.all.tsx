@@ -17,6 +17,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 function createData(
     companyId: number,

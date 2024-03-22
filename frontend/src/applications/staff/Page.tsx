@@ -24,7 +24,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Dashboard from './content/Dashboard';
 import Student from './content/Student';
 import Company from './content/Company';
-import Verify from './content/action.verify';
+import Verify from './content/Action.verify';
 import Update from './content/Action.update';
 import AllJob from './content/Job.all';
 import ManageJob from './content/Job.manage';
@@ -47,7 +47,8 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import GradingIcon from '@mui/icons-material/Grading';
 import DescriptionIcon from '@mui/icons-material/Description';
 import UploadIcon from '@mui/icons-material/Upload';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import { getJwtToken, validateJwtToken } from '../../shared/utils/authUtils';
+
 
 type ResponseType = {
     response: {
@@ -171,7 +172,7 @@ export default function StaffPage() {
             } else {
                 try {
                     // Validate jwt token
-                    await validateJwtToken(token);
+                    await validateJwtToken(token, 'staff');
                     // Token is valid, continue with the component rendering
                 } catch (error) {
                     // Error occurred while validating token, redirect to login page

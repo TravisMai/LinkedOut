@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Button, Container, Divider, IconButton, Link, Typography } from '@mui/material';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type jobType = {
     "id": string,

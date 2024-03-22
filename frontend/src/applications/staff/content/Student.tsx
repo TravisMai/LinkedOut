@@ -18,6 +18,7 @@ import Link from '@mui/material/Link';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 function createData(
     studentId: number,
