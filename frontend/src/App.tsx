@@ -147,9 +147,7 @@ function App() {
               <Route path="/staff"
                 element={
                   <PrivateRoute>
-                    <UserPageLayout>
                       <StaffPage />
-                    </UserPageLayout>
                   </PrivateRoute>
                 } />
 

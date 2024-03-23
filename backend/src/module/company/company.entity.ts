@@ -30,7 +30,7 @@ export class Company extends commonAttribute {
     description: string;
 
     @Column({ nullable: true })
-    @IsNumber()
+    // @IsNumber()
     @IsOptional()
     taxId: number;
 

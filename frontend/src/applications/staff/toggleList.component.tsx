@@ -53,7 +53,7 @@ const ToggleList: React.FC<PropsWithChildren<IProps>> = (props) => {
                     primaryTypographyProps={{
                         fontFamily: 'body1',
                         fontWeight: 'medium',
-                        lineHeight: '20px',
+                        lineHeight: '20px', 
                         color: 'inherit',
                     }}
                 />
@@ -61,7 +61,7 @@ const ToggleList: React.FC<PropsWithChildren<IProps>> = (props) => {
                     sx={{
                         mr: -1,
                         opacity: 0,
-                        transform: open ? 'rotate(90deg)' : 'rotate(0)',
+                        transform: open ? 'rotate(180deg)' : 'rotate(0)',
                         transition: '0.2s',
                     }}
                 />

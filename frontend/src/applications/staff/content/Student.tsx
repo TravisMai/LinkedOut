@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
+import StudentDialog from './Student.Dialog';
+import { Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 
 function createData(
     studentId: number,
@@ -41,19 +43,30 @@ type studentType = {
     "isVerify": boolean,
 }
 
-const rows = [
-    createData(2052443, 'Trần Trí Đạt', 'dat.trantri2002@gmail.com', 'Intern', 'Noventiq', 'https://mui.com'),
-    createData(2052612, 'Mai Hữu Nghĩa', 'nghia.maiemches@hcmut.edu.vn', 'Fresher', 'Cybozu', 'https://mui.com'),
-    createData(2052508, 'Lê Chí Hùng', 'hung.lechpro@hcmut.edu.vn', 'Intern', 'Ampere', 'https://mui.com'),
-    createData(2052650, 'Đinh Xuân Phú', 'phu.dinh153@hcmut.edu.vn', 'Senior Intern', 'Rockship', 'https://mui.com'),
-];
-
-
 export default function Student() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
 
+    // Student Profile Dialog
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const handleCloseSettings = () => {
+        setOpenDialog(false);
+    }
+
+    const handleOpenStudent = () => {
+        setOpenDialog(true);
+    }
+
+    // Action Menu
+    const [anchorAction, setAnchorAction] = React.useState<null | HTMLElement>(null);
+    const handleOpenActionMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorAction(event.currentTarget);
+    };
+    const handleCloseActionMenu = () => {
+        setAnchorAction(null);
+    };
+
     // Get jwt token
-    
+
 
     const token = getJwtToken();
 
@@ -70,6 +83,8 @@ export default function Student() {
             setAllStudent(data.data);
         }
     });
+
+
 
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
@@ -113,7 +128,7 @@ export default function Student() {
                             >
 
                                 <TableCell >{++index}</TableCell>
-                                <TableCell >{row.name}</TableCell>
+                                <TableCell >{row.name} {row.isVerify ? '' : "(Not verified)"}</TableCell>
                                 <TableCell >{row.email}</TableCell>
                                 <TableCell >{row.phoneNumber}</TableCell>
 
@@ -124,8 +139,35 @@ export default function Student() {
                                 </TableCell> */}
                                 <TableCell align="center">
                                     <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                        <IconButton><AccountBoxIcon /></IconButton>
-                                        <IconButton><MoreHorizIcon /></IconButton>
+                                        <Tooltip title="Student Info">
+                                            <IconButton onClick={handleOpenStudent}><AccountBoxIcon /></IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Actions">
+                                            <IconButton onClick={handleOpenActionMenu}><MoreHorizIcon /></IconButton>
+                                        </Tooltip>
+                                        <Menu
+                                            sx={{ mt: '45px' }}
+                                            id="menu-action"
+                                            anchorEl={anchorAction}
+                                            anchorOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            keepMounted
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            open={Boolean(anchorAction)}
+                                            onClose={handleCloseActionMenu}
+                                        >
+                                            <MenuItem key="verify" onClick={handleOpenActionMenu}>
+                                                <Typography textAlign="center">Verify</Typography>
+                                            </MenuItem>
+                                            <MenuItem key="delete" onClick={handleCloseActionMenu}>
+                                                <Typography textAlign="center">Delete</Typography>
+                                            </MenuItem>
+                                        </Menu>
                                     </Box>
                                 </TableCell>
                             </TableRow>
@@ -133,6 +175,7 @@ export default function Student() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <StudentDialog state={openDialog} onClose={handleCloseSettings} />
         </div>
     );
 }

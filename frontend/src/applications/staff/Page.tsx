@@ -48,6 +48,7 @@ import GradingIcon from '@mui/icons-material/Grading';
 import DescriptionIcon from '@mui/icons-material/Description';
 import UploadIcon from '@mui/icons-material/Upload';
 import { getJwtToken, validateJwtToken } from '../../shared/utils/authUtils';
+import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 
 
 type ResponseType = {
@@ -268,9 +269,10 @@ export default function StaffPage() {
                         >
                             {value}
                         </Typography>
+
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
+                                <NotificationsIcon />                                
                             </Badge>
                         </IconButton>
                     </Toolbar>
@@ -284,6 +286,8 @@ export default function StaffPage() {
                             px: [1],
                         }}
                     >
+                        <img src={Logo} alt='Home Page' className='h-11 mx-auto ml-4 rounded-lg' />
+                        <Typography variant="h6" >Admin Portal</Typography>
                         <IconButton onClick={toggleDrawer}>
                             <ChevronLeftIcon />
                         </IconButton>

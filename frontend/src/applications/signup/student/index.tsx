@@ -209,7 +209,7 @@ export default function StudentSignUp() {
                                                 label="Student ID"
                                                 name="studentId"
                                                 autoComplete="studentId"
-                                                value={formData.studentId}
+                                                value={formData.studentId == 0? '' : formData.studentId } 
                                                 onChange={handleInputChange}
                                             />
                                         </Grid>
