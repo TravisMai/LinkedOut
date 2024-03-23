@@ -7,6 +7,7 @@ import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Divider, IconButton, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type ResponeType = {
   data: {
@@ -37,9 +38,7 @@ const LeftSidebar: React.FC = () => {
   const [studentName, setStudentName] = useState("");
 
   // Fetch for student info
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

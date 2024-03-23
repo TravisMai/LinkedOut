@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Divider, Grid, IconButton, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import JobDisplay from './JobDisplay.component';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type ResponeType = {
   data: {
@@ -32,9 +33,7 @@ const LeftSidebar: React.FC = () => {
   const [showContent, setShowContent] = useState(false);
 
   // Fetch for student info
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

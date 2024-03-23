@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Container, Divider, Grid, IconButton, Link, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type jobType = {
     "id": string,
@@ -32,9 +33,7 @@ const RightSidebar: React.FC = () => {
     const [appliedJobs, setAppliedJobs] = useState<jobType[]>([]);
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 

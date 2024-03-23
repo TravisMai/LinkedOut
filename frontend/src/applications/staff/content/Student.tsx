@@ -18,6 +18,7 @@ import Link from '@mui/material/Link';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 function createData(
     studentId: number,
@@ -52,9 +53,7 @@ export default function Student() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 

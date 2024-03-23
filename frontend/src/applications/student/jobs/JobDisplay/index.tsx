@@ -6,6 +6,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import { getJwtToken } from '../../../../shared/utils/authUtils';
 
 type jobType = {
     "id": string,
@@ -35,9 +36,7 @@ const JobDisplay: React.FC = () => {
     const [job, setJob] = useState<jobType>();
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 
@@ -148,7 +147,7 @@ const JobDisplay: React.FC = () => {
                 </Grid>
                 <Grid item xs={4}>
                     <img
-                        src={"/src/shared/assets/" + job?.company.avatar}
+                        src={job?.company.avatar}
                         className='w-full object-cover rounded-xl border-2 border-gray-200 mb-2'
                         alt="company avatar"
                     />

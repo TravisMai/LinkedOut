@@ -47,7 +47,7 @@ type ResposeType = {
             name: string;
             email: string;
             phoneNumber: string;
-            // avatar: string;
+            myfile: string;
             isGoogle: boolean;
             isVerify: boolean;
         };
@@ -69,7 +69,7 @@ interface newForm {
     workField: string | null;
     address: string | null;
     website: string | null;
-    // avatar: File | null;
+    myfile: File | null;
     description: string | null;
     email: string;
     phoneNumber: string;
@@ -111,7 +111,7 @@ export default function CompanySignUp() {
         workField: null as string | null,
         address: null as string | null,
         website: null as string | null,
-        // avatar: null as File | null,
+        myfile: null as File | null,
         description: null as string | null,
     });
 
@@ -124,6 +124,15 @@ export default function CompanySignUp() {
         }));
     };
 
+    // Handle file input change
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]; // Get the first file from the input
+        setFormData((prevData: any) => ({
+            ...prevData,
+            myfile: file, // Update the myfile field with the selected file
+        }));
+    };
+
     // Handle country selection change
     const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
@@ -133,7 +142,21 @@ export default function CompanySignUp() {
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({
         mutationFn: (formData) => {
-            return axios.post("http://localhost:4000/api/v1/company", formData);
+            const formDataToSend = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                if (value !== null) {
+                    if (key === 'myfile') {
+                        formDataToSend.append(key, value as File); // Append file to FormData
+                    } else {
+                        formDataToSend.append(key, value.toString()); // Convert other fields to string
+                    }
+                }
+            });
+            return axios.post("http://localhost:4000/api/v1/company", formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Set content type for file upload
+                },
+            });
         },
         onSuccess: (data) => {
             console.log(data);
@@ -154,13 +177,12 @@ export default function CompanySignUp() {
             setSending(true);
             setShowError(false);
         }
-    }
-    );
+    });
 
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formData);
+        // console.log(formData);
         // Add country code to phone number
         if (formData.phoneNumber.charAt(0) !== '0')
             formData.phoneNumber = '0' + formData.phoneNumber;
@@ -169,7 +191,7 @@ export default function CompanySignUp() {
         formData.taxId = Number(formData.taxId); //HERE
 
 
-
+        console.log(formData);
         mutation.mutate(formData);
     };
 
@@ -346,6 +368,16 @@ export default function CompanySignUp() {
                                             name='website'
                                             value={formData.website}
                                             onChange={handleInputChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            id="myfile"
+                                            type="file"
+                                            label="Logo"
+                                            name='myfile'
+                                            onChange={handleFileChange} // Handle file input change
                                         />
                                     </Grid>
                                 </Grid>

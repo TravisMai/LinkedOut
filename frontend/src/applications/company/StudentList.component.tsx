@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import StudentCard from './StudentCard.component';
 import { Typography } from '@mui/material';
+import { getJwtToken } from '../../shared/utils/authUtils';
 
 type studentType = {
     "id": string,
@@ -17,10 +18,6 @@ type studentType = {
 
 const StudentList: React.FC = () => {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
-    // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
 
     const token = getJwtToken();
 

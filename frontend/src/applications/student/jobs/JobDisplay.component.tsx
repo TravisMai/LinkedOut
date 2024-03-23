@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Button, Container, Divider, IconButton, Link, Typography } from '@mui/material';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type jobType = {
     "id": string,
@@ -32,9 +33,7 @@ const JobDisplay: React.FC = () => {
     const [appliedJobs, setAppliedJobs] = useState<jobType[]>([]);
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 

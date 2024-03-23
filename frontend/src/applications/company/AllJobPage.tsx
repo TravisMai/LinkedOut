@@ -20,8 +20,7 @@ import axios from 'axios';
 import CompanyAppBar from './CompanyAppBar.component';
 import { Typography } from '@mui/material';
 import { Add, Launch, RecentActors } from '@mui/icons-material';
-
-const usingtoken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhZTZjYWEzLTAwNTgtNDg3My05NjQxLTFiOGQxMWYwNGZlNCIsInVzZXJuYW1lIjoic3RhZmYgMDAwMSIsImVtYWlsIjoic3RhZmYyQGhjbXV0LmVkdS52biIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTY5NTc5NDE4NSwiZXhwIjoxNzI3MzUxNzg1fQ.bhG0pDXwTSGQ2iOSj8WN7IdP642uc6kFTAPlfeLBWMU";
+import { getJwtToken } from '../../shared/utils/authUtils';
 
 function createData(
     companyId: number,
@@ -36,32 +35,12 @@ function createData(
 }
 
 
-type companyType = {
-    "id": string,
-    "title": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-    "workField": string,
-    "address": string,
-    "website": null,
-    "descriptions": {
-        "responsibilities": string,
-        "detailed": string
-    }
-    "taxId": null
-}
 
 export function AllJobPage() {
 
     const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
-    // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
-
-    const token = usingtoken;
+    const token = getJwtToken();
 
     // Fetch all companies
     useQuery({
@@ -72,7 +51,6 @@ export function AllJobPage() {
             },
         }),
         onSuccess: (data) => {
-            console.log(data.data);
             setAllCompany(data.data);
         }
     });
@@ -110,7 +88,7 @@ export function AllJobPage() {
                     />
                     <Button variant="contained">Search</Button>
                     <Button variant="outlined">Filter</Button>
-                    <Button variant="outlined" color='success' sx={{}} href='/company/jobs/add'><Add/>Add</Button>
+                    <Button variant="outlined" color='success' sx={{}} href='/company/jobs/add'><Add />Add</Button>
                 </div>
                 <TableContainer component={Paper} className='mt-5'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -125,31 +103,32 @@ export function AllJobPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allCompany.map((row, index) => (
-                                <TableRow
-                                    key={row.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
+                            {allCompany.length > 0 ? (
+                                allCompany.map((row, index) => (
+                                    <TableRow
+                                        key={row.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
 
-                                    <TableCell align='center'>{++index}</TableCell>
-                                    {/* <TableCell align="center">
+                                        <TableCell align='center'>{++index}</TableCell>
+                                        {/* <TableCell align="center">
                                     <img
                                         src={row.avatar}
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                    <TableCell align="center">{row.title}</TableCell>
-                                    <TableCell align="center">{row.descriptions.responsibilities}</TableCell>
-                                    <TableCell align="center">21/12/2023</TableCell>
-                                    <TableCell align="center">9</TableCell>
-                                    <TableCell align="center">
-                                        <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                            <IconButton href={'/company/applicant/'}><RecentActors /></IconButton>
-                                            <IconButton href={'/company/jobs/'+row.id}><Launch /></IconButton>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                        <TableCell align="center">{row.title}</TableCell>
+                                        <TableCell align="center">{row.descriptions.responsibilities}</TableCell>
+                                        <TableCell align="center">21/12/2023</TableCell>
+                                        <TableCell align="center">9</TableCell>
+                                        <TableCell align="center">
+                                            <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
+                                                <IconButton href={'/company/applicant/'}><RecentActors /></IconButton>
+                                                <IconButton href={'/company/jobs/' + row.id}><Launch /></IconButton>
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                ))) : <></>}
                         </TableBody>
                     </Table>
                 </TableContainer>

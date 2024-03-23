@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type companyType = {
   "id": string,
@@ -21,9 +22,7 @@ const RightSidebar: React.FC = () => {
   const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
   // Get jwt token
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 
@@ -59,7 +58,7 @@ const RightSidebar: React.FC = () => {
               >
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={"/src/shared/assets/" + row.avatar}
+                  src={row.avatar}
                   alt="user"
                 />
                 <p className="text-sm font-semibold">{row.name}</p>

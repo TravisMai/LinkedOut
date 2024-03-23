@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ContentCard from './ContentCard.component';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type jobType = {
   "id": string,
@@ -30,9 +31,7 @@ type jobType = {
 const NewsFeed: React.FC = () => {
   const [allJobs, setAllJobs] = useState<jobType[]>([]);
   // Get jwt token
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
+  
 
   const token = getJwtToken();
 

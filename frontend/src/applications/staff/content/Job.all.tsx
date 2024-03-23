@@ -17,6 +17,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 function createData(
     companyId: number,
@@ -63,9 +64,7 @@ export default function AllJob() {
     const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
     // Get jwt token
-    const getJwtToken = () => {
-        return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-    };
+    
 
     const token = getJwtToken();
 

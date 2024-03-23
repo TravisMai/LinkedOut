@@ -72,6 +72,8 @@ export default function CompanyLogin() {
   const mutation = useMutation<ResponeType, ErrorType, loginForm>({
     mutationFn: (loginForm) => axios.post("http://localhost:4000/api/v1/company/login", loginForm),
     onSuccess: (data) => {
+      
+
       console.log(data);
       const token = data.data.token;
       document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;

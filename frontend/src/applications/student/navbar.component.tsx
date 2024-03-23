@@ -14,14 +14,12 @@ import {
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import { getJwtToken } from '../../shared/utils/authUtils';
 
 const Navbar: React.FC = () => {
   const [studentEmail, setStudentEmail] = useState("");
 
   // Fetch for student info
-  const getJwtToken = () => {
-    return document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
-  };
 
   const token = getJwtToken();
   const getStudentInfo = useQuery({
