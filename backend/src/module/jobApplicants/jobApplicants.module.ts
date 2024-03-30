@@ -8,13 +8,33 @@ import { RedisModule } from 'src/module/redis/redis.module';
 import { Module, Logger, forwardRef } from '@nestjs/common';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 import { JobApplicants } from './jobApplicants.entity';
+import { JobApplicantsController } from './jobApplicants.controller';
+import { JobApplicantsService } from './jobApplicants.service';
+import { JobApplicantsRepository } from './jobApplicants.repository';
+import { StaffModule } from '../staff/staff.module';
+import { JobModule } from '../job/job.module';
+
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([JobApplicants]),
+    JwtModule.register({
+      secret: jwtConfig.secret,
+      signOptions: { expiresIn: jwtConfig.signOptions.expiresIn },
+    }),
+    RedisModule,
+    CompanyModule,
+    StudentModule,
+    StaffModule,
+    JobModule,
   ],
-  controllers: [],
-  providers: [],
-  exports: [],
+  controllers: [JobApplicantsController],
+  providers: [
+    AuthService,
+    Logger,
+    JobApplicantsService,
+    JobApplicantsRepository
+  ],
+  exports: [JobApplicantsService],
 })
 export class JobApplicantsModule {}

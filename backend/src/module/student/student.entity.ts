@@ -25,6 +25,16 @@ export class Student extends commonAttribute {
   @Column({ nullable: true })
   @IsNumber()
   @IsOptional()
+  year: number;
+
+  @Column({ nullable: true })
+  @IsString()
+  @IsOptional()
+  major: string;
+
+  @Column({ nullable: true })
+  @IsNumber()
+  @IsOptional()
   classCode: number;
 
   @Column('text', { array: true, nullable: true })
@@ -36,4 +46,7 @@ export class Student extends commonAttribute {
   @IsString({ each: true })
   @IsOptional()
   skill: string[];
+
+  @Column({ default: true })
+  isActive: boolean;
 }
