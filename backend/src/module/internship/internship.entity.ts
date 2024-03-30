@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToOne, ManyToMany } from "typeorm";
 import { JobApplicants } from "../jobApplicants/jobApplicants.entity";
+import { Staff } from "../staff/staff.entity";
 
 @Entity()
 export class Internship {
@@ -7,8 +8,12 @@ export class Internship {
     id: string;
 
     @OneToOne(() => JobApplicants, { eager: true })
-    @JoinColumn({ name: 'jobId' })
+    @JoinColumn({ name: 'jobApplicantId' })
     jobApplicants: JobApplicants;
+
+    @OneToOne(() => Staff, { eager: true })
+    @JoinColumn({ name: 'staffId' })
+    staff: Staff;
 
     @Column({ default: "Recieved" })
     process: string;

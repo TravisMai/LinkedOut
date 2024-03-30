@@ -36,4 +36,7 @@ export class Company extends commonAttribute {
 
     @Column({ default: false })
     isVerify: boolean;
+
+    @Column({ default: true })
+    isActive: boolean;
 }

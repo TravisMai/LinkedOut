@@ -24,4 +24,8 @@ export class StudentUpdateDto {
     @IsBoolean()
     @IsOptional()
     isVerify: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive: boolean;
 }
