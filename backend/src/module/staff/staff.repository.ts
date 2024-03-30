@@ -21,4 +21,12 @@ export class StaffRepository extends Repository<Staff> {
         });
         return await this.save(newStaff);
     }
+
+    // get a random staff
+    async getRandomStaff(): Promise<Staff> {
+        return await this.createQueryBuilder('staff')
+            .orderBy('RANDOM()')
+            .limit(1)
+            .getOne();
+    }
 }

@@ -44,4 +44,8 @@ export class CompanyUpdateDto {
     @IsNumber()
     @IsOptional()
     taxId: number;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive: boolean;
 }
