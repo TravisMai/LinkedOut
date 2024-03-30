@@ -1,9 +1,6 @@
-import * as bcrypt from 'bcrypt';
-import validate = require('uuid-validate');
 import { Request, Response } from 'express';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/role.guard';
-import { expireTimeOneDay, expireTimeOneHour, CompanyListKey, JobListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req } from '@nestjs/common';
 import { JobApplicants } from './jobApplicants.entity';
 import { CompanyService } from "../company/company.service";
@@ -14,7 +11,6 @@ import { AuthService } from "../auth/auth.service";
 import { JwtService } from "@nestjs/jwt";
 import { AllowRoles } from "src/common/decorators/role.decorator";
 import { JobApplicantsService } from './jobApplicants.service';
-import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
 import { JobService } from '../job/job.service';
 
 
@@ -22,11 +18,7 @@ import { JobService } from '../job/job.service';
 export class JobApplicantsController {
     constructor(
         private readonly jwtService: JwtService,
-        private readonly authService: AuthService,
-        private readonly redisService: RedisService,
-        private readonly staffService: StaffService,
         private readonly studentService: StudentService,
-        private readonly companyService: CompanyService,
         private readonly jobService: JobService,
         private readonly jobApplicantsService: JobApplicantsService,
     ) { }

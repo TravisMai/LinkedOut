@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JobApplicants } from './jobApplicants.entity';
 import { JobApplicantsRepository } from './jobApplicants.repository';
-import { Job } from '../job/job.entity';
 
 @Injectable()
 export class JobApplicantsService {

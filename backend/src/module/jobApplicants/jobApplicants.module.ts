@@ -35,6 +35,6 @@ import { JobModule } from '../job/job.module';
     JobApplicantsService,
     JobApplicantsRepository
   ],
-  exports: [],
+  exports: [JobApplicantsService],
 })
 export class JobApplicantsModule {}

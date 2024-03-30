@@ -40,4 +40,9 @@ export class StaffService {
     async findByEmail(email: string): Promise<Staff> {
         return await this.staffRepository.findOne({ where: { email } });
     }
+
+    // get a random staff
+    async getRandomStaff(): Promise<Staff> {
+        return await this.staffRepository.getRandomStaff();
+    }
 }
