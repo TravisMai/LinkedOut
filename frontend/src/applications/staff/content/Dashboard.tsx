@@ -12,17 +12,85 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Chart from './Dashboard.chart';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
-const cardData = [["Students", "312", "Student"], ["Companies", "53", "Company"], ["Applications", "187", "Job / All jobs"]]
+type studentType = {
+    "id": string,
+    "name": string,
+    "email": string,
+    "phoneNumber": string,
+    "avatar": string,
+    "isGoogle": boolean,
+    "isVerify": boolean,
+}
 
 
 
 export default function Dashboard(props: any) {
+
+    const token = getJwtToken();
+
     function handleDisplay(index: string) {
         return () => {
             props.display(index)
         }
     }
+
+    // Get Data
+
+    // Fetch all students
+    const [allStudent, setAllStudent] = useState<studentType[]>([]);
+    useQuery({
+        queryKey: "allStudent",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/student", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data.data);
+            setAllStudent(data.data);
+        }
+    });
+    const totalStudent = allStudent.length;
+
+    // Fetch all companies
+    const [allCompany, setAllCompany] = useState<companyType[]>([]);
+    useQuery({
+        queryKey: "allCompany",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/company", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data.data);
+            setAllCompany(data.data);
+        }
+    });
+    const totalCompany = allCompany.length;
+
+    // Fetch all jobs
+    const [allJob, setAllJob] = useState<jobType[]>([]);
+    useQuery({
+        queryKey: "allJobs",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/job", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data.data);
+            setAllJob(data.data);
+        }
+    });
+    const totalJob = allJob.length;
+
+
+    const cardData = [["Students", `${totalStudent}`, "Student"], ["Companies", `${totalCompany}`, "Company"], ["Jobs", `${totalJob}`, "Job / All jobs"]]
     return (
         <Box
             component="main"

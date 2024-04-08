@@ -21,8 +21,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Paper } from '@mui/material';
+import { Accordion, AccordionSummary, Paper, AccordionDetails } from '@mui/material';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function Copyright(props: any) {
     return (
@@ -68,6 +69,8 @@ interface newForm {
     email: string;
     phoneNumber: string;
     studentId: number;
+    classCode: string;
+    avatar: File | null;
 }
 
 const countryCode = [
@@ -101,6 +104,8 @@ export default function StudentSignUp() {
         email: '',
         phoneNumber: '',
         studentId: 0,
+        classCode: '',
+        avatar: null as File | null,
     });
 
     // Handle input change
@@ -109,6 +114,15 @@ export default function StudentSignUp() {
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
+        }));
+    };
+
+    // Handle file input change
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]; // Get the first file from the input
+        setFormData((prevData: any) => ({
+            ...prevData,
+            myfile: file, // Update the myfile field with the selected file
         }));
     };
 
@@ -152,7 +166,7 @@ export default function StudentSignUp() {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         console.log(formData.studentId);
-        
+
         // Add country code to phone number
         if (formData.phoneNumber.charAt(0) !== '0')
             formData.phoneNumber = '0' + formData.phoneNumber;
@@ -209,7 +223,7 @@ export default function StudentSignUp() {
                                                 label="Student ID"
                                                 name="studentId"
                                                 autoComplete="studentId"
-                                                value={formData.studentId == 0? '' : formData.studentId } 
+                                                value={formData.studentId == 0 ? '' : formData.studentId}
                                                 onChange={handleInputChange}
                                             />
                                         </Grid>
@@ -251,6 +265,41 @@ export default function StudentSignUp() {
                                             />
                                         </Grid>
                                     </Grid>
+
+                                    <Accordion className='mt-3'>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel2-content"
+                                            id="panel2-header"
+                                        >
+                                            More Information
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        id="class"
+                                                        type="text"
+                                                        label="Class Code"
+                                                        name="classcode"
+                                                        value={formData.classCode}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        id="avatar"
+                                                        type="file"
+                                                        label="Avatar"
+                                                        name="avatar"
+                                                        onChange={handleFileChange}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </AccordionDetails>
+                                    </Accordion>
 
                                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginTop: 2, marginBottom: 2 }}>
                                         <LoadingButton

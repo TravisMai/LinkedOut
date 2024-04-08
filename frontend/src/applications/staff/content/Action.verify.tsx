@@ -40,14 +40,6 @@ type ResposeType = {
     };
 }
 
-type ErrorType = {
-    response: {
-        data: {
-            message: string;
-        }
-    }
-}
-
 interface newForm {
     isVerify: boolean;
 }
@@ -176,10 +168,13 @@ export default function Verify() {
                     <TableHead>
                         <TableRow>
                             <TableCell align='center'>No.</TableCell>
+                            <TableCell align="center">Avatar</TableCell>
                             <TableCell align="center">Name</TableCell>
                             <TableCell align="center">Email</TableCell>
                             <TableCell align="center">StudentID</TableCell>
                             <TableCell align="center">Phone</TableCell>
+                            <TableCell align="center">Year</TableCell>
+                            <TableCell align="center">Class code</TableCell>
                             <TableCell align="center">Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -192,16 +187,18 @@ export default function Verify() {
                                 >
 
                                     <TableCell align='center'>{++index}</TableCell>
-                                    {/* <TableCell align="center">
-                                    <img
-                                        src={row.avatar}
-                                        className='h-10 mx-auto'
-                                    />
-                                </TableCell> */}
+                                    <TableCell align="center">
+                                        <img
+                                            src={row.avatar}
+                                            className='h-10 mx-auto'
+                                        />
+                                    </TableCell>
                                     <TableCell align="center">{row.name}</TableCell>
                                     <TableCell align="center">{row.email}</TableCell>
                                     <TableCell align="center">{row.id}</TableCell>
                                     <TableCell align="center">{row.phoneNumber}</TableCell>
+                                    <TableCell align="center">Year</TableCell>
+                                    <TableCell align="center">Class Code</TableCell>
                                     <TableCell align="center">
                                         <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
                                             <IconButton onClick={() => handleSubmit(true, row.id)}><Check /></IconButton>

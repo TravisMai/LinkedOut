@@ -238,6 +238,22 @@ export default function StaffPage() {
     }
 
 
+    const [staffName, setStaffName] = React.useState("");
+
+    // Fetch self name
+    useQuery({
+        queryKey: "staff",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/staff/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data);
+            setStaffName(data.data.name);
+        }
+    });
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
@@ -269,10 +285,13 @@ export default function StaffPage() {
                         >
                             {value}
                         </Typography>
-
+                        <Typography variant="h6" color="inherit" noWrap className='pr-2'>
+                            {staffName}
+                        </Typography>
                         <IconButton color="inherit">
+
                             <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />                                
+                                <NotificationsIcon />
                             </Badge>
                         </IconButton>
                     </Toolbar>

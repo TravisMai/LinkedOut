@@ -33,15 +33,6 @@ function createData(
     return { studentId, email, name, status, company, companyLink };
 }
 
-type studentType = {
-    "id": string,
-    "name": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-    "isGoogle": boolean,
-    "isVerify": boolean,
-}
 
 export default function Student() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
