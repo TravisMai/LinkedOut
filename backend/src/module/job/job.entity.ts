@@ -35,6 +35,11 @@ export class Job {
     @IsString()
     level: string;
 
+    @Column({ nullable: true })
+    @IsOptional()
+    @IsString()
+    internshipPrograme: string;
+
     @Column()
     @IsNotEmpty()
     @IsString()
