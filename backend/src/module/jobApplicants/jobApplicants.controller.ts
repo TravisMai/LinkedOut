@@ -65,7 +65,7 @@ export class JobApplicantsController {
 
     // find all applied job by candidate id
     @Get('candidate/:id')
-    @AllowRoles(['student'])
+    @AllowRoles(['student', 'staff'])
     @UseGuards(JwtGuard, RolesGuard)
     async findAllJobByCandidateId(@Req() req: Request, @Res() response: Response, @Param('id') id: string): Promise<Response> {
         try {

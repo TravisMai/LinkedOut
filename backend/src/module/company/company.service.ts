@@ -40,4 +40,10 @@ export class CompanyService {
     async findByEmail(email: string): Promise<Company> {
         return await this.companyRepository.findOne({ where: { email } });
     }
+
+    // find an company by anything that related to company, it receives a string and return a company
+    async findByAnything(value: string): Promise<Company> {
+        return await this.companyRepository.findOne({ where: [{ name: value }, { email: value }, { phoneNumber: value }] });
+    }
+
 }

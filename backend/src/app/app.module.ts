@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { AuthService } from 'src/module/auth/auth.service';
 import { RedisModule } from 'src/module/redis/redis.module';
 import { StaffModule } from 'src/module/staff/staff.module';
-import { Module, ValidationPipe } from '@nestjs/common';
 import { StudentModule } from '../module/student/student.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyModule } from 'src/module/company/company.module';
@@ -13,6 +12,7 @@ import { JobModule } from 'src/module/job/job.module';
 import { FacultyModule } from 'src/module/faculty/faculty.module';
 import { InternshipModule } from 'src/module/internship/internship.module';
 import { JobApplicantsModule } from 'src/module/jobApplicants/jobApplicants.module';
+import { Module, ValidationPipe, Logger } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -51,7 +51,8 @@ import { JobApplicantsModule } from 'src/module/jobApplicants/jobApplicants.modu
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    AuthService
+    AuthService,
+    Logger,
   ],
 })
 export class AppModule {}

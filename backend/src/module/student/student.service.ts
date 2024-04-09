@@ -40,4 +40,9 @@ export class StudentService {
     async findByEmail(email: string): Promise<Student> {
         return await this.studentRepository.findOne({ where: { email } });
     }
+
+    // find a student by anything that related to student, it receives a string and return a student
+    async findByAnything(value: string): Promise<Student> {
+        return await this.studentRepository.findOne({ where: [{ name: value }, { email: value }, { phoneNumber: value }] });
+    }
 }

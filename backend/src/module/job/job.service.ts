@@ -53,4 +53,9 @@ export class JobService {
     async delete(id: string): Promise<void> {
         await this.jobRepository.delete({ id });
     }
+
+    // find a job by title
+    async findJobByTitle(value: string): Promise<Job> {
+        return await this.jobRepository.findOne({ where: { title: value } });
+    }
 }
