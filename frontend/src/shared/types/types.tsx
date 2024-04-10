@@ -19,6 +19,7 @@ type studentType = {
     "avatar": string,
     "studentId": string,
     "isVerify": boolean,
+    "isActive": boolean,
 }
 
 type jobType = {

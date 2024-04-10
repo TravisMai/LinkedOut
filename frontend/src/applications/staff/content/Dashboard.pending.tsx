@@ -118,9 +118,9 @@ export default function Pending(props: any) {
 
     // Mutation to send form data to server    
     const queryClient = useQueryClient();
-    const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string }>({
-        mutationFn: ({ verify, id }) => axios.put(`http://localhost:4000/api/v1/student/${id}`,
-            { isVerify: verify },
+    const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string, property: string }>({
+        mutationFn: ({ verify, id, property }) => axios.put(`http://localhost:4000/api/v1/student/${id}`,
+            { property: verify },
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -150,9 +150,10 @@ export default function Pending(props: any) {
     );
 
     // Handlde verify student
-    const handleSubmit = (verify: boolean, id: string) => {
-        mutation.mutate({ verify, id });
+    const handleSubmit = (verify: boolean, id: string, property: string) => {
+        mutation.mutate({ verify, id, property});
     };
+
 
     return (
         <React.Fragment>
@@ -171,7 +172,7 @@ export default function Pending(props: any) {
                 </TableHead>
                 <TableBody>
                     {allStudent.map((row) => (
-                        row.isVerify ? null :
+                        row.isVerify && !row.isActive ? null :
                             <TableRow key={row.id}>
                                 <TableCell>{row.studentId}</TableCell>
                                 <TableCell>{row.name}</TableCell>
@@ -184,8 +185,8 @@ export default function Pending(props: any) {
                             </TableCell> */}
                                 <TableCell align="right">
                                     <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                        <IconButton onClick={() => handleSubmit(true, row.id)}><CheckIcon /></IconButton>
-                                        <IconButton><CloseIcon /></IconButton>
+                                        <IconButton onClick={() => handleSubmit(true, row.id, "isVerify")}><CheckIcon /></IconButton>
+                                        <IconButton onClick={() => handleSubmit(false, row.id, "isActive")}><CloseIcon /></IconButton>
                                     </Box>
                                 </TableCell>
                             </TableRow>
