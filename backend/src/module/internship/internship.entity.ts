@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToOne, ManyToMany } from "typeorm";
 import { JobApplicants } from "../jobApplicants/jobApplicants.entity";
 import { Staff } from "../staff/staff.entity";
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Internship {
@@ -19,6 +20,7 @@ export class Internship {
     process: string;
 
     @Column({ nullable: true })
+    @Transform(({ value }) => parseInt(value))
     result: number;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
