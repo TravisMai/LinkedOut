@@ -2,6 +2,7 @@ import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
 import { IsNumber, IsOptional, IsString, Length } from "class-validator";
 import { commonAttribute } from "src/common/entities/commonAttribute.entity";
 import { Faculty } from "../faculty/faculty.entity";
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Student extends commonAttribute {
@@ -12,16 +13,19 @@ export class Student extends commonAttribute {
   @Column({ default: false })
   isVerify: boolean;
 
-  @Column({ nullable: true })
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsOptional()
+  @Column({ nullable: true })
   studentId: number;
 
+  @Transform(({ value }) => parseInt(value))
   @Column({ nullable: true })
   @IsNumber()
   @IsOptional()
   gpa: number;
 
+  @Transform(({ value }) => parseInt(value))
   @Column({ nullable: true })
   @IsNumber()
   @IsOptional()
@@ -35,7 +39,7 @@ export class Student extends commonAttribute {
   @Column({ nullable: true })
   @IsNumber()
   @IsOptional()
-  classCode: number;
+  classCode: string;
 
   @Column('text', { array: true, nullable: true })
   @IsString({ each: true })
@@ -49,4 +53,7 @@ export class Student extends commonAttribute {
 
   @Column({ default: true })
   isActive: boolean;
+
+  // flag keep the status occupation of student ?
+  
 }
