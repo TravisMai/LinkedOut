@@ -4,6 +4,7 @@ import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsU
 import { PostDescription } from "src/common/interfaces/postDescription.interface";
 import { Company } from "../company/company.entity";
 import { CompanyResponseDto } from "../company/dto/companyResponse.dto";
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Job {
@@ -49,6 +50,7 @@ export class Job {
     @IsNotEmpty()
     @IsNumber()
     @Min(0, { message: "Quantity must be a positive number" })
+    @Transform(({ value }) => parseInt(value))
     quantity: number;
 
     @Column('json', { nullable: true })

@@ -1,6 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToOne, ManyToMany } from "typeorm";
 import { JobApplicants } from "../jobApplicants/jobApplicants.entity";
 import { Staff } from "../staff/staff.entity";
+import { Transform } from 'class-transformer';
+import { IsOptional, IsString } from "class-validator";
 
 @Entity()
 export class Internship {
@@ -15,10 +17,13 @@ export class Internship {
     @JoinColumn({ name: 'staffId' })
     staff: Staff;
 
-    @Column({ default: "Recieved" })
-    process: string;
+    @Column('text', { array: true, nullable: true })
+    @IsString({ each: true })
+    @IsOptional()
+    document: string[];
 
     @Column({ nullable: true })
+    @Transform(({ value }) => parseInt(value))
     result: number;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
