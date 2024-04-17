@@ -1,36 +1,13 @@
-import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group, Launch, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium } from "@mui/icons-material";
-import { Box, Button, Checkbox, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
-import React from "react";
-import FormDialog from "./update/updateDialog.component";
-import PhotoDialog from "./photo/updatePhotoDialog.component";
-import { useMutation } from "react-query";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium, Fingerprint } from "@mui/icons-material";
+import { Box, Button, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import {
+    ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import { getJwtToken } from "../../../shared/utils/authUtils";
-
-
-type ResponeType = {
-    data: {
-        student: {
-            id: string;
-            name: string;
-            email: string;
-            phoneNumber: string;
-            avatar: string;
-            isGoogle: boolean;
-            isVerify: boolean;
-        };
-        token: string;
-    };
-}
-
-type ErrorType = {
-    response: {
-        data: {
-            message: string;
-        }
-    }
-}
+import { useQuery } from "react-query";
+import axios from "axios";
+import PhotoDialog from "./photo/updatePhotoDialog.component";
 
 
 const data = {
@@ -207,64 +184,44 @@ const data = {
     ],
 }
 
+
+
 export default function StudentProfile2() {
-    const navigate = useNavigate();
-    const [openInfo, setOpenInfo] = React.useState(false);
-    const handleOpenRequest = () => {
-        setOpenInfo(true);
-    };
-    const handleCloseRequest = () => {
-        setOpenInfo(false);
-    }
+
+
+
+    // Fetch for student info
+    const token = getJwtToken();
+
+
+    const [studentData, setStudentData] = React.useState<studentType>([]);
+
+
+    const getStudentInfo = useQuery({
+        queryKey: "studentInfo",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+    });
+
+    useEffect(() => {
+        if (getStudentInfo.isSuccess) {
+            setStudentData(getStudentInfo.data.data);
+        }
+    }, [getStudentInfo.isSuccess]);
+
     const [openPhoto, setOpenPhoto] = React.useState(false);
     const handleOpenUpload = () => {
         setOpenPhoto(true);
     };
+
     const handleCloseUpload = () => {
         setOpenPhoto(false);
+        // Force the page to reload
+        window.location.reload();
     }
-
-    
-    const token = getJwtToken();
-    // Mutation to logout
-    const mutation = useMutation<ResponeType, ErrorType>({
-        mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        onSuccess: () => {
-            document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
-            // Delete cookie
-
-            console.log("Logout successfully");
-            // setSending(false);
-            // setShowError(false);
-            // setShowSuccess(true);
-            setTimeout(() => {
-                // setShowSuccess(false); // Hide the success message
-                navigate('/'); // Navigate to the next screen
-            }, 1000);
-        },
-        onError: (error) => {
-            // setSending(false);
-            // setShowError(true);
-            console.log("Logout failed");
-            console.log(error);
-        },
-        onMutate: () => {
-            console.log(token);
-            // setSending(true);
-            // setShowError(false);
-        }
-    }
-    );
-
-
-    const handleLogout = () => {
-        mutation.mutate();
-    }
-
 
     return (
         <Grid container spacing={2} className='bg-[#f3f2f0] min-h-screen'>
@@ -280,27 +237,30 @@ export default function StudentProfile2() {
                             gap: 1,
                         }} >
                         <img
-                            src={data.avatar}
+                            src={`${studentData.avatar}`} // Append a unique query parameter to bypass browser caching
                             className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
                         />
                         <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={handleOpenUpload}>Change photo</Button>
-                        <Chip color="success" icon={<Check />} label="Verified" />
+                        {studentData.isVerify ? <Chip color="success" icon={<Check />} label="Verified" /> : <Chip color="warning" icon={<ExclamationCircleOutlined />} label="Not Verified" />}
+                        {/* <Chip color="success" icon={<Check />} label="Verified" /> */}
+
                     </Container>
 
-                    <Typography variant="body2" className='pl-5'> <AccountCircle /> Name: <span className="font-bold">{data.name} </span> </Typography>
-                    <Typography variant="body2" className='pl-5'><Email /> Email: <span className="font-bold">{data.email} </span></Typography>
-                    <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{data.phone} </span></Typography>
-                    <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{data.major} </span></Typography>
-                    <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{data.year} </span></Typography>
-                    <Container disableGutters="true"
+                    <Typography variant="body2" className='pl-5'> <AccountCircle /> Name: <span className="font-bold">{studentData.name} </span> </Typography>
+                    <Typography variant="body2" className='pl-5'><Fingerprint /> Student ID: <span className="font-bold">{studentData.studentId} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><Email /> Email: <span className="font-bold">{studentData.email} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{studentData.phoneNumber} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{studentData.major} </span></Typography>
+                    <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{studentData.year} </span></Typography>
+                    {/* <Container disableGutters="true"
                         sx={{
                             alignContent: "center",
                             display: 'flex',
                             flexDirection: "column",
                             alignItems: "center",
                         }} >
-                        <Button variant="outlined" color="warning" sx={{}} size="small" onClick={handleOpenRequest}>Request to change information </Button>
-                    </Container>
+                        <Button variant="outlined" color="warning" sx={{}} size="small">Request to change information </Button>
+                    </Container> */}
 
 
 
@@ -310,54 +270,218 @@ export default function StudentProfile2() {
             <Grid item xs={8.8}>
                 <Container disableGutters="true"
                     sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
-                    <Button href="/student/profile/update" variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" disabled>Update</Button>
+                    <Button href="/student/profile/update" variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" >Update</Button>
                     <Paper>
-                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                Internship Process
+                                Social Media
                             </Typography>
 
                         </Box>
-                        <Typography variant="body2" sx={{ pb: 2 }}>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
-                                <ListItem>
-                                    <Checkbox disabled checked />
-                                    <Typography variant="body1" sx={{ textDecoration: 'line-through', color: 'gray', fontStyle: 'italic' }} >Internship Course Registered</Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox disabled checked />
-                                    <Typography variant="body1" sx={{ textDecoration: 'line-through', color: 'gray', fontStyle: 'italic' }} >Foundation test</Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox disabled checked />
-                                    <Typography variant="body1" sx={{ textDecoration: 'line-through', color: 'gray', fontStyle: 'italic' }} >Apply for Internship</Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox disabled />
-                                    <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'left', }}>
-                                        <Typography variant="body1" sx={{ fontWeight: 'bold' }} >Internship</Typography>
-                                        <Typography>ABC Company</Typography>
-                                    </Box>
-                                    <IconButton aria-label="delete">
-                                        <Launch />
-                                    </IconButton>
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox disabled />
-                                    <Typography variant="body1" sx={{}} >Internship Report</Typography>
-                                </ListItem>
+                                {studentData.socialMedia ?
+                                    <>
+                                        <ListItem>
+                                            <ListItemIcon><GitHub /></ListItemIcon>
+                                            <Link>{studentData.socialMedia.github}</Link>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon><LinkedIn /></ListItemIcon>
+                                            <Link>{studentData.socialMedia.linkedin}</Link>
+                                        </ListItem>
+                                        {/* google, facebook, twitter */}
+                                    </>
+                                    : <></>}
                             </List>
                         </Typography>
                     </Paper>
-                    <Button variant="outlined" color="error" sx={{ mt: 1, width: 1 / 5 }} size="small" onClick={handleLogout}>Logout</Button>
-                    <FormDialog state={openInfo} onClose={handleCloseRequest} />
-                    <PhotoDialog state={openPhoto} onClose={handleCloseUpload} />
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Objective
+                            </Typography>
 
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            {studentData.objective}
+                        </Typography>
+                    </Paper>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Education
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.education ? studentData.education.map((item) => (
+                                    <ListItem>
+                                        <ListItemIcon><School /></ListItemIcon>
+                                        <ListItemText
+                                            primary={item.school}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography variant="body1">
+                                                        {item.major}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {item.startTime} - {item.endTime}
+                                                    </Typography>
+                                                    <Typography>
+                                                        GPA: {item.gpa} /10.0
+                                                    </Typography>
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
+
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Working History
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.workingHistory ? studentData.workingHistory.map((item) => (
+                                    <ListItem>
+                                        <ListItemIcon><WorkHistory /></ListItemIcon>
+                                        <ListItemText
+                                            primary={item.company}
+
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography variant="body1">
+                                                        {item.time}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {item.position}
+                                                    </Typography>
+                                                    <Typography>
+                                                        GPA: {item.task}
+                                                    </Typography>
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
+
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Certificates
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.certificate ? studentData.certificate.map((item) => (
+                                    <ListItem>
+                                        <ListItemIcon><WorkspacePremium /></ListItemIcon>
+                                        <ListItemText
+                                            primary={item.name}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography variant="body1">
+                                                        {item.time}
+                                                    </Typography>
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
+
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Skills
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.skill ? studentData.skill.map((item) => (
+                                    <span>{item.name} - </span>
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Additional Information
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.additionalInformation ? studentData.additionalInformation.map((item) => (
+                                    <ListItem>
+                                        <ListItemIcon><More /></ListItemIcon>
+                                        <ListItemText
+                                            primary={item.name}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography variant="body1">
+                                                        {item.level}
+                                                    </Typography>
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
+
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                References
+                            </Typography>
+
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.reference ? studentData.reference.map((item) => (
+                                    <ListItem>
+                                        <ListItemIcon><Group /></ListItemIcon>
+                                        <ListItemText
+                                            primary={item.name}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography variant="body1">
+                                                        {item.email}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {item.phone}
+                                                    </Typography>
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
+
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
+                    <PhotoDialog state={openPhoto} onClose={handleCloseUpload} />
                 </Container>
             </Grid>
-        </Grid>
-
-
+        </Grid >
     )
 
 }

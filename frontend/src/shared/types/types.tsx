@@ -17,9 +17,73 @@ type studentType = {
     "email": string,
     "phoneNumber": string,
     "avatar": string,
-    "studentId": string,
+    "role": string,
+    "created": string,
+    "updated": string,
     "isVerify": boolean,
+    "studentId": number,
+    "gpa": number,
+    "year": number,
+    "major": string,
+    "classCode": string,
+    "resume": string[],
     "isActive": boolean,
+    "process": string,
+    "socialMedia": {
+        github: string;
+        linkedin: string;
+        google: string;
+        facebook: string;
+        twitter: string;
+    },
+    "objective": string,
+    "education": educationType[],
+    "workingHistory": workingHistoryType[],
+    "certificate": certificateType[],
+    "skill": skillType[],
+    "additionalInformation": additionalInformationType[],
+    "reference": referenceType[],
+    "faculty": facultyType,
+}
+
+type educationType = {
+    "id": string,
+    "school": string,
+    "major": string,
+    "startTime": string,
+    "endTime": string,
+    "gpa": string
+}
+
+type workingHistoryType = {
+    "company": string,
+    "position": string,
+    "time": string,
+    "task": string
+}
+
+type certificateType = {
+    "name" : string,
+    "time" : string
+}
+
+type skillType = {
+    "name": string,
+    "level": string
+}
+
+type additionalInformationType = {
+    "name": string,
+    "level": string
+}
+
+type referenceType = {
+    "name": string,
+    "email": string,
+    "phone": string
+}
+
+type facultyType = {
 }
 
 type jobType = {

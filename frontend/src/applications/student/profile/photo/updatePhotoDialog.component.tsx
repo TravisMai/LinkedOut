@@ -21,7 +21,7 @@ export default function PhotoDialog({ state, onClose }: { state: boolean, onClos
                 >
                     <CloseIcon />
                 </IconButton>
-                <UpdatePhoto/>
+                <UpdatePhoto state={state} onClose={onClose}/>
             </Dialog>
         </React.Fragment>
     );

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -48,7 +47,7 @@ type ResposeType = {
             name: string;
             email: string;
             phoneNumber: string;
-            avatar: string;
+            myfile: string;
             isGoogle: boolean;
             isVerify: boolean;
         };
@@ -70,7 +69,10 @@ interface newForm {
     phoneNumber: string;
     studentId: number;
     classCode: string;
-    avatar: File | null;
+    // faculty: string;
+    major: string;
+    year: number;
+    myfile: File | null;
 }
 
 const countryCode = [
@@ -105,7 +107,10 @@ export default function StudentSignUp() {
         phoneNumber: '',
         studentId: 0,
         classCode: '',
-        avatar: null as File | null,
+        // faculty: '',
+        major: '',
+        year: 0,
+        myfile: null as File | null,
     });
 
     // Handle input change
@@ -134,7 +139,27 @@ export default function StudentSignUp() {
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({
-        mutationFn: (newForm) => axios.post("http://localhost:4000/api/v1/student", newForm),
+        mutationFn: (formData) => {
+            const formDataToSend = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                if (value !== null) {
+                    if (key === 'myfile') {
+                        formDataToSend.append(key, value as File); // Append file to FormData
+                    } else if (key === 'studentId') {
+                        // const blobValue = new Blob([new Uint8Array([value])]);
+                        formDataToSend.append(key, value);
+                    } else {
+                        formDataToSend.append(key, value.toString()); // Convert other fields to string
+                    }
+                }
+                console.log(formDataToSend);
+            });
+            return axios.post("http://localhost:4000/api/v1/student", formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Set content type for file upload
+                },
+            });
+        },
         onSuccess: (data) => {
             console.log(data);
             setSending(false);
@@ -157,15 +182,10 @@ export default function StudentSignUp() {
     }
     );
 
-    // Function to store JWT token in cookie
-    const storeJwtToken = (token: string) => {
-        document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-    };
-
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formData.studentId);
+        console.log(formData);
 
         // Add country code to phone number
         if (formData.phoneNumber.charAt(0) !== '0')
@@ -173,7 +193,6 @@ export default function StudentSignUp() {
 
         // Change studentId to number
         formData.studentId = Number(formData.studentId);
-        console.log(typeof formData.studentId)
         mutation.mutate(formData);
     };
 
@@ -264,6 +283,55 @@ export default function StudentSignUp() {
                                                 }}
                                             />
                                         </Grid>
+                                        {/* <Grid item xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="faculty"
+                                                label="Faculty"
+                                                name="faculty"
+                                                autoComplete="faculty"
+                                                value={formData.faculty}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Grid> */}
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="major"
+                                                label="Major"
+                                                name="major"
+                                                autoComplete="major"
+                                                value={formData.major}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="year"
+                                                type="number"
+                                                label="Year"
+                                                name="year"
+                                                autoComplete="year"
+                                                value={formData.year == 0 ? '' : formData.year}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="classCode"
+                                                label="Class Code"
+                                                name="classCode"
+                                                autoComplete="classCode"
+                                                value={formData.classCode}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Grid>
                                     </Grid>
 
                                     <Accordion className='mt-3'>
@@ -276,24 +344,14 @@ export default function StudentSignUp() {
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             <Grid container spacing={2}>
+
                                                 <Grid item xs={12}>
                                                     <TextField
                                                         fullWidth
-                                                        id="class"
-                                                        type="text"
-                                                        label="Class Code"
-                                                        name="classcode"
-                                                        value={formData.classCode}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        id="avatar"
+                                                        id="myfile"
                                                         type="file"
                                                         label="Avatar"
-                                                        name="avatar"
+                                                        name="myfile"
                                                         onChange={handleFileChange}
                                                     />
                                                 </Grid>
