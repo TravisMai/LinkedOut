@@ -2,7 +2,7 @@ import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group
 import { Box, Button, Checkbox, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import React from "react";
 import FormDialog from "./update/updateDialog.component";
-import PhotoDialog from "./photo/updatePhotoDialog.component";
+import PhotoDialog from "./update/updateDialog.component";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

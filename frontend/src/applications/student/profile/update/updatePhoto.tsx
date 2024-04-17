@@ -45,12 +45,11 @@ interface updateForm {
   myfile: string;
 }
 
-export default function UpdatePhoto({ state, onClose }: { state: boolean, onClose: () => void }) {
+export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   const handleClose = () => {
     onClose();
   };
 
-  const navigate = useNavigate();
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -66,7 +65,7 @@ export default function UpdatePhoto({ state, onClose }: { state: boolean, onClos
 
   // Fetch current information
   useQuery({
-    queryKey: "currentInfo",
+    queryKey: "studentInfo",
     queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,

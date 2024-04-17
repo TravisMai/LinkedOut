@@ -1,4 +1,4 @@
-import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium, Fingerprint } from "@mui/icons-material";
+import { AccountCircle, CalendarMonth, Check, Code, Create, Edit, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium, Fingerprint, Facebook, Google, Twitter } from "@mui/icons-material";
 import { Box, Button, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import {
@@ -7,7 +7,7 @@ import {
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useQuery } from "react-query";
 import axios from "axios";
-import PhotoDialog from "./photo/updatePhotoDialog.component";
+import UpdateDialog from "./update/updateDialog.component";
 
 
 const data = {
@@ -212,13 +212,16 @@ export default function StudentProfile2() {
         }
     }, [getStudentInfo.isSuccess]);
 
-    const [openPhoto, setOpenPhoto] = React.useState(false);
-    const handleOpenUpload = () => {
-        setOpenPhoto(true);
+    const [updateField, setUpdateField] = React.useState("");
+
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const handleOpenDialog = (field: string) => {
+        setOpenDialog(true);
+        setUpdateField(field);
     };
 
-    const handleCloseUpload = () => {
-        setOpenPhoto(false);
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
         // Force the page to reload
         window.location.reload();
     }
@@ -240,7 +243,7 @@ export default function StudentProfile2() {
                             src={`${studentData.avatar}`} // Append a unique query parameter to bypass browser caching
                             className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
                         />
-                        <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={handleOpenUpload}>Change photo</Button>
+                        <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={() => handleOpenDialog("avatar")}>Change photo</Button>
                         {studentData.isVerify ? <Chip color="success" icon={<Check />} label="Verified" /> : <Chip color="warning" icon={<ExclamationCircleOutlined />} label="Not Verified" />}
                         {/* <Chip color="success" icon={<Check />} label="Verified" /> */}
 
@@ -276,23 +279,47 @@ export default function StudentProfile2() {
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                 Social Media
                             </Typography>
+                            <IconButton size="small" onClick={() => handleOpenDialog("socialMedia")}><Edit /></IconButton>
 
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
-                                {studentData.socialMedia ?
-                                    <>
-                                        <ListItem>
-                                            <ListItemIcon><GitHub /></ListItemIcon>
-                                            <Link>{studentData.socialMedia.github}</Link>
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon><LinkedIn /></ListItemIcon>
-                                            <Link>{studentData.socialMedia.linkedin}</Link>
-                                        </ListItem>
-                                        {/* google, facebook, twitter */}
-                                    </>
-                                    : <></>}
+                                {studentData.socialMedia?.github ?
+                                    <ListItem>
+                                        <ListItemIcon><GitHub /></ListItemIcon>
+                                        <Link href={studentData.socialMedia?.github} target="_blank">{studentData.socialMedia?.github}</Link>
+                                    </ListItem>
+                                    : <></>
+                                }
+                                {studentData.socialMedia?.linkedin ?
+                                    <ListItem>
+                                        <ListItemIcon><LinkedIn /></ListItemIcon>
+                                        <Link href={studentData.socialMedia?.linkedin} target="_blank">{studentData.socialMedia?.linkedin}</Link>
+                                    </ListItem>
+                                    : <></>
+                                }
+                                {studentData.socialMedia?.facebook ?
+                                    <ListItem>
+                                        <ListItemIcon><Facebook /></ListItemIcon>
+                                        <Link href={studentData.socialMedia?.facebook} target="_blank">{studentData.socialMedia?.facebook}</Link>
+                                    </ListItem>
+                                    : <></>
+                                }
+                                {studentData.socialMedia?.google ?
+                                    <ListItem>
+                                        <ListItemIcon><Google /></ListItemIcon>
+                                        <Link href={studentData.socialMedia?.google} target="_blank">{studentData.socialMedia?.google}</Link>
+                                    </ListItem>
+                                    : <></>
+                                }
+                                {studentData.socialMedia?.twitter ?
+                                    <ListItem>
+                                        <ListItemIcon><Twitter /></ListItemIcon>
+                                        <Link href={studentData.socialMedia?.twitter} target="_blank">{studentData.socialMedia?.twitter}</Link>
+                                    </ListItem>
+                                    : <></>
+                                }
+                                
                             </List>
                         </Typography>
                     </Paper>
@@ -478,9 +505,11 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
-                    <PhotoDialog state={openPhoto} onClose={handleCloseUpload} />
+                    {/* <FormDialog state={true} onClose={handleCloseUpload} /> */}
                 </Container>
+
             </Grid>
+            <UpdateDialog field={updateField} state={openDialog} onClose={handleCloseDialog} />
         </Grid >
     )
 

@@ -2,16 +2,17 @@ import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import StudentProfile from './update';
+import UpdatePhoto from './updatePhoto';
+import UpdateSocialMedia from './updateSocialMedia';
 
-export default function FormDialog({ state, onClose }: { state: boolean, onClose: () => void }) {
+export default function UpdateDialog({ field, state, onClose }: { field: string, state: boolean, onClose: () => void }) {
     const handleClose = () => {
         onClose();
     };
 
     return (
         <React.Fragment>
-            <Dialog open={state}>
+            <Dialog open={state} style={{}}>
                 <IconButton
                     edge="end"
                     color="inherit"
@@ -21,7 +22,10 @@ export default function FormDialog({ state, onClose }: { state: boolean, onClose
                 >
                     <CloseIcon />
                 </IconButton>
-                <StudentProfile/>
+                {/* Switch based on field here */}
+                {field === 'avatar' && <UpdatePhoto onClose={onClose} />}
+                {field === 'socialMedia' && <UpdateSocialMedia onClose={onClose} />}
+
             </Dialog>
         </React.Fragment>
     );
