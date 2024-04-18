@@ -143,7 +143,8 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs" >
+                                
+        <Container component="main" style={{width: "600px"}}>
           <CssBaseline />
           <Box
             sx={{
@@ -154,7 +155,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
             }}
           >
             <Typography component="h1" variant="h5">
-              Change Profile Photo
+              Update Profile Photo
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -168,6 +169,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
                     name="myfile"
                     autoComplete="myfile"
                     onChange={handleFileChange}
+                    style={{width: "500px"}}
                   />
                 </Grid>
               </Grid>

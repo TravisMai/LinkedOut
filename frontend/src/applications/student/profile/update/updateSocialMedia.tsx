@@ -155,7 +155,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
-                <Container component="main" maxWidth="xs" style={{}}>
+                <Container component="main" style={{width: "600px"}}>
                     <CssBaseline />
                     <Box
                         sx={{
@@ -166,9 +166,9 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
                         }}
                     >
                         <Typography component="h1" variant="h5">
-                            Change Social Media Links
+                            Update Social Media Links
                         </Typography>
-                        <Box component="form" onSubmit={handleSubmit} sx={{ my: 2 }}>
+                        <Box component="form" onSubmit={handleSubmit} sx={{ mx: 2, my: 2 }}>
                             <Grid container spacing={2} justifyContent="center">
                                 <Grid container direction='row' className='mt-3 mx-5'>
                                     <Grid item xs={1} className='pt-2'>
@@ -271,9 +271,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
                             </Box>
                             {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                             {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-                            <Grid container justifyContent="flex-end">
-
-                            </Grid>
+                            
                         </Box>
                     </Box>
                 </Container>

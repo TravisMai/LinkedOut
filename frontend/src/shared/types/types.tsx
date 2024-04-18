@@ -64,6 +64,7 @@ type workingHistoryType = {
 
 type certificateType = {
     "name" : string,
+    "issuedBy" : string,
     "time" : string
 }
 

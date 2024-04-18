@@ -5,9 +5,10 @@ import {
     ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { getJwtToken } from "../../../shared/utils/authUtils";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import UpdateDialog from "./update/updateDialog.component";
+import { useNavigate } from "react-router-dom";
 
 
 const data = {
@@ -184,10 +185,13 @@ const data = {
     ],
 }
 
+type ResponeType = {
+    data: {}
+}
 
 
-export default function StudentProfile2() {
-
+export default function StudentProfile() {
+    const navigate = useNavigate();
 
 
     // Fetch for student info
@@ -224,6 +228,51 @@ export default function StudentProfile2() {
         setOpenDialog(false);
         // Force the page to reload
         window.location.reload();
+        // Forece refetch the data
+        // getStudentInfo.refetch();
+    }
+
+    const handleExit = () => {
+        setOpenDialog(false);
+    }
+
+
+    // Logout
+    // Mutation to logout
+    const mutation = useMutation<ResponeType, ErrorType>({
+        mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: () => {
+            document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
+            // Delete cookie
+
+            console.log("Logout successfully");
+            // setSending(false);
+            // setShowError(false);
+            // setShowSuccess(true);
+            setTimeout(() => {
+                // setShowSuccess(false); // Hide the success message
+                navigate('/'); // Navigate to the next screen
+            }, 1000);
+        },
+        onError: (error) => {
+            // setSending(false);
+            // setShowError(true);
+            console.log("Logout failed");
+            console.log(error);
+        },
+        onMutate: () => {
+            console.log(token);
+            // setSending(true);
+            // setShowError(false);
+        }
+    }
+    );
+    const handleLogout = () => {
+        mutation.mutate();
     }
 
     return (
@@ -255,25 +304,23 @@ export default function StudentProfile2() {
                     <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{studentData.phoneNumber} </span></Typography>
                     <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{studentData.major} </span></Typography>
                     <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{studentData.year} </span></Typography>
-                    {/* <Container disableGutters="true"
+                    <Container disableGutters="true"
                         sx={{
                             alignContent: "center",
                             display: 'flex',
                             flexDirection: "column",
                             alignItems: "center",
                         }} >
-                        <Button variant="outlined" color="warning" sx={{}} size="small">Request to change information </Button>
-                    </Container> */}
-
-
-
+                        <Button variant="outlined" color="warning" sx={{}} onClick={handleLogout} size="large">Logout</Button>
+                    </Container>
                 </Container>
+
 
             </Grid>
             <Grid item xs={8.8}>
                 <Container disableGutters="true"
                     sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
-                    <Button href="/student/profile/update" variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" >Update</Button>
+                    {/* Social media */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -319,27 +366,29 @@ export default function StudentProfile2() {
                                     </ListItem>
                                     : <></>
                                 }
-                                
+
                             </List>
                         </Typography>
                     </Paper>
+                    {/* Objective */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                 Objective
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("objective")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             {studentData.objective}
                         </Typography>
                     </Paper>
+                    {/* Education */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                 Education
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("education")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
@@ -350,15 +399,21 @@ export default function StudentProfile2() {
                                             primary={item.school}
                                             secondary={
                                                 <React.Fragment>
-                                                    <Typography variant="body1">
-                                                        {item.major}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {item.startTime} - {item.endTime}
-                                                    </Typography>
-                                                    <Typography>
-                                                        GPA: {item.gpa} /10.0
-                                                    </Typography>
+                                                    {item.major &&
+                                                        <Typography variant="body1">
+                                                            {item.major}
+                                                        </Typography>
+                                                    }
+                                                    {item.startTime &&
+                                                        <Typography>
+                                                            {item.startTime} - {item.endTime ? item.endTime : "Present"}
+                                                        </Typography>
+                                                    }
+                                                    {item.gpa &&
+                                                        <Typography>
+                                                            GPA: {item.gpa}
+                                                        </Typography>
+                                                    }
                                                 </React.Fragment>
                                             }
                                         />
@@ -368,12 +423,13 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
+                    {/* Working History */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                 Working History
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("workingHistory")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
@@ -385,15 +441,21 @@ export default function StudentProfile2() {
 
                                             secondary={
                                                 <React.Fragment>
-                                                    <Typography variant="body1">
-                                                        {item.time}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {item.position}
-                                                    </Typography>
-                                                    <Typography>
-                                                        GPA: {item.task}
-                                                    </Typography>
+                                                    {item.time &&
+                                                        <Typography variant="body1">
+                                                            {item.time}
+                                                        </Typography>
+                                                    }
+                                                    {item.position &&
+                                                        <Typography>
+                                                            Role: {item.position}
+                                                        </Typography>
+                                                    }
+                                                    {item.task &&
+                                                        <Typography>
+                                                            Responsibilities: {item.task}
+                                                        </Typography>
+                                                    }
                                                 </React.Fragment>
                                             }
                                         />
@@ -403,12 +465,13 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
+                    {/* Certificate */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                Certificates
+                                Certificate
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("certificate")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
@@ -420,8 +483,12 @@ export default function StudentProfile2() {
                                             secondary={
                                                 <React.Fragment>
                                                     <Typography variant="body1">
+                                                        {item.issuedBy}
+                                                    </Typography>
+                                                    <Typography variant="body1">
                                                         {item.time}
                                                     </Typography>
+
                                                 </React.Fragment>
                                             }
                                         />
@@ -431,27 +498,41 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
+                    {/* Skill */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                 Skills
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("skill")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
                                 {studentData.skill ? studentData.skill.map((item) => (
-                                    <span>{item.name} - </span>
+                                    <ListItem>
+                                        <ListItemIcon><Star /></ListItemIcon>
+                                        <ListItemText
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography variant="body1">
+                                                        {item.name} {item.level && <> - {item.level}</>}
+                                                    </Typography>
+
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
                                 )) : <></>}
                             </List>
                         </Typography>
                     </Paper>
+                    {/* Additional Information */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                 Additional Information
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("additionalInformation")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
@@ -474,12 +555,13 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
+                    {/* Reference */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                References
+                                Reference
                             </Typography>
-
+                            <IconButton size="small" onClick={() => handleOpenDialog("reference")}><Edit /></IconButton>
                         </Box>
                         <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                             <List>
@@ -490,12 +572,16 @@ export default function StudentProfile2() {
                                             primary={item.name}
                                             secondary={
                                                 <React.Fragment>
-                                                    <Typography variant="body1">
-                                                        {item.email}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {item.phone}
-                                                    </Typography>
+                                                    {item.email &&
+                                                        <Typography variant="body1">
+                                                            Email: {item.email}
+                                                        </Typography>
+                                                    }
+                                                    {item.phone &&
+                                                        <Typography>
+                                                            Phone: {item.phone}
+                                                        </Typography>
+                                                    }
                                                 </React.Fragment>
                                             }
                                         />
@@ -505,11 +591,10 @@ export default function StudentProfile2() {
                             </List>
                         </Typography>
                     </Paper>
-                    {/* <FormDialog state={true} onClose={handleCloseUpload} /> */}
                 </Container>
 
             </Grid>
-            <UpdateDialog field={updateField} state={openDialog} onClose={handleCloseDialog} />
+            <UpdateDialog field={updateField} state={openDialog} onExit={handleExit} onClose={handleCloseDialog} />
         </Grid >
     )
 

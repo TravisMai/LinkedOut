@@ -17,7 +17,6 @@ import { CompanySettingPage } from "./applications/company/CompanySetting";
 import Providers from "./Providers";
 import StudentJobsPage from "./applications/student/jobs";
 import StudentMessage from "./applications/student/message";
-import StudentUpdate from "./applications/student/profile/update/updatePhoto";
 import JobDisplay from "./applications/student/jobs/JobDisplay";
 import AddJob from "./applications/company/AddJob";
 import JobDisplayCompany from "./applications/company/JobDisplay";
