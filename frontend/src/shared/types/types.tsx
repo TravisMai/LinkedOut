@@ -100,7 +100,7 @@ type jobType = {
     "descriptions": postDescriptionType,
     "created": Date,
     "updated": Date,
-    "expired": Date
+    "expireDate": Date
 }
 
 type postDescriptionType = {

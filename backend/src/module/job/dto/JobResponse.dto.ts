@@ -11,6 +11,7 @@ export class JobResponseDto {
     level: string;
     workType: string;
     quantity: number;
+    expireDate: Date;
     descriptions: PostDescription;
 
     static fromJob(job: Job): JobResponseDto {
@@ -23,6 +24,7 @@ export class JobResponseDto {
         dto.level = job.level;
         dto.workType = job.workType;
         dto.quantity = job.quantity;
+        dto.expireDate = job.expireDate;
         dto.descriptions = job.descriptions;
         return dto;
     }
