@@ -1,4 +1,4 @@
-import { AccountCircle, CalendarMonth, Check, Code, Create, Edit, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium, Fingerprint, Facebook, Google, Twitter } from "@mui/icons-material";
+import { AccountCircle, CalendarMonth, Check, Code, Create, Edit, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium, Fingerprint, Facebook, Google, Twitter, AttachFile } from "@mui/icons-material";
 import { Box, Button, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import {
@@ -314,12 +314,34 @@ export default function StudentProfile() {
                         <Button variant="outlined" color="warning" sx={{}} onClick={handleLogout} size="large">Logout</Button>
                     </Container>
                 </Container>
-
-
             </Grid>
             <Grid item xs={8.8}>
                 <Container disableGutters="true"
                     sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
+                    {/* Resume */}
+                    <Paper>
+                        <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Résumé
+                            </Typography>
+                            <IconButton size="small" onClick={() => handleOpenDialog("resume")}><Edit /></IconButton>
+                        </Box>
+                        <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                            <List>
+                                {studentData.resume ? studentData.resume.map((item) => (
+                                    <ListItem>
+                                        <ListItemIcon><AttachFile /></ListItemIcon>
+                                        <Link href={item}>
+                                            <ListItemText
+                                                primary={item}
+                                            />
+                                        </Link>
+                                    </ListItem>
+
+                                )) : <></>}
+                            </List>
+                        </Typography>
+                    </Paper>
                     {/* Social media */}
                     <Paper>
                         <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>

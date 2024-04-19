@@ -89,34 +89,27 @@ type facultyType = {
 
 type jobType = {
     "id": string,
+    "company": companyType,
     "title": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-    "workField": string,
-    "address": string,
-    "website": null,
-    "descriptions": {
-        "responsibilities": string,
-        "detailed": string
-    }
-    "taxId": null,
-    "company": {
-        "id": string,
-        "name": string,
-        "representative": string,
-        "phone": string,
-        "email": string,
-        "address": string,
-        "website": null,
-        "avatar": string,
-        "taxId": null
-    }
+    "image": string[],
+    "salary": number,
+    "level": string,
+    "internshipPrograme": string,
+    "workType": string,
+    "quantity": number,
+    "descriptions": postDescriptionType,
+    "created": Date,
+    "updated": Date,
+    "expired": Date
 }
 
-
-
-
+type postDescriptionType = {
+    "aboutUs": string,
+    "responsibilities": string[],
+    "requirements": string[],
+    "preferredQualifications": string[],
+    "benefits": string[]
+}
 
 type ErrorType = {
     response: {

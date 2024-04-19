@@ -11,6 +11,7 @@ import UpdateCertificate from './updateCertificate';
 import UpdateSkill from './updateSkill';
 import UpdateAdditionalInformation from './updateAdditionalInformation';
 import UpdateReference from './updateReference';
+import UpdateResume from './updateResume';
 
 export default function UpdateDialog({ field, state, onExit, onClose }: { field: string, state: boolean, onExit: () => void, onClose: () => void }) {
 
@@ -40,6 +41,8 @@ export default function UpdateDialog({ field, state, onExit, onClose }: { field:
                 {field === 'skill' && <UpdateSkill onClose={onClose} />}
                 {field === 'additionalInformation' && <UpdateAdditionalInformation onClose={onClose} />}
                 {field === 'reference' && <UpdateReference onClose={onClose} />}
+                {field === 'resume' && <UpdateResume onClose={onClose} />}
+
 
 
 

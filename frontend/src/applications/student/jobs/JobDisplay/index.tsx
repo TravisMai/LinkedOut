@@ -3,46 +3,22 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
 
-type jobType = {
-    "id": string,
-    "company": {
-        "id": string,
-        "name": string,
-        "email": string,
-        "avatar": string,
-        "workField": string,
-        "address": string,
-    },
-    "title": string,
-    "image": null,
-    "salary": null,
-    "level": string,
-    "workType": string,
-    "quantity": number,
-    "descriptions": {
-        "aboutUs": string,
-        "responsibilities": [string],
-        "requirements": [string],
-    }
-}
 
 const JobDisplay: React.FC = () => {
     const { jobId } = useParams();
     const [job, setJob] = useState<jobType>();
 
     // Get jwt token
-    
-
     const token = getJwtToken();
 
     // Fetch all jobs
     useQuery({
-        queryKey: "allJobs",
+        queryKey: "thisJob",
         queryFn: () => axios.get("http://localhost:4000/api/v1/job/" + jobId, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -61,28 +37,45 @@ const JobDisplay: React.FC = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            !applied?setApplied(true):setApplied(false);
+            !applied ? setApplied(true) : setApplied(false);
         }, 2000);
     }
-    
+
+    // Get Student information
+    const [studentData, setStudentData] = React.useState<studentType>([]);
+    const getStudentInfo = useQuery({
+        queryKey: "studentInfo",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+    });
+    useEffect(() => {
+        if (getStudentInfo.isSuccess) {
+            setStudentData(getStudentInfo.data.data);
+        }
+    }, [getStudentInfo.isSuccess]);
+
+
     return (
         <Container>
             <Grid container spacing={2} sx={{ mt: 3 }}>
                 <Grid item xs={7}>
                     <Box display="flex" gap={3}>
                         <Typography variant="h4">{job?.title}</Typography>
-                        <LoadingButton variant="outlined" color="primary" onClick={handleClick} loading={loading}>{!applied?"Apply":<Check/>}</LoadingButton>
-                        {job?.workType === "Internship" ? <Button variant="outlined" color="success">Apply Intern</Button> : null}
+                        <LoadingButton variant="outlined" color="primary" onClick={handleClick} loading={loading} disabled={!studentData.isVerify}>{!applied ? "Apply" : <Check />}</LoadingButton>
+                        {job?.workType === "Internship" ? <Button variant="outlined" color="success" disabled={!studentData.isVerify}>Apply Intern</Button> : null}
                     </Box>
                     <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
                     <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Open Date</Typography>
-                            <Typography variant="h6">16/11/2023</Typography>
+                            <Typography variant="h6">Open Date</Typography>
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Close Date</Typography>
-                            <Typography variant="h6">16/01/2024</Typography>
+                            <Typography variant="h6">Close Date</Typography>
                         </Box>
 
                     </Box>
@@ -96,7 +89,7 @@ const JobDisplay: React.FC = () => {
                         <Typography variant="h6">Internship Program</Typography>
                         <List sx={{ mb: 2 }}>
                             <ListItem>
-                                <Link> <ListItemText primary={job?.company.name + " INTERNSHIP PROGRAM"}></ListItemText></Link>
+                                <Link href={job?.internshipPrograme}> <ListItemText primary={job?.company.name + " INTERNSHIP PROGRAM"}></ListItemText></Link>
                             </ListItem>
                         </List>
 
