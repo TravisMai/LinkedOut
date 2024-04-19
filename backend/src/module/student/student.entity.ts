@@ -43,7 +43,6 @@ export class Student extends commonAttribute {
   major: string;
 
   @Column({ nullable: true })
-  @IsNumber()
   @IsOptional()
   classCode: string;
 
@@ -75,36 +74,42 @@ export class Student extends commonAttribute {
 
   @Column({ type: 'jsonb', nullable: true })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => EducationDTO)
   education: EducationDTO[];
 
   @Column({ type: 'jsonb', nullable: true })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => WorkingHistoryDTO)
   workingHistory: WorkingHistoryDTO[];
 
   @Column({ type: 'jsonb', nullable: true })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CertificateDTO)
   certificate: CertificateDTO[];
 
   @Column({ type: 'jsonb', nullable: true })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => SkillDTO)
   skill: SkillDTO[];
 
   @Column({ type: 'jsonb', nullable: true })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => AdditionalInformationDTO)
   additionalInformation: AdditionalInformationDTO[];
 
   @Column({ type: 'jsonb', nullable: true })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ReferenceDTO)
   reference: ReferenceDTO[];

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
+// import UpdateProfile from './UpdateProfile.component';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import UpdatePhoto from './updatePhoto';
+import UpdateProfile from '../../company/UpdateProfile.component';
+import StudentProfile2 from '../../student/profile';
 
-export default function PhotoDialog({ state, onClose }: { state: boolean, onClose: () => void }) {
+export default function StudentDialog({ state, onClose }: { state: boolean, onClose: () => void }) {
     const handleClose = () => {
         onClose();
     };
@@ -21,7 +23,7 @@ export default function PhotoDialog({ state, onClose }: { state: boolean, onClos
                 >
                     <CloseIcon />
                 </IconButton>
-                <UpdatePhoto/>
+                <StudentProfile2/>
             </Dialog>
         </React.Fragment>
     );

@@ -18,9 +18,12 @@ import { getJwtToken } from '../../shared/utils/authUtils';
 
 const Navbar: React.FC = () => {
   const [studentEmail, setStudentEmail] = useState("");
+  const [studentStatus, setStudentStatus] = useState(false);
+  const [studentProcess, setStudentProcess] = useState("");
+  const [studentAvatar, setStudentAvatar] = useState("");
+
 
   // Fetch for student info
-
   const token = getJwtToken();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
@@ -34,6 +37,11 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     if (getStudentInfo.isSuccess) {
       setStudentEmail(getStudentInfo.data.data.email);
+      setStudentStatus(getStudentInfo.data.data.isVerify);
+      setStudentProcess(getStudentInfo.data.data.process);
+      setStudentAvatar(getStudentInfo.data.data.avatar);
+
+      
     }
   }, [getStudentInfo.isSuccess]);
 
@@ -120,8 +128,15 @@ const Navbar: React.FC = () => {
       </div>
       <div className="col-span-2 grid grid-cols-10 items-center justify-end">
         <div className='w-fit col-span-3 items-center mt-1'>
-          <Tag icon={<SyncOutlined spin />} color="processing" className='w-full overflow-hidden'>Processing
-          </Tag>
+          {
+            studentStatus === true ? (
+              <Tag icon={<CheckCircleOutlined />} color="success" className='w-full overflow-hidden'>Verified</Tag>
+            ) : (
+              <Tag icon={<ExclamationCircleOutlined />} color="warning" className='w-full overflow-hidden'>Not Verified</Tag>
+            )
+          }
+          {/* <Tag icon={<SyncOutlined spin />} color="processing" className='w-full overflow-hidden'>Processing</Tag> */}
+
         </div>
         <div className="h-10 w-full col-span-7 mx-1 pr-2 ">
           <Link to="/student/profile">
@@ -129,7 +144,7 @@ const Navbar: React.FC = () => {
               <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">{studentEmail}</p>
               <div>
                 <img
-                  src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
+                  src={studentAvatar}
                   className="w-8 h-8 rounded-full col-span-1"
                   alt="dp"
                 />

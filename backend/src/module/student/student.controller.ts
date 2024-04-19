@@ -46,8 +46,8 @@ export class StudentController {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
             const limitedData = StudentResponseDto.fromStudent(findMeResult);
-            await this.redisService.setObjectByKeyValue(`STUDENT:${decodedToken.id}`, limitedData, expireTimeOneHour);
-            return response.status(HttpStatus.OK).json(limitedData);
+            await this.redisService.setObjectByKeyValue(`STUDENT:${decodedToken.id}`, findMeResult, expireTimeOneHour);
+            return response.status(HttpStatus.OK).json(findMeResult);
         } catch (error) {
             return response.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }

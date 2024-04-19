@@ -31,7 +31,7 @@ export class Company extends commonAttribute {
     description: string;
 
     @Column({ nullable: true })
-    @IsNumber()
+    // @IsNumber()
     @IsOptional()
     @Transform(({ value }) => parseInt(value))
     taxId: number;

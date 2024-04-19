@@ -42,56 +42,30 @@ type ErrorType = {
 }
 
 interface updateForm {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  newPassword: string;
+  myfile: string;
 }
 
-const countryCode = [
-  {
-    label: 'VNM',
-    numberPrefix: '+84',
-  },
-  {
-    label: 'AUS',
-    numberPrefix: '+61',
-  },
-  {
-    label: 'USA',
-    numberPrefix: '+1',
-  },
-  {
-    label: 'JPN',
-    numberPrefix: '+81',
-  },
-];
+export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
+  const handleClose = () => {
+    onClose();
+  };
 
-export default function UpdatePhoto() {
-  const navigate = useNavigate();
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [studentId, setStudentId] = useState('');
+  const [filePreview, setFilePreview] = useState<string | null>(null); // State to store file preview URL
 
-  const [country, countryChange] = useState(0);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    newPassword: '',
-    phoneNumber: '',
+    myfile: '',
   });
 
   // Get jwt token
-  
-
   const token = getJwtToken();
 
   // Fetch current information
   useQuery({
-    queryKey: "currentInfo",
+    queryKey: "studentInfo",
     queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -99,53 +73,37 @@ export default function UpdatePhoto() {
     }),
     onSuccess: (data) => {
       console.log(data);
+
       // Set student id
       setStudentId(data.data.id);
 
-      // Set form data
-      if (formData.name === '' && formData.email === '' && formData.phoneNumber === '')
-        setFormData({
-          name: data.data.name,
-          email: data.data.email,
-          phoneNumber: data.data.phoneNumber,
-          password: '',
-          newPassword: '',
-        });
-    },
+    }
   });
-
-
-  // Handle input change
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Handle country selection change
-  const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
-    countryChange(selectedCountryIndex);
-  };
 
   // Mutation to send form data to server    
   const mutation = useMutation<ResposeType, ErrorType, updateForm>({
-    mutationFn: (updateForm) => axios.put(`http://localhost:4000/api/v1/student/${studentId}`, updateForm, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }),
+    mutationFn: (formData) => {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null) {
+          if (key === 'myfile') {
+            formDataToSend.append(key, value as File); // Append file to FormData
+          }
+        }
+      });
+      return axios.put(`http://localhost:4000/api/v1/student/${studentId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Set content type for file upload
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
     onSuccess: (data) => {
       console.log(data);
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false); // Hide the success message
-        navigate('/student'); // Navigate to the next screen
-      }, 5000);
+      handleClose();
     },
     onError: () => {
       console.log(mutation.error);
@@ -153,33 +111,40 @@ export default function UpdatePhoto() {
       setShowError(true);
     },
     onMutate: () => {
-      console.log(token);
       setSending(true);
       setShowError(false);
     }
   }
   );
 
-  // Function to store JWT token in cookie
-  const storeJwtToken = (token: string) => {
-    document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-  };
-
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(formData);
-    // Add country code to phone number
-    if (formData.phoneNumber.charAt(0) !== '0')
-      formData.phoneNumber = '0' + formData.phoneNumber;
-
     mutation.mutate(formData);
   };
+
+  // Handle file input change
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; // Get the first file from the input
+    setFormData((prevData: any) => ({
+      ...prevData,
+      myfile: file, // Update the myfile field with the selected file
+    }));
+    if (file) {
+      setFilePreview(URL.createObjectURL(file)); // Generate preview URL for the selected file
+    } else {
+      setFilePreview(null); // Clear preview if no file is selected
+    }
+  };
+
+
 
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs" >
+                                
+        <Container component="main" style={{width: "600px"}}>
           <CssBaseline />
           <Box
             sx={{
@@ -190,7 +155,7 @@ export default function UpdatePhoto() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Change Profile Photo
+              Update Profile Photo
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -198,20 +163,21 @@ export default function UpdatePhoto() {
                   <TextField
                     required
                     fullWidth
-                    id="photo"
+                    id="myfile"
                     type="file"
                     // Image only
-                    name="email"
-                    autoComplete="email"
-                    onChange={handleInputChange}
+                    name="myfile"
+                    autoComplete="myfile"
+                    onChange={handleFileChange}
+                    style={{width: "500px"}}
                   />
                 </Grid>
               </Grid>
-                {/* Display current photo */}
-                <img
-                  src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
-                  className="my-3"
-                />
+              {/* Display current photo */}
+              <img
+                src={filePreview}
+                className="my-3"
+              />
 
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                 <LoadingButton

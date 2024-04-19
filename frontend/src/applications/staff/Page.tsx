@@ -48,6 +48,7 @@ import GradingIcon from '@mui/icons-material/Grading';
 import DescriptionIcon from '@mui/icons-material/Description';
 import UploadIcon from '@mui/icons-material/Upload';
 import { getJwtToken, validateJwtToken } from '../../shared/utils/authUtils';
+import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 
 
 type ResponseType = {
@@ -237,6 +238,22 @@ export default function StaffPage() {
     }
 
 
+    const [staffName, setStaffName] = React.useState("");
+
+    // Fetch self name
+    useQuery({
+        queryKey: "staff",
+        queryFn: () => axios.get("http://localhost:4000/api/v1/staff/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            console.log(data);
+            setStaffName(data.data.name);
+        }
+    });
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
@@ -268,7 +285,11 @@ export default function StaffPage() {
                         >
                             {value}
                         </Typography>
+                        <Typography variant="h6" color="inherit" noWrap className='pr-2'>
+                            {staffName}
+                        </Typography>
                         <IconButton color="inherit">
+
                             <Badge badgeContent={4} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
@@ -284,6 +305,8 @@ export default function StaffPage() {
                             px: [1],
                         }}
                     >
+                        <img src={Logo} alt='Home Page' className='h-11 mx-auto ml-4 rounded-lg' />
+                        <Typography variant="h6" >Admin Portal</Typography>
                         <IconButton onClick={toggleDrawer}>
                             <ChevronLeftIcon />
                         </IconButton>

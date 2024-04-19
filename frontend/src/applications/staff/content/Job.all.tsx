@@ -32,43 +32,16 @@ function createData(
 }
 
 
-type companyType = {
-    "id": string,
-    "title": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-    "workField": string,
-    "address": string,
-    "website": null,
-    "descriptions": {
-        "responsibilities": string,
-        "detailed": string
-    }
-    "taxId": null,
-    "company": {
-        "id": string,
-        "name": string,
-        "representative": string,
-        "phone": string,
-        "email": string,
-        "address": string,
-        "website": null,
-        "avatar": string,
-        "taxId": null
-    }
-}
-
 export default function AllJob() {
 
-    const [allCompany, setAllCompany] = useState<companyType[]>([]);
+    const [allJob, setAllJob] = useState<jobType[]>([]);
 
     // Get jwt token
     
 
     const token = getJwtToken();
 
-    // Fetch all companies
+    // Fetch all jobs
     useQuery({
         queryKey: "allJobs",
         queryFn: () => axios.get("http://localhost:4000/api/v1/job", {
@@ -78,7 +51,7 @@ export default function AllJob() {
         }),
         onSuccess: (data) => {
             console.log(data.data);
-            setAllCompany(data.data);
+            setAllJob(data.data);
         }
     });
 
@@ -119,7 +92,7 @@ export default function AllJob() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allCompany.map((row, index) => (
+                            {allJob.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
