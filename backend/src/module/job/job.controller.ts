@@ -91,8 +91,8 @@ export class JobController {
                     return response.status(HttpStatus.NOT_FOUND).json({ message: 'Job not found!' });
                 }
                 const limitedData = JobResponseDto.fromJob(job);
-                await this.redisService.setObjectByKeyValue(`JOB:${id}`, limitedData, expireTimeOneHour);
-                return response.status(HttpStatus.OK).json(limitedData);
+                await this.redisService.setObjectByKeyValue(`JOB:${id}`, job, expireTimeOneHour);
+                return response.status(HttpStatus.OK).json(job);
             }
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
