@@ -10,7 +10,6 @@ import { RolesGuard } from 'src/common/guards/role.guard';
 import { AuthService } from 'src/module/auth/auth.service';
 import { CompanyService } from '../company/company.service';
 import { RedisService } from 'src/module/redis/redis.service';
-import { StudentResponseDto } from './dto/studentResponse.dto';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
@@ -45,7 +44,6 @@ export class StudentController {
             if (!findMeResult) {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
-            const limitedData = StudentResponseDto.fromStudent(findMeResult);
             await this.redisService.setObjectByKeyValue(`STUDENT:${decodedToken.id}`, findMeResult, expireTimeOneHour);
             return response.status(HttpStatus.OK).json(findMeResult);
         } catch (error) {
@@ -68,9 +66,8 @@ export class StudentController {
                 if (!findAllResult || findAllResult.length === 0) {
                     return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student list is empty!' });
                 }
-                const limitedData = StudentResponseDto.fromStudentArray(findAllResult);
-                await this.redisService.setObjectByKeyValue(StudentListKey, limitedData, 120);
-                return response.status(HttpStatus.OK).json(limitedData);
+                await this.redisService.setObjectByKeyValue(StudentListKey, findAllResult, 120);
+                return response.status(HttpStatus.OK).json(findAllResult);
             }
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
@@ -94,9 +91,8 @@ export class StudentController {
                 if (!student) {
                     return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
                 }
-                const limitedData = StudentResponseDto.fromStudent(student);
-                await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, limitedData, expireTimeOneHour);
-                return response.status(HttpStatus.OK).json(limitedData);
+                await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, student, expireTimeOneHour);
+                return response.status(HttpStatus.OK).json(student);
             }
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
@@ -116,10 +112,9 @@ export class StudentController {
                 student.avatar = await this.azureBlobService.upload(file);
             }
             const newCreateStudent = await this.studentService.create(student);
-            const limitedData = StudentResponseDto.fromStudent(newCreateStudent);
-            await this.redisService.setObjectByKeyValue(`STUDENT:${newCreateStudent.id}`, limitedData, expireTimeOneHour);
+            await this.redisService.setObjectByKeyValue(`STUDENT:${newCreateStudent.id}`, newCreateStudent, expireTimeOneHour);
             const token = this.authService.generateJwtToken(newCreateStudent);
-            return response.status(HttpStatus.CREATED).json({ student: limitedData, token });
+            return response.status(HttpStatus.CREATED).json({ student: newCreateStudent, token });
         } catch (error) {
             return response.status(error.status).json({ message: error.message });
         }
@@ -137,11 +132,6 @@ export class StudentController {
             }
             const findStudent = await this.studentService.findOne(id);
             const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
-            // if (
-            //     // !(await bcrypt.compare(student.password, findStudent.password)) || 
-            // id !== decodedToken.id) {
-            //     return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
-            // }
             if (file) {
                 findStudent.avatar && await this.azureBlobService.delete(findStudent.avatar.split('/').pop());
                 student.avatar = await this.azureBlobService.upload(file);
@@ -150,9 +140,8 @@ export class StudentController {
             if (!updateStudent) {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
-            const limitedData = StudentResponseDto.fromStudent(updateStudent);
-            await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, limitedData, expireTimeOneHour);
-            return response.status(HttpStatus.OK).json(limitedData);
+            await this.redisService.setObjectByKeyValue(`STUDENT:${id}`, updateStudent, expireTimeOneHour);
+            return response.status(HttpStatus.OK).json(updateStudent);
         } catch (error) {
             console.log(error);
             return response.status(error.status).json({ message: error.message });
