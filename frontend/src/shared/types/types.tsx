@@ -111,6 +111,18 @@ type postDescriptionType = {
     "benefits": string[]
 }
 
+
+
+type jobApplicationType = {
+    "id": string,
+    "student": studentType,
+    "job": jobType,
+    "status": string,
+    "created": Date,
+    "updated": Date
+}
+
+
 type ErrorType = {
     response: {
         data: {

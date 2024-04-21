@@ -185,7 +185,7 @@ const data = {
     ],
 }
 
-type ResponeType = {
+type ResponseType = {
     data: {}
 }
 
@@ -239,7 +239,7 @@ export default function StudentProfile() {
 
     // Logout
     // Mutation to logout
-    const mutation = useMutation<ResponeType, ErrorType>({
+    const mutation = useMutation<ResponseType, ErrorType>({
         mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
             headers: {
                 Authorization: `Bearer ${token}`,

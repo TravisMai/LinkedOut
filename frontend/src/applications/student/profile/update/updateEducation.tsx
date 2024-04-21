@@ -18,7 +18,7 @@ import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter } from '@mui/icons-
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         education: educationType[];
         id: string;
@@ -83,7 +83,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
     }, []);
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
+    const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
             return axios.put(`http://localhost:4000/api/v1/student/${studentId}`, formData, {
                 headers: {
