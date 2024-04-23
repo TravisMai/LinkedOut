@@ -13,7 +13,9 @@ import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter } from '@mui/icons-material';
+import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter, WorkHistory } from '@mui/icons-material';
+import DividerWithText from '../../../../shared/components/DividerWithText';
+import { Divider } from 'antd';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -145,61 +147,65 @@ export default function UpdateWorkingHistory({ onClose }: { onClose: () => void 
                         <Box component="form" onSubmit={handleSubmit} sx={{ mx: 2, mt: 5, mb: 2 }}>
                             <Grid container spacing={2} justifyContent="center">
                                 {formData.workingHistory?.map((item: workingHistoryType, index) => (
-                                    <Grid container direction='row' spacing={1} className='mt-3 mx-5 mb-6'>
-                                        <Grid item xs={3}>
+                                    <>
+                                        <Grid container direction='row' spacing={1} className='mt-3 mx-5 mb-6'>
+                                            <Grid item xs={11} spacing={2} className='space-y-3'>
+                                                <TextField
+                                                    fullWidth
+                                                    required
+                                                    id={`${index}-company`}
+                                                    name='company'
+                                                    type="string"
+                                                    label="Company"
+                                                    value={item.company}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <TextField
+                                                    fullWidth
+                                                    id={`${index}-position`}
+                                                    type="string"
+                                                    label="Position"
+                                                    value={item.position}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <TextField
+                                                    fullWidth
+                                                    id={`${index}-time`}
+                                                    type="string"
+                                                    label="Time"
+                                                    value={item.time}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <TextField
+                                                    fullWidth
+                                                    id={`${index}-task`}
+                                                    type="string"
+                                                    label="Task"
+                                                    value={item.task}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={1}>
 
-                                            {/* Delete current field */}
-                                            <LoadingButton
-                                                loading={sending}
-                                                variant="outlined"
-                                                color='error'
-                                                onClick={() => {
-                                                    const updatedFormData = { ...formData };
-                                                    updatedFormData.workingHistory.splice(index, 1);
-                                                    setFormData(updatedFormData);
-                                                }}
-                                                sx={{ mt: 1, mb: 2 }}
-                                            >
-                                                <Delete /> Delete
-                                            </LoadingButton>
+                                                {/* Delete current field */}
+                                                <LoadingButton
+                                                    loading={sending}
+                                                    variant="outlined"
+                                                    color='error'
+                                                    onClick={() => {
+                                                        const updatedFormData = { ...formData };
+                                                        updatedFormData.workingHistory.splice(index, 1);
+                                                        setFormData(updatedFormData);
+                                                    }}
+                                                >
+                                                    <Delete />
+                                                </LoadingButton>
+                                            </Grid>
+                                            <DividerWithText  className='mt-5' text="" muiElementIcon={<WorkHistory/>}/>
+
                                         </Grid>
-                                        <Grid item xs={9} spacing={2} className='space-y-3'>
-                                            <TextField
-                                                fullWidth
-                                                required
-                                                id={`${index}-company`}
-                                                name='company'
-                                                type="string"
-                                                label="Company"
-                                                value={item.company}
-                                                onChange={handleInputChange}
-                                            />
-                                            <TextField
-                                                fullWidth
-                                                id={`${index}-position`}
-                                                type="string"
-                                                label="Position"
-                                                value={item.position}
-                                                onChange={handleInputChange}
-                                            />
-                                            <TextField
-                                                fullWidth
-                                                id={`${index}-time`}
-                                                type="string"
-                                                label="Time"
-                                                value={item.time}
-                                                onChange={handleInputChange}
-                                            />
-                                            <TextField
-                                                fullWidth
-                                                id={`${index}-task`}
-                                                type="string"
-                                                label="Task"
-                                                value={item.task}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Grid>
-                                    </Grid>
+                                    </>
+
                                 ))}
                             </Grid>
                             {/* Add new workingHistory */}

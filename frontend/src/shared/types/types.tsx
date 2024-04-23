@@ -100,7 +100,7 @@ type jobType = {
     "descriptions": postDescriptionType,
     "created": Date,
     "updated": Date,
-    "expired": Date
+    "expireDate": Date
 }
 
 type postDescriptionType = {
@@ -110,6 +110,18 @@ type postDescriptionType = {
     "preferredQualifications": string[],
     "benefits": string[]
 }
+
+
+
+type jobApplicationType = {
+    "id": string,
+    "student": studentType,
+    "job": jobType,
+    "status": string,
+    "created": Date,
+    "updated": Date
+}
+
 
 type ErrorType = {
     response: {

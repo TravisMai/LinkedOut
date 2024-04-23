@@ -35,26 +35,62 @@ type ErrorType = {
 const LeftSidebar: React.FC = () => {
   const navigate = useNavigate();
   const [showContent, setShowContent] = useState(false);
-  const [studentName, setStudentName] = useState("");
-
-  // Fetch for student info
-  
-
   const token = getJwtToken();
 
-  // Fetch student info
-  useQuery({
-    queryKey: "student",
+
+  // Fetch for student info
+  // Get Student information
+  const [studentData, setStudentData] = React.useState<studentType>([]);
+  const getStudentInfo = useQuery({
+    queryKey: "studentInfo",
     queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }),
-    onSuccess: (data) => {
-      console.log(data);
-      setStudentName(data.data.name);
-    }
+    })
   });
+  useEffect(() => {
+    if (getStudentInfo.isSuccess) {
+      setStudentData(getStudentInfo.data.data);
+      // console.log(getStudentInfo.data.data.id)
+    }
+  }, [getStudentInfo.isSuccess]);
+
+  useEffect(() => {
+    if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
+      setStudentData(getStudentInfo.data.data);
+    }
+  }, [getStudentInfo.isSuccess]);
+
+
+  // Get all applied jobs
+  const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
+  const fetchAppliedJobs = (studentId: string) => {
+    axios.get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => {
+        console.log(response.data);
+        setAppliedJobs(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching applied jobs:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (studentData && studentData.id) {
+      fetchAppliedJobs(studentData.id);
+    }
+  }, [studentData]);
+
+  // Count jobs with status
+  const countAppliedJobs = appliedJobs?.filter(job => job.status === "Applied").length;
+  const countApprovedJobs = appliedJobs?.filter(job => job.status === "Approved").length;
+  const countPendingJobs = appliedJobs?.filter(job => job.status === "Pending").length;
+  const countRejectedJobs = appliedJobs?.filter(job => job.status === "Rejected").length;
 
 
   // Mutation to logout
@@ -111,28 +147,28 @@ const LeftSidebar: React.FC = () => {
             className="w-full h-24 rounded-t-lg"
           />
           <img
-            src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
+            src={studentData.avatar}
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>
         <Container className='pb-2 pt-2'>
-          <Typography variant="h5" component="div" className='text-center'> {token ? studentName : <div>Not Logged In</div>}</Typography>
-          <Typography variant="body2" className='text-center text-gray-400'>Computer Engineering Student</Typography>
+          <Typography variant="h5" component="div" className='text-center'> {token ? studentData.name : <div>Not Logged In</div>}</Typography>
+          <Typography variant="body2" className='text-center text-gray-400'>{studentData.major} Student </Typography>
         </Container>
         <List component="nav" aria-label="mailbox folders" hidden={showContent}>
           <Divider />
           <ListItem button secondaryAction={
-            <Typography>23</Typography>
+            <Typography>{countAppliedJobs}</Typography>
           }>
-            <ListItemText primary="Applied" >
+            <ListItemText primary="Jobs Applied" >
             </ListItemText>
           </ListItem>
           <ListItem button secondaryAction={
-            <Typography>2</Typography>
+            <Typography>{countApprovedJobs}</Typography>
           }>
-            <ListItemText primary="Approved" />
+            <ListItemText primary="Jobs Approved" />
           </ListItem>
-          <ListItem button secondaryAction={
+          {/* <ListItem button secondaryAction={
             <Typography>153</Typography>
           }>
             <ListItemText primary="Message" />
@@ -141,7 +177,7 @@ const LeftSidebar: React.FC = () => {
             <Typography>512</Typography>
           }>
             <ListItemText primary="Following" />
-          </ListItem>
+          </ListItem> */}
         </List>
       </div>
       {/* {!showContent && (

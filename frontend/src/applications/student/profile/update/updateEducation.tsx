@@ -18,7 +18,7 @@ import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter } from '@mui/icons-
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         education: educationType[];
         id: string;
@@ -83,7 +83,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
     }, []);
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
+    const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
             return axios.put(`http://localhost:4000/api/v1/student/${studentId}`, formData, {
                 headers: {
@@ -129,7 +129,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
-                <Container component="main" style={{ width: "600px" }}>
+                <Container component="main" style={{ width: "" }}>
                     <CssBaseline />
                     <Box
                         sx={{
@@ -142,7 +142,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                         <Typography component="h1" variant="h5">
                             Update Education
                         </Typography>
-                        <Box component="form" onSubmit={handleSubmit} sx={{ mx: 2, mt: 5, mb: 2 }}>
+                        <Box component="form" onSubmit={handleSubmit} sx={{ mx: 4, mt: 5, mb: 2 }}>
                             <Grid container spacing={2} justifyContent="center">
                                 {formData.education?.map((item: educationType, index) => (
                                     <Grid container direction='row' spacing={1} className='mt-3 mx-5 mb-6'>

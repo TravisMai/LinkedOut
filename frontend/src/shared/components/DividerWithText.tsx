@@ -13,11 +13,9 @@ const DividerWithText = (props: DividerWithTextProps) => {
     return (
         <div className={`w-full flex items-center justify-between ${noText ? "gap-0" : "gap-3"} ${className} `}>
             <hr className={`h-[1px] flex-1 bg-gray-300 ${dividerClassname} ${noText && "w-full"}`} />
-            {text && (
-                <span className={`${textClassname}`}>
-                    {text} {muiElementIcon}
-                </span>
-            )}
+            <span className={`${textClassname}`}>
+                {text} {muiElementIcon}
+            </span>
             <hr className={`h-[1px] flex-1 bg-gray-300 ${dividerClassname}`} />
         </div>
     );

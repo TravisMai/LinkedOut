@@ -32,6 +32,7 @@ export class JobApplicantsRepository extends Repository<JobApplicants> {
     async findJobApplicantsByCandidateId(candidateId: string): Promise<JobApplicants[]> {
         return await this.createQueryBuilder('jobApplicants')
             .leftJoinAndSelect('jobApplicants.job', 'job')
+            .leftJoinAndSelect('job.company', 'company') // Left join with the company entity
             .leftJoinAndSelect('jobApplicants.student', 'student')
             .where('student.id = :candidateId', { candidateId })
             .getMany();

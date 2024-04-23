@@ -1,22 +1,25 @@
-import { Apartment, Check, Email, Event, Search, Work } from '@mui/icons-material';
+import { Apartment, Check, Email, Event, PriorityHigh, Search, Work } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Alert, Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
+import ApplyDialog from './applyDialog';
 
 
 const JobDisplay: React.FC = () => {
-    const { jobId } = useParams();
-    const [job, setJob] = useState<jobType>();
 
     // Get jwt token
     const token = getJwtToken();
 
-    // Fetch all jobs
+    const { jobId } = useParams();
+    const [job, setJob] = useState<jobType>();
+
+
+    // Fetch job information
     useQuery({
         queryKey: "thisJob",
         queryFn: () => axios.get("http://localhost:4000/api/v1/job/" + jobId, {
@@ -28,18 +31,55 @@ const JobDisplay: React.FC = () => {
             console.log(data.data);
             setJob(data.data);
         }
-    });
+    },
 
+    );
+
+
+    // Handle apply button
     const [loading, setLoading] = React.useState(false);
     const [applied, setApplied] = React.useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     function handleClick() {
+        // handleOpenDialog();
         setLoading(true);
+        // event.preventDefault();  
+
         setTimeout(() => {
-            setLoading(false);
-            !applied ? setApplied(true) : setApplied(false);
-        }, 2000);
+            mutation.mutate();
+            // setLoading(false);
+            // !applied ? setApplied(true) : setApplied(false);
+        }, 1000);
     }
+
+    const mutation = useMutation<ResponseType, ErrorType>({
+        mutationFn: () => {
+            return axios.post(`http://localhost:4000/api/v1/job_applicants/${jobId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+        },
+        onSuccess: (data) => {
+            setLoading(false);
+            setShowError(false);
+            setShowSuccess(true);
+            setApplied(true);
+            // handleClose();
+        },
+        onError: () => {
+            console.log(mutation.error);
+            setLoading(false);
+            setShowError(true);
+        },
+        onMutate: () => {
+            // setLoading(true);
+            // setShowError(false);
+        }
+    }
+    );
 
     // Get Student information
     const [studentData, setStudentData] = React.useState<studentType>([]);
@@ -54,9 +94,68 @@ const JobDisplay: React.FC = () => {
     useEffect(() => {
         if (getStudentInfo.isSuccess) {
             setStudentData(getStudentInfo.data.data);
+            // console.log(getStudentInfo.data.data.id)
         }
     }, [getStudentInfo.isSuccess]);
 
+    useEffect(() => {
+        if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
+            setStudentData(getStudentInfo.data.data);
+        }
+    }, [getStudentInfo.isSuccess]);
+
+    // Check submitted
+    // Get all applied jobs
+    const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
+    const fetchAppliedJobs = (studentId: string) => {
+        axios.get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(response => {
+            console.log(response.data);
+            setAppliedJobs(response.data);
+        })
+        .catch(error => {
+            console.error("Error fetching applied jobs:", error);
+        });
+    };
+
+    useEffect(() => {
+        if (studentData && studentData.id) {
+            fetchAppliedJobs(studentData.id);
+        }
+    }, [studentData]);
+
+    // Check if student applied for the job
+    useEffect(() => {
+        if (appliedJobs && appliedJobs.length > 0) {
+            appliedJobs.forEach((job) => {
+                if (job.job.id === jobId) {
+                    setApplied(true);
+                }
+            });
+        }
+    }, [appliedJobs]);
+
+    // // Handle dialog
+    // const [openDialog, setOpenDialog] = React.useState(false);
+    // const handleOpenDialog = () => {
+    //     setOpenDialog(true);
+    // };
+
+    // const handleCloseDialog = () => {
+    //     setOpenDialog(false);
+    //     setLoading(false);
+    //         // !applied ? setApplied(true) : setApplied(false);
+    // }
+
+    // const handleExit = () => {
+    //     setOpenDialog(false);
+    //     setLoading(false);
+    //     //     !applied ? setApplied(true) : setApplied(false);
+    // }
 
     return (
         <Container>
@@ -64,18 +163,21 @@ const JobDisplay: React.FC = () => {
                 <Grid item xs={7}>
                     <Box display="flex" gap={3}>
                         <Typography variant="h4">{job?.title}</Typography>
-                        <LoadingButton variant="outlined" color="primary" onClick={handleClick} loading={loading} disabled={!studentData.isVerify}>{!applied ? "Apply" : <Check />}</LoadingButton>
+                        <LoadingButton variant="outlined" color={showError ? "error" : "primary"} onClick={handleClick} loading={loading} disabled={!studentData.isVerify}>{!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}</LoadingButton>
                         {job?.workType === "Internship" ? <Button variant="outlined" color="success" disabled={!studentData.isVerify}>Apply Intern</Button> : null}
+                        {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+                        {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Apply successfully</Alert>} */}
+
                     </Box>
                     <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
                     <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Open Date</Typography>
-                            <Typography variant="h6">Open Date</Typography>
+                            <Typography variant="h6">{job?.expireDate}</Typography>
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Close Date</Typography>
-                            <Typography variant="h6">Close Date</Typography>
+                            <Typography variant="h6">{job?.expireDate}</Typography>
                         </Box>
 
                     </Box>
@@ -169,7 +271,7 @@ const JobDisplay: React.FC = () => {
                 </Grid>
 
             </Grid>
-
+            {/* <ApplyDialog state={openDialog} onExit={handleExit} onClose={handleCloseDialog} /> */}
 
 
         </Container >

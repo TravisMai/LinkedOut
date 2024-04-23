@@ -50,7 +50,7 @@ export default function ContentCard({ job }: { job: jobType }) {
           <div className='flex flex-row'>
             <div className='mr-4 basis-1/6 center'>
               <img
-                src={"/src/shared/assets/" + job.company.avatar}
+                src={job.company.avatar}
                 className='w-full h-3/4 mt-3 object-cover rounded-xl'
                 alt="company avatar" />
             </div>

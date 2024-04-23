@@ -199,7 +199,7 @@ export default function StudentSignUp() {
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
-                <Grid container component="main" sx={{ height: 'auto' }} className='justify-center items-center my-auto absolute top-0 bottom-0 left-0 right- bg-[url(https://hcmut.edu.vn/img/carouselItem/36901269.jpeg?t=36901270)] bg-cover'>
+                <Grid container component="main" className='justify-center items-center h-full my-auto min-h-screen bg-[url(https://hcmut.edu.vn/img/carouselItem/36901269.jpeg?t=36901270)] bg-cover'>
                     <CssBaseline />
                     <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className='rounded-xl p-10'>
                         <Container component="main" maxWidth="xs" >
