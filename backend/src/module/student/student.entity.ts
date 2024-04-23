@@ -9,6 +9,7 @@ import { CertificateDTO } from "./dto/certificate.dto";
 import { SkillDTO } from "./dto/skill.dto";
 import { AdditionalInformationDTO } from "./dto/additionalInfo.dto";
 import { ReferenceDTO } from "./dto/reference.dto";
+import { ResumeDTO } from "./dto/resume.dto";
 
 @Entity()
 export class Student extends commonAttribute {
@@ -46,10 +47,12 @@ export class Student extends commonAttribute {
   @IsOptional()
   classCode: string;
 
-  @Column('text', { array: true, nullable: true })
-  @IsString({ each: true })
+  @Column({ type: 'jsonb', nullable: true })
+  @IsArray()
   @IsOptional()
-  resume: string[];
+  @ValidateNested({ each: true })
+  @Type(() => ResumeDTO)
+  resume: ResumeDTO[];
 
   @Column({ default: true })
   isActive: boolean;

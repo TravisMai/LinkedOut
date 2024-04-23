@@ -1,4 +1,7 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsArray } from "class-validator";
+import { Type } from "class-transformer";
+import { ValidateNested } from "class-validator";
+import { ResumeDTO } from "./resume.dto";
 
 export class StudentUpdateDto {
     @IsString()
@@ -28,4 +31,15 @@ export class StudentUpdateDto {
     @IsBoolean()
     @IsOptional()
     isActive: boolean;
+
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    deleteResumeID: string[];
+
+    @IsArray()
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => ResumeDTO)
+    resume: ResumeDTO[];
 }
