@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getJwtToken } from '../../../shared/utils/authUtils';
+import { Link } from 'react-router-dom';
 
 type companyType = {
   "id": string,
@@ -22,7 +23,7 @@ const RightSidebar: React.FC = () => {
   const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
   // Get jwt token
-  
+
 
   const token = getJwtToken();
 
@@ -52,17 +53,19 @@ const RightSidebar: React.FC = () => {
         <ul className="w-full text-gray-600">
           {allCompany
             .map((row, idx) => (
-              <li
-                key={idx}
-                className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
-              >
-                <img
-                  className="w-8 h-8 rounded-full"
-                  src={row.avatar}
-                  alt="user"
-                />
-                <p className="text-sm font-semibold">{row.name}</p>
-              </li>
+              <Link to={`/student/companies/${row.id}`}>
+                <li
+                  key={idx}
+                  className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
+                >
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={row.avatar}
+                    alt="user"
+                  />
+                  <p className="text-sm font-semibold">{row.name}</p>
+                </li>
+              </Link>
             ))}
         </ul>
       </div>

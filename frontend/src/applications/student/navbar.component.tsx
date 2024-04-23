@@ -15,6 +15,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Button } from '@mui/material';
 import { getJwtToken } from '../../shared/utils/authUtils';
+import { BusinessOutlined, HomeOutlined, WorkOutline } from '@mui/icons-material';
 
 const Navbar: React.FC = () => {
   const [studentEmail, setStudentEmail] = useState("");
@@ -66,16 +67,16 @@ const Navbar: React.FC = () => {
         <Link to="/student">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
-              <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
+              {/* <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
                 99+
-              </div>
+              </div> */}
               <div
                 className={`${pathName === '' || undefined
                   ? 'text-primary'
                   : 'text-gray-400'
                   }`}
               >
-                <Home size={30} />
+                <HomeOutlined fontSize='large' />
               </div>
             </div>
           </div>
@@ -83,29 +84,29 @@ const Navbar: React.FC = () => {
         <Link to="/student/jobs">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
-              <div className="absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
+              {/* <div className="absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
                 99+
-              </div>
+              </div> */}
               <div
                 className={`${pathName === 'watch' ? 'text-primary' : 'text-gray-400'
                   }`}
               >
-                <Briefcase size={30} />
+                <WorkOutline fontSize='large' />
               </div>
             </div>
           </div>
         </Link>
-        <Link to="/student/message">
+        <Link to="/student/companies">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
-              <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
+              {/* <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
                 99+
-              </div>
+              </div> */}
               <div
                 className={`${pathName === 'marketplace' ? 'text-primary' : 'text-gray-400'
                   }`}
               >
-                <MessagesSquare size={30} />
+                <BusinessOutlined fontSize='large' />
               </div>
             </div>
           </div>

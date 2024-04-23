@@ -6,29 +6,6 @@ import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { OpenInNew } from '@mui/icons-material';
 
-type jobType = {
-    "id": string,
-    "company": {
-        "id": string,
-        "name": string,
-        "email": string,
-        "avatar": string,
-        "workField": string,
-        "address": string,
-    },
-    "title": string,
-    "image": null,
-    "salary": null,
-    "level": string,
-    "workType": string,
-    "quantity": number,
-    "descriptions": {
-        "aboutUs": string,
-        "responsibilities": [string],
-        "requirements": [string],
-    }
-}
-
 const JobDisplay: React.FC = () => {
     const mySectionRef = useRef<HTMLDivElement>(null);
 
