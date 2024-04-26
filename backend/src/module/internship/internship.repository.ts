@@ -19,4 +19,13 @@ export class InternshipRepository extends Repository<Internship> {
             .where('company.id = :companyId', { companyId })
             .getMany();
     }
+
+    // find all internships by student id
+    async findByCandidateId(studentId: string): Promise<Internship[]> {
+        return await this.createQueryBuilder('internship')
+            .leftJoinAndSelect('internship.jobApplicants', 'jobApplicants')
+            .leftJoinAndSelect('jobApplicants.student', 'student')
+            .where('student.id = :studentId', { studentId })
+            .getMany();
+    }
 }

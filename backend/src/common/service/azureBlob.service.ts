@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 
@@ -6,7 +5,6 @@ import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 export class AzureBlobService {
   azureConnection = process.env.CONNECTION_STRING;
   containerName = process.env.CONTAINER_NAME;
-
 
   getBlobClient(imageName: string): BlockBlobClient {
     const blobClientService = BlobServiceClient.fromConnectionString(this.azureConnection);
