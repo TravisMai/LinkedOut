@@ -42,4 +42,8 @@ export class StudentUpdateDto {
     @ValidateNested({ each: true })
     @Type(() => ResumeDTO)
     resume: ResumeDTO[];
+
+    @IsString()
+    @IsOptional()
+    resumeObjective: string;
 }
