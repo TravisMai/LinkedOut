@@ -12,10 +12,12 @@ import { CompanyService } from '../company/company.service';
 import { RedisService } from 'src/module/redis/redis.service';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { expireTimeOneDay, expireTimeOneHour, StudentListKey } from 'src/common/variables/constVariable';
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Res, HttpStatus, Req, UseInterceptors, UploadedFile, UploadedFiles } from '@nestjs/common';
 import { StudentUpdateDto } from './dto/studentUpdate.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
+import { v4 as uuidv4 } from 'uuid';
+import { ResumeDTO } from './dto/resume.dto';
 
 @Controller('student')
 export class StudentController {
@@ -122,20 +124,49 @@ export class StudentController {
 
     // update an student
     @Put(':id')
-    @AllowRoles(['staff', 'student'])
-    @UseGuards(JwtGuard, RolesGuard)
-    @UseInterceptors(FileInterceptor('myfile'))
-    async update(@UploadedFile() file: Express.Multer.File, @Param('id') id: string, @Body() student: StudentUpdateDto, @Req() req: Request, @Res() response: Response): Promise<Response> {
+    @UseInterceptors(FileFieldsInterceptor([
+        { name: 'avatar', maxCount: 1 },
+        { name: 'resume', maxCount: 1 }
+    ]))
+    async update(
+        @UploadedFiles() files: { avatar?: Express.Multer.File[], resume?: Express.Multer.File[] },
+        @Param('id') id: string,
+        @Body() student: StudentUpdateDto,
+        @Req() req: Request,
+        @Res() response: Response
+    ): Promise<Response> {
         try {
             if (!validate(id)) {
                 return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid UUID format' });
             }
             const findStudent = await this.studentService.findOne(id);
             const decodedToken = this.jwtService.decode(req.headers.authorization.split(' ')[1]) as { id: string };
-            if (file) {
+            if (files.avatar && files.avatar[0]) {
                 findStudent.avatar && await this.azureBlobService.delete(findStudent.avatar.split('/').pop());
-                student.avatar = await this.azureBlobService.upload(file);
+                student.avatar = await this.azureBlobService.upload(files.avatar[0]);
             }
+            const currentResumes = findStudent.resume || [];
+            if (student.deleteResumeID && student.deleteResumeID.length > 0) {
+                for (let i = currentResumes.length - 1; i >= 0; i--) {
+                    const resume = currentResumes[i];
+                    if (student.deleteResumeID.includes(resume.id)) {
+                        console.log(resume.url.split('/').pop());
+                        await this.azureBlobService.delete(resume.url.split('/').pop());
+                        currentResumes.splice(i, 1);
+                    }
+                }
+                delete student.deleteResumeID;
+                student.resume = currentResumes;
+            }
+            if (files.resume && files.resume[0]) {
+                const resumeUrl = await this.azureBlobService.upload(files.resume[0]);
+                const newResumeDto = new ResumeDTO();
+                newResumeDto.id = uuidv4();
+                newResumeDto.url = resumeUrl;
+                const updatedResumes = [...currentResumes, newResumeDto];
+                student.resume = updatedResumes;
+            }
+
             const updateStudent = await this.studentService.update(id, student);
             if (!updateStudent) {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { commonAttribute } from "src/common/entities/commonAttribute.entity";
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, Length, Min } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, Length, Min } from "class-validator";
 import { PostDescription } from "src/common/interfaces/postDescription.interface";
 import { Company } from "../company/company.entity";
 import { CompanyResponseDto } from "../company/dto/companyResponse.dto";
@@ -62,6 +62,13 @@ export class Job {
 
     @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
     updated: Date;
+
+    @Column({ default: true })
+    @IsBoolean()
+    isActive: boolean;
+
+    @Column({ type: "timestamp", nullable: true })
+    openDate: Date;
 
     @Column({ type: "timestamp", nullable: true })
     expireDate: Date;
