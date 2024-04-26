@@ -10,6 +10,8 @@ import { getJwtToken } from '../../../../shared/utils/authUtils';
 import ApplyDialog from './applyDialog';
 
 
+const processList = ["Intern", "Received"];
+
 const JobDisplay: React.FC = () => {
 
     // Get jwt token
@@ -17,6 +19,7 @@ const JobDisplay: React.FC = () => {
 
     const { jobId } = useParams();
     const [job, setJob] = useState<jobType>();
+
 
 
     // Fetch job information
@@ -39,22 +42,35 @@ const JobDisplay: React.FC = () => {
     // Handle apply button
     const [loading, setLoading] = React.useState(false);
     const [applied, setApplied] = React.useState(false);
+    const [appliedIntern, setAppliedIntern] = React.useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
 
-    function handleClick() {
+    function handleClickApply() {
         // handleOpenDialog();
         setLoading(true);
         // event.preventDefault();  
 
         setTimeout(() => {
-            mutation.mutate();
+            mutationApply.mutate();
             // setLoading(false);
             // !applied ? setApplied(true) : setApplied(false);
         }, 1000);
     }
 
-    const mutation = useMutation<ResponseType, ErrorType>({
+    function handleClickApplyInternship() {
+        // handleOpenDialog();
+        setLoading(true);
+        // event.preventDefault();  
+
+        setTimeout(() => {
+            mutationApplyInternship.mutate();
+            // setLoading(false);
+            // !applied ? setApplied(true) : setApplied(false);
+        }, 1000);
+    }
+
+    const mutationApply = useMutation<ResponseType, ErrorType>({
         mutationFn: () => {
             return axios.post(`http://localhost:4000/api/v1/job_applicants/${jobId}`, {}, {
                 headers: {
@@ -70,7 +86,34 @@ const JobDisplay: React.FC = () => {
             // handleClose();
         },
         onError: () => {
-            console.log(mutation.error);
+            console.log(mutationApply.error);
+            setLoading(false);
+            setShowError(true);
+        },
+        onMutate: () => {
+            // setLoading(true);
+            // setShowError(false);
+        }
+    }
+    );
+
+    const mutationApplyInternship = useMutation<ResponseType, ErrorType>({
+        mutationFn: () => {
+            return axios.post(`http://localhost:4000/api/v1/internship/${jobId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+        },
+        onSuccess: (data) => {
+            setLoading(false);
+            setShowError(false);
+            setShowSuccess(true);
+            setApplied(true);
+            // handleClose();
+        },
+        onError: () => {
+            console.log(mutationApplyInternship.error);
             setLoading(false);
             setShowError(true);
         },
@@ -94,7 +137,6 @@ const JobDisplay: React.FC = () => {
     useEffect(() => {
         if (getStudentInfo.isSuccess) {
             setStudentData(getStudentInfo.data.data);
-            // console.log(getStudentInfo.data.data.id)
         }
     }, [getStudentInfo.isSuccess]);
 
@@ -104,6 +146,25 @@ const JobDisplay: React.FC = () => {
         }
     }, [getStudentInfo.isSuccess]);
 
+    const [isInternship, setIsInternship] = useState(false);
+    const [isInternStudent, setIsInternStudent] = useState(false);
+
+    
+    // Check if student can apply for intern (check within a list)
+    useEffect(() => {
+        if (studentData && processList.includes(studentData.process)) {
+            setIsInternStudent(true);
+        }
+    }, [studentData]);
+
+    // Check if job type is internship
+    useEffect(() => {
+        if (job && job.workType === "Internship") {
+            setIsInternship(true);
+        }
+    }, [job]);
+
+    
     // Check submitted
     // Get all applied jobs
     const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
@@ -113,18 +174,36 @@ const JobDisplay: React.FC = () => {
                 Authorization: `Bearer ${token}`,
             },
         })
-        .then(response => {
-            console.log(response.data);
-            setAppliedJobs(response.data);
-        })
-        .catch(error => {
-            console.error("Error fetching applied jobs:", error);
-        });
+            .then(response => {
+                console.log(response.data);
+                setAppliedJobs(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching applied jobs:", error);
+            });
     };
+    // Get all internship applied
+    const [appliedInternships, setAppliedInternships] = React.useState<internshipType[]>();
+    const fetchAppliedIntern = (studentId: string) => {
+        axios.get(`http://localhost:4000/api/v1/job_applicants/internship/${studentId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then(response => {
+                console.log(response.data);
+                setAppliedInternships(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching applied jobs:", error);
+            });
+    };
+
 
     useEffect(() => {
         if (studentData && studentData.id) {
             fetchAppliedJobs(studentData.id);
+            // fetchAppliedIntern(studentData.id);
         }
     }, [studentData]);
 
@@ -137,7 +216,18 @@ const JobDisplay: React.FC = () => {
                 }
             });
         }
-    }, [appliedJobs]);
+    }, [applied]);
+
+    // Check if student applied for intern
+    useEffect(() => {
+        if (appliedInternships && appliedInternships.length > 0) {
+            appliedInternships.forEach((intern) => {
+                if (intern.jobApplicants.job.id === jobId) {
+                    setAppliedIntern(true);
+                }
+            });
+        }
+    }, [appliedIntern]);
 
     // // Handle dialog
     // const [openDialog, setOpenDialog] = React.useState(false);
@@ -163,21 +253,23 @@ const JobDisplay: React.FC = () => {
                 <Grid item xs={7}>
                     <Box display="flex" gap={3}>
                         <Typography variant="h4">{job?.title}</Typography>
-                        <LoadingButton variant="outlined" color={showError ? "error" : "primary"} onClick={handleClick} loading={loading} disabled={!studentData.isVerify}>{!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}</LoadingButton>
-                        {job?.workType === "Internship" ? <Button variant="outlined" color="success" disabled={!studentData.isVerify}>Apply Intern</Button> : null}
+                        <LoadingButton variant="outlined" color={showError ? "error" : "primary"} onClick={handleClickApply} loading={loading} disabled={!studentData.isVerify}>{!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}</LoadingButton>
+                        {isInternship && isInternStudent && <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData.isVerify}>{!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}</LoadingButton>}
                         {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                         {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Apply successfully</Alert>} */}
 
                     </Box>
-                    <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
-                    <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
+                    {isInternship &&
+                        <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic', color:'green', textAlign:'center', mr:10 }}>    Job avaiable for internship    </Typography>
+                    }
+                    <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ my: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Open Date</Typography>
-                            <Typography variant="h6">{job?.expireDate}</Typography>
+                            <Typography variant="h6">{job?.openDate?.toString()}</Typography>
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Close Date</Typography>
-                            <Typography variant="h6">{job?.expireDate}</Typography>
+                            <Typography variant="h6">{job?.expireDate?.toString()}</Typography>
                         </Box>
 
                     </Box>
@@ -187,26 +279,33 @@ const JobDisplay: React.FC = () => {
                             <ListItemText primary={job?.descriptions.aboutUs}></ListItemText>
                         </ListItem>
                     </List>
-                    {job?.workType === "Internship" ? <>
-                        <Typography variant="h6">Internship Program</Typography>
-                        <List sx={{ mb: 2 }}>
-                            <ListItem>
-                                <Link href={job?.internshipPrograme}> <ListItemText primary={job?.company.name + " INTERNSHIP PROGRAM"}></ListItemText></Link>
-                            </ListItem>
-                        </List>
+                    <Typography variant="h6">Level</Typography>
+                    <List sx={{ mb: 2 }}>
+                        <ListItem>
+                            <ListItemText primary={job?.workType}></ListItemText>
+                        </ListItem>
+                    </List>
+                    {isInternship &&
+                        <>
+                            <Typography variant="h6">Internship Program</Typography>
+                            <List sx={{ mb: 2 }}>
+                                <ListItem>
+                                    <Link href={job?.internshipPrograme}> <ListItemText primary={job?.company.name + " INTERNSHIP PROGRAM"}></ListItemText></Link>
+                                </ListItem>
+                            </List>
 
-                        <Typography variant="h6">Quantity</Typography>
-                        <List sx={{ mb: 2 }}>
-                            <ListItem>
-                                <ListItemText primary="Required" secondary={job?.quantity}></ListItemText>
-                                <ListItemText primary="Registered" secondary={job?.quantity}></ListItemText>
-                                <ListItemText primary="Accepted" secondary={job?.quantity}></ListItemText>
-                                <ListItemText primary="Max Accept" secondary={job?.quantity}></ListItemText>
+                            <Typography variant="h6">Quantity</Typography>
+                            <List sx={{ mb: 2 }}>
+                                <ListItem>
+                                    <ListItemText primary="Required" secondary={job?.quantity}></ListItemText>
+                                    <ListItemText primary="Registered" secondary={job?.quantity}></ListItemText>
+                                    <ListItemText primary="Accepted" secondary={job?.quantity}></ListItemText>
+                                    <ListItemText primary="Max Accept" secondary={job?.quantity}></ListItemText>
 
-                            </ListItem>
-                        </List>
-                    </>
-                        : null}
+                                </ListItem>
+                            </List>
+                        </>
+                    }
                     <Typography variant="h6">Responsibities</Typography>
                     <List sx={{ mb: 2 }}>
                         {job?.descriptions.responsibilities.map((responsibility) => (

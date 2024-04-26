@@ -105,6 +105,7 @@ type jobType = {
     "descriptions": postDescriptionType,
     "created": Date,
     "updated": Date,
+    "openDate": Date,
     "expireDate": Date
 }
 
@@ -134,4 +135,28 @@ type ErrorType = {
             message: string;
         }
     }
+}
+
+type internshipType = {
+    "id": string,
+    "document": string[],
+    "result": number,
+    "created": Date,
+    "updated": Date,
+    "jobApplicants": jobApplicationType,
+    "staff": staffType,
+}
+
+type staffType = {
+    "id": string,
+    "name": string,
+    "email": string,
+    "phoneNumber": string,
+    "avatar": string,
+    "role": string,
+    "created": Date,
+    "updated": Date,
+    "isAdmin": boolean,
+    "staffId": number,
+    "faculty": facultyType,
 }
