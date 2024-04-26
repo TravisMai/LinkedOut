@@ -158,10 +158,13 @@ export class StudentController {
                 delete student.deleteResumeID;
                 student.resume = currentResumes;
             }
+            const resumeObjective = student.resumeObjective ? student.resumeObjective : findStudent.name ;
+            delete student.resumeObjective;
             if (files.resume && files.resume[0]) {
                 const resumeUrl = await this.azureBlobService.upload(files.resume[0]);
                 const newResumeDto = new ResumeDTO();
                 newResumeDto.id = uuidv4();
+                newResumeDto.title = resumeObjective;
                 newResumeDto.url = resumeUrl;
                 const updatedResumes = [...currentResumes, newResumeDto];
                 student.resume = updatedResumes;
