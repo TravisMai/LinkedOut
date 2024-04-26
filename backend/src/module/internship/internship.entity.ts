@@ -13,10 +13,11 @@ export class Internship {
     @JoinColumn({ name: 'jobApplicantId' })
     jobApplicants: JobApplicants;
 
-    @OneToOne(() => Staff, { eager: true })
+    @ManyToOne(() => Staff, { eager: true })
     @JoinColumn({ name: 'staffId' })
     staff: Staff;
 
+    // chỉnh này qua jsonb
     @Column('text', { array: true, nullable: true })
     @IsString({ each: true })
     @IsOptional()

@@ -42,7 +42,6 @@ export class InternshipController {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
 
-
             // create a new jobApplicants
             const jobApplicants = new JobApplicants();
             jobApplicants.student = student;
