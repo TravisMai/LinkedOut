@@ -108,4 +108,20 @@ export class InternshipController {
             return response.status(error.status).json({ message: error.message });
         }
     }
+
+    // get all internship by candidateId
+    @Get('candidate/:id')
+    @AllowRoles(['student', 'staff'])
+    @UseGuards(JwtGuard, RolesGuard)
+    async findByCandidateId(@Res() response: Response, @Param('id') id: string): Promise<Response> {
+        try {
+            const internships = await this.internshipService.findByCandidateId(id);
+            if (!internships || internships.length === 0) {
+                return response.status(HttpStatus.NOT_FOUND).json({ message: 'No internships found!' });
+            }
+            return response.status(HttpStatus.OK).json(internships);
+        } catch (error) {
+            return response.status(error.status).json({ message: error.message });
+        }
+    }
 }
