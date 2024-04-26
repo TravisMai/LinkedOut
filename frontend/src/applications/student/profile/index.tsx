@@ -333,7 +333,7 @@ export default function StudentProfile() {
                                         <ListItemIcon><AttachFile /></ListItemIcon>
                                         <Link href={item.url}>
                                             <ListItemText
-                                                primary={"This is a random id: " + item.id} 
+                                                primary={item.title} 
                                             />
                                         </Link>
                                     </ListItem>

@@ -88,7 +88,7 @@ const LeftSidebar: React.FC = () => {
 
 
   return (
-    <div className="w-4/5 mx-auto my-6 pb-6 h-fit flex flex-col rounded-xl border-2 items-center bg-white">
+    <div className="w-4/5 mx-auto my-6 pb-6 h-fit flex flex-col rounded-lg border-2 items-center bg-white">
       <div className='w-full border-b-2 flex justify-evenly'>
         <p className="font-semibold text-xl text-black my-4">
           Connected company

@@ -49,6 +49,7 @@ type studentType = {
 type resumeType = {
     "id": string,
     "url": string,
+    "title": string,
 }
 
 type educationType = {

@@ -51,23 +51,16 @@ const RightSidebar: React.FC = () => {
       </div>
       <div className="w-10/12 pt-4">
         <ul className="w-full text-gray-600">
-          {allCompany
-            .map((row, idx) => (
-              <Link to={`/student/companies/${row.id}`}>
-                <li
-                  key={idx}
-                  className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
-                >
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={row.avatar}
-                    alt="user"
-                  />
-                  <p className="text-sm font-semibold">{row.name}</p>
-                </li>
-              </Link>
-            ))}
+          {allCompany.map((row) => (
+            <Link key={row.id} to={`/student/companies/${row.id}`}>
+              <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
+                <img className="w-8 h-8 rounded-full" src={row.avatar} alt="user" />
+                <p className="text-sm font-semibold">{row.name}</p>
+              </li>
+            </Link>
+          ))}
         </ul>
+
       </div>
     </div>
   );

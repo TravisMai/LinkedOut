@@ -149,7 +149,7 @@ const JobDisplay: React.FC = () => {
     const [isInternship, setIsInternship] = useState(false);
     const [isInternStudent, setIsInternStudent] = useState(false);
 
-    
+
     // Check if student can apply for intern (check within a list)
     useEffect(() => {
         if (studentData && processList.includes(studentData.process)) {
@@ -164,10 +164,9 @@ const JobDisplay: React.FC = () => {
         }
     }, [job]);
 
-    
+
     // Check submitted
     // Get all applied jobs
-    const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
     const fetchAppliedJobs = (studentId: string) => {
         axios.get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
             headers: {
@@ -175,24 +174,36 @@ const JobDisplay: React.FC = () => {
             },
         })
             .then(response => {
-                console.log(response.data);
-                setAppliedJobs(response.data);
+                // console.log(response.data);
+                // setAppliedJobs(response.data);
+                if (response.data && response.data.length > 0) {
+                    response.data.forEach((job: jobApplicationType) => {
+                        if (job.job.id === jobId) {
+                            setApplied(true);
+                        }
+                    });
+                }
             })
             .catch(error => {
                 console.error("Error fetching applied jobs:", error);
             });
     };
     // Get all internship applied
-    const [appliedInternships, setAppliedInternships] = React.useState<internshipType[]>();
     const fetchAppliedIntern = (studentId: string) => {
-        axios.get(`http://localhost:4000/api/v1/job_applicants/internship/${studentId}`, {
+        axios.get(`http://localhost:4000/api/v1/internship/candidate/${studentId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         })
             .then(response => {
-                console.log(response.data);
-                setAppliedInternships(response.data);
+                if (response.data && response.data.length > 0) {
+                    response.data.forEach((intern: internshipType) => {
+                        // console
+                        if (intern.jobApplicants.job.id === jobId) {
+                            setAppliedIntern(true);
+                        }
+                    });
+                }
             })
             .catch(error => {
                 console.error("Error fetching applied jobs:", error);
@@ -203,31 +214,11 @@ const JobDisplay: React.FC = () => {
     useEffect(() => {
         if (studentData && studentData.id) {
             fetchAppliedJobs(studentData.id);
-            // fetchAppliedIntern(studentData.id);
+            fetchAppliedIntern(studentData.id);
         }
     }, [studentData]);
 
-    // Check if student applied for the job
-    useEffect(() => {
-        if (appliedJobs && appliedJobs.length > 0) {
-            appliedJobs.forEach((job) => {
-                if (job.job.id === jobId) {
-                    setApplied(true);
-                }
-            });
-        }
-    }, [applied]);
 
-    // Check if student applied for intern
-    useEffect(() => {
-        if (appliedInternships && appliedInternships.length > 0) {
-            appliedInternships.forEach((intern) => {
-                if (intern.jobApplicants.job.id === jobId) {
-                    setAppliedIntern(true);
-                }
-            });
-        }
-    }, [appliedIntern]);
 
     // // Handle dialog
     // const [openDialog, setOpenDialog] = React.useState(false);
@@ -260,7 +251,7 @@ const JobDisplay: React.FC = () => {
 
                     </Box>
                     {isInternship &&
-                        <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic', color:'green', textAlign:'center', mr:10 }}>    Job avaiable for internship    </Typography>
+                        <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic', color: 'green', textAlign: 'center', mr: 10 }}>    Job avaiable for internship    </Typography>
                     }
                     <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ my: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
@@ -308,8 +299,8 @@ const JobDisplay: React.FC = () => {
                     }
                     <Typography variant="h6">Responsibities</Typography>
                     <List sx={{ mb: 2 }}>
-                        {job?.descriptions.responsibilities.map((responsibility) => (
-                            <ListItem>
+                        {job?.descriptions.responsibilities.map((responsibility, index) => (
+                            <ListItem key={index}>
                                 <ListItemIcon><Search /></ListItemIcon>
                                 <ListItemText primary={responsibility}></ListItemText>
                             </ListItem>
@@ -317,8 +308,8 @@ const JobDisplay: React.FC = () => {
                     </List>
                     <Typography variant="h6">Requirements</Typography>
                     <List sx={{ mb: 2 }}>
-                        {job?.descriptions.requirements.map((requirement) => (
-                            <ListItem>
+                        {job?.descriptions.requirements.map((requirement, index) => (
+                            <ListItem key={index}>
                                 <ListItemIcon><Check /></ListItemIcon>
                                 <ListItemText primary={requirement}></ListItemText>
                             </ListItem>

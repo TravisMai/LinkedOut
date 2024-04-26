@@ -36,6 +36,7 @@ type ErrorType = {
 interface updateForm {
   resume: File | null;
   deleteResumeID: string[] | null;
+  resumeObjective: string | null;
 }
 
 export default function UpdateResume({ onClose }: { onClose: () => void }) {
@@ -50,9 +51,10 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   const [currentResume, setCurrentResume] = useState<resumeType[]>([]); // State to store current resume
   const [showAddNew, setShowAddNew] = useState(false); // State to show/hide add new working history button
 
-  const [formData, setFormData] = useState<{ resume: File | null, deleteResumeID: string[] | null }>({
+  const [formData, setFormData] = useState<{ resume: File | null, deleteResumeID: string[] | null, resumeObjective: string | null }>({
     resume: null,
     deleteResumeID: null,
+    resumeObjective: null,
   });
 
   // Get jwt token
@@ -80,6 +82,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   // Mutation to send form data to server    
   const mutation = useMutation<ResposeType, ErrorType, updateForm>({
     mutationFn: (formData) => {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAA")
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
@@ -119,6 +122,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
     event.preventDefault();
     console.log(formData);
     mutation.mutate(formData);
+    console.log("BBBBBBBBBBBBBBBBBBBBb");
   };
 
   // Handle file input change
@@ -130,6 +134,14 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
     }));
   };
 
+  // Handle input change
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
 
   return (
@@ -153,16 +165,16 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
               <Grid container spacing={2} rowSpacing={3} justifyContent="center">
                 {currentResume.map((item: resumeType, index) => (
                   <>
-                    <Grid item container columnSpacing={3} className='pl-5'>
+                    <Grid item container columnSpacing={3} alignItems={"center"} justifyContent={"between"} className='pl-5'>
                       <Grid item xs={1}>
                         <AttachFile />
                       </Grid>
-                      <Grid item xs={9}>
+                      <Grid item xs={9} sx={{ minWidth: "250px" }} >
                         <Link href={item.url} target="_blank" rel="noreferrer">
-                          <Typography variant='h6'>{item.id}</Typography>
+                          <Typography variant='h6'>{item.title}</Typography>
                         </Link>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={1} sx={{ justifyItems: "right" }}>
                         {/* Delete current field */}
                         <LoadingButton
                           loading={sending}
@@ -209,7 +221,24 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
               {showAddNew &&
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <Grid container spacing={2}>
-                    <Grid item xs={12}>
+
+                    <Grid item>
+                      <TextField
+                        fullWidth
+                        id="title"
+                        type="text"
+                        label="Title"
+                        placeholder='Enter your resume name'
+                        variant='standard'
+                        // Image only
+                        name="resumeObjective"
+                        autoComplete="title"
+                        onChange={handleInputChange}
+                        style={{ width: "500px" }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} spacing={2}>
+
                       <TextField
                         required
                         fullWidth
@@ -234,7 +263,6 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
 
               </Grid>
 
-
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                 <LoadingButton
                   loading={sending}
@@ -242,16 +270,15 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                   type="submit"
                   variant="contained"
                   disabled={showSuccess}
-                  sx={{ mt: 2, mb: 2 }}
+                  sx={{ mt: 2, mb: 2, width: "50vh" }}
                 >
                   Update
                 </LoadingButton>
               </Box>
-              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-
             </Box>
 
+            {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
           </Box>
         </Container>
       </ThemeProvider >
