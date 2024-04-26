@@ -39,4 +39,9 @@ export class InternshipService {
     async findInternshipsByCompanyId(companyId: string): Promise<Internship[]> {
         return await this.InternshipRepository.findInternshipsByCompanyId(companyId);
     }
+
+    // find all internships by student id
+    async findByCandidateId(studentId: string): Promise<Internship[]> {
+        return await this.InternshipRepository.findByCandidateId(studentId);
+    }
 }
