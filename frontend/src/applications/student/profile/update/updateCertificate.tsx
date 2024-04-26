@@ -13,7 +13,8 @@ import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter } from '@mui/icons-material';
+import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter, WorkspacePremium } from '@mui/icons-material';
+import DividerWithText from '../../../../shared/components/DividerWithText';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -146,24 +147,7 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
                             <Grid container spacing={2} justifyContent="center">
                                 {formData.certificate?.map((item: certificateType, index) => (
                                     <Grid container direction='row' spacing={1} className='mt-3 mx-5 mb-6'>
-                                        <Grid item xs={3}>
-
-                                            {/* Delete current field */}
-                                            <LoadingButton
-                                                loading={sending}
-                                                variant="outlined"
-                                                color='error'
-                                                onClick={() => {
-                                                    const updatedFormData = { ...formData };
-                                                    updatedFormData.certificate.splice(index, 1);
-                                                    setFormData(updatedFormData);
-                                                }}
-                                                sx={{ mt: 1, mb: 2 }}
-                                            >
-                                                <Delete /> Delete
-                                            </LoadingButton>
-                                        </Grid>
-                                        <Grid item xs={9} spacing={2} className='space-y-3'>
+                                        <Grid item xs={11} spacing={2} className='space-y-3'>
                                             <TextField
                                                 fullWidth
                                                 required
@@ -191,6 +175,26 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
                                                 onChange={handleInputChange}
                                             />
                                         </Grid>
+                                        <Grid item xs={1}>
+
+                                            {/* Delete current field */}
+                                            <LoadingButton
+                                                loading={sending}
+                                                variant="outlined"
+                                                color='error'
+                                                onClick={() => {
+                                                    const updatedFormData = { ...formData };
+                                                    updatedFormData.certificate.splice(index, 1);
+                                                    setFormData(updatedFormData);
+                                                }}
+                                                // sx={{ mt: 1, mb: 2 }}
+                                            >
+                                                <Delete /> 
+                                            </LoadingButton>
+                                            
+                                        </Grid>
+                                        <DividerWithText className='mt-5' text="" muiElementIcon={<WorkspacePremium />} />
+
                                     </Grid>
                                 ))}
                             </Grid>
