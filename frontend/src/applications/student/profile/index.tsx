@@ -331,9 +331,9 @@ export default function StudentProfile() {
                                 {studentData.resume ? studentData.resume.map((item) => (
                                     <ListItem>
                                         <ListItemIcon><AttachFile /></ListItemIcon>
-                                        <Link href={item}>
+                                        <Link href={item.url}>
                                             <ListItemText
-                                                primary={item}
+                                                primary={"This is a random id: " + item.id} 
                                             />
                                         </Link>
                                     </ListItem>

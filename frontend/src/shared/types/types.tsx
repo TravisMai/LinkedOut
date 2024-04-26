@@ -26,7 +26,7 @@ type studentType = {
     "year": number,
     "major": string,
     "classCode": string,
-    "resume": string[],
+    "resume": resumeType[],
     "isActive": boolean,
     "process": string,
     "socialMedia": {
@@ -44,6 +44,11 @@ type studentType = {
     "additionalInformation": additionalInformationType[],
     "reference": referenceType[],
     "faculty": facultyType,
+}
+
+type resumeType = {
+    "id": string,
+    "url": string,
 }
 
 type educationType = {

@@ -9,27 +9,19 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMutation, useQuery } from "react-query";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
+import { AttachFile, Delete, WorkHistory } from '@mui/icons-material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 type ResposeType = {
   data: {
-    id: string;
-    name: string;
-    email: string;
-    phoneNumber: string;
-    avatar: string;
-    isGoogle: boolean;
-    isVerify: boolean;
-
+    resume: resumeType[] | null,
+    id: string
   };
 }
 
@@ -42,7 +34,8 @@ type ErrorType = {
 }
 
 interface updateForm {
-  myfile: string;
+  resume: File | null;
+  deleteResumeID: string[] | null;
 }
 
 export default function UpdateResume({ onClose }: { onClose: () => void }) {
@@ -54,10 +47,12 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [studentId, setStudentId] = useState('');
-  const [filePreview, setFilePreview] = useState<string | null>(null); // State to store file preview URL
+  const [currentResume, setCurrentResume] = useState<resumeType[]>([]); // State to store current resume
+  const [showAddNew, setShowAddNew] = useState(false); // State to show/hide add new working history button
 
-  const [formData, setFormData] = useState({
-    myfile: '',
+  const [formData, setFormData] = useState<{ resume: File | null, deleteResumeID: string[] | null }>({
+    resume: null,
+    deleteResumeID: null,
   });
 
   // Get jwt token
@@ -65,7 +60,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
 
   // Fetch current information
   useQuery({
-    queryKey: "studentInfo",
+    queryKey: "studentInfo2",
     queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -76,6 +71,8 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
 
       // Set student id
       setStudentId(data.data.id);
+      // Set current resume
+      setCurrentResume(data.data.resume);
 
     }
   });
@@ -129,13 +126,8 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
     const file = event.target.files?.[0]; // Get the first file from the input
     setFormData((prevData: any) => ({
       ...prevData,
-      myfile: file, // Update the myfile field with the selected file
+      resume: file, // Update the myfile field with the selected file
     }));
-    if (file) {
-      setFilePreview(URL.createObjectURL(file)); // Generate preview URL for the selected file
-    } else {
-      setFilePreview(null); // Clear preview if no file is selected
-    }
   };
 
 
@@ -143,8 +135,8 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-                                
-        <Container component="main" style={{width: "600px"}}>
+
+        <Container component="main" style={{ width: "600px" }}>
           <CssBaseline />
           <Box
             sx={{
@@ -155,29 +147,93 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
             }}
           >
             <Typography component="h1" variant="h5">
-              Update Profile Photo
+              Update Résumé
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="myfile"
-                    type="file"
-                    // Image only
-                    name="myfile"
-                    autoComplete="myfile"
-                    onChange={handleFileChange}
-                    style={{width: "500px"}}
-                  />
-                </Grid>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mx: 2, mt: 5, mb: 2 }}>
+              <Grid container spacing={2} rowSpacing={3} justifyContent="center">
+                {currentResume.map((item: resumeType, index) => (
+                  <>
+                    <Grid item container columnSpacing={3} className='pl-5'>
+                      <Grid item xs={1}>
+                        <AttachFile />
+                      </Grid>
+                      <Grid item xs={9}>
+                        <Link href={item.url} target="_blank" rel="noreferrer">
+                          <Typography variant='h6'>{item.id}</Typography>
+                        </Link>
+                      </Grid>
+                      <Grid item xs={2}>
+                        {/* Delete current field */}
+                        <LoadingButton
+                          loading={sending}
+                          variant="outlined"
+                          color='error'
+                          onClick={() => {
+                            const updatedFormData = { ...formData };
+                            // Add new field to delete list
+                            if (updatedFormData?.deleteResumeID === null) {
+                              updatedFormData.deleteResumeID = [item.id];
+                            } else {
+                              updatedFormData.deleteResumeID.push(item.id);
+                            }
+                            setFormData(updatedFormData);
+                            // Also delete the field from current resume
+                            currentResume.splice(index, 1);
+                          }}
+                        >
+                          <Delete />
+                        </LoadingButton>
+                      </Grid>
+
+                    </Grid>
+                  </>
+
+                ))}
               </Grid>
+              {/* Add new workingHistory */}
+              {!showAddNew &&
+                <Grid container justifyContent="center">
+                  <LoadingButton
+                    loading={sending}
+                    color='success'
+                    variant="contained"
+                    onClick={() => {
+                      setShowAddNew(true)
+                    }}
+                    sx={{ mt: 2, mb: 2 }}
+                  >
+                    Upload new file
+                  </LoadingButton>
+                </Grid>
+              }
+              {showAddNew &&
+                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="resume"
+                        type="file"
+                        // Image only
+                        name="resume"
+                        autoComplete="resume"
+                        onChange={handleFileChange}
+                        style={{ width: "500px" }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+
+              }
               {/* Display current photo */}
-              <img
-                src={filePreview}
-                className="my-3"
-              />
+
+              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
+              <Grid container justifyContent="flex-end">
+
+              </Grid>
+
 
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                 <LoadingButton
@@ -188,15 +244,14 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                   disabled={showSuccess}
                   sx={{ mt: 2, mb: 2 }}
                 >
-                  Update Photo
+                  Update
                 </LoadingButton>
               </Box>
               {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
               {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-              <Grid container justifyContent="flex-end">
 
-              </Grid>
             </Box>
+
           </Box>
         </Container>
       </ThemeProvider >
