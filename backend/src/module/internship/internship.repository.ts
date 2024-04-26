@@ -24,6 +24,7 @@ export class InternshipRepository extends Repository<Internship> {
     async findByCandidateId(studentId: string): Promise<Internship[]> {
         return await this.createQueryBuilder('internship')
             .leftJoinAndSelect('internship.jobApplicants', 'jobApplicants')
+            .leftJoinAndSelect('jobApplicants.job', 'job')
             .leftJoinAndSelect('jobApplicants.student', 'student')
             .where('student.id = :studentId', { studentId })
             .getMany();
