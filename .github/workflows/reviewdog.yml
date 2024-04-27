@@ -1,61 +1,63 @@
 name: reviewdog
-
-on: [pull_request]
-
-permissions:
-  checks: write
-  contents: write
-  issues: write
-  pull-requests: write
-
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
-  reviewdog:
-    name: Run Reviewdog
+  shellcheck:
+    name: runner / shellcheck
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Verify Node.js installation
-        run: node -v
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - uses: haya14busa/action-cond@v1
+        id: reporter
         with:
-          node-version: '18'
+          cond: ${{ github.event_name == 'pull_request' }}
+          if_true: "github-pr-review"
+          if_false: "github-check"
+      - uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: ${{ steps.reporter.outputs.value }}
+          level: warning
 
-      - name: Install Reviewdog
-        run: |
-          curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr/local/bin
-        env:
-          REVIEWDOG_VERSION: latest
+  hadolint:
+    name: runner / hadolint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haya14busa/action-cond@v1
+        id: reporter
+        with:
+          cond: ${{ github.event_name == 'pull_request' }}
+          if_true: "github-pr-review"
+          if_false: "github-check"
+      - uses: reviewdog/action-hadolint@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: ${{ steps.reporter.outputs.value }}
+          level: warning
 
-      - name: Install Backend Dependencies (no cache)
-        run: npm install --no-cache
-        working-directory: ./backend
+  misspell:
+    name: runner / misspell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-check
+          level: warning
+          locale: "US"
 
-      - name: Verify ESLint installation (backend)
-        run: npm list eslint --depth=0
-        working-directory: ./backend
-
-      - name: Run ESLint with Reviewdog on Backend (debug mode)
-        run: |
-          npx eslint . --ext .ts,.tsx -f json | reviewdog -debug -reporter=github-pr-review -f=eslint -name="eslint-backend" -diff="git diff"
-        working-directory: ./backend
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install Frontend Dependencies (no cache)
-        run: npm install --no-cache
-        working-directory: ./frontend
-
-      - name: Verify ESLint installation (frontend)
-        run: npm list eslint --depth=0
-        working-directory: ./frontend
-
-      - name: Run ESLint with Reviewdog on Frontend (debug mode)
-        run: |
-          npx eslint . --ext .ts,.tsx -f json | reviewdog -debug -reporter=github-pr-review -f=eslint -name="eslint-frontend" -diff="git diff"
-        working-directory: ./frontend
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  alex:
+    name: runner / alex
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-alex@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-check
+          level: warning
