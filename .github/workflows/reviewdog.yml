@@ -3,8 +3,8 @@ name: reviewdog
 on: [pull_request]
 
 jobs:
-  eslint:
-    name: runner / eslint
+  eslint-backend:
+    name: ESLint Backend
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -15,12 +15,38 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Dependencies
+      - name: Install Backend Dependencies
         run: npm install
+        working-directory: ./backend
 
-      - name: Run ESLint with reviewdog
+      - name: Run ESLint with reviewdog on Backend
         uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review # This makes reviewdog leave PR review comments.
-          eslint_flags: 'src/**/*.ts src/**/*.tsx' # Adjust to include both .ts and .tsx files if using React
+          reporter: github-pr-review
+          eslint_flags: './**/*.ts'
+        working-directory: ./backend
+
+  eslint-frontend:
+    name: ESLint Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Frontend Dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Run ESLint with reviewdog on Frontend
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: './**/*.ts ./**/*.ts'
+        working-directory: ./frontend
