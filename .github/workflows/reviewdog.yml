@@ -3,46 +3,42 @@ name: reviewdog
 on: [pull_request]
 
 jobs:
-  eslint-backend:
-    name: ESLint Backend
+  reviewdog:
+    name: Run Reviewdog
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18' # Adjust this to match the Node.js version you're using
+          node-version: '18'
+
+      - name: Install Reviewdog
+        run: |
+          curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s
+        env:
+          REVIEWDOG_VERSION: latest
 
       - name: Install Backend Dependencies
         run: npm install
         working-directory: ./backend
 
-      - name: Run ESLint with reviewdog on Backend
-        run: npx eslint . --ext .ts,.tsx | npx reviewdog -f=eslint -name="eslint-backend" -reporter=github-pr-review
+      - name: Run ESLint with Reviewdog on Backend
+        run: |
+          ./bin/reviewdog -reporter=github-pr-review -f=eslint -name="eslint-backend" -diff="git diff" <(npx eslint . --ext .ts,.tsx -f json)
         working-directory: ./backend
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  eslint-frontend:
-    name: ESLint Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18' # Adjust this to match the Node.js version you're using
 
       - name: Install Frontend Dependencies
         run: npm install
         working-directory: ./frontend
 
-      - name: Run ESLint with reviewdog on Frontend
-        run: npx eslint . --ext .ts,.tsx | npx reviewdog -f=eslint -name="eslint-frontend" -reporter=github-pr-review
+      - name: Run ESLint with Reviewdog on Frontend
+        run: |
+          ./bin/reviewdog -reporter=github-pr-review -f=eslint -name="eslint-frontend" -diff="git diff" <(npx eslint . --ext .ts,.tsx -f json)
         working-directory: ./frontend
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
