@@ -27,7 +27,7 @@ jobs:
 
       - name: Run ESLint with Reviewdog on Backend
         run: |
-          eslint . --ext .ts,.tsx -f json | reviewdog -reporter=github-pr-review -f=eslint -name="eslint-backend" -diff="git diff"
+          npx eslint . --ext .ts,.tsx -f json | reviewdog -reporter=github-pr-review -f=eslint -name="eslint-backend" -diff="git diff"
         working-directory: ./backend
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
