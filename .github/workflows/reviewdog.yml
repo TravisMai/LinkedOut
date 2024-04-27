@@ -1,6 +1,6 @@
 name: reviewdog
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   reviewdog:
@@ -17,7 +17,7 @@ jobs:
 
       - name: Install Reviewdog
         run: |
-          curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s
+          curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr/local/bin
         env:
           REVIEWDOG_VERSION: latest
 
@@ -27,7 +27,7 @@ jobs:
 
       - name: Run ESLint with Reviewdog on Backend
         run: |
-          ./bin/reviewdog -reporter=github-pr-review -f=eslint -name="eslint-backend" -diff="git diff" <(npx eslint . --ext .ts,.tsx -f json)
+          eslint . --ext .ts,.tsx -f json | reviewdog -reporter=github-pr-review -f=eslint -name="eslint-backend" -diff="git diff"
         working-directory: ./backend
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
 
       - name: Run ESLint with Reviewdog on Frontend
         run: |
-          ./bin/reviewdog -reporter=github-pr-review -f=eslint -name="eslint-frontend" -diff="git diff" <(npx eslint . --ext .ts,.tsx -f json)
+          eslint . --ext .ts,.tsx -f json | reviewdog -reporter=github-pr-review -f=eslint -name="eslint-frontend" -diff="git diff"
         working-directory: ./frontend
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
