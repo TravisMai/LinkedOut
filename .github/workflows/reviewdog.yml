@@ -5,9 +5,6 @@ permissions:
   issues: write
   pull-requests: write
 on:
-  push:
-    branches:
-      - main
   pull_request:
 jobs:
   shellcheck:
@@ -27,7 +24,6 @@ jobs:
           reporter: ${{ steps.reporter.outputs.value }}
           level: warning
           fail_on_error: true  # This will fail the job when there's a warning
-          problem_matcher: '::shellcheck'  # This links issues to code lines
 
   hadolint:
     name: runner / hadolint
@@ -46,7 +42,6 @@ jobs:
           reporter: ${{ steps.reporter.outputs.value }}
           level: warning
           fail_on_error: true  # This will fail the job when there's a warning
-          problem_matcher: '::hadolint'  # This links issues to code lines
 
   misspell:
     name: runner / misspell
@@ -60,7 +55,6 @@ jobs:
           level: warning
           locale: "US"
           fail_on_error: true  # This will fail the job when there's a warning
-          problem_matcher: '::misspell'  # This links issues to code lines
 
   alex:
     name: runner / alex
