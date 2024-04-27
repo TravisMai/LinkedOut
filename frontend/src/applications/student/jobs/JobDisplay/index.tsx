@@ -235,7 +235,7 @@ const JobDisplay: React.FC = () => {
                     <Typography variant="h6">Salary</Typography>
                     <List sx={{ mb: 2 }}>
                         <ListItem>
-                            <ListItemText primary={job?.salary ? job.salary : "None"}></ListItemText>
+                            <ListItemText primary={job?.salari ? job.salari : "None"}></ListItemText>
                         </ListItem>
                     </List>
 
