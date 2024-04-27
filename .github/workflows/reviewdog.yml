@@ -1,8 +1,13 @@
 name: reviewdog
+permissions:
+  checks: write
+  contents: write
+  issues: write
+  pull-requests: write
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 jobs:
   shellcheck:
