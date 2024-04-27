@@ -12,16 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: haya14busa/action-cond@v1
-        id: reporter
-        with:
-          cond: ${{ github.event_name == 'pull_request' }}
-          if_true: "github-pr-review"
-          if_false: "github-check"
       - uses: reviewdog/action-shellcheck@v1
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: ${{ steps.reporter.outputs.value }}
+          reporter: github-pr-review
           level: warning
           fail_on_error: true  # This will fail the job when there's a warning
 
@@ -30,16 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: haya14busa/action-cond@v1
-        id: reporter
-        with:
-          cond: ${{ github.event_name == 'pull_request' }}
-          if_true: "github-pr-review"
-          if_false: "github-check"
       - uses: reviewdog/action-hadolint@v1
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: ${{ steps.reporter.outputs.value }}
+          reporter: github-pr-review
           level: warning
           fail_on_error: true  # This will fail the job when there's a warning
 
@@ -51,7 +39,7 @@ jobs:
       - uses: reviewdog/action-misspell@v1
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: github-check
+          reporter: github-pr-review
           level: warning
           locale: "US"
           fail_on_error: true  # This will fail the job when there's a warning
@@ -64,6 +52,6 @@ jobs:
       - uses: reviewdog/action-alex@v1
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: github-check
+          reporter: github-pr-review
           level: warning
           fail_on_error: true  # This will fail the job when there's a warning
