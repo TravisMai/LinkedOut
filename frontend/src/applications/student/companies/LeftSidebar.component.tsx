@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 type companyType = {
   "id": string,
@@ -96,7 +97,7 @@ const LeftSidebar: React.FC = () => {
       </div>
       <div className="w-10/12 pt-4">
         <ul className="w-full text-gray-600">
-          {companies
+          {companies.length > 0 ? companies
             .map((row, idx) => (
               <Link to={`/student/companies/${row.id}`}>
                 <li
@@ -112,7 +113,7 @@ const LeftSidebar: React.FC = () => {
                   <p className="text-sm font-semibold">{row.name}</p>
                 </li>
               </Link>
-            ))}
+            )) : <Typography className='text-center'>No company connected</Typography>}
         </ul>
       </div>
     </div>

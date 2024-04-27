@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import { Button, Container, Divider, IconButton, Link, Typography } from '@mui/material';
+import { Button, Container, Divider, IconButton, Link, Pagination, Stack, Typography } from '@mui/material';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { OpenInNew } from '@mui/icons-material';
@@ -80,14 +80,32 @@ const JobDisplay: React.FC = () => {
 
 
 
+
+    // Handle pagination
+    const itemsPerPage = 2; // Number of items per page
+
+    // State variables for pagination
+    const [currentPageApplied, setCurrentPageApplied] = useState(0);
+    const [currentPageApproved, setCurrentPageApproved] = useState(0);
+    const [currentPagePending, setCurrentPagePending] = useState(0);
+    const [currentPageRejected, setCurrentPageRejected] = useState(0);
+
+    // Handle page change
+    const handlePageChange = (value: number, page: string) => {
+        if (page === 'applied') setCurrentPageApplied(value);
+        if (page === 'approved') setCurrentPageApproved(value);
+        if (page === 'pending') setCurrentPagePending(value);
+        if (page === 'rejected') setCurrentPageRejected(value);
+    };
+
     // Limit display jobs
-    const limitedAppliedJobs = appliedList.slice(0, 2);
-    const limitedApprovedJobs = approvedList.slice(0, 2);
-    const limitedPendingJobs = pendingList.slice(0, 2);
-    const limitedRejectedJobs = rejectedList.slice(0, 2);
+    const limitedAppliedJobs = appliedList.slice(itemsPerPage * currentPageApplied, itemsPerPage * currentPageApplied + itemsPerPage);
+    const limitedApprovedJobs = approvedList.slice(itemsPerPage * currentPageApproved, itemsPerPage * currentPageApproved + itemsPerPage);
+    const limitedPendingJobs = pendingList.slice(itemsPerPage * currentPagePending, itemsPerPage * currentPagePending + itemsPerPage);
+    const limitedRejectedJobs = rejectedList.slice(itemsPerPage * currentPageRejected, itemsPerPage * currentPageRejected + itemsPerPage);
 
     return (
-        <div className="mt-6 w-full h-fit flex flex-col space-y-3 px-5 pb-10">
+        <div className="mt-6 w-full h-fit flex flex-col space-y-6 px-5 pb-10">
             {/* Applied jobs */}
             <Container className='h-fit bg-white rounded-xl pb-2'>
                 <Typography variant='h5' className='pt-4'>Applied Jobs</Typography>
@@ -125,9 +143,16 @@ const JobDisplay: React.FC = () => {
                 ) : (
                     <p>No applied job</p>
                 )}
-                <div className='w-full mt-2'>
-                    <Button variant="text" className='w-full' >Show all</Button>
-                </div>
+                {appliedList.length > 0 &&
+                    <div className='w-full mt-2 flex justify-center '>
+                        <Stack spacing={2} >
+                            <Pagination
+                                count={Math.ceil(appliedList.length / itemsPerPage)}
+                                onChange={(event, value) => handlePageChange(value - 1, 'applied')}
+                            />
+                        </Stack>
+                    </div>
+                }
             </Container>
 
             {/* Approved jobs */}
@@ -162,14 +187,23 @@ const JobDisplay: React.FC = () => {
                                 </IconButton>
                             </div>
                             <Divider />
+
                         </>
                     ))
                 ) : (
                     <p>No approved job</p>
                 )}
-                <div className='w-full mt-2'>
-                    <Button variant="text" className='w-full' >Show all</Button>
-                </div>
+                {approvedList.length > 0 &&
+                    <div className='w-full mt-2 flex justify-center '>
+                        <Stack spacing={2} >
+                            <Pagination
+                                count={Math.ceil(approvedList.length / itemsPerPage)}
+                                onChange={(event, value) => handlePageChange(value - 1, 'approved')}
+                            />
+                        </Stack>
+                    </div>
+                }
+
             </Container>
 
             {/* Pending jobs */}
@@ -209,9 +243,16 @@ const JobDisplay: React.FC = () => {
                 ) : (
                     <p>No waiting job</p>
                 )}
-                <div className='w-full mt-2'>
-                    <Button variant="text" className='w-full' >Show all</Button>
-                </div>
+                {pendingList.length > 0 &&
+                    <div className='w-full mt-2 flex justify-center '>
+                        <Stack spacing={2} >
+                            <Pagination
+                                count={Math.ceil(pendingList.length / itemsPerPage)}
+                                onChange={(event, value) => handlePageChange(value - 1, 'pending')}
+                            />
+                        </Stack>
+                    </div>
+                }
             </Container>
 
             {/* Rejected jobs */}
@@ -251,9 +292,16 @@ const JobDisplay: React.FC = () => {
                 ) : (
                     <p>No rejected job</p>
                 )}
-                <div className='w-full mt-2'>
-                    <Button variant="text" className='w-full' >Show all</Button>
-                </div>
+                {rejectedList.length > 0 &&
+                    <div className='w-full mt-2 flex justify-center '>
+                        <Stack spacing={2} >
+                            <Pagination
+                                count={Math.ceil(rejectedList.length / itemsPerPage)}
+                                onChange={(event, value) => handlePageChange(value - 1, 'rejected')}
+                            />
+                        </Stack>
+                    </div>
+                }
             </Container>
         </div>
     );
