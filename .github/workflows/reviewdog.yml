@@ -1,0 +1,16 @@
+name: Setup Reviewdog
+on: [push, pull_request]
+jobs:
+  setup-reviewdog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Reviewdog
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: ${{ inputs.reviewdog_version || 'latest' }}
+
+      - name: Check Reviewdog Version
+        run: reviewdog -version
