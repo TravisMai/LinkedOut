@@ -6,19 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToOne,
 } from 'typeorm';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  IsUrl,
-  Length,
-  Min,
-} from 'class-validator';
+import { IsString } from 'class-validator';
 import { Student } from '../student/student.entity';
 import { Job } from '../job/job.entity';
 
@@ -38,6 +27,7 @@ export class JobApplicants {
   // thêm cột để store cái cv muốn giữ
 
   @Column({ default: 'Applied' })
+  @IsString()
   status: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

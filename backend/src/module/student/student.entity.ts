@@ -1,12 +1,9 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import {
   IsArray,
-  IsBoolean,
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
-  Length,
   ValidateNested,
 } from 'class-validator';
 import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
