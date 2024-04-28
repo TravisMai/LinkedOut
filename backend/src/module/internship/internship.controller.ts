@@ -42,7 +42,9 @@ export class InternshipController {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
 
-            const findJobApplicant = await this.jobApplicantsService.findJobApplicantsByCandidateId(decodedToken.id);
+      const findJobApplicant =
+        await this.jobApplicantsService.findJobApplicantsByCandidateId(
+          decodedToken.id,
             let newJobApplicants;
             if (findJobApplicant && findJobApplicant.length > 0) {
                 const job = findJobApplicant.find(job => job.job.id === id);
