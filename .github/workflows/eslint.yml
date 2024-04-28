@@ -1,9 +1,9 @@
-name: ESLint Check
+name: ESLint with Reviewdog
 on:
-  pull_request:
+  pull_request: # Trigger on every pull request
 jobs:
-  eslint:
-    name: Run ESLint in Frontend
+  frontend-lint:
+    name: Lint Frontend with ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -11,10 +11,43 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # or the appropriate version for your project
+          node-version: '20'
       - name: Install frontend dependencies
         run: npm install
-        working-directory: frontend # Sets the working directory to 'frontend'
-      - name: Run ESLint in Frontend
-        run: npm run lint
-        working-directory: frontend # Ensures ESLint is run in the 'frontend' directory
+        working-directory: frontend
+      - name: Run ESLint
+        run: npm run lint -- --format json --output-file eslint_frontend.json
+        working-directory: frontend
+      - name: Report ESLint Issues with Reviewdog
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          eslint_input: frontend/eslint_frontend.json
+          level: warning
+          fail_on_error: true
+
+  backend-lint:
+    name: Lint Backend with ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: backend
+      - name: Run ESLint
+        run: npm run lint -- --format json --output-file eslint_backend.json
+        working-directory: backend
+      - name: Report ESLint Issues with Reviewdog
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          eslint_input: backend/eslint_backend.json
+          level: warning
+          fail_on_error: true
