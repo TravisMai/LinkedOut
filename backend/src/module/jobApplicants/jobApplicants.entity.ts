@@ -7,10 +7,9 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { Student } from '../student/student.entity';
 import { Job } from '../job/job.entity';
-import { Type } from 'class-transformer';
 import { ResumeDTO } from '../student/dto/resume.dto';
 
 @Entity()

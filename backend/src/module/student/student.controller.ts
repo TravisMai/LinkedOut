@@ -217,9 +217,9 @@ export class StudentController {
           .json({ message: 'Invalid UUID format' });
       }
       const findStudent = await this.studentService.findOne(id);
-      const decodedToken = this.jwtService.decode(
-        req.headers.authorization.split(' ')[1],
-      ) as { id: string };
+      // const decodedToken = this.jwtService.decode(
+      //   req.headers.authorization.split(' ')[1],
+      // ) as { id: string };
       if (files.avatar && files.avatar[0]) {
         findStudent.avatar &&
           (await this.azureBlobService.delete(
