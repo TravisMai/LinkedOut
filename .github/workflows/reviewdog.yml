@@ -8,7 +8,7 @@ on:
   pull_request:
 jobs:
   eslint-frontend:
-    name: runner / eslint
+    name: runner / eslint-frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +30,7 @@ jobs:
           workdir: "frontend"
 
   eslint-backend:
-    name: runner / eslint
+    name: runner / eslint-backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
