@@ -18,8 +18,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         ttl: 120,
         ssl: true,
         tls: {
-            host: configService.get('REDIS_HOST'),
-        }
+          host: configService.get('REDIS_HOST'),
+        },
       }),
     }),
   ],

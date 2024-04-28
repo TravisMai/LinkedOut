@@ -65,7 +65,7 @@ export class InternshipController {
         );
       let newJobApplicants;
       if (findJobApplicant && findJobApplicant.length > 0) {
-        const job = findJobApplicant.find(job => job.job.id === id);
+        const job = findJobApplicant.find((job) => job.job.id === id);
         if (job) {
           newJobApplicants =
             await this.jobApplicantsService.findJobApplicantsByJobIdAndCandidateId(
@@ -88,7 +88,7 @@ export class InternshipController {
       );
       if (findInternship && findInternship.length > 0) {
         const internship = findInternship.find(
-          internship => internship.jobApplicants.id === newJobApplicants.id,
+          (internship) => internship.jobApplicants.id === newJobApplicants.id,
         );
         if (internship) {
           await this.internshipService.delete(internship.id);

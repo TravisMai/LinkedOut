@@ -23,6 +23,6 @@ export class StudentResponseDto {
   }
 
   static fromStudentArray(studentArray: Student[]): StudentResponseDto[] {
-    return studentArray.map(student => this.fromStudent(student));
+    return studentArray.map((student) => this.fromStudent(student));
   }
 }

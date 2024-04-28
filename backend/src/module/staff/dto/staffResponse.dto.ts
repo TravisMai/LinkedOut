@@ -22,6 +22,6 @@ export class StaffResponseDto {
   }
 
   static fromStaffArray(staffArray: Staff[]): StaffResponseDto[] {
-    return staffArray.map(staff => this.fromStaff(staff));
+    return staffArray.map((staff) => this.fromStaff(staff));
   }
 }
