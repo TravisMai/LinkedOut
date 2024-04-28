@@ -25,12 +25,7 @@ import { JobRepository } from './job.repository';
     StudentModule,
   ],
   controllers: [JobController],
-  providers: [
-    AuthService,
-    Logger,
-    JobService,
-    JobRepository
-  ],
+  providers: [AuthService, Logger, JobService, JobRepository],
   exports: [JobService],
 })
-export class JobModule { }
+export class JobModule {}

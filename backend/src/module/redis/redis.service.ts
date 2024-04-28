@@ -13,7 +13,11 @@ export class RedisService {
     return await this.redisCache.get(key);
   }
 
-  async setObjectByKeyValue(key: string, value: any, ttl: number): Promise<any> {
+  async setObjectByKeyValue(
+    key: string,
+    value: any,
+    ttl: number,
+  ): Promise<any> {
     return await this.redisCache.set(key, value, {
       ttl,
     } as any);

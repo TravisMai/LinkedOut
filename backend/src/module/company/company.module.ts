@@ -33,4 +33,4 @@ import { AzureBlobService } from 'src/common/service/azureBlob.service';
   ],
   exports: [CompanyService],
 })
-export class CompanyModule { }
+export class CompanyModule {}
