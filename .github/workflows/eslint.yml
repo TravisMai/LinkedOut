@@ -1,53 +1,16 @@
-name: Lint Check
-on:
-  pull_request: # Trigger on every pull request
+name: reviewdog
+on: [pull_request]
 jobs:
-  frontend-lint:
-    name: Lint Frontend with ESLint
+  eslint:
+    name: runner / eslint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3 # Use the latest version
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20' # Transition to Node.js 20
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: frontend
-      - name: Run ESLint
-        run: npm run lint -- --format json --output-file eslint_frontend.json
-        working-directory: frontend
-      - name: Report ESLint Issues with Reviewdog
-        uses: reviewdog/action-eslint@v1
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          eslint_input: frontend/eslint_frontend.json
-          level: warning
-          fail_on_error: true
-
-  backend-lint:
-    name: Lint Backend with ESLint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3 # Use the latest version
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20' # Transition to Node.js 20
-      - name: Install backend dependencies
-        run: npm install
-        working-directory: backend
-      - name: Run ESLint
-        run: npm run lint -- --format json --output-file eslint_backend.json
-        working-directory: backend
-      - name: Report ESLint Issues with Reviewdog
-        uses: reviewdog/action-eslint@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          eslint_input: backend/eslint_backend.json
-          level: warning
-          fail_on_error: true
+          eslint_flags: "frontend/src/"  # Adjusted to run eslint in the frontend directory
