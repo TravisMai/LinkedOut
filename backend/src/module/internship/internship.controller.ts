@@ -42,13 +42,31 @@ export class InternshipController {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
 
-            // create a new jobApplicants
-            const jobApplicants = new JobApplicants();
-            jobApplicants.student = student;
-            const job = await this.jobService.findOne(id);
-            jobApplicants.job = job;
-            const newJobApplicants = await this.jobApplicantsService.create(jobApplicants);
-
+            const findJobApplicant = await this.jobApplicantsService.findJobApplicantsByCandidateId(decodedToken.id);
+            let newJobApplicants;
+            if (findJobApplicant && findJobApplicant.length > 0) {
+                const job = findJobApplicant.find(job => job.job.id === id);
+                if (job) {
+                    newJobApplicants = await this.jobApplicantsService.findJobApplicantsByJobIdAndCandidateId(job.job.id, student.id);
+                    console.log('test');
+                }
+            } else {
+                // create a new jobApplicants
+                const jobApplicants = new JobApplicants();
+                jobApplicants.student = student;
+                const job = await this.jobService.findOne(id);
+                jobApplicants.job = job;
+                newJobApplicants = await this.jobApplicantsService.create(jobApplicants);
+            }
+            // if the internship already exists, remove the student from the internship
+            const findInternship = await this.internshipRepository.findByCandidateId(student.id);
+            if (findInternship && findInternship.length > 0) {
+                const internship = findInternship.find(internship => internship.jobApplicants.id === newJobApplicants.id);
+                if (internship) {
+                    await this.internshipService.delete(internship.id);
+                    return response.status(HttpStatus.OK).json({ message: 'Delete internship successfully' });
+                }
+            }
             // create a new internship
             const internship = new Internship();
             internship.jobApplicants = newJobApplicants;

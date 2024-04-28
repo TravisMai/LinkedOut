@@ -37,4 +37,13 @@ export class JobApplicantsRepository extends Repository<JobApplicants> {
             .where('student.id = :candidateId', { candidateId })
             .getMany();
     }
+
+    async findJobApplicantsByJobIdAndCandidateId(jobId: string, candidateId: string): Promise<JobApplicants> {
+        return await this.createQueryBuilder('jobApplicants')
+            .leftJoinAndSelect('jobApplicants.student', 'student')
+            .leftJoinAndSelect('jobApplicants.job', 'job')
+            .where('job.id = :jobId', { jobId })
+            .andWhere('student.id = :candidateId', { candidateId })
+            .getOne();
+    }
 }

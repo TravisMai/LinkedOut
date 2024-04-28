@@ -34,6 +34,15 @@ export class JobApplicantsController {
             if (!student) {
                 return response.status(HttpStatus.NOT_FOUND).json({ message: 'Student not found!' });
             }
+            const findApplicant = await this.jobApplicantsService.findJobApplicantsByCandidateId(decodedToken.id);
+            if (findApplicant && findApplicant.length > 0) {
+                const job = findApplicant.find(job => job.job.id === id);
+                if (job) {
+                    // delete the job applicant
+                    await this.jobApplicantsService.delete(job.id);
+                    return response.status(HttpStatus.OK).json({ message: 'Delete job apply successfully' });
+                }
+            }
             const jobApplicants = new JobApplicants();
             jobApplicants.student = student;
             const job = await this.jobService.findOne(id);

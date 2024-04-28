@@ -14,7 +14,7 @@ export class JobApplicantsService {
         return await this.jobApplicantsRepository.save(newJobApplicants);
     }
 
-    // find a job by id
+    // find a job applicant by id
     async findOne(id: string): Promise<JobApplicants> {
         return await this.jobApplicantsRepository.findOne({ where: { id } });
     }
@@ -24,7 +24,18 @@ export class JobApplicantsService {
         return await this.jobApplicantsRepository.findJobApplicantsByJobId(jobId);
     }
 
+    // find all jobApplicants by candidate id
     async findJobApplicantsByCandidateId(candidateId: string): Promise<JobApplicants[]> {
         return await this.jobApplicantsRepository.findJobApplicantsByCandidateId(candidateId);
+    }
+
+    // find a job applicant by job id and candidate id
+    async findJobApplicantsByJobIdAndCandidateId(jobId: string, candidateId: string): Promise<JobApplicants> {
+        return await this.jobApplicantsRepository.findJobApplicantsByJobIdAndCandidateId(jobId, candidateId);
+    }
+
+    // delete a job applicant
+    async delete(id: string): Promise<void> {
+        await this.jobApplicantsRepository.delete(id);
     }
 }
