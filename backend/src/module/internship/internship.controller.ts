@@ -45,7 +45,8 @@ export class InternshipController {
       const findJobApplicant =
         await this.jobApplicantsService.findJobApplicantsByCandidateId(
           decodedToken.id,
-            let newJobApplicants;
+        );
+      let newJobApplicants;
             if (findJobApplicant && findJobApplicant.length > 0) {
                 const job = findJobApplicant.find(job => job.job.id === id);
                 if (job) {
