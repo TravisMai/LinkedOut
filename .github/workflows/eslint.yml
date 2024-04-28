@@ -4,13 +4,13 @@ jobs:
   eslint:
     name: runner / eslint
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - run: cd frontend && npm install  # Change to the frontend directory before running npm install
       - uses: reviewdog/action-eslint@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          eslint_flags: "frontend/src/"  # Adjusted to run eslint in the frontend directory
+          eslint_flags: "frontend/src/"  # Lint only the frontend/src/ directory
