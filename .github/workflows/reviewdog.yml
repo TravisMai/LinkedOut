@@ -7,7 +7,7 @@ permissions:
 on:
   pull_request:
 jobs:
-  eslint:
+  eslint-frontend:
     name: runner / eslint
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +28,28 @@ jobs:
           filter_mode: added
           fail_on_error: false
           workdir: "frontend"
+
+  eslint-backend:
+    name: runner / eslint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - run: |
+          cd backend
+          npm install
+          # Check eslint version to confirm installation
+          npx eslint --version
+      - uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: error
+          filter_mode: added
+          fail_on_error: false
+          workdir: "backend"
 
   shellcheck:
     name: runner / shellcheck
