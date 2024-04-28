@@ -1,4 +1,4 @@
-name: ESLint with Reviewdog
+name: Lint Check
 on:
   pull_request: # Trigger on every pull request
 jobs:
@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3 # Use the latest version
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' # Transition to Node.js 20
       - name: Install frontend dependencies
         run: npm install
         working-directory: frontend
@@ -32,11 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3 # Use the latest version
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' # Transition to Node.js 20
       - name: Install backend dependencies
         run: npm install
         working-directory: backend
