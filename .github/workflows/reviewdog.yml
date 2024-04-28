@@ -17,7 +17,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: warning
-          fail_on_error: true  # This will fail the job when there's a warning
+          fail_on_error: true
 
   hadolint:
     name: runner / hadolint
@@ -29,7 +29,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: warning
-          fail_on_error: true  # This will fail the job when there's a warning
+          fail_on_error: true
 
   misspell:
     name: runner / misspell
@@ -42,7 +42,7 @@ jobs:
           reporter: github-pr-review
           level: warning
           locale: "US"
-          fail_on_error: true  # This will fail the job when there's a warning
+          fail_on_error: true
 
   alex:
     name: runner / alex
@@ -54,4 +54,4 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: warning
-          fail_on_error: true  # This will fail the job when there's a warning
+          fail_on_error: true
