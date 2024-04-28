@@ -13,13 +13,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         isGlobal: true,
         store: redisStore,
         host: configService.get('REDIS_HOST'),
-        // auth_pass: configService.get('REDIS_PASSWORD'),
+        auth_pass: configService.get('REDIS_PASSWORD'),
         port: configService.get('REDIS_PORT'),
         ttl: 120,
         ssl: true,
-        // tls: {
-        //     host: configService.get('REDIS_HOST'),
-        // }
+        tls: {
+            host: configService.get('REDIS_HOST'),
+        }
       }),
     }),
   ],
