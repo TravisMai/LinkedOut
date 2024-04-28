@@ -7,7 +7,6 @@ import {
   Post,
   Body,
   Param,
-  Delete,
   Put,
   UseGuards,
   Res,
@@ -15,11 +14,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { JobApplicants } from '../jobApplicants/jobApplicants.entity';
-import { CompanyService } from '../company/company.service';
 import { StudentService } from '../student/student.service';
 import { StaffService } from '../staff/staff.service';
-import { RedisService } from '../redis/redis.service';
-import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { JobApplicantsService } from '../jobApplicants/jobApplicants.service';

@@ -2,7 +2,6 @@ import { Entity, Column } from 'typeorm';
 import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
 import {
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   IsUrl,

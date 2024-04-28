@@ -1,11 +1,7 @@
 import { JwtGuard } from 'src/common/guards/jwt.guard';
-import { RolesGuard } from 'src/common/guards/role.guard';
-import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { CompanyService } from 'src/module/company/company.service';
-import { Internship } from 'src/module/internship/internship.entity';
 import { InternshipRepository } from 'src/module/internship/internship.repository';
 import { InternshipService } from 'src/module/internship/internship.service';
-import { JobApplicants } from 'src/module/jobApplicants/jobApplicants.entity';
 import { JobApplicantsService } from 'src/module/jobApplicants/jobApplicants.service';
 import { JobService } from 'src/module/job/job.service';
 import { StudentService } from 'src/module/student/student.service';
@@ -15,10 +11,6 @@ import { Request, Response } from 'express';
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Param,
-  Put,
   Res,
   HttpStatus,
   UseGuards,

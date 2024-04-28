@@ -1,12 +1,9 @@
-import * as bcrypt from 'bcrypt';
 import validate = require('uuid-validate');
 import { Request, Response } from 'express';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import {
-  expireTimeOneDay,
   expireTimeOneHour,
-  CompanyListKey,
   JobListKey,
 } from 'src/common/variables/constVariable';
 import {

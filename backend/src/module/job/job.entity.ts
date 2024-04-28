@@ -7,16 +7,12 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
 import {
   IsBoolean,
-  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsPhoneNumber,
   IsString,
-  IsUrl,
   Length,
   Min,
 } from 'class-validator';

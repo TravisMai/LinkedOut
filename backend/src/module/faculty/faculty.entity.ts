@@ -8,15 +8,9 @@ import {
   JoinColumn,
 } from 'typeorm';
 import {
-  IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  IsPhoneNumber,
   IsString,
-  IsUrl,
-  Length,
-  Min,
 } from 'class-validator';
 
 @Entity()

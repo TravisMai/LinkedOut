@@ -7,7 +7,6 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
-  ManyToMany,
 } from 'typeorm';
 import { JobApplicants } from '../jobApplicants/jobApplicants.entity';
 import { Staff } from '../staff/staff.entity';

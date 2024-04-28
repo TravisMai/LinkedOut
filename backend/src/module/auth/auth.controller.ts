@@ -1,18 +1,14 @@
 import {
   Body,
   Controller,
-  Get,
   HttpStatus,
   Post,
-  Request,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { OAuth2Client } from 'google-auth-library';
 import { JwtService } from '@nestjs/jwt';
 import { StaffService } from '../staff/staff.service';
-import { RedisService } from '../redis/redis.service';
 import { StudentService } from '../student/student.service';
 import { Response } from 'express';
 import { StudentResponseDto } from '../student/dto/studentResponse.dto';
@@ -29,7 +25,6 @@ export class AuthController {
     private readonly jwtService: JwtService,
     private readonly authService: AuthService,
     private readonly staffService: StaffService,
-    private readonly redisService: RedisService,
     private readonly studentService: StudentService,
   ) {}
 
