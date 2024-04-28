@@ -30,6 +30,6 @@ export class JobResponseDto {
   }
 
   static fromJobArray(jobArray: Job[]): JobResponseDto[] {
-    return jobArray.map((job) => this.fromJob(job));
+    return jobArray.map(job => this.fromJob(job));
   }
 }

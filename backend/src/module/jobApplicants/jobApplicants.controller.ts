@@ -56,7 +56,7 @@ export class JobApplicantsController {
           decodedToken.id,
         );
       if (findApplicant && findApplicant.length > 0) {
-        const job = findApplicant.find((job) => job.job.id === id);
+        const job = findApplicant.find(job => job.job.id === id);
         if (job) {
           // delete the job applicant
           await this.jobApplicantsService.delete(job.id);

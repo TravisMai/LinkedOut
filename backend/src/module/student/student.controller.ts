@@ -232,7 +232,6 @@ export class StudentController {
         for (let i = currentResumes.length - 1; i >= 0; i--) {
           const resume = currentResumes[i];
           if (student.deleteResumeID.includes(resume.id)) {
-            console.log(resume.url.split('/').pop());
             await this.azureBlobService.delete(resume.url.split('/').pop());
             currentResumes.splice(i, 1);
           }
@@ -267,7 +266,6 @@ export class StudentController {
       );
       return response.status(HttpStatus.OK).json(updateStudent);
     } catch (error) {
-      console.log(error);
       return response.status(error.status).json({ message: error.message });
     }
   }

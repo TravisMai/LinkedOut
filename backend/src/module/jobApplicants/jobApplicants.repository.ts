@@ -14,7 +14,6 @@ export class JobApplicantsRepository extends Repository<JobApplicants> {
 
   // apply for a job
   async applyForJob(studentId: string, jobId: string): Promise<void> {
-    console.log('studentId', studentId);
     await this.createQueryBuilder('job')
       .relation(JobApplicants, 'students')
       .of(jobId)

@@ -28,6 +28,6 @@ export class CompanyResponseDto {
   }
 
   static fromCompanyArray(companyArray: Company[]): CompanyResponseDto[] {
-    return companyArray.map((company) => this.fromCompany(company));
+    return companyArray.map(company => this.fromCompany(company));
   }
 }

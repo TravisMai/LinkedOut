@@ -187,7 +187,6 @@ export class StaffController {
         .status(HttpStatus.CREATED)
         .json({ staff: limitedData, token });
     } catch (error) {
-      console.log(error);
       return response.status(error.status).json({ message: error.message });
     }
   }
@@ -241,7 +240,6 @@ export class StaffController {
       );
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
-      console.log(error);
       return response.status(error.status).json({ message: error.message });
     }
   }
