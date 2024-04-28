@@ -9,10 +9,10 @@ export class Internship {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @OneToOne(() => JobApplicants, { 
-        eager: true,
-        onDelete: 'CASCADE', // Ensures related jobApplicants are deleted when internship is deleted
-    })
+  @OneToOne(() => JobApplicants, {
+    eager: true,
+    onDelete: 'CASCADE', // Ensures related jobApplicants are deleted when internship is deleted
+  })
     @JoinColumn({ name: 'jobApplicantId' })
     jobApplicants: JobApplicants;
 
