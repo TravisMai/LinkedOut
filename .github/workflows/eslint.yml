@@ -17,9 +17,9 @@ jobs:
       - uses: reviewdog/action-eslint@v1
         with:
           reporter: github-pr-review
-          eslint_flags: "frontend/src/"  # Target directory for eslint
+          eslint_flags: "frontend/src/**/*.{ts,tsx}"  # Check .ts and .tsx files in the frontend/src/ directory and its subdirectories
           github_token: ${{ secrets.GITHUB_TOKEN }}
           level: error
           filter_mode: added
           fail_on_error: false
-          workdir: "frontend"  # Set working directory for reviewdog
+          workdir: "frontend"
