@@ -7,9 +7,11 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Student } from '../student/student.entity';
 import { Job } from '../job/job.entity';
+import { Type } from 'class-transformer';
+import { ResumeDTO } from '../student/dto/resume.dto';
 
 @Entity()
 export class JobApplicants {
@@ -24,7 +26,9 @@ export class JobApplicants {
   @JoinColumn({ name: 'jobId' })
   job: Job;
 
-  // thêm cột để store cái cv muốn giữ
+  @Column({ type: 'jsonb', nullable: true })
+  @IsOptional()
+  resume: ResumeDTO;
 
   @Column({ default: 'Applied' })
   @IsString()

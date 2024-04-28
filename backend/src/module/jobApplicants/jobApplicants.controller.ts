@@ -10,6 +10,7 @@ import {
   Res,
   HttpStatus,
   Req,
+  Body,
 } from '@nestjs/common';
 import { JobApplicants } from './jobApplicants.entity';
 import { StudentService } from '../student/student.service';
@@ -17,6 +18,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { JobApplicantsService } from './jobApplicants.service';
 import { JobService } from '../job/job.service';
+import { ApplyJobDTO } from './dto/applyJob.dto';
 
 @Controller('job_applicants')
 export class JobApplicantsController {
@@ -34,6 +36,7 @@ export class JobApplicantsController {
     @Req() req: Request,
     @Res() response: Response,
     @Param('id') id: string,
+    @Body() ApplyJob: ApplyJobDTO,
   ): Promise<Response> {
     try {
       const token = req.headers.authorization.split(' ')[1];
@@ -62,6 +65,11 @@ export class JobApplicantsController {
       jobApplicants.student = student;
       const job = await this.jobService.findOne(id);
       jobApplicants.job = job;
+      const resume = await this.studentService.getResumeById(
+        student.id,
+        ApplyJob.resumeId,
+      );
+      jobApplicants.resume = resume;
       const newJobApplicants =
         await this.jobApplicantsService.create(jobApplicants);
       return response.status(HttpStatus.CREATED).json(newJobApplicants);

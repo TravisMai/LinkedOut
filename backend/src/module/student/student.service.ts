@@ -2,6 +2,7 @@ import { Student } from './student.entity';
 import { Injectable } from '@nestjs/common';
 import { StudentRepository } from './student.repository';
 import { StudentUpdateDto } from './dto/studentUpdate.dto';
+import { ResumeDTO } from './dto/resume.dto';
 
 @Injectable()
 export class StudentService {
@@ -44,5 +45,14 @@ export class StudentService {
     return await this.studentRepository.findOne({
       where: [{ name: value }, { email: value }, { phoneNumber: value }],
     });
+  }
+
+  async getResumeById(studentId: string, resumeId: string): Promise<ResumeDTO> {
+    const student = await this.studentRepository.findOne({
+      where: { id: studentId },
+    });
+    const resume = student.resume?.find((resume) => resume.id === resumeId);
+
+    return resume ? resume : null;
   }
 }
