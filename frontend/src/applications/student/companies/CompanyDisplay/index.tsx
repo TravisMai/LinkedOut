@@ -1,10 +1,8 @@
-import { Apartment, Check, Email, Event, PriorityHigh, Search, Work, WorkHistorySharp } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
-import { Alert, Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Container, Grid, List, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
 import ContentCard from './ContentCard.component';
@@ -36,51 +34,6 @@ const CompanyDisplay: React.FC = () => {
     );
 
 
-    // Handle apply button
-    const [loading, setLoading] = React.useState(false);
-    const [applied, setApplied] = React.useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [showError, setShowError] = useState(false);
-
-    function handleClick() {
-        // handleOpenDialog();
-        setLoading(true);
-        // event.preventDefault();  
-
-        setTimeout(() => {
-            mutation.mutate();
-            // setLoading(false);
-            // !applied ? setApplied(true) : setApplied(false);
-        }, 1000);
-    }
-
-    const mutation = useMutation<ResponseType, ErrorType>({
-        mutationFn: () => {
-            return axios.post(`http://localhost:4000/api/v1/company_applicants/${companyId}`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-        },
-        onSuccess: (data) => {
-            setLoading(false);
-            setShowError(false);
-            setShowSuccess(true);
-            setApplied(true);
-            // handleClose();
-        },
-        onError: () => {
-            console.log(mutation.error);
-            setLoading(false);
-            setShowError(true);
-        },
-        onMutate: () => {
-            // setLoading(true);
-            // setShowError(false);
-        }
-    }
-    );
-
     // Fetch all jobs
     const [jobs, setJobs] = useState<jobType[]>([]);
     useQuery({
@@ -97,60 +50,6 @@ const CompanyDisplay: React.FC = () => {
     });
     // Extract job of current company
     const companyJobs = jobs.filter(job => job.company.id === companyId);
-
-
-    // // Check submitted
-    // // Get all applied companies
-    // const [appliedCompanys, setAppliedCompanys] = React.useState<companyApplicationType[]>();
-    // const fetchAppliedCompanys = (studentId: string) => {
-    //     axios.get(`http://localhost:4000/api/v1/company_applicants/candidate/${studentId}`, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`,
-    //         },
-    //     })
-    //     .then(response => {
-    //         console.log(response.data);
-    //         setAppliedCompanys(response.data);
-    //     })
-    //     .catch(error => {
-    //         console.error("Error fetching applied companies:", error);
-    //     });
-    // };
-
-    // useEffect(() => {
-    //     if (studentData && studentData.id) {
-    //         fetchAppliedCompanys(studentData.id);
-    //     }
-    // }, [studentData]);
-
-    // // Check if student applied for the company
-    // useEffect(() => {
-    //     if (appliedCompanys && appliedCompanys.length > 0) {
-    //         appliedCompanys.forEach((company) => {
-    //             if (company.company.id === companyId) {
-    //                 setApplied(true);
-    //             }
-    //         });
-    //     }
-    // }, [appliedCompanys]);
-
-    // // Handle dialog
-    // const [openDialog, setOpenDialog] = React.useState(false);
-    // const handleOpenDialog = () => {
-    //     setOpenDialog(true);
-    // };
-
-    // const handleCloseDialog = () => {
-    //     setOpenDialog(false);
-    //     setLoading(false);
-    //         // !applied ? setApplied(true) : setApplied(false);
-    // }
-
-    // const handleExit = () => {
-    //     setOpenDialog(false);
-    //     setLoading(false);
-    //     //     !applied ? setApplied(true) : setApplied(false);
-    // }
 
     return (
         <Container>

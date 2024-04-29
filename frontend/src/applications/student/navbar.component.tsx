@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BellRing, Briefcase, MessagesSquare, Home } from 'lucide-react';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 import { Tag } from 'antd';
 import {
   CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
   ExclamationCircleOutlined,
-  MinusCircleOutlined,
-  SyncOutlined,
 } from '@ant-design/icons';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
-import { Box, Button, Divider, IconButton, InputBase, Paper, TextField, Menu, MenuItem } from '@mui/material';
+import { IconButton, InputBase, Paper, Menu, MenuItem } from '@mui/material';
 import { getJwtToken } from '../../shared/utils/authUtils';
-import { BusinessOutlined, Directions, HomeOutlined, Search, WorkOutline } from '@mui/icons-material';
+import { BusinessOutlined, HomeOutlined, Search, WorkOutline } from '@mui/icons-material';
 
 
 type ResponseType = {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import { useQuery } from 'react-query';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { Link } from 'react-router-dom';
@@ -37,16 +37,16 @@ const LeftSidebar: React.FC = () => {
   });
   useEffect(() => {
     if (getStudentInfo.isSuccess) {
-      setStudentData(getStudentInfo.data.data);
+      setStudentData(getStudentInfo.data?.data);
       // console.log(getStudentInfo.data.data.id)
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
   useEffect(() => {
-    if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
-      setStudentData(getStudentInfo.data.data);
+    if (getStudentInfo.isSuccess && getStudentInfo.data?.data.id) {
+      setStudentData(getStudentInfo.data?.data);
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
 
   // Get all applied jobs

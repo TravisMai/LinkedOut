@@ -6,14 +6,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { Delete, Facebook, GitHub, Google, Group, LinkedIn, Twitter } from '@mui/icons-material';
+import { Delete, Group } from '@mui/icons-material';
 import DividerWithText from '../../../../shared/components/DividerWithText';
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -92,7 +91,7 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
                 },
             });
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);
@@ -147,7 +146,7 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
                             <Grid container spacing={2} justifyContent="center">
                                 {formData.reference?.map((item: referenceType, index) => (
                                     <Grid container direction='row' spacing={1} className='mt-3 mx-5 mb-6'>
-                                        
+
                                         <Grid item xs={11} spacing={2} className='space-y-3'>
                                             <TextField
                                                 fullWidth
@@ -189,9 +188,9 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
                                                     updatedFormData.reference.splice(index, 1);
                                                     setFormData(updatedFormData);
                                                 }}
-                                                // sx={{ mt: 1, mb: 2 }}
+                                            // sx={{ mt: 1, mb: 2 }}
                                             >
-                                                <Delete /> 
+                                                <Delete />
                                             </LoadingButton>
                                         </Grid>
                                         <DividerWithText className='mt-5' text="" muiElementIcon={<Group />} />

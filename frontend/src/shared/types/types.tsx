@@ -122,6 +122,7 @@ type postDescriptionType = {
 
 type jobApplicationType = {
     "id": string,
+    "resume": resumeType,
     "student": studentType,
     "job": jobType,
     "status": string,
@@ -138,15 +139,15 @@ type ErrorType = {
     }
 }
 
-type internshipType = {
-    "id": string,
-    "document": string[],
-    "result": number,
-    "created": Date,
-    "updated": Date,
-    "jobApplicants": jobApplicationType,
-    "staff": staffType,
-}
+// type internshipType = {
+//     "id": string,
+//     "document": string[],
+//     "result": number,
+//     "created": Date,
+//     "updated": Date,
+//     "jobApplicants": jobApplicationType,
+//     "staff": staffType,
+// }
 
 type staffType = {
     "id": string,

@@ -1,13 +1,12 @@
-import { Apartment, Check, Email, Event, PriorityHigh, Search, Work } from '@mui/icons-material';
+import { Apartment, Check, Email, PriorityHigh, Search, Work } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Alert, Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import ApplyDialog from './applyDialog';
 
 
 const processList = ["Intern", "Received"];
@@ -43,7 +42,6 @@ const JobDisplay: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
     const [applied, setApplied] = React.useState(false);
     const [appliedIntern, setAppliedIntern] = React.useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
 
     function handleClickApply() {
@@ -78,10 +76,9 @@ const JobDisplay: React.FC = () => {
                 },
             });
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             setLoading(false);
             setShowError(false);
-            setShowSuccess(true);
             setApplied(true);
             // handleClose();
         },
@@ -105,12 +102,10 @@ const JobDisplay: React.FC = () => {
                 },
             });
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             setLoading(false);
             setShowError(false);
-            setShowSuccess(true);
             setApplied(true);
-            // handleClose();
         },
         onError: () => {
             console.log(mutationApplyInternship.error);
@@ -125,7 +120,7 @@ const JobDisplay: React.FC = () => {
     );
 
     // Get Student information
-    const [studentData, setStudentData] = React.useState<studentType>([]);
+    const [studentData, setStudentData] = React.useState<studentType | null>(null);
     const getStudentInfo = useQuery({
         queryKey: "studentInfo",
         queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
@@ -244,14 +239,14 @@ const JobDisplay: React.FC = () => {
                 <Grid item xs={7}>
                     <Box display="flex" gap={3}>
                         <Typography variant="h4">{job?.title}</Typography>
-                        <LoadingButton variant="outlined" color={showError ? "error" : "primary"} onClick={handleClickApply} loading={loading} disabled={!studentData.isVerify}>{!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}</LoadingButton>
-                        {isInternship && isInternStudent && <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData.isVerify}>{!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}</LoadingButton>}
+                        <LoadingButton variant="outlined" color={showError ? "error" : "primary"} onClick={handleClickApply} loading={loading} disabled={!studentData?.isVerify}>{!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}</LoadingButton>
+                        {isInternship && isInternStudent && <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData?.isVerify}>{!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}</LoadingButton>}
                         {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                         {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Apply successfully</Alert>} */}
 
                     </Box>
                     {isInternship &&
-                        <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic', color: 'green', textAlign: 'center', mr: 10 }}>    Job avaiable for internship    </Typography>
+                        <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic', color: 'green', textAlign: 'center', mr: 10 }}>    Job available for internship    </Typography>
                     }
                     <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ my: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">

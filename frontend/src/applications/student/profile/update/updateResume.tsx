@@ -10,10 +10,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMutation, useQuery } from "react-query";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { AttachFile, Delete, WorkHistory } from '@mui/icons-material';
+import { AttachFile, Delete } from '@mui/icons-material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
