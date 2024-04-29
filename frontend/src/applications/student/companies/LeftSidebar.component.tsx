@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect} from 'react';
+import React, { useCallback, useEffect} from 'react';
 import { useQuery } from 'react-query';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { Link } from 'react-router-dom';
@@ -51,20 +51,24 @@ const LeftSidebar: React.FC = () => {
 
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>([]);
-  const fetchAppliedJobs = (studentId: string) => {
-    axios.get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        console.log(response.data);
-        setAppliedJobs(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching applied jobs:", error);
-      });
-  };
+  // Wrap fetchAppliedJobs in useCallback
+  const fetchAppliedJobs = useCallback(
+    (studentId: string) => {
+      axios
+        .get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setAppliedJobs(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching applied jobs:", error);
+        });
+    },
+    [token] // Make sure to add token as dependency
+  );
 
   useEffect(() => {
     if (studentData && studentData.id) {
