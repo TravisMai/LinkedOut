@@ -13,6 +13,7 @@ import { FacultyModule } from 'src/module/faculty/faculty.module';
 import { InternshipModule } from 'src/module/internship/internship.module';
 import { JobApplicantsModule } from 'src/module/jobApplicants/jobApplicants.module';
 import { Module, ValidationPipe, Logger } from '@nestjs/common';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { Module, ValidationPipe, Logger } from '@nestjs/common';
     },
     AuthService,
     Logger,
+    AppService,
   ],
 })
 export class AppModule {}
