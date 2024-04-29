@@ -9,7 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
@@ -21,7 +20,7 @@ import axios from 'axios';
 import { getJwtToken } from '../../shared/utils/authUtils';
 
 const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicant'], ['Messages', '/company/message']];
-const settings = ['Settings', 'Logout'];
+// const settings = ['Settings', 'Logout'];
 
 const theme = createTheme({
   palette: {
@@ -41,9 +40,9 @@ const CompanyAppBar = () => {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  // const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorElUser(event.currentTarget);
+  // };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -63,7 +62,7 @@ const CompanyAppBar = () => {
   }
 
   // Fetch company data
-  const [companyData, setcompanyData] = React.useState<companyType>([]);
+  const [companyData, setcompanyData] = React.useState<companyType | null>();
   const token = getJwtToken();
 
   // Fetch company data
@@ -174,14 +173,10 @@ const CompanyAppBar = () => {
               ))}
             </Box>
             <Typography sx={{ mr: 3 }}>
-              {companyData.name}
+              {companyData?.name ?? ''}
             </Typography>
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={companyData.avatar} />
-                </IconButton>
-              </Tooltip>
+              <Avatar alt="Remy Sharp" src={companyData?.avatar ?? ''} />
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"

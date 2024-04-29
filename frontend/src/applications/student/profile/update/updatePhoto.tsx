@@ -1,7 +1,6 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -9,12 +8,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMutation, useQuery } from "react-query";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -175,7 +171,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
               </Grid>
               {/* Display current photo */}
               <img
-                src={filePreview}
+                src={filePreview || ''}
                 className="my-3"
               />
 

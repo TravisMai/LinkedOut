@@ -1,4 +1,4 @@
-import { Apartment, Check, Close, Email, Event, Search, Work } from '@mui/icons-material';
+import { Check, Close, Search } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';

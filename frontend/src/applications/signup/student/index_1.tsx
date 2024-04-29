@@ -1,10 +1,7 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -16,9 +13,8 @@ import { useMutation } from "react-query";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -142,9 +138,9 @@ export default function StudentSignUp() {
     );
 
     // Function to store JWT token in cookie
-    const storeJwtToken = (token: string) => {
-        document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-    };
+    // const storeJwtToken = (token: string) => {
+    //     document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
+    // };
 
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {

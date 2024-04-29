@@ -6,16 +6,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter, WorkHistory } from '@mui/icons-material';
+import { Delete, WorkHistory } from '@mui/icons-material';
 import DividerWithText from '../../../../shared/components/DividerWithText';
-import { Divider } from 'antd';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -93,7 +91,7 @@ export default function UpdateWorkingHistory({ onClose }: { onClose: () => void 
                 },
             });
         },
-        onSuccess: (data) => {
+        onSuccess: (_data) => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);

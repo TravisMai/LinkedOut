@@ -12,8 +12,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
@@ -22,17 +20,17 @@ import { Typography } from '@mui/material';
 import { Add, Launch, RecentActors } from '@mui/icons-material';
 import { getJwtToken } from '../../shared/utils/authUtils';
 
-function createData(
-    companyId: number,
-    logoLink: string,
-    name: string,
-    representative: string,
-    phone: number,
-    email: string,
-    companyLink: string,
-) {
-    return { companyId, logoLink, name, representative, phone, email, companyLink };
-}
+// function createData(
+//     companyId: number,
+//     logoLink: string,
+//     name: string,
+//     representative: string,
+//     phone: number,
+//     email: string,
+//     companyLink: string,
+// ) {
+//     return { companyId, logoLink, name, representative, phone, email, companyLink };
+// }
 
 
 
@@ -117,8 +115,8 @@ export function AllJobPage() {
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                        <TableCell align="center">{row.title}</TableCell>
-                                        <TableCell align="center">{row.descriptions.responsibilities}</TableCell>
+                                        <TableCell align="center">{row.name}</TableCell>
+                                        <TableCell align="center">{row.description}</TableCell>
                                         <TableCell align="center">21/12/2023</TableCell>
                                         <TableCell align="center">9</TableCell>
                                         <TableCell align="center">

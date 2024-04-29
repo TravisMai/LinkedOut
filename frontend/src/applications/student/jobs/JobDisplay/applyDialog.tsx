@@ -4,14 +4,14 @@ import { Box, Container, CssBaseline, Grid, IconButton, Typography } from '@mui/
 import CloseIcon from '@mui/icons-material/Close';
 import { LoadingButton } from '@mui/lab';
 
-export default function ApplyDialog({ state, onExit, onClose }: { state: boolean, onExit: () => void, onClose: () => void }) {
+export default function ApplyDialog({ state, onExit }: { state: boolean, onExit: () => void, onClose: () => void }) {
 
     const handleExit = () => {
         onExit();
     }
-    const handleClose = () => {
-        onClose();
-    }
+    // const handleClose = () => {
+    //     onClose();
+    // }
 
     return (
         <React.Fragment>

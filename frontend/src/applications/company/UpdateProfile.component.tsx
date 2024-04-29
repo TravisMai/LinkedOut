@@ -1,7 +1,6 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -11,7 +10,7 @@ import { useMutation, useQuery } from "react-query";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -159,9 +158,9 @@ export default function UpdateProfile() {
   );
 
   // Function to store JWT token in cookie
-  const storeJwtToken = (token: string) => {
-    document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-  };
+  // const storeJwtToken = (token: string) => {
+  //   document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
+  // };
 
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {

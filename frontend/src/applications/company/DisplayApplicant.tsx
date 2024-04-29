@@ -1,5 +1,5 @@
-import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium } from "@mui/icons-material";
-import { Box, Button, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
+import { AccountCircle, CalendarMonth, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium } from "@mui/icons-material";
+import { Box, Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import React from "react";
 import CompanyAppBar from "./CompanyAppBar.component";
 
@@ -184,9 +184,9 @@ export default function StudentProfile2() {
             <CompanyAppBar />
             <Grid container spacing={2} className='bg-[#f3f2f0] min-h-screen' sx={{ mt: 1 }}>
                 <Grid item xs={3}>
-                    <Container disableGutters="true"
+                    <Container disableGutters={true}
                         sx={{ width: 9 / 10, bgcolor: "white", display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
-                        <Container disableGutters="true"
+                        <Container disableGutters={true}
                             sx={{
                                 alignContent: "center",
                                 display: 'flex',
@@ -206,7 +206,7 @@ export default function StudentProfile2() {
                         <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{data.phone} </span></Typography>
                         <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{data.major} </span></Typography>
                         <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{data.year} </span></Typography>
-                        <Container disableGutters="true"
+                        <Container disableGutters={true}
                             sx={{
                                 alignContent: "center",
                                 display: 'flex',
@@ -221,7 +221,7 @@ export default function StudentProfile2() {
 
                 </Grid>
                 <Grid item xs={8.8}>
-                    <Container disableGutters="true"
+                    <Container disableGutters={true}
                         sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
                         <Box display={'flex'} flexDirection={'row'} gap={2}>
                             <Button variant="contained" color='success' sx={{ mt: 1, width: 1 / 6 }} size="small" >Accept</Button>

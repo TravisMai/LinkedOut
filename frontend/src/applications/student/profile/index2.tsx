@@ -1,5 +1,5 @@
-import { AccountCircle, CalendarMonth, Check, Code, Create, Email, GitHub, Group, Launch, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium } from "@mui/icons-material";
-import { Box, Button, Checkbox, Chip, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
+import { AccountCircle, CalendarMonth, Check, Email, Launch, Phone, Star } from "@mui/icons-material";
+import { Box, Button, Checkbox, Chip, Container, Grid, IconButton, List, ListItem, Paper, Typography } from "@mui/material";
 import React from "react";
 import FormDialog from "./update/updateDialog.component";
 import PhotoDialog from "./update/updateDialog.component";
@@ -224,7 +224,7 @@ export default function StudentProfile2() {
         setOpenPhoto(false);
     }
 
-    
+
     const token = getJwtToken();
     // Mutation to logout
     const mutation = useMutation<ResponeType, ErrorType>({
@@ -269,9 +269,9 @@ export default function StudentProfile2() {
     return (
         <Grid container spacing={2} className='bg-[#f3f2f0] min-h-screen'>
             <Grid item xs={3}>
-                <Container disableGutters="true"
+                <Container disableGutters={true}
                     sx={{ width: 9 / 10, bgcolor: "white", display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
-                    <Container disableGutters="true"
+                    <Container disableGutters={true}
                         sx={{
                             alignContent: "center",
                             display: 'flex',
@@ -292,7 +292,7 @@ export default function StudentProfile2() {
                     <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{data.phone} </span></Typography>
                     <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{data.major} </span></Typography>
                     <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{data.year} </span></Typography>
-                    <Container disableGutters="true"
+                    <Container disableGutters={true}
                         sx={{
                             alignContent: "center",
                             display: 'flex',
@@ -308,7 +308,7 @@ export default function StudentProfile2() {
 
             </Grid>
             <Grid item xs={8.8}>
-                <Container disableGutters="true"
+                <Container disableGutters={true}
                     sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
                     <Button href="/student/profile/update" variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" disabled>Update</Button>
                     <Paper>
@@ -350,8 +350,12 @@ export default function StudentProfile2() {
                         </Typography>
                     </Paper>
                     <Button variant="outlined" color="error" sx={{ mt: 1, width: 1 / 5 }} size="small" onClick={handleLogout}>Logout</Button>
-                    <FormDialog state={openInfo} onClose={handleCloseRequest} />
-                    <PhotoDialog state={openPhoto} onClose={handleCloseUpload} />
+                    <FormDialog state={openInfo} onClose={handleCloseRequest} field={""} onExit={function (): void {
+                        throw new Error("Function not implemented.");
+                    } } />
+                    <PhotoDialog state={openPhoto} onClose={handleCloseUpload} field={""} onExit={function (): void {
+                        throw new Error("Function not implemented.");
+                    } } />
 
                 </Container>
             </Grid>

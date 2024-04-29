@@ -1,38 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Container, Divider, Grid, IconButton, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
-import JobDisplay from './JobDisplay.component';
+import { List, ListItem, ListItemText, Typography } from '@mui/material';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { useQuery } from 'react-query';
 // import JobDisplay from './JobDisplay.component';
 
-type ResponeType = {
-  data: {
-    student: {
-      id: string;
-      name: string;
-      email: string;
-      phoneNumber: string;
-      avatar: string;
-      isGoogle: boolean;
-      isVerify: boolean;
-    };
-    token: string;
-  };
-}
+// type ResponeType = {
+//   data: {
+//     student: {
+//       id: string;
+//       name: string;
+//       email: string;
+//       phoneNumber: string;
+//       avatar: string;
+//       isGoogle: boolean;
+//       isVerify: boolean;
+//     };
+//     token: string;
+//   };
+// }
 
-type ErrorType = {
-  response: {
-    data: {
-      message: string;
-    }
-  }
-}
+// type ErrorType = {
+//   response: {
+//     data: {
+//       message: string;
+//     }
+//   }
+// }
 
 const LeftSidebar: React.FC = () => {
-  const navigate = useNavigate();
-  const [showContent, setShowContent] = useState(false);
+  // const navigate = useNavigate();
+  const [showContent] = useState(false);
 
 
   const handleClickScrollToJobs = () => {
@@ -101,9 +99,9 @@ const LeftSidebar: React.FC = () => {
   const rejectedList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Rejected');
 
 
-  const handleClick = () => {
-    document.getElementById("my-section")?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const handleClick = () => {
+  //   document.getElementById("my-section")?.scrollIntoView({ behavior: "smooth" });
+  // };
 
   return (
     <div className="ml-7 mt-6 pb-6 h-fit lg:min-h-[500px] flex flex-col rounded-xl space-y-2 fixed">

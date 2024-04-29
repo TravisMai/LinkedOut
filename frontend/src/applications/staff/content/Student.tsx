@@ -14,25 +14,12 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import Link from '@mui/material/Link';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import StudentDialog from './Student.Dialog';
 import { Menu, MenuItem, Tooltip, Typography } from '@mui/material';
-
-function createData(
-    studentId: number,
-    name: string,
-    email: string,
-    status: string,
-    company: string,
-    companyLink: string,
-) {
-    return { studentId, email, name, status, company, companyLink };
-}
-
 
 export default function Student() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);

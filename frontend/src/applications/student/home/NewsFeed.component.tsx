@@ -4,35 +4,8 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
-type jobType = {
-  "id": string,
-  "company": {
-    "id": string,
-    "name": string,
-    "email": string,
-    "avatar": string,
-    "workField": string,
-    "address": string,
-  },
-  "title": string,
-  "image": null,
-  "salary": null,
-  "level": string,
-  "workType": string,
-  "quantity": number,
-  "descriptions": {
-    "aboutUs": string,
-    "responsibilities": [string],
-    "requirements": [string],
-  }
-}
-
-
 const NewsFeed: React.FC = () => {
   const [allJobs, setAllJobs] = useState<jobType[]>([]);
-  // Get jwt token
-  
-
   const token = getJwtToken();
 
   // Fetch all jobs
@@ -48,7 +21,6 @@ const NewsFeed: React.FC = () => {
       setAllJobs(data.data);
     }
   });
-
 
   return (
     <div className="mt-6 w-full h-fit flex flex-col space-y-3 pb-10">

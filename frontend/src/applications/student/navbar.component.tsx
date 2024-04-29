@@ -20,7 +20,7 @@ type ResponseType = {
 const Navbar: React.FC = () => {
   const [studentEmail, setStudentEmail] = useState("");
   const [studentStatus, setStudentStatus] = useState(false);
-  const [studentProcess, setStudentProcess] = useState("");
+  const [, setStudentProcess] = useState("");
   const [studentAvatar, setStudentAvatar] = useState("");
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Container, TextField, Button, List, ListItem, ListItemText, Divider, Grid, ListItemButton, } from '@mui/material';
-import { KeyboardArrowDown } from '@mui/icons-material';
+import { ListItemText, Divider, Grid, ListItemButton, } from '@mui/material';
 import ChatHistory from './chatHistory.component';
 import CompanyAppBar from './CompanyAppBar.component';
 

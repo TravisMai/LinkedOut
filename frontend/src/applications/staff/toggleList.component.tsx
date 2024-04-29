@@ -4,9 +4,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import People from '@mui/icons-material/People';
-import Dns from '@mui/icons-material/Dns';
-import { Label } from 'recharts';
 import { PropsWithChildren } from 'react';
 
 type DataItem = {

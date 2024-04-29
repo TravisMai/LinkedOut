@@ -15,19 +15,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
-// Generate Order Data
-function createData(
-    id: number,
-    date: string,
-    companyName: string,
-    representative: string,
-    phone: number,
-    file: string,
-) {
-    return { id, date, companyName, representative, phone, file };
-}
-
-
 type ResposeType = {
     data: {
         student: {
@@ -86,9 +73,9 @@ type ResposeType = {
 //     ),
 // ];
 
-function preventDefault(event: React.MouseEvent) {
-    event.preventDefault();
-}
+// function preventDefault(event: React.MouseEvent) {
+//     event.preventDefault();
+// }
 
 export default function Pending(props: any) {
 
@@ -119,7 +106,7 @@ export default function Pending(props: any) {
     // Mutation to send form data to server    
     const queryClient = useQueryClient();
     const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string, property: string }>({
-        mutationFn: ({ verify, id, property }) => axios.put(`http://52.163.112.173:4000/api/v1/student/${id}`,
+        mutationFn: ({ verify, id }) => axios.put(`http://52.163.112.173:4000/api/v1/student/${id}`,
             { property: verify },
             {
                 headers: {

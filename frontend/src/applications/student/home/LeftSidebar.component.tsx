@@ -1,46 +1,16 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import React, { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
-import DividerWithText from '../../../shared/components/DividerWithText';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Container, Divider, IconButton, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Container, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
-type ResponeType = {
-  data: {
-    student: {
-      id: string;
-      name: string;
-      email: string;
-      phoneNumber: string;
-      avatar: string;
-      isGoogle: boolean;
-      isVerify: boolean;
-    };
-    token: string;
-  };
-}
-
-type ErrorType = {
-  response: {
-    data: {
-      message: string;
-    }
-  }
-}
-
 const LeftSidebar: React.FC = () => {
-  const navigate = useNavigate();
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, ] = useState(false);
   const token = getJwtToken();
-
 
   // Fetch for student info
   // Get Student information
-  const [studentData, setStudentData] = React.useState<studentType>([]);
+  const [studentData, setStudentData] = React.useState<studentType | null>(null);
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
     queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
@@ -89,53 +59,8 @@ const LeftSidebar: React.FC = () => {
   // Count jobs with status
   const countAppliedJobs = appliedJobs?.filter(job => job.status === "Applied").length;
   const countApprovedJobs = appliedJobs?.filter(job => job.status === "Approved").length;
-  const countPendingJobs = appliedJobs?.filter(job => job.status === "Pending").length;
-  const countRejectedJobs = appliedJobs?.filter(job => job.status === "Rejected").length;
-
 
   // Mutation to logout
-  const mutation = useMutation<ResponeType, ErrorType>({
-    mutationFn: () => axios.post("http://52.163.112.173:4000/api/v1/student/logout", {}, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-    onSuccess: () => {
-      document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
-      // Delete cookie
-
-      console.log("Logout successfully");
-      // setSending(false);
-      // setShowError(false);
-      // setShowSuccess(true);
-      setTimeout(() => {
-        // setShowSuccess(false); // Hide the success message
-        navigate('/'); // Navigate to the next screen
-      }, 1000);
-    },
-    onError: (error) => {
-      // setSending(false);
-      // setShowError(true);
-      console.log("Logout failed");
-      console.log(error);
-    },
-    onMutate: () => {
-      console.log(token);
-      // setSending(true);
-      // setShowError(false);
-    }
-  }
-  );
-
-
-  const handleLogout = () => {
-    mutation.mutate();
-  }
-
-  // Toggle show more/less
-  const toggleContent = () => {
-    setShowContent(!showContent);
-  };
 
   return (
     <div className="w-4/5 mx-auto mt-6 pb-6 h-fit lg:min-h-[500px] flex flex-col rounded-xl space-y-2">
@@ -147,13 +72,13 @@ const LeftSidebar: React.FC = () => {
             className="w-full h-24 rounded-t-lg"
           />
           <img
-            src={studentData.avatar}
+            src={studentData?.avatar}
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>
         <Container className='pb-2 pt-2'>
-          <Typography variant="h5" component="div" className='text-center'> {token ? studentData.name : <div>Not Logged In</div>}</Typography>
-          <Typography variant="body2" className='text-center text-gray-400'>{studentData.major} Student </Typography>
+          <Typography variant="h5" component="div" className='text-center'> {token ? studentData?.name : <div>Not Logged In</div>}</Typography>
+          <Typography variant="body2" className='text-center text-gray-400'>{studentData?.major} Student </Typography>
         </Container>
         <List component="nav" aria-label="mailbox folders" hidden={showContent}>
           <Divider />

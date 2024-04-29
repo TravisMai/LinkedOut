@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { Container, Divider, Grid, IconButton, Link, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
-import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { Grid, List, ListItemButton, Typography } from '@mui/material';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
 type jobType = {

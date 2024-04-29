@@ -1,8 +1,4 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 import Typewriter from 'typewriter-effect';
@@ -47,7 +42,6 @@ export default function HomePage() {
                         options={{
                             strings: ['Website for students to find internship and job opportunities'],
                             autoStart: true,
-                            pauseFor: 3000,
                             delay: 10,
                             deleteSpeed: 10,
                             loop: true,

@@ -19,19 +19,6 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
-function createData(
-    companyId: number,
-    logoLink: string,
-    name: string,
-    representative: string,
-    phone: number,
-    email: string,
-    companyLink: string,
-) {
-    return { companyId, logoLink, name, representative, phone, email, companyLink };
-}
-
-
 export default function AllJob() {
 
     const [allJob, setAllJob] = useState<jobType[]>([]);

@@ -148,7 +148,7 @@ const JobDisplay: React.FC = () => {
                         <Stack spacing={2} >
                             <Pagination
                                 count={Math.ceil(appliedList.length / itemsPerPage)}
-                                onChange={(event, value) => handlePageChange(value - 1, 'applied')}
+                                onChange={(_event, value) => handlePageChange(value - 1, 'applied')}
                             />
                         </Stack>
                     </div>
@@ -198,7 +198,7 @@ const JobDisplay: React.FC = () => {
                         <Stack spacing={2} >
                             <Pagination
                                 count={Math.ceil(approvedList.length / itemsPerPage)}
-                                onChange={(event, value) => handlePageChange(value - 1, 'approved')}
+                                onChange={(_event, value) => handlePageChange(value - 1, 'approved')}
                             />
                         </Stack>
                     </div>
@@ -248,7 +248,7 @@ const JobDisplay: React.FC = () => {
                         <Stack spacing={2} >
                             <Pagination
                                 count={Math.ceil(pendingList.length / itemsPerPage)}
-                                onChange={(event, value) => handlePageChange(value - 1, 'pending')}
+                                onChange={(_event, value) => handlePageChange(value - 1, 'pending')}
                             />
                         </Stack>
                     </div>
@@ -297,7 +297,7 @@ const JobDisplay: React.FC = () => {
                         <Stack spacing={2} >
                             <Pagination
                                 count={Math.ceil(rejectedList.length / itemsPerPage)}
-                                onChange={(event, value) => handlePageChange(value - 1, 'rejected')}
+                                onChange={(_event, value) => handlePageChange(value - 1, 'rejected')}
                             />
                         </Stack>
                     </div>

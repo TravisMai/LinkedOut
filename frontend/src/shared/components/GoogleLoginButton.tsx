@@ -1,6 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { Database } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
 const GoogleLoginButton = (params: { 'role': string }) => {

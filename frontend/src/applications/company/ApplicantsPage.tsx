@@ -13,27 +13,25 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import CompanyAppBar from './CompanyAppBar.component';
 import { Typography } from '@mui/material';
-import { Add } from '@mui/icons-material';
 import { getJwtToken } from '../../shared/utils/authUtils';
 
 
-function createData(
-    companyId: number,
-    logoLink: string,
-    name: string,
-    representative: string,
-    phone: number,
-    email: string,
-    companyLink: string,
-) {
-    return { companyId, logoLink, name, representative, phone, email, companyLink };
-}
+// function createData(
+//     companyId: number,
+//     logoLink: string,
+//     name: string,
+//     representative: string,
+//     phone: number,
+//     email: string,
+//     companyLink: string,
+// ) {
+//     return { companyId, logoLink, name, representative, phone, email, companyLink };
+// }
 
 
 type studentType = {

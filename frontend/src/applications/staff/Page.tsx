@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -20,7 +19,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MainListItems from './listItems.component';
 import ToggleList from './toggleList.component';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Dashboard from './content/Dashboard';
 import Student from './content/Student';
 import Company from './content/Company';
@@ -38,9 +36,8 @@ import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Collapse, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Button } from '@mui/material';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import WorkIcon from '@mui/icons-material/Work';
 import SubjectIcon from '@mui/icons-material/Subject';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
@@ -185,11 +182,11 @@ export default function StaffPage() {
         checkAuthentication();
     }, []);
 
-    const [openSub, setOpenSub] = React.useState(true);
+    // const [openSub, setOpenSub] = React.useState(true);
 
-    const handleClick = () => {
-        setOpenSub(!openSub);
-    };
+    // const handleClick = () => {
+    //     setOpenSub(!openSub);
+    // };
 
 
     const [open, setOpen] = React.useState(true);

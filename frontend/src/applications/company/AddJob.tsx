@@ -1,7 +1,6 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -11,10 +10,9 @@ import { useMutation, useQuery } from "react-query";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
 import CompanyAppBar from './CompanyAppBar.component';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -53,25 +51,6 @@ interface updateForm {
     newPassword: string;
 }
 
-const countryCode = [
-    {
-        label: 'VNM',
-        numberPrefix: '+84',
-    },
-    {
-        label: 'AUS',
-        numberPrefix: '+61',
-    },
-    {
-        label: 'USA',
-        numberPrefix: '+1',
-    },
-    {
-        label: 'JPN',
-        numberPrefix: '+81',
-    },
-];
-
 export default function AddJob() {
     const navigate = useNavigate();
     const [sending, setSending] = useState(false);
@@ -79,7 +58,6 @@ export default function AddJob() {
     const [showError, setShowError] = useState(false);
     const [studentId, setStudentId] = useState('');
 
-    const [country, countryChange] = useState(0);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -89,8 +67,6 @@ export default function AddJob() {
     });
 
     // Get jwt token
-    
-
     const token = getJwtToken();
 
     // Fetch current information
@@ -129,10 +105,10 @@ export default function AddJob() {
     };
 
     // Handle country selection change
-    const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
-        countryChange(selectedCountryIndex);
-    };
+    // const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    //     const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
+    //     countryChange(selectedCountryIndex);
+    // };
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm>({
@@ -165,9 +141,9 @@ export default function AddJob() {
     );
 
     // Function to store JWT token in cookie
-    const storeJwtToken = (token: string) => {
-        document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-    };
+    // const storeJwtToken = (token: string) => {
+    //     document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
+    // };
 
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {

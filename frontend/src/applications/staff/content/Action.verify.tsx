@@ -4,12 +4,7 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import Fab from "@mui/material/Fab";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { Check } from "@mui/icons-material";
@@ -39,11 +34,6 @@ type ResposeType = {
         token: string;
     };
 }
-
-interface newForm {
-    isVerify: boolean;
-}
-
 
 export default function Verify() {
     const [searchTerm, setSearchTerm] = React.useState("");

@@ -1,13 +1,9 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -15,27 +11,12 @@ import { useMutation } from "react-query";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormHelperText from '@mui/material/FormHelperText';
-import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Accordion, AccordionSummary, Paper, AccordionDetails } from '@mui/material';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -100,7 +81,7 @@ export default function StudentSignUp() {
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
 
-    const [country, countryChange] = useState(0);
+    const [country, ] = useState(0);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -132,10 +113,10 @@ export default function StudentSignUp() {
     };
 
     // Handle country selection change
-    const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
-        countryChange(selectedCountryIndex);
-    };
+    // const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    //     const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
+    //     countryChange(selectedCountryIndex);
+    // };
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({

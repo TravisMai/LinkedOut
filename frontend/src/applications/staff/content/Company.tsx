@@ -19,19 +19,6 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
-function createData(
-    companyId: number,
-    logoLink: string,
-    name: string,
-    representative: string,
-    phone: number,
-    email: string,
-    companyLink: string,
-) {
-    return { companyId, logoLink, name, representative, phone, email, companyLink };
-}
-
-
 type companyType = {
     "id": string,
     "name": string,
@@ -45,12 +32,12 @@ type companyType = {
     "taxId": null
 }
 
-const rows = [
-    createData(926382, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-    createData(396283, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-    createData(928683, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-    createData(682463, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-];
+// const rows = [
+//     createData(926382, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
+//     createData(396283, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
+//     createData(928683, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
+//     createData(682463, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
+// ];
 
 
 export default function Company() {

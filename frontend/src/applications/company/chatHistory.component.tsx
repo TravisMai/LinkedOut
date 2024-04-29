@@ -1,4 +1,4 @@
-import { ContactEmergency, MoreHoriz } from "@mui/icons-material";
+import { ContactEmergency } from "@mui/icons-material";
 import { Container, IconButton, List, ListItem, ListItemText, Paper, Typography } from "@mui/material"
 
 const messages = [{ id: 1, text: 'Hello', user: 'Tran Tri Dat' }, { id: 2, text: 'Hi', user: 'Me' }, { id: 3, text: 'I want to apply to Fullstack Developer Intern position, can you show Tran Tri Dat the applying procees?', user: 'Tran Tri Dat' }, { id: 4, text: 'Sure, please fill in this form.', user: 'Me' }, { id: 4, text: 'https://youcannotapply.Me.kintone.com', user: 'Me' }, { id: 3, text: 'Thanks! Can I have the JD of this position?', user: 'Tran Tri Dat' }, { id: 2, text: 'Yes, sure.', user: 'Me' },]
