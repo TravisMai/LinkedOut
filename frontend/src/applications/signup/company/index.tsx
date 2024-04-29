@@ -152,7 +152,7 @@ export default function CompanySignUp() {
                     }
                 }
             });
-            return axios.post("http://localhost:4000/api/v1/company", formDataToSend, {
+            return axios.post("http://52.163.112.173:4000/api/v1/company", formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Set content type for file upload
                 },

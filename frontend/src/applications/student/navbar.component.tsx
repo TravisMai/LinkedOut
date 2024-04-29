@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
   const token = getJwtToken();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
   // Mutation to get search results
   const mutation = useMutation<ResponseType, ErrorType, string | null>({
     mutationFn: (searchString) => {
-      return axios.get(`http://localhost:4000/api/v1/app?search=${searchString}`, {
+      return axios.get(`http://52.163.112.173:4000/api/v1/app?search=${searchString}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

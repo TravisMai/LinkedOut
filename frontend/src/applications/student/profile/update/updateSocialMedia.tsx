@@ -76,7 +76,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:4000/api/v1/student/me", {
+                const response = await axios.get("http://52.163.112.173:4000/api/v1/student/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -109,7 +109,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
-            return axios.put(`http://localhost:4000/api/v1/student/${studentId}`, formData, {
+            return axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

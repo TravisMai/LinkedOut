@@ -55,7 +55,7 @@ export function ApplicantsPage() {
     // Fetch all stdents
     useQuery({
         queryKey: "allStudents",
-        queryFn: () => axios.get("http://localhost:4000/api/v1/student/", {
+        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

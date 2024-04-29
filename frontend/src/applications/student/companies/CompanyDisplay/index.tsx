@@ -20,7 +20,7 @@ const CompanyDisplay: React.FC = () => {
     // Fetch company information
     useQuery({
         queryKey: "thisCompany",
-        queryFn: () => axios.get("http://localhost:4000/api/v1/company/" + companyId, {
+        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company/" + companyId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -38,7 +38,7 @@ const CompanyDisplay: React.FC = () => {
     const [jobs, setJobs] = useState<jobType[]>([]);
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://localhost:4000/api/v1/job", {
+        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

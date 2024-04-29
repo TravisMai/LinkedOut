@@ -15,7 +15,7 @@ const BrowseCompany: React.FC = () => {
   // Fetch all companys
   useQuery({
     queryKey: "allCompanies",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/company", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

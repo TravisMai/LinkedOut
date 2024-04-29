@@ -12,7 +12,7 @@ const GoogleLoginButton = (params: { 'role': string }) => {
             locale="en"
             onSuccess={async (credentialResponse) => {
                 const response = await axios.post(
-                    'http://localhost:4000/api/v1/auth/google-login',
+                    'http://52.163.112.173:4000/api/v1/auth/google-login',
                     {
                         token: credentialResponse.credential,
                         role: role

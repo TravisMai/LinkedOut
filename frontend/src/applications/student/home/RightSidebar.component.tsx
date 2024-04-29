@@ -30,7 +30,7 @@ const RightSidebar: React.FC = () => {
   // Fetch all companies
   useQuery({
     queryKey: "allCompany",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/company", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

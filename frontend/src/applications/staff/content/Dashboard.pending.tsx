@@ -105,7 +105,7 @@ export default function Pending(props: any) {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://localhost:4000/api/v1/student", {
+        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -119,7 +119,7 @@ export default function Pending(props: any) {
     // Mutation to send form data to server    
     const queryClient = useQueryClient();
     const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string, property: string }>({
-        mutationFn: ({ verify, id, property }) => axios.put(`http://localhost:4000/api/v1/student/${id}`,
+        mutationFn: ({ verify, id, property }) => axios.put(`http://52.163.112.173:4000/api/v1/student/${id}`,
             { property: verify },
             {
                 headers: {
