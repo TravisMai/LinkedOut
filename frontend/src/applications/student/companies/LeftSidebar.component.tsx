@@ -70,7 +70,7 @@ const LeftSidebar: React.FC = () => {
     if (studentData && studentData.id) {
       fetchAppliedJobs(studentData.id);
     }
-  }, [studentData]);
+  }, [studentData, fetchAppliedJobs]);  // Include fetchAppliedJobs  
 
   // Get all different companies (get display 1 for each) from fetech applied jobs
   const [companies, setCompanies] = React.useState<companyType[]>([]);
