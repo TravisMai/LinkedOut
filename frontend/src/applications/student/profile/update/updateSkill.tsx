@@ -6,14 +6,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { Delete, Facebook, GitHub, Google, LinkedIn, Twitter } from '@mui/icons-material';
+import { Delete, Star} from '@mui/icons-material';
+import DividerWithText from '../../../../shared/components/DividerWithText';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -58,7 +58,7 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:4000/api/v1/student/me", {
+                const response = await axios.get("http://52.163.112.173:4000/api/v1/student/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -85,13 +85,13 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
-            return axios.put(`http://localhost:4000/api/v1/student/${studentId}`, formData, {
+            return axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);
@@ -146,24 +146,8 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
                             <Grid container spacing={2} justifyContent="center">
                                 {formData.skill?.map((item: skillType, index) => (
                                     <Grid container direction='row' spacing={1} className='mt-3 mx-5 mb-6'>
-                                        <Grid item xs={3}>
 
-                                            {/* Delete current field */}
-                                            <LoadingButton
-                                                loading={sending}
-                                                variant="outlined"
-                                                color='error'
-                                                onClick={() => {
-                                                    const updatedFormData = { ...formData };
-                                                    updatedFormData.skill.splice(index, 1);
-                                                    setFormData(updatedFormData);
-                                                }}
-                                                sx={{ mt: 1, mb: 2 }}
-                                            >
-                                                <Delete /> Delete
-                                            </LoadingButton>
-                                        </Grid>
-                                        <Grid item xs={9} spacing={2} className='space-y-3'>
+                                        <Grid item xs={11} spacing={2} className='space-y-3'>
                                             <TextField
                                                 fullWidth
                                                 required
@@ -183,6 +167,25 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
                                                 onChange={handleInputChange}
                                             />
                                         </Grid>
+                                        <Grid item xs={1}>
+
+                                            {/* Delete current field */}
+                                            <LoadingButton
+                                                loading={sending}
+                                                variant="outlined"
+                                                color='error'
+                                                onClick={() => {
+                                                    const updatedFormData = { ...formData };
+                                                    updatedFormData.skill.splice(index, 1);
+                                                    setFormData(updatedFormData);
+                                                }}
+                                                // sx={{ mt: 1, mb: 2 }}
+                                            >
+                                                <Delete /> 
+                                            </LoadingButton>
+                                        </Grid>
+                                        <DividerWithText className='mt-5' text="" muiElementIcon={<Star />} />
+
                                     </Grid>
                                 ))}
                             </Grid>

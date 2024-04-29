@@ -43,7 +43,7 @@ const LeftSidebar: React.FC = () => {
   const [studentData, setStudentData] = React.useState<studentType>([]);
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -66,7 +66,7 @@ const LeftSidebar: React.FC = () => {
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
   const fetchAppliedJobs = (studentId: string) => {
-    axios.get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
+    axios.get(`http://52.163.112.173:4000/api/v1/job_applicants/candidate/${studentId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -95,7 +95,7 @@ const LeftSidebar: React.FC = () => {
 
   // Mutation to logout
   const mutation = useMutation<ResponeType, ErrorType>({
-    mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
+    mutationFn: () => axios.post("http://52.163.112.173:4000/api/v1/student/logout", {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

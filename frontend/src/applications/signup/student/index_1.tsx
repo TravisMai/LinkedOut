@@ -118,7 +118,7 @@ export default function StudentSignUp() {
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({
-        mutationFn: (newForm) => axios.post("http://localhost:4000/api/v1/student", newForm),
+        mutationFn: (newForm) => axios.post("http://52.163.112.173:4000/api/v1/student", newForm),
         onSuccess: (data) => {
             console.log(data);
             setSending(false);

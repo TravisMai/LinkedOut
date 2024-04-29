@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getJwtToken } from '../../../shared/utils/authUtils';
+import { Link } from 'react-router-dom';
 
 type companyType = {
   "id": string,
@@ -22,14 +23,14 @@ const RightSidebar: React.FC = () => {
   const [allCompany, setAllCompany] = useState<companyType[]>([]);
 
   // Get jwt token
-  
+
 
   const token = getJwtToken();
 
   // Fetch all companies
   useQuery({
     queryKey: "allCompany",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/company", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -50,21 +51,16 @@ const RightSidebar: React.FC = () => {
       </div>
       <div className="w-10/12 pt-4">
         <ul className="w-full text-gray-600">
-          {allCompany
-            .map((row, idx) => (
-              <li
-                key={idx}
-                className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
-              >
-                <img
-                  className="w-8 h-8 rounded-full"
-                  src={row.avatar}
-                  alt="user"
-                />
+          {allCompany.map((row) => (
+            <Link key={row.id} to={`/student/companies/${row.id}`}>
+              <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
+                <img className="w-8 h-8 rounded-full" src={row.avatar} alt="user" />
                 <p className="text-sm font-semibold">{row.name}</p>
               </li>
-            ))}
+            </Link>
+          ))}
         </ul>
+
       </div>
     </div>
   );

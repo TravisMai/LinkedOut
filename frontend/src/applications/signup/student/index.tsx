@@ -154,7 +154,7 @@ export default function StudentSignUp() {
                 }
                 console.log(formDataToSend);
             });
-            return axios.post("http://localhost:4000/api/v1/student", formDataToSend, {
+            return axios.post("http://52.163.112.173:4000/api/v1/student", formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Set content type for file upload
                 },

@@ -70,7 +70,7 @@ export default function CompanyLogin() {
 
   // Mutation to send login information
   const mutation = useMutation<ResponeType, ErrorType, loginForm>({
-    mutationFn: (loginForm) => axios.post("http://localhost:4000/api/v1/company/login", loginForm),
+    mutationFn: (loginForm) => axios.post("http://52.163.112.173:4000/api/v1/company/login", loginForm),
     onSuccess: (data) => {
       
 

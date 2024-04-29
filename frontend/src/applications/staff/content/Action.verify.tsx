@@ -57,7 +57,7 @@ export default function Verify() {
     // Fetch all students
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://localhost:4000/api/v1/student", {
+        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -72,7 +72,7 @@ export default function Verify() {
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string }>({
-        mutationFn: ({ verify, id }) => axios.put(`http://localhost:4000/api/v1/student/${id}`,
+        mutationFn: ({ verify, id }) => axios.put(`http://52.163.112.173:4000/api/v1/student/${id}`,
             { isVerify: verify },
             {
                 headers: {

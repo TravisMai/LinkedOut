@@ -16,7 +16,6 @@ import { AllJobPage } from "./applications/company/AllJobPage";
 import { CompanySettingPage } from "./applications/company/CompanySetting";
 import Providers from "./Providers";
 import StudentJobsPage from "./applications/student/jobs";
-import StudentMessage from "./applications/student/message";
 import JobDisplay from "./applications/student/jobs/JobDisplay";
 import AddJob from "./applications/company/AddJob";
 import JobDisplayCompany from "./applications/company/JobDisplay";
@@ -25,6 +24,8 @@ import DisplayApplicant from "./applications/company/DisplayApplicant";
 import CompanyMessage from "./applications/company/CompanyMessage";
 import StaffLogin from "./applications/login/staff";
 import PrivateRoute from "./shared/routes/PrivateRoute";
+import DisplayCompany from "./applications/student/companies";
+import CompanyDisplay from "./applications/student/companies/CompanyDisplay";
 
 const queryClient = new QueryClient()
 
@@ -75,20 +76,27 @@ function App() {
                     </UserPageLayout>
                   </PrivateRoute>
                 } />
-              <Route path="/student/message"
+              <Route path="/student/companies"
                 element={
                   <PrivateRoute>
                     <UserPageLayout>
-                      <StudentMessage />
+                      <DisplayCompany />
                     </UserPageLayout>
                   </PrivateRoute>
                 } />
-
+              <Route path="/student/companies/:companyId"
+                element={
+                  <PrivateRoute>
+                    <UserPageLayout>
+                      <CompanyDisplay />
+                    </UserPageLayout>
+                  </PrivateRoute>
+                } />
               {/* Company routes */}
               <Route path="/company"
                 element={
                   <PrivateRoute>
-                      <CompanyPage />
+                    <CompanyPage />
                   </PrivateRoute>
                 } />
               <Route path="/company/jobs"
@@ -138,7 +146,7 @@ function App() {
               <Route path="/staff"
                 element={
                   <PrivateRoute>
-                      <StaffPage />
+                    <StaffPage />
                   </PrivateRoute>
                 } />
 

@@ -26,7 +26,7 @@ type studentType = {
     "year": number,
     "major": string,
     "classCode": string,
-    "resume": string[],
+    "resume": resumeType[],
     "isActive": boolean,
     "process": string,
     "socialMedia": {
@@ -44,6 +44,12 @@ type studentType = {
     "additionalInformation": additionalInformationType[],
     "reference": referenceType[],
     "faculty": facultyType,
+}
+
+type resumeType = {
+    "id": string,
+    "url": string,
+    "title": string,
 }
 
 type educationType = {
@@ -100,6 +106,7 @@ type jobType = {
     "descriptions": postDescriptionType,
     "created": Date,
     "updated": Date,
+    "openDate": Date,
     "expireDate": Date
 }
 
@@ -115,6 +122,7 @@ type postDescriptionType = {
 
 type jobApplicationType = {
     "id": string,
+    "resume": resumeType,
     "student": studentType,
     "job": jobType,
     "status": string,
@@ -130,3 +138,27 @@ type ErrorType = {
         }
     }
 }
+
+// type internshipType = {
+//     "id": string,
+//     "document": string[],
+//     "result": number,
+//     "created": Date,
+//     "updated": Date,
+//     "jobApplicants": jobApplicationType,
+//     "staff": staffType,
+// }
+
+// type staffType = {
+//     "id": string,
+//     "name": string,
+//     "email": string,
+//     "phoneNumber": string,
+//     "avatar": string,
+//     "role": string,
+//     "created": Date,
+//     "updated": Date,
+//     "isAdmin": boolean,
+//     "staffId": number,
+//     "faculty": facultyType,
+// }

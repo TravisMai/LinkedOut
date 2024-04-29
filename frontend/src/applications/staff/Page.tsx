@@ -200,7 +200,7 @@ export default function StaffPage() {
 
     // Mutation to logout
     const mutation = useMutation<ResponseType, ErrorType>({
-        mutationFn: () => axios.post("http://localhost:4000/api/v1/staff/logout", {}, {
+        mutationFn: () => axios.post("http://52.163.112.173:4000/api/v1/staff/logout", {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -243,7 +243,7 @@ export default function StaffPage() {
     // Fetch self name
     useQuery({
         queryKey: "staff",
-        queryFn: () => axios.get("http://localhost:4000/api/v1/staff/me", {
+        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/staff/me", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

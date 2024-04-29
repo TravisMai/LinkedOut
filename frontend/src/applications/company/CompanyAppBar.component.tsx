@@ -69,7 +69,7 @@ const CompanyAppBar = () => {
   // Fetch company data
   useQuery({
     queryKey: "allJobs",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/company/me", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

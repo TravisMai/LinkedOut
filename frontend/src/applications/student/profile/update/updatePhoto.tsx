@@ -66,7 +66,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   // Fetch current information
   useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -91,7 +91,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
           }
         }
       });
-      return axios.put(`http://localhost:4000/api/v1/student/${studentId}`, formData, {
+      return axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Set content type for file upload
           Authorization: `Bearer ${token}`,

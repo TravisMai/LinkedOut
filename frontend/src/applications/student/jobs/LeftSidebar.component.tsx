@@ -51,7 +51,7 @@ const LeftSidebar: React.FC = () => {
   const [studentData, setStudentData] = React.useState<studentType>();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://localhost:4000/api/v1/student/me", {
+    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -74,7 +74,7 @@ const LeftSidebar: React.FC = () => {
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>([]);
   const fetchAppliedJobs = (studentId: string) => {
-    axios.get(`http://localhost:4000/api/v1/job_applicants/candidate/${studentId}`, {
+    axios.get(`http://52.163.112.173:4000/api/v1/job_applicants/candidate/${studentId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -106,7 +106,6 @@ const LeftSidebar: React.FC = () => {
   };
 
   return (
-
     <div className="ml-7 mt-6 pb-6 h-fit lg:min-h-[500px] flex flex-col rounded-xl space-y-2 fixed">
       <div className='flex flex-col bg-white rounded-lg '>
 

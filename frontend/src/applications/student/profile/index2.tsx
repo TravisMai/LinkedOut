@@ -228,7 +228,7 @@ export default function StudentProfile2() {
     const token = getJwtToken();
     // Mutation to logout
     const mutation = useMutation<ResponeType, ErrorType>({
-        mutationFn: () => axios.post("http://localhost:4000/api/v1/student/logout", {}, {
+        mutationFn: () => axios.post("http://52.163.112.173:4000/api/v1/student/logout", {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
