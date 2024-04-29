@@ -10,23 +10,26 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-      const allowedRoles = this.reflector.get<string[]>('roles', context.getHandler());
-      if (!allowedRoles) {
-          return true;
-        }
-        
-        const request = context.switchToHttp().getRequest();
-        const token = request.headers.authorization;
-        
-        if (!token) {
-            return false;
-        }
-        
-        try {
-            const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
-            const userRole = decodedToken.role;
-            
-            return allowedRoles.includes(userRole);
+    const allowedRoles = this.reflector.get<string[]>(
+      'roles',
+      context.getHandler(),
+    );
+    if (!allowedRoles) {
+      return true;
+    }
+
+    const request = context.switchToHttp().getRequest();
+    const token = request.headers.authorization;
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
+      const userRole = decodedToken.role;
+
+      return allowedRoles.includes(userRole);
     } catch (error) {
       return false;
     }

@@ -14,7 +14,6 @@ import { JobApplicantsRepository } from './jobApplicants.repository';
 import { StaffModule } from '../staff/staff.module';
 import { JobModule } from '../job/job.module';
 
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([JobApplicants]),
@@ -33,7 +32,7 @@ import { JobModule } from '../job/job.module';
     AuthService,
     Logger,
     JobApplicantsService,
-    JobApplicantsRepository
+    JobApplicantsRepository,
   ],
   exports: [JobApplicantsService],
 })

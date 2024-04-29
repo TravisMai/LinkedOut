@@ -1,49 +1,57 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsArray } from "class-validator";
-import { Type } from "class-transformer";
-import { ValidateNested } from "class-validator";
-import { ResumeDTO } from "./resume.dto";
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  IsArray,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
+import { ResumeDTO } from './resume.dto';
 
 export class StudentUpdateDto {
-    @IsString()
-    @IsOptional()
-    name: string;
+  @IsString()
+  @IsOptional()
+  name: string;
 
-    @IsEmail()
-    @IsOptional()
-    email: string;
+  @IsEmail()
+  @IsOptional()
+  email: string;
 
-    @IsPhoneNumber('VN')
-    @IsOptional()
-    phoneNumber: string;
-    
-    @IsString()
-    @IsOptional()
-    avatar: string;
+  @IsPhoneNumber('VN')
+  @IsOptional()
+  phoneNumber: string;
 
-    @IsNumber()
-    @IsOptional()
-    studentId: number;
+  @IsString()
+  @IsOptional()
+  avatar: string;
 
-    @IsBoolean()
-    @IsOptional()
-    isVerify: boolean;
+  @IsNumber()
+  @IsOptional()
+  studentId: number;
 
-    @IsBoolean()
-    @IsOptional()
-    isActive: boolean;
+  @IsBoolean()
+  @IsOptional()
+  isVerify: boolean;
 
-    @IsArray()
-    @IsString({ each: true })
-    @IsOptional()
-    deleteResumeID: string[];
+  @IsBoolean()
+  @IsOptional()
+  isActive: boolean;
 
-    @IsArray()
-    @IsOptional()
-    @ValidateNested({ each: true })
-    @Type(() => ResumeDTO)
-    resume: ResumeDTO[];
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  deleteResumeID: string[];
 
-    @IsString()
-    @IsOptional()
-    resumeObjective: string;
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => ResumeDTO)
+  resume: ResumeDTO[];
+
+  @IsString()
+  @IsOptional()
+  resumeObjective: string;
 }

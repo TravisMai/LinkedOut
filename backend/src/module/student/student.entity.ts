@@ -1,15 +1,21 @@
-import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, IsUrl, Length, ValidateNested } from "class-validator";
-import { commonAttribute } from "src/common/entities/commonAttribute.entity";
-import { Faculty } from "../faculty/faculty.entity";
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
+import { Faculty } from '../faculty/faculty.entity';
 import { Transform, Type } from 'class-transformer';
-import { EducationDTO } from "./dto/education.dto";
-import { WorkingHistoryDTO } from "./dto/workingHistory.dto";
-import { CertificateDTO } from "./dto/certificate.dto";
-import { SkillDTO } from "./dto/skill.dto";
-import { AdditionalInformationDTO } from "./dto/additionalInfo.dto";
-import { ReferenceDTO } from "./dto/reference.dto";
-import { ResumeDTO } from "./dto/resume.dto";
+import { EducationDTO } from './dto/education.dto';
+import { WorkingHistoryDTO } from './dto/workingHistory.dto';
+import { CertificateDTO } from './dto/certificate.dto';
+import { SkillDTO } from './dto/skill.dto';
+import { AdditionalInformationDTO } from './dto/additionalInfo.dto';
+import { ReferenceDTO } from './dto/reference.dto';
+import { ResumeDTO } from './dto/resume.dto';
 
 @Entity()
 export class Student extends commonAttribute {
@@ -57,7 +63,7 @@ export class Student extends commonAttribute {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ default: "Recieved" })
+  @Column({ default: 'Recieved' })
   process: string;
 
   @Column({ type: 'jsonb', nullable: true })

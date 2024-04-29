@@ -7,8 +7,12 @@ export class AzureBlobService {
   containerName = process.env.CONTAINER_NAME;
 
   getBlobClient(imageName: string): BlockBlobClient {
-    const blobClientService = BlobServiceClient.fromConnectionString(this.azureConnection);
-    const containerClient = blobClientService.getContainerClient(this.containerName);
+    const blobClientService = BlobServiceClient.fromConnectionString(
+      this.azureConnection,
+    );
+    const containerClient = blobClientService.getContainerClient(
+      this.containerName,
+    );
     const blobClient = containerClient.getBlockBlobClient(imageName);
     return blobClient;
   }

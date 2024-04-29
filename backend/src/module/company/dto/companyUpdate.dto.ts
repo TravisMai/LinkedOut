@@ -1,51 +1,59 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 
 export class CompanyUpdateDto {
-    @IsString()
-    @IsOptional()
-    name: string;
+  @IsString()
+  @IsOptional()
+  name: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-    @IsString()
-    @IsOptional()
-    newPassword: string;
+  @IsString()
+  @IsOptional()
+  newPassword: string;
 
-    @IsEmail()
-    @IsOptional()
-    email: string;
+  @IsEmail()
+  @IsOptional()
+  email: string;
 
-    @IsPhoneNumber()
-    @IsOptional()
-    phoneNumber: string;
+  @IsPhoneNumber()
+  @IsOptional()
+  phoneNumber: string;
 
-    @IsString()
-    @IsOptional()
-    avatar: string;
+  @IsString()
+  @IsOptional()
+  avatar: string;
 
-    @IsString()
-    @IsOptional()
-    workField: string;
+  @IsString()
+  @IsOptional()
+  workField: string;
 
-    @IsString()
-    @IsOptional()
-    address: string;
+  @IsString()
+  @IsOptional()
+  address: string;
 
-    @IsString()
-    @IsOptional()
-    website: string;
+  @IsString()
+  @IsOptional()
+  website: string;
 
-    @IsString()
-    @IsOptional()
-    description: string;
+  @IsString()
+  @IsOptional()
+  description: string;
 
-    @IsNumber()
-    @IsOptional()
-    taxId: number;
+  @IsNumber()
+  @IsOptional()
+  taxId: number;
 
-    @IsBoolean()
-    @IsOptional()
-    isActive: boolean;
+  @IsBoolean()
+  @IsOptional()
+  isActive: boolean;
 }

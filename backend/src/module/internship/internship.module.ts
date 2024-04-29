@@ -29,12 +29,7 @@ import { JobApplicantsModule } from '../jobApplicants/jobApplicants.module';
     JobApplicantsModule,
   ],
   controllers: [InternshipController],
-  providers: [
-    AuthService,
-    Logger,
-    InternshipService,
-    InternshipRepository
-  ],
+  providers: [AuthService, Logger, InternshipService, InternshipRepository],
   exports: [InternshipService, InternshipRepository],
 })
 export class InternshipModule {}
