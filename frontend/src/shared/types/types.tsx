@@ -149,16 +149,16 @@ type ErrorType = {
 //     "staff": staffType,
 // }
 
-type staffType = {
-    "id": string,
-    "name": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-    "role": string,
-    "created": Date,
-    "updated": Date,
-    "isAdmin": boolean,
-    "staffId": number,
-    "faculty": facultyType,
-}
+// type staffType = {
+//     "id": string,
+//     "name": string,
+//     "email": string,
+//     "phoneNumber": string,
+//     "avatar": string,
+//     "role": string,
+//     "created": Date,
+//     "updated": Date,
+//     "isAdmin": boolean,
+//     "staffId": number,
+//     "faculty": facultyType,
+// }
