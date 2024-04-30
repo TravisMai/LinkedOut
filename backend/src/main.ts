@@ -1,12 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { INestApplication, Logger } from '@nestjs/common';
+import * as fs from 'fs';
 
 export let app: INestApplication;
 
+const httpsOptions = {
+  key: fs.readFileSync('./secrets/cert.key'),
+  cert: fs.readFileSync('./secrets/cert.crt'),
+};
+
 async function bootstrap() {
   const logger: Logger = new Logger('main');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { httpsOptions });
   app.enableCors({
     origin: '*',  // Allows all origins
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',  // Allowed HTTP methods
