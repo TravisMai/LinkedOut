@@ -39,12 +39,16 @@ export class AuthController {
     const payload = ticket.getPayload();
     switch (role) {
       case 'student':
+        console.log('student', payload.email);
         try {
           const loginStudent = await this.studentService.findByEmail(
             payload.email,
           );
+          console.log('loginStudent', loginStudent);
           const limitedData = StudentResponseDto.fromStudent(loginStudent);
+          console.log('limitedData', limitedData);
           const token = this.authService.generateJwtToken(loginStudent);
+          console.log('token', token);
           return response
             .status(HttpStatus.OK)
             .json({ student: limitedData, token });
@@ -52,6 +56,7 @@ export class AuthController {
           return response.status(error.status).json({ message: error.message });
         }
       case 'staff':
+        console.log('staff', payload.email);
         try {
           const loginStaff = await this.staffService.findByEmail(payload.email);
           const limitedData = StaffResponseDto.fromStaff(loginStaff);
@@ -63,6 +68,7 @@ export class AuthController {
           return response.status(error.status).json({ message: error.message });
         }
       default:
+        console.log('default');
         return response
           .status(HttpStatus.FORBIDDEN)
           .json({ message: 'Unauthorized access' });
