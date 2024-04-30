@@ -38,7 +38,7 @@ type ErrorType = {
 }
 
 interface updateForm {
-  myfile: string;
+  avatar: string;
 }
 
 export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
@@ -53,7 +53,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   const [filePreview, setFilePreview] = useState<string | null>(null); // State to store file preview URL
 
   const [formData, setFormData] = useState({
-    myfile: '',
+    avatar: '',
   });
 
   // Get jwt token
@@ -82,7 +82,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
-          if (key === 'myfile') {
+          if (key === 'avatar') {
             formDataToSend.append(key, value as File); // Append file to FormData
           }
         }
@@ -125,7 +125,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
     const file = event.target.files?.[0]; // Get the first file from the input
     setFormData((prevData: any) => ({
       ...prevData,
-      myfile: file, // Update the myfile field with the selected file
+      avatar: file, // Update the avatar field with the selected file
     }));
     if (file) {
       setFilePreview(URL.createObjectURL(file)); // Generate preview URL for the selected file
@@ -159,11 +159,11 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
                   <TextField
                     required
                     fullWidth
-                    id="myfile"
+                    id="avatar"
                     type="file"
                     // Image only
-                    name="myfile"
-                    autoComplete="myfile"
+                    name="avatar"
+                    autoComplete="avatar"
                     onChange={handleFileChange}
                     style={{ width: "500px" }}
                   />
