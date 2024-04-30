@@ -28,10 +28,13 @@ export class AuthController {
     @Body('role') role: string,
     @Res() response: Response,
   ): Promise<any> {
+    console.log('token', token);
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
+
+    console.log('ticket', ticket);
 
     const payload = ticket.getPayload();
     switch (role) {
