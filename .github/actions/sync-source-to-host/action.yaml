@@ -1,0 +1,30 @@
+name: sync-source-to-host
+description: Sync source to host
+
+inputs:
+  ssh-username:
+    description: Username for SSH connection
+    required: true
+  ssh-host:
+    description: Host for SSH connection
+    required: true
+  source-folder:
+    description: Source folder
+    required: true
+  destination-folder:
+    description: Destination folder for sync
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Remove the current source
+      shell: bash
+      run: |
+        ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} "sudo chown -R ${{ inputs.ssh-username }} ${{ inputs.destination-folder }}"
+        ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} "sudo rm -rf ${{ inputs.destination-folder }}/*"
+
+    - name: Sync the new source
+      shell: bash
+      run: |
+        scp -r ${{ inputs.source-folder }}/* ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:${{ inputs.destination-folder }}

@@ -1,0 +1,31 @@
+name: backend-build
+description: Build backend
+
+inputs:
+  variables-env:
+    description: Variables in .env file
+    required: true
+  ssh-username:
+    description: Username for SSH connection
+    required: true
+  ssh-host:
+    description: Host for SSH connection
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Copy .env files to host
+      shell: bash
+      run: |
+        echo "${{ inputs.variables-env }}" > .production.env
+        echo "${{ inputs.variables-env }}" > .docker.env
+        scp .docker.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/ubuntu/backend
+        scp .production.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/ubuntu/backend
+
+    - name: Deploy using Docker Compose
+      shell: bash
+      run: |
+        ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} 'cd /home/ubuntu/backend && sudo docker compose down'
+        ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} 'cd /home/ubuntu/backend/script && sudo sh ./remove-unused-docker-resources.sh'
+        ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} 'cd /home/ubuntu/backend && sudo docker compose up --detach'

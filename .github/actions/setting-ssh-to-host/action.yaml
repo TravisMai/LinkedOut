@@ -1,0 +1,35 @@
+name: setting-ssh-to-host
+description: Setting SSH connect to host
+
+inputs:
+  ssh-private-key:
+    description: SSH private key to access
+    required: true
+  ssh-username:
+    description: Username for SSH connection
+    required: true
+  ssh-host:
+    description: Host for SSH connection
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup SSH agent on the runner
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ inputs.ssh-private-key }}
+
+    - name: Setup SSH connection to host
+      env:
+        SSH_PRIVATE_KEY: ${{ inputs.ssh-private-key }}
+        SSH_USERNAME: ${{ inputs.ssh-username }}
+        SSH_HOST: ${{ inputs.ssh-host }}
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+        ssh -o "StrictHostKeyChecking=no" $SSH_USERNAME@$SSH_HOST "echo 'Connected via SSH'"
+        ssh $SSH_USERNAME@$SSH_HOST "sudo apt update"

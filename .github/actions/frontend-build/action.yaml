@@ -1,0 +1,13 @@
+name: frontend-build
+description: Build the frontend source code
+
+runs:
+  using: composite
+  steps:
+    - name: Build frontend source
+      shell: bash
+      run: |
+        cd ./frontend
+        npm install
+        npm run build
+        cd ..

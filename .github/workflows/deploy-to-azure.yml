@@ -1,0 +1,51 @@
+name: Deploy project
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  frontend-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setting-ssh-to-host
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-username: ${{ secrets.VM_USER }}
+          ssh-host: ${{ secrets.VM_HOST }}
+
+      - uses: ./.github/actions/frontend-build
+
+      - uses: ./.github/actions/sync-source-to-host
+        with:
+          ssh-username: ubuntu
+          ssh-host: ${{ secrets.VM_HOST }}
+          source-folder: ./frontend/dist
+          destination-folder: /home/linkedout-noventiq/test
+
+  # backend-deploy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - uses: ./.github/actions/setting-ssh-to-host
+  #       with:
+  #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_BACKEND }}
+  #         ssh-username: ubuntu
+  #         ssh-host: ec2-54-254-9-143.ap-southeast-1.compute.amazonaws.com
+
+  #     - uses: ./.github/actions/sync-source-to-host
+  #       with:
+  #         ssh-username: ubuntu
+  #         ssh-host: ec2-54-254-9-143.ap-southeast-1.compute.amazonaws.com
+  #         source-folder: ./backend
+  #         destination-folder: /home/ubuntu/backend
+
+  #     - uses: ./.github/actions/backend-build
+  #       with:
+  #         variables-env: ${{ secrets.BACKEND_ENV }}
+  #         ssh-username: ubuntu
+  #         ssh-host: ec2-54-254-9-143.ap-southeast-1.compute.amazonaws.com
