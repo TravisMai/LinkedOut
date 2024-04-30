@@ -31,14 +31,14 @@ const RightSidebar: React.FC = () => {
     const [appliedJobs, setAppliedJobs] = useState<jobType[]>([]);
 
     // Get jwt token
-    
+
 
     const token = getJwtToken();
 
     // Fetch all jobs
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -60,7 +60,7 @@ const RightSidebar: React.FC = () => {
                         appliedJobs.map((job: jobType) => (
                             <>
 
-                                <ListItemButton className='rounded-xl' href={'/student/jobs/'+ job.id} >
+                                <ListItemButton className='rounded-xl' href={'/student/jobs/' + job.id} >
                                     <Grid container spacing={1}>
                                         <Grid item xs={2}>
                                             <img
@@ -85,7 +85,7 @@ const RightSidebar: React.FC = () => {
                     ) : (
                         <p>Loading...</p>
                     )}
-                    
+
                 </List>
             </div>
         </div>

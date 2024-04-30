@@ -28,7 +28,7 @@ export default function StudentProfile() {
 
     const getStudentInfo = useQuery({
         queryKey: "studentInfo",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -65,7 +65,7 @@ export default function StudentProfile() {
     // Logout
     // Mutation to logout
     const mutation = useMutation<ResponseType, ErrorType>({
-        mutationFn: () => axios.post("http://52.163.112.173:4000/api/v1/student/logout", {}, {
+        mutationFn: () => axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/student/logout", {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

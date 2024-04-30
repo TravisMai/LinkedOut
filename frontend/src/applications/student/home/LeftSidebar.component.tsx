@@ -5,7 +5,7 @@ import { Container, Divider, List, ListItem, ListItemText, Typography } from '@m
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
 const LeftSidebar: React.FC = () => {
-  const [showContent, ] = useState(false);
+  const [showContent,] = useState(false);
   const token = getJwtToken();
 
   // Fetch for student info
@@ -13,7 +13,7 @@ const LeftSidebar: React.FC = () => {
   const [studentData, setStudentData] = React.useState<studentType | null>(null);
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -36,7 +36,7 @@ const LeftSidebar: React.FC = () => {
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
   const fetchAppliedJobs = (studentId: string) => {
-    axios.get(`http://52.163.112.173:4000/api/v1/job_applicants/candidate/${studentId}`, {
+    axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

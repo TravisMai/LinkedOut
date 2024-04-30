@@ -6,13 +6,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation} from "react-query";
+import { useMutation } from "react-query";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { Delete, More} from '@mui/icons-material';
+import { Delete, More } from '@mui/icons-material';
 import DividerWithText from '../../../../shared/components/DividerWithText';
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -58,7 +58,7 @@ export default function UpdateAdditionalInformation({ onClose }: { onClose: () =
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+                const response = await axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -85,7 +85,7 @@ export default function UpdateAdditionalInformation({ onClose }: { onClose: () =
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
-            return axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, formData, {
+            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

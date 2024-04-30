@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation} from "react-query";
+import { useMutation } from "react-query";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import { useEffect, useState } from 'react';
@@ -58,7 +58,7 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+                const response = await axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -85,7 +85,7 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
-            return axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, formData, {
+            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -186,11 +186,11 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
                                                     updatedFormData.certificate.splice(index, 1);
                                                     setFormData(updatedFormData);
                                                 }}
-                                                // sx={{ mt: 1, mb: 2 }}
+                                            // sx={{ mt: 1, mb: 2 }}
                                             >
-                                                <Delete /> 
+                                                <Delete />
                                             </LoadingButton>
-                                            
+
                                         </Grid>
                                         <DividerWithText className='mt-5' text="" muiElementIcon={<WorkspacePremium />} />
 

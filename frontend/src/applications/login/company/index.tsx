@@ -68,9 +68,9 @@ export default function CompanyLogin() {
 
   // Mutation to send login information
   const mutation = useMutation<ResponeType, ErrorType, loginForm>({
-    mutationFn: (loginForm) => axios.post("http://52.163.112.173:4000/api/v1/company/login", loginForm),
+    mutationFn: (loginForm) => axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/company/login", loginForm),
     onSuccess: (data) => {
-      
+
 
       console.log(data);
       const token = data.data.token;

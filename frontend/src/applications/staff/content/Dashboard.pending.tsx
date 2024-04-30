@@ -92,7 +92,7 @@ export default function Pending(props: any) {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -106,7 +106,7 @@ export default function Pending(props: any) {
     // Mutation to send form data to server    
     const queryClient = useQueryClient();
     const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string, property: string }>({
-        mutationFn: ({ verify, id }) => axios.put(`http://52.163.112.173:4000/api/v1/student/${id}`,
+        mutationFn: ({ verify, id }) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${id}`,
             { property: verify },
             {
                 headers: {
@@ -138,7 +138,7 @@ export default function Pending(props: any) {
 
     // Handlde verify student
     const handleSubmit = (verify: boolean, id: string, property: string) => {
-        mutation.mutate({ verify, id, property});
+        mutation.mutate({ verify, id, property });
     };
 
 

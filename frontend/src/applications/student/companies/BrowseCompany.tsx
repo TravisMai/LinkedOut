@@ -8,14 +8,14 @@ import { getJwtToken } from '../../../shared/utils/authUtils';
 const BrowseCompany: React.FC = () => {
   const [allCompanies, setAllCompanies] = useState<companyType[]>([]);
   // Get jwt token
-  
+
 
   const token = getJwtToken();
 
   // Fetch all companys
   useQuery({
     queryKey: "allCompanies",
-    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company", {
+    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -56,7 +56,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+                const response = await axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -83,7 +83,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
-            return axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, formData, {
+            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -127,7 +127,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
-                <Container component="main" style={{width: "600px"}}>
+                <Container component="main" style={{ width: "600px" }}>
                     <CssBaseline />
                     <Box
                         sx={{
@@ -153,7 +153,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
                                 onChange={handleInputChange}
                                 multiline
                                 rows={4}
-                                style={{width: "500px"}}
+                                style={{ width: "500px" }}
                             />
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>

@@ -127,7 +127,7 @@ export default function CompanySignUp() {
     // Mutation to send form data to server    
     const mutation = useMutation<ResposeType, ErrorType, newForm>({
         mutationFn: (formData) => {
-            return axios.post("http://52.163.112.173:4000/api/v1/company", formData);
+            return axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/company", formData);
         },
         onSuccess: (data) => {
             console.log(data);

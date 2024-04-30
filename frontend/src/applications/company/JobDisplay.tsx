@@ -43,7 +43,7 @@ const JobDisplayCompany: React.FC = () => {
     // Fetch all jobs
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job/" + jobId, {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/" + jobId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -74,7 +74,7 @@ const JobDisplayCompany: React.FC = () => {
                     <Grid item xs={7}>
                         <Box display="flex" gap={3}>
                             <Typography variant="h4">{job?.title}</Typography>
-                            <LoadingButton variant="outlined" color="error" onClick={handleClick} loading={loading}>{!applied ? "Close" : <Close/>}</LoadingButton>
+                            <LoadingButton variant="outlined" color="error" onClick={handleClick} loading={loading}>{!applied ? "Close" : <Close />}</LoadingButton>
                             {job?.workType === "Internship" ? <Button variant="outlined" color="success" href='/company/applicant'>View applicants</Button> : null}
                         </Box>
                         <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
@@ -162,7 +162,7 @@ const JobDisplayCompany: React.FC = () => {
                                 <ListItemText primary="Tran Tri Dat" secondary="Applied 10/10/2023"></ListItemText>
 
                             </ListItem>
-                            
+
                         </List>
 
                     </Grid>

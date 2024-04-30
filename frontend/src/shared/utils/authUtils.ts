@@ -12,7 +12,7 @@ export const getJwtToken = (): String | undefined => {
 
 export const validateJwtToken = async (token: String, role: String): Promise<boolean> => {
     try {
-        await axios.get(`http://52.163.112.173:4000/api/v1/${role}/me`, {
+        await axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/${role}/me`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

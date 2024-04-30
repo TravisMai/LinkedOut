@@ -12,7 +12,7 @@ const GoogleLoginButton = (params: { 'role': string }) => {
             onSuccess={async (credentialResponse) => {
                 console.log('Login Success', credentialResponse.credential);
                 const response = await axios.post(
-                    'http://52.163.112.173:4000/api/v1/auth/google-login',
+                    'https://linkedout-hcmut.feedme.io.vn/api/v1/auth/google-login',
                     {
                         token: credentialResponse.credential,
                         role: role
@@ -21,7 +21,7 @@ const GoogleLoginButton = (params: { 'role': string }) => {
                 const data = response.data;
                 console.log('data', data);
                 document.cookie = `jwtToken=${data.token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-                navigate("/"+role)
+                navigate("/" + role)
             }}
             onError={() => {
                 console.log('Login Failed');

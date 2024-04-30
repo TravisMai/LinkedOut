@@ -43,7 +43,7 @@ export function AllJobPage() {
     // Fetch all companies
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job/", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

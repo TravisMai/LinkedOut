@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { Link } from 'react-router-dom';
@@ -29,7 +29,7 @@ const LeftSidebar: React.FC = () => {
   const [studentData, setStudentData] = React.useState<studentType>();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -56,7 +56,7 @@ const LeftSidebar: React.FC = () => {
   const fetchAppliedJobs = useCallback(
     (studentId: string) => {
       axios
-        .get(`http://52.163.112.173:4000/api/v1/job_applicants/candidate/${studentId}`, {
+        .get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

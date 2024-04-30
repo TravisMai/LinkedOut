@@ -39,7 +39,7 @@ export default function Dashboard(props: any) {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -55,7 +55,7 @@ export default function Dashboard(props: any) {
     const [allCompany, setAllCompany] = useState<companyType[]>([]);
     useQuery({
         queryKey: "allCompany",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/company", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -71,7 +71,7 @@ export default function Dashboard(props: any) {
     const [allJob, setAllJob] = useState<jobType[]>([]);
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

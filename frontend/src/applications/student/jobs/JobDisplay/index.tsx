@@ -24,7 +24,7 @@ const JobDisplay: React.FC = () => {
     // Fetch job information
     useQuery({
         queryKey: "thisJob",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job/" + jobId, {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/" + jobId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -70,7 +70,7 @@ const JobDisplay: React.FC = () => {
 
     const mutationApply = useMutation<ResponseType, ErrorType>({
         mutationFn: () => {
-            return axios.post(`http://52.163.112.173:4000/api/v1/job_applicants/${jobId}`, {}, {
+            return axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${jobId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -96,7 +96,7 @@ const JobDisplay: React.FC = () => {
 
     const mutationApplyInternship = useMutation<ResponseType, ErrorType>({
         mutationFn: () => {
-            return axios.post(`http://52.163.112.173:4000/api/v1/internship/${jobId}`, {}, {
+            return axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${jobId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -123,7 +123,7 @@ const JobDisplay: React.FC = () => {
     const [studentData, setStudentData] = React.useState<studentType | null>(null);
     const getStudentInfo = useQuery({
         queryKey: "studentInfo",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -163,7 +163,7 @@ const JobDisplay: React.FC = () => {
     // Check submitted
     // Get all applied jobs
     const fetchAppliedJobs = (studentId: string) => {
-        axios.get(`http://52.163.112.173:4000/api/v1/job_applicants/candidate/${studentId}`, {
+        axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -185,7 +185,7 @@ const JobDisplay: React.FC = () => {
     };
     // Get all internship applied
     const fetchAppliedIntern = (studentId: string) => {
-        axios.get(`http://52.163.112.173:4000/api/v1/internship/candidate/${studentId}`, {
+        axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/candidate/${studentId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

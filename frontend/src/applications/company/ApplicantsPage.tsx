@@ -40,7 +40,7 @@ type studentType = {
     "email": string,
     "phoneNumber": string,
     "avatar": string,
-    
+
 }
 
 export function ApplicantsPage() {
@@ -53,7 +53,7 @@ export function ApplicantsPage() {
     // Fetch all stdents
     useQuery({
         queryKey: "allStudents",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -84,8 +84,8 @@ export function ApplicantsPage() {
                         id="search"
                         type="search"
                         label="Search"
-                        
-                        value={searchTerm?searchTerm:"Azure Cloud Intern"}
+
+                        value={searchTerm ? searchTerm : "Azure Cloud Intern"}
                         onChange={e => setSearchTerm(e.target.value)}
                         sx={{ width: 500 }}
                         InputProps={{
@@ -113,30 +113,30 @@ export function ApplicantsPage() {
                         </TableHead>
                         <TableBody>
                             {allStudent.length > 0 ?
-                            allStudent.map((row, index) => (
-                                <TableRow
-                                    key={row.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
+                                allStudent.map((row, index) => (
+                                    <TableRow
+                                        key={row.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
 
-                                    <TableCell align='center'>{++index}</TableCell>
-                                    {/* <TableCell align="center">
+                                        <TableCell align='center'>{++index}</TableCell>
+                                        {/* <TableCell align="center">
                                     <img
                                         src={row.avatar}
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                    <TableCell align="center">{row.name}</TableCell>
-                                    <TableCell align="center">{row.email}</TableCell>
-                                    <TableCell align="center">{row.phoneNumber}</TableCell>
-                                    <TableCell align="center">10/10/2023</TableCell>
-                                    <TableCell align="center">
-                                        <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                            <IconButton href={'/company/applicant/'+row.id}><ContactEmergencyIcon /></IconButton>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            )):<></>}
+                                        <TableCell align="center">{row.name}</TableCell>
+                                        <TableCell align="center">{row.email}</TableCell>
+                                        <TableCell align="center">{row.phoneNumber}</TableCell>
+                                        <TableCell align="center">10/10/2023</TableCell>
+                                        <TableCell align="center">
+                                            <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
+                                                <IconButton href={'/company/applicant/' + row.id}><ContactEmergencyIcon /></IconButton>
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )) : <></>}
                         </TableBody>
                     </Table>
                 </TableContainer>

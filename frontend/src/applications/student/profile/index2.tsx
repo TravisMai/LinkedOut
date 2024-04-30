@@ -228,7 +228,7 @@ export default function StudentProfile2() {
     const token = getJwtToken();
     // Mutation to logout
     const mutation = useMutation<ResponeType, ErrorType>({
-        mutationFn: () => axios.post("http://52.163.112.173:4000/api/v1/student/logout", {}, {
+        mutationFn: () => axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/student/logout", {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -352,10 +352,10 @@ export default function StudentProfile2() {
                     <Button variant="outlined" color="error" sx={{ mt: 1, width: 1 / 5 }} size="small" onClick={handleLogout}>Logout</Button>
                     <FormDialog state={openInfo} onClose={handleCloseRequest} field={""} onExit={function (): void {
                         throw new Error("Function not implemented.");
-                    } } />
+                    }} />
                     <PhotoDialog state={openPhoto} onClose={handleCloseUpload} field={""} onExit={function (): void {
                         throw new Error("Function not implemented.");
-                    } } />
+                    }} />
 
                 </Container>
             </Grid>

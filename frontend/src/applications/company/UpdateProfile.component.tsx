@@ -89,7 +89,7 @@ export default function UpdateProfile() {
   // Fetch current information
   useQuery({
     queryKey: "currentInfo",
-    queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student/me", {
+    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -129,7 +129,7 @@ export default function UpdateProfile() {
 
   // Mutation to send form data to server    
   const mutation = useMutation<ResposeType, ErrorType, updateForm>({
-    mutationFn: (updateForm) => axios.put(`http://52.163.112.173:4000/api/v1/student/${studentId}`, updateForm, {
+    mutationFn: (updateForm) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, updateForm, {
       headers: {
         Authorization: `Bearer ${token}`,
       }

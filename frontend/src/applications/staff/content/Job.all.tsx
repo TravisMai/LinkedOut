@@ -24,14 +24,14 @@ export default function AllJob() {
     const [allJob, setAllJob] = useState<jobType[]>([]);
 
     // Get jwt token
-    
+
 
     const token = getJwtToken();
 
     // Fetch all jobs
     useQuery({
         queryKey: "allJobs",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/job", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

@@ -51,7 +51,7 @@ export default function Student() {
     // Fetch all students
     useQuery({
         queryKey: "allStudent",
-        queryFn: () => axios.get("http://52.163.112.173:4000/api/v1/student", {
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
