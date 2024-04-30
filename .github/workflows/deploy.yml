@@ -16,13 +16,14 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
 
       - name: SSH into VM
         uses: appleboy/ssh-action@v0.1.3
         with:
           host: ${{ secrets.VM_HOST }}  # IP or hostname of your VM
           username: ${{ secrets.VM_USER }}  # SSH username
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: "22"  # SSH port
           script: |
             hostname  # Print the hostname to confirm SSH access
             uname -a  # Print system information
