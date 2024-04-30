@@ -21,7 +21,7 @@ jobs:
 
       - uses: ./.github/actions/sync-source-to-host
         with:
-          ssh-username: ubuntu
+          ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
           source-folder: ./frontend/dist
           destination-folder: /home/linkedout-noventiq/test
