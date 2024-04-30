@@ -24,6 +24,7 @@ jobs:
           username: ${{ secrets.VM_USER }}  # SSH username
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: "22"  # SSH port
+          debug: true  # Enable debug mode for more detailed output
           script: |
             hostname  # Print the hostname to confirm SSH access
             uname -a  # Print system information
