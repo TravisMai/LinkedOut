@@ -5,6 +5,12 @@ inputs:
   variables-env:
     description: Variables in .env file
     required: true
+  ssh-username:
+    description: Username for SSH connection
+    required: true
+  ssh-host:
+    description: Host for SSH connection
+    required: true
 
 runs:
   using: composite
@@ -13,6 +19,12 @@ runs:
       shell: bash
       run: |
         npm install -g @nestjs/cli
+
+    - name: Copy .env files to host
+      shell: bash
+      run: |
+        echo "${{ inputs.variables-env }}" > .production.env
+        scp .production.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/test-backend
 
     - name: Run backend
       shell: bash

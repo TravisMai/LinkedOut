@@ -48,3 +48,5 @@ jobs:
       - uses: ./.github/actions/backend-build
         with:
           variables-env: ${{ secrets.BACKEND_ENV }}
+          ssh-username: ${{ secrets.VM_USER }}
+          ssh-host: ${{ secrets.VM_HOST }}
