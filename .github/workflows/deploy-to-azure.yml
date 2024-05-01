@@ -6,16 +6,23 @@ on:
       - main
 
 jobs:
-  frontend-deploy:
+  setup-ssh:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setting-ssh-to-host
+      - name: Setting SSH to host
+        uses: ./.github/actions/setting-ssh-to-host
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
+
+  frontend-deploy:
+    needs: setup-ssh
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
       - uses: ./.github/actions/frontend-build
 
@@ -24,26 +31,20 @@ jobs:
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
           source-folder: ./frontend/dist
-          destination-folder: /home/linkedout-noventiq/linkedout/frontend
+          destination-folder: /home/${{ secrets.VM_USER }}/linkedout/frontend
 
   backend-deploy:
-    needs: frontend-deploy
+    needs: setup-ssh
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - uses: ./.github/actions/setting-ssh-to-host
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-username: ${{ secrets.VM_USER }}
-          ssh-host: ${{ secrets.VM_HOST }}
 
       - uses: ./.github/actions/sync-source-to-host
         with:
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
           source-folder: ./backend
-          destination-folder: /home/linkedout-noventiq/linkedout/backend
+          destination-folder: /home/${{ secrets.VM_USER }}/linkedout/backend
 
       - uses: ./.github/actions/backend-build
         with:
