@@ -40,5 +40,6 @@ runs:
         echo "${{ inputs.variables-env }}" > .production.env
         echo "${{ inputs.variables-env }}" > .development.env
         npm install
-        pm2 start npm --name "backend-service" -- run start:dev
+        npm run build
+        npm run start:prod
         cd ..
