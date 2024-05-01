@@ -27,7 +27,7 @@ jobs:
   #         destination-folder: /home/linkedout-noventiq/test
 
   backend-deploy:
-    needs: frontend-deploy
+    # needs: frontend-deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
