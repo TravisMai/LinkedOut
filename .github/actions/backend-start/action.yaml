@@ -1,0 +1,12 @@
+name: backend-start
+description: Start backend
+
+runs:
+  using: composite
+  steps:
+    - name: Run backend
+      shell: bash
+      run: |
+        cd ./backend
+        npm run start:prod
+        cd ..

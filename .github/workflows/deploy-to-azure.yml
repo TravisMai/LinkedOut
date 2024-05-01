@@ -38,6 +38,10 @@ jobs:
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
 
+      - uses: ./.github/actions/backend-build
+        with:
+          variables-env: ${{ secrets.BACKEND_ENV }}
+
       - uses: ./.github/actions/sync-source-to-host
         with:
           ssh-username: ${{ secrets.VM_USER }}
@@ -45,6 +49,10 @@ jobs:
           source-folder: ./backend
           destination-folder: /home/linkedout-noventiq/test-backend
 
-      - uses: ./.github/actions/backend-build
+      - uses: ./.github/actions/setting-ssh-to-host
         with:
-          variables-env: ${{ secrets.BACKEND_ENV }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-username: ${{ secrets.VM_USER }}
+          ssh-host: ${{ secrets.VM_HOST }}
+          
+      - uses: ./.github/actions/backend-start
