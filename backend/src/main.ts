@@ -5,14 +5,14 @@ import * as fs from 'fs';
 
 export let app: INestApplication;
 
-const httpsOptions = {
-  key: fs.readFileSync('./secrets/cert.key'),
-  cert: fs.readFileSync('./secrets/cert.crt'),
-};
+// const httpsOptions = {
+//   key: fs.readFileSync('./secrets/cert.key'),
+//   cert: fs.readFileSync('./secrets/cert.crt'),
+// };
 
 async function bootstrap() {
   const logger: Logger = new Logger('main');
-  const app = await NestFactory.create(AppModule, { httpsOptions });
+  const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: '*',  // Allows all origins
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',  // Allowed HTTP methods
