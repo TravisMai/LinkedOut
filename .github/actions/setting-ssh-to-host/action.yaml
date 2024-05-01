@@ -1,5 +1,5 @@
 name: setting-ssh-to-host
-description: Setting SSH connect to host
+description: Setting SSH connection to host
 
 inputs:
   ssh-private-key:
@@ -10,6 +10,9 @@ inputs:
     required: true
   ssh-host:
     description: Host for SSH connection
+    required: true
+  ssh-key-filename:
+    description: Filename for SSH private key
     required: true
 
 runs:
@@ -25,11 +28,12 @@ runs:
         SSH_PRIVATE_KEY: ${{ inputs.ssh-private-key }}
         SSH_USERNAME: ${{ inputs.ssh-username }}
         SSH_HOST: ${{ inputs.ssh-host }}
+        SSH_KEY_FILENAME: ${{ inputs.ssh-key-filename }}
       shell: bash
       run: |
         mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
-        ssh -o "StrictHostKeyChecking=no" $SSH_USERNAME@$SSH_HOST "echo 'Connected via SSH'"
-        ssh $SSH_USERNAME@$SSH_HOST "sudo apt update"
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/$SSH_KEY_FILENAME  # Store the key with the specified filename
+        chmod 600 ~/.ssh/$SSH_KEY_FILENAME  # Set correct permissions
+        ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts  # Add to known hosts
+        ssh -i ~/.ssh/$SSH_KEY_FILENAME -o "StrictHostKeyChecking=no" $SSH_USERNAME@$SSH_HOST "echo 'Connected via SSH'"
+        ssh -i ~/.ssh/$SSH_KEY_FILENAME $SSH_USERNAME@$SSH_HOST "sudo apt update"

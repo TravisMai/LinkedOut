@@ -16,6 +16,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_FRONTEND }}
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
+          ssh-key-filename: front_key
 
       - uses: ./.github/actions/frontend-build
 
@@ -27,7 +28,6 @@ jobs:
           destination-folder: /home/linkedout-noventiq/linkedout/frontend
 
   backend-deploy:
-    needs: frontend-deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -37,6 +37,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_BACKEND }}
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
+          ssh-key-filename: backend_key
 
       - uses: ./.github/actions/sync-source-to-host
         with:
