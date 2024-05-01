@@ -9,6 +9,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Install NestJS CLI
+      run: |
+        npm install -g @nestjs/cli
+
     - name: Run backend
       shell: bash
       run: |
