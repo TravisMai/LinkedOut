@@ -24,14 +24,16 @@ runs:
       shell: bash
       run: |
         echo "${{ inputs.variables-env }}" > .production.env
+        echo "${{ inputs.variables-env }}" > .development.env
         scp .production.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/test-backend
+        scp .development.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/test-backend
 
     - name: Run backend
       shell: bash
       run: |
         cd ./backend
         echo "${{ inputs.variables-env }}" > .production.env
+        echo "${{ inputs.variables-env }}" > .development.env
         npm install
-        npm run build
-        npm run start:prod
+        npm run start:dev
         cd ..
