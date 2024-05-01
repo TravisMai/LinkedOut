@@ -19,6 +19,7 @@ runs:
       run: |
         cd ./backend
         echo "${{ inputs.variables-env }}" > .production.env
+        npm install
         npm run build
         npm run start:prod
         cd ..
