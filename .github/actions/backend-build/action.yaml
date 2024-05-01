@@ -15,17 +15,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install NestJS CLI
-      shell: bash
-      run: |
-        npm install -g @nestjs/cli
-
-    - name: Install PM2
-      shell: bash
-      run: |
-        npm install -g pm2
-
-    - name: Copy .env files to host
+    - name: Copy .env files and backend code to host
       shell: bash
       run: |
         echo "${{ inputs.variables-env }}" > .production.env
@@ -33,13 +23,12 @@ runs:
         scp .production.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/test-backend
         scp .development.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/test-backend
 
-    - name: Run backend
+    - name: Install dependencies, build, and start the backend on the VM
       shell: bash
       run: |
-        cd ./backend
-        echo "${{ inputs.variables-env }}" > .production.env
-        echo "${{ inputs.variables-env }}" > .development.env
-        npm install
-        npm run build
-        npm run start:prod
-        cd ..
+        ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} << EOF
+          cd /home/linkedout-noventiq/test-backend
+          npm install
+          npm run build
+          pm2 start dist/main.js --name backend
+        EOF

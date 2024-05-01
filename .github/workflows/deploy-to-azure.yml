@@ -6,25 +6,25 @@ on:
       - main
 
 jobs:
-  # frontend-deploy:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
+  frontend-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - uses: ./.github/actions/setting-ssh-to-host
-  #       with:
-  #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         ssh-username: ${{ secrets.VM_USER }}
-  #         ssh-host: ${{ secrets.VM_HOST }}
+      - uses: ./.github/actions/setting-ssh-to-host
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-username: ${{ secrets.VM_USER }}
+          ssh-host: ${{ secrets.VM_HOST }}
 
-  #     - uses: ./.github/actions/frontend-build
+      - uses: ./.github/actions/frontend-build
 
-  #     - uses: ./.github/actions/sync-source-to-host
-  #       with:
-  #         ssh-username: ${{ secrets.VM_USER }}
-  #         ssh-host: ${{ secrets.VM_HOST }}
-  #         source-folder: ./frontend/dist
-  #         destination-folder: /home/linkedout-noventiq/test
+      - uses: ./.github/actions/sync-source-to-host
+        with:
+          ssh-username: ${{ secrets.VM_USER }}
+          ssh-host: ${{ secrets.VM_HOST }}
+          source-folder: ./frontend/dist
+          destination-folder: /home/linkedout-noventiq/test
 
   backend-deploy:
     # needs: frontend-deploy
