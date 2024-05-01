@@ -36,9 +36,9 @@ runs:
     - name: Run backend
       shell: bash
       run: |
-        cd ./backend
+        cd /home/linkedout-noventiq/test-backend
         echo "${{ inputs.variables-env }}" > .production.env
         echo "${{ inputs.variables-env }}" > .development.env
         npm install
         pm2 start npm --name "backend-service" -- run start:dev
-        cd ..
+        cd /
