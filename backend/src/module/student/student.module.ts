@@ -31,6 +31,6 @@ import { AzureBlobService } from 'src/common/service/azureBlob.service';
     Logger,
     StudentRepository,
   ],
-  exports: [StudentService],
+  exports: [StudentService, StudentRepository],
 })
 export class StudentModule {}
