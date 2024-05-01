@@ -12,5 +12,7 @@ runs:
     - name: Run backend
       shell: bash
       run: |
+        cd ./backend
         echo "${{ inputs.variables-env }}" > .production.env
         npm run start:prod
+        cd ..
