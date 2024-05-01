@@ -16,7 +16,9 @@ import {
   UseGuards,
   Req,
   Query,
+  Body,
 } from '@nestjs/common';
+import { AppService } from './app.service';
 
 @Controller('app')
 export class AppController {
@@ -29,6 +31,7 @@ export class AppController {
     private readonly internshipRepository: InternshipRepository,
     private readonly staffService: StaffService,
     private readonly companyService: CompanyService,
+    private readonly appService: AppService,
   ) {}
 
   @Get()
@@ -36,27 +39,12 @@ export class AppController {
   async search(
     @Req() req: Request,
     @Res() response: Response,
-    @Query('search') search: string,
+    @Body('search') search: string,
   ): Promise<Response> {
     try {
-      const company = await this.companyService.findByAnything(search);
-      if (company) {
-        return response.status(HttpStatus.OK).json(company);
-      }
-
-      const job = await this.jobService.findJobByTitle(search);
-      if (job) {
-        return response.status(HttpStatus.OK).json(job);
-      }
-
-      const studentResult = await this.studentService.findByAnything(search);
-      if (studentResult) {
-        return response.status(HttpStatus.OK).json(studentResult);
-      }
-
-      return response
-        .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'No result found!' });
+      // take the search and pass to the service
+      const searchResult = await this.appService.search(search);
+      return response.status(HttpStatus.OK).json(searchResult);
     } catch (error) {
       return response.status(error.status).json({ message: error.message });
     }

@@ -44,6 +44,7 @@ export class InternshipController {
     @Req() req: Request,
     @Res() response: Response,
     @Param('id') id: string,
+    @Body('resumeId') resumeId: string,
   ): Promise<Response> {
     try {
       const token = req.headers.authorization.split(' ')[1];
@@ -75,6 +76,11 @@ export class InternshipController {
         jobApplicants.student = student;
         const job = await this.jobService.findOne(id);
         jobApplicants.job = job;
+        const resume = await this.studentService.getResumeById(
+          student.id,
+          resumeId,
+        );
+        jobApplicants.resume = resume;
         newJobApplicants =
           await this.jobApplicantsService.create(jobApplicants);
       }
