@@ -20,6 +20,11 @@ runs:
       run: |
         npm install -g @nestjs/cli
 
+    - name: Install PM2
+      shell: bash
+      run: |
+        npm install -g pm2
+
     - name: Copy .env files to host
       shell: bash
       run: |
@@ -35,5 +40,5 @@ runs:
         echo "${{ inputs.variables-env }}" > .production.env
         echo "${{ inputs.variables-env }}" > .development.env
         npm install
-        npm run start:dev
+        pm2 start npm --name "backend-service" -- run start:dev
         cd ..
