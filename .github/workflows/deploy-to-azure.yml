@@ -19,6 +19,10 @@ jobs:
 
       - uses: ./.github/actions/frontend-build
 
+      - uses: ./.github/actions/frontend-build
+        with:
+          variables-env: ${{ secrets.BACKEND_ENV_FILE }}
+
       - uses: ./.github/actions/sync-source-to-host
         with:
           ssh-username: ${{ secrets.VM_USER }}

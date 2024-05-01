@@ -9,5 +9,6 @@ runs:
       run: |
         cd ./frontend
         npm install
+        echo "${{ secrets.BACKEND_ENV_FILE }}" > .production.env
         npm run build
         cd ..
