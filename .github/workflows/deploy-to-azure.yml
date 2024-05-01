@@ -24,10 +24,10 @@ jobs:
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
           source-folder: ./frontend/dist
-          destination-folder: /home/linkedout-noventiq/test
+          destination-folder: /home/linkedout-noventiq/linkedout/frontend
 
   backend-deploy:
-    # needs: frontend-deploy
+    needs: frontend-deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -43,7 +43,7 @@ jobs:
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
           source-folder: ./backend
-          destination-folder: /home/linkedout-noventiq/test-backend
+          destination-folder: /home/linkedout-noventiq/linkedout/backend
 
       - uses: ./.github/actions/backend-build
         with:
