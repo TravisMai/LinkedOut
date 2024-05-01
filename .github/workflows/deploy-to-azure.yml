@@ -13,7 +13,7 @@ jobs:
 
       - uses: ./.github/actions/setting-ssh-to-host
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_FRONTEND }}
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
 
@@ -34,7 +34,7 @@ jobs:
 
       - uses: ./.github/actions/setting-ssh-to-host
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_BACKEND }}
           ssh-username: ${{ secrets.VM_USER }}
           ssh-host: ${{ secrets.VM_HOST }}
 
