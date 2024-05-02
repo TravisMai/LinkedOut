@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
+import ApplyDialog from './applyDialog';
 
 
 const processList = ["Intern", "Received"];
@@ -44,16 +45,18 @@ const JobDisplay: React.FC = () => {
     const [appliedIntern, setAppliedIntern] = React.useState(false);
     const [showError, setShowError] = useState(false);
 
+    const [resumeId, setResumeId] = useState<String>("");
+
     function handleClickApply() {
-        // handleOpenDialog();
         setLoading(true);
+        handleOpenDialog();
         // event.preventDefault();  
 
-        setTimeout(() => {
-            mutationApply.mutate();
-            // setLoading(false);
-            // !applied ? setApplied(true) : setApplied(false);
-        }, 1000);
+        // setTimeout(() => {
+        //     mutationApply.mutate();
+        //     // setLoading(false);
+        //     // !applied ? setApplied(true) : setApplied(false);
+        // }, 1000);
     }
 
     function handleClickApplyInternship() {
@@ -70,7 +73,7 @@ const JobDisplay: React.FC = () => {
 
     const mutationApply = useMutation<ResponseType, ErrorType>({
         mutationFn: () => {
-            return axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${jobId}`, {}, {
+            return axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${jobId}`, { resumeId: resumeId }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -79,17 +82,12 @@ const JobDisplay: React.FC = () => {
         onSuccess: () => {
             setLoading(false);
             setShowError(false);
-            setApplied(true);
-            // handleClose();
+            setApplied(!applied);
         },
         onError: () => {
             console.log(mutationApply.error);
             setLoading(false);
             setShowError(true);
-        },
-        onMutate: () => {
-            // setLoading(true);
-            // setShowError(false);
         }
     }
     );
@@ -216,22 +214,25 @@ const JobDisplay: React.FC = () => {
 
 
     // // Handle dialog
-    // const [openDialog, setOpenDialog] = React.useState(false);
-    // const handleOpenDialog = () => {
-    //     setOpenDialog(true);
-    // };
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
 
-    // const handleCloseDialog = () => {
-    //     setOpenDialog(false);
-    //     setLoading(false);
-    //         // !applied ? setApplied(true) : setApplied(false);
-    // }
+    // Close is confirm to apply
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setTimeout(() => {
+            mutationApply.mutate();
+        }, 1000);
+    }
 
-    // const handleExit = () => {
-    //     setOpenDialog(false);
-    //     setLoading(false);
-    //     //     !applied ? setApplied(true) : setApplied(false);
-    // }
+    // Exit is cancel
+    const handleExit = () => {
+        setOpenDialog(false);
+        setLoading(false);
+        //     !applied ? setApplied(true) : setApplied(false);
+    }
 
     return (
         <Container>
@@ -239,8 +240,16 @@ const JobDisplay: React.FC = () => {
                 <Grid item xs={7}>
                     <Box display="flex" gap={3}>
                         <Typography variant="h4">{job?.title}</Typography>
-                        <LoadingButton variant="outlined" color={showError ? "error" : "primary"} onClick={handleClickApply} loading={loading} disabled={!studentData?.isVerify}>{!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}</LoadingButton>
-                        {isInternship && isInternStudent && <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData?.isVerify}>{!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}</LoadingButton>}
+                        <LoadingButton
+                            variant="outlined"
+                            color={showError ? "error" : "primary"}
+                            onClick={handleClickApply}
+                            loading={loading}
+                            disabled={!studentData?.isVerify}
+                            type="button" // Ensure the button type is set to "button"
+                        >
+                            {!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}
+                        </LoadingButton>{isInternship && isInternStudent && <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData?.isVerify}>{!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}</LoadingButton>}
                         {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                         {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Apply successfully</Alert>} */}
 
@@ -356,7 +365,7 @@ const JobDisplay: React.FC = () => {
                 </Grid>
 
             </Grid>
-            {/* <ApplyDialog state={openDialog} onExit={handleExit} onClose={handleCloseDialog} /> */}
+            <ApplyDialog isApplied={applied} chooseResume={setResumeId} state={openDialog} onExit={handleExit} onClose={handleCloseDialog} />
 
 
         </Container >
