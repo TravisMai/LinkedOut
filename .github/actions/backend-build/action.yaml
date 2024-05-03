@@ -32,6 +32,7 @@ runs:
           cd /home/linkedout-noventiq/linkedout/backend
           npm install
           pm2 list | grep backend && pm2 restart backend || pm2 start npm --name backend -- start
+          pm2 save --force
           sudo systemctl reload nginx
           sudo nginx -t
         EOF
