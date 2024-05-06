@@ -67,7 +67,7 @@ const CompanyAppBar = () => {
 
   // Fetch company data
   useQuery({
-    queryKey: "allJobs",
+    queryKey: "companyData",
     queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
       headers: {
         Authorization: `Bearer ${token}`,

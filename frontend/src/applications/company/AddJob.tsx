@@ -6,49 +6,31 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
-import MenuItem from '@mui/material/MenuItem';
 import CompanyAppBar from './CompanyAppBar.component';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { FormControl, InputLabel, Select } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
 import { getJwtToken } from '../../shared/utils/authUtils';
+import dayjs from 'dayjs';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
-    data: {
-        id: string;
-        name: string;
-        email: string;
-        phoneNumber: string;
-        avatar: string;
-        isGoogle: boolean;
-        isVerify: boolean;
-
-    };
-}
-
-type ErrorType = {
-    response: {
-        data: {
-            message: string;
-        }
-    }
-}
-
-interface updateForm {
-    name: string;
-    email: string;
-    phoneNumber: string;
-    password: string;
-    newPassword: string;
+interface createForm {
+    title: string,
+    level: string,
+    workType: string,
+    quantity: number,
+    descriptions: postDescriptionType,
+    openDate: Date,
+    expireDate: Date,
+    isActive: boolean,
 }
 
 export default function AddJob() {
@@ -56,63 +38,85 @@ export default function AddJob() {
     const [sending, setSending] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [studentId, setStudentId] = useState('');
 
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        newPassword: '',
-        phoneNumber: '',
+    const [formData, setFormData] = useState<createForm>({
+        title: '',
+        level: '',
+        workType: '',
+        quantity: 0,
+        descriptions: {
+            aboutUs: '',
+            responsibilities: [],
+            requirements: [],
+            preferredQualifications: [],
+            benefits: [],
+        },
+        openDate: new Date(),
+        expireDate: new Date(),
+        isActive: false,
     });
 
     // Get jwt token
     const token = getJwtToken();
 
-    // Fetch current information
-    useQuery({
-        queryKey: "currentInfo",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        onSuccess: (data) => {
-            console.log(data);
-            // Set student id
-            setStudentId(data.data.id);
-
-            // Set form data
-            if (formData.name === '' && formData.email === '' && formData.phoneNumber === '')
-                setFormData({
-                    name: data.data.name,
-                    email: data.data.email,
-                    phoneNumber: data.data.phoneNumber,
-                    password: '',
-                    newPassword: '',
-                });
-        },
-    });
-
 
     // Handle input change
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
+
+        // If the name is responsibilities or requirements, handle them as arrays
+        if (name === "responsibilities" || name === "requirements") {
+            setFormData((prevData) => ({
+                ...prevData,
+                descriptions: {
+                    ...prevData.descriptions,
+                    [name]: value.split(",").map(item => item.trim()), // Assuming responsibilities and requirements are comma-separated lists
+                },
+            }));
+        } else {
+            // For other fields, handle as usual
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+    };
+
+    // Handle checkbox change
+    const [isInternship, setIsInternship] = useState(false);
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsInternship(event.target.checked);
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            workType: event.target.checked ? "Internship" : "",
         }));
     };
 
-    // Handle country selection change
-    // const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    //     const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
-    //     countryChange(selectedCountryIndex);
-    // };
+
+    // Handle date picker change for open date
+    const handleOpenDateChange = (date: Date | null) => {
+        if (date) {
+            setFormData((prevData) => ({
+                ...prevData,
+                openDate: date,
+            }));
+        }
+    };
+
+    // Handle date picker change for expire date
+    const handleExpireDateChange = (date: Date | null) => {
+        if (date) {
+            setFormData((prevData) => ({
+                ...prevData,
+                expireDate: date,
+            }));
+        }
+    };
+
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, updateForm>({
-        mutationFn: (updateForm) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, updateForm, {
+    const mutation = useMutation<ResponseType, ErrorType, createForm>({
+        mutationFn: (formData) => axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job`, formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
@@ -124,7 +128,7 @@ export default function AddJob() {
             setShowSuccess(true);
             setTimeout(() => {
                 setShowSuccess(false); // Hide the success message
-                navigate('/student'); // Navigate to the next screen
+                navigate('/company/jobs'); // Navigate to the next screen
             }, 5000);
         },
         onError: () => {
@@ -133,25 +137,16 @@ export default function AddJob() {
             setShowError(true);
         },
         onMutate: () => {
-            console.log(token);
             setSending(true);
             setShowError(false);
         }
     }
     );
 
-    // Function to store JWT token in cookie
-    // const storeJwtToken = (token: string) => {
-    //     document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-    // };
-
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         console.log(formData);
-        // Add country code to phone number
-        if (formData.phoneNumber.charAt(0) !== '0')
-            formData.phoneNumber = '0' + formData.phoneNumber;
 
         mutation.mutate(formData);
     };
@@ -183,94 +178,106 @@ export default function AddJob() {
                                         required
                                         fullWidth
                                         label="Job Title"
-                                        name="name"
-                                        autoComplete="name"
-                                        value={formData.name}
+                                        name="title"
+                                        autoComplete="title"
+                                        value={formData.title}
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
+
                                 <Grid item xs={12}>
                                     <TextField
+                                        required
                                         fullWidth
-                                        type="email"
-                                        label="Description"
-                                        name="email"
-                                        autoComplete="email"
-                                        value={formData.email}
+                                        name="level"
+                                        label="Level"
+                                        type="text"
+                                        autoComplete="level"
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
+                                    {/* Check box for worktype, is Internship or not */}
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Work Type</InputLabel>
-                                        <Select
-                                            defaultValue={10}
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Age"
-                                        >
-                                            <MenuItem value={10}>Internship</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
-                                        </Select>
+                                        <Grid container columnSpacing={6}>
+                                            <Grid item xs={8}>
+                                                <TextField
+                                                    required
+                                                    fullWidth
+                                                    name="workType"
+                                                    label="Work Type"
+                                                    type="text"
+                                                    autoComplete="workType"
+                                                    onChange={handleInputChange}
+                                                    value={formData.workType}
+                                                    disabled={isInternship}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <FormGroup>
+                                                    <FormControlLabel control={<Checkbox checked={isInternship} onChange={handleCheckboxChange} />} label="Internship" />
+                                                </FormGroup>
+
+                                            </Grid>
+                                        </Grid>
                                     </FormControl>
                                 </Grid>
+
+
                                 <Grid item xs={12}>
                                     <Box display={"flex"} flexDirection={'row'} gap={5}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker label="Start day *" views={['day', 'month', 'year']} />
+                                            <DatePicker
+                                                label="Open Date"
+                                                value={dayjs(formData.openDate)}
+                                                onChange={(newValue) => handleOpenDateChange(newValue?.toDate() ?? null)}
+                                            />
                                         </LocalizationProvider>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker label="End day *" views={['day', 'month', 'year']} />
+                                            <DatePicker
+                                                label="Expired Date"
+                                                value={dayjs(formData.expireDate)}
+                                                onChange={(newValue) => handleExpireDateChange(newValue?.toDate() ?? null)}
+                                            />
                                         </LocalizationProvider>
                                     </Box>
-
                                 </Grid>
 
 
 
                                 <Grid item xs={12}>
                                     <TextField
+                                        required
                                         fullWidth
-                                        name="Requirement"
-                                        label="Requirement"
-                                        type="text"
-                                        autoComplete="password"
+                                        name="quantity"
+                                        label="Quantity"
+                                        type="number"
+                                        autoComplete="quantity"
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
-                                        name="Responsibilities"
+                                        name="responsibilities"
                                         label="Responsibilities"
                                         type="text"
-                                        autoComplete="password"
+                                        autoComplete="responsibilities"
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
-                                        name="password"
-                                        label="Internship Program"
-                                        type="file"
-                                        autoComplete="password"
-                                        value={formData.password}
+                                        name="requirements"
+                                        label="Requirements"
+                                        type="text"
+                                        autoComplete="requirements"
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        name="newPassword"
-                                        label="Salary"
-                                        type="number"
-                                        autoComplete="new-password"
-                                        value={formData.newPassword}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
+
+
                             </Grid>
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
@@ -286,7 +293,7 @@ export default function AddJob() {
                                 </LoadingButton>
                             </Box>
                             {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-                            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
+                            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Job created successfully</Alert>}
                             <Grid container justifyContent="flex-end">
 
                             </Grid>

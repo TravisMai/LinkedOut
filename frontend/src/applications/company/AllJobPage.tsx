@@ -12,7 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import CompanyAppBar from './CompanyAppBar.component';
@@ -36,7 +36,9 @@ import { getJwtToken } from '../../shared/utils/authUtils';
 
 export function AllJobPage() {
 
-    const [allCompany, setAllCompany] = useState<companyType[]>([]);
+    const [allCompany, setAllCompany] = useState<jobType[]>([]);
+    const [companyJob, setCompanyJob] = useState<jobType[]>([]);
+    const [companyId, setCompanyId] = useState<string>("");
 
     const token = getJwtToken();
 
@@ -52,6 +54,27 @@ export function AllJobPage() {
             setAllCompany(data.data);
         }
     });
+
+    // Get company id
+    useQuery({
+        queryKey: "companyData",
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            setCompanyId(data.data.id);
+        }
+    });
+
+    // Filter out only jobs of company
+    useEffect(() => {
+        if (companyId !== "") {
+            const jobs = allCompany.filter(job => job.company.id === companyId);
+            setCompanyJob(jobs);
+        }
+    }, [companyId, allCompany]);
 
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
@@ -94,15 +117,16 @@ export function AllJobPage() {
                             <TableRow>
                                 <TableCell align='center'>No.</TableCell>
                                 <TableCell align="center">Title</TableCell>
-                                <TableCell align="center">Description</TableCell>
+                                <TableCell align="center">Level</TableCell>
+                                <TableCell align='center'>Work Type</TableCell>
                                 <TableCell align="center">Close day</TableCell>
-                                <TableCell align="center">Applied</TableCell>
+                                <TableCell align="center">Quantity</TableCell>
                                 <TableCell align="center">Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allCompany.length > 0 ? (
-                                allCompany.map((row, index) => (
+                            {companyJob.length > 0 ? (
+                                companyJob.map((row, index) => (
                                     <TableRow
                                         key={row.id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -115,10 +139,11 @@ export function AllJobPage() {
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                        <TableCell align="center">{row.name}</TableCell>
-                                        <TableCell align="center">{row.description}</TableCell>
-                                        <TableCell align="center">21/12/2023</TableCell>
-                                        <TableCell align="center">9</TableCell>
+                                        <TableCell align="center">{row.title}</TableCell>
+                                        <TableCell align="center">{row.level}</TableCell>
+                                        <TableCell align="center">{row.workType}</TableCell>
+                                        <TableCell align="center">{row.expireDate.toString()}</TableCell>
+                                        <TableCell align="center">{row.quantity}</TableCell>
                                         <TableCell align="center">
                                             <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
                                                 <IconButton href={'/company/applicant/'}><RecentActors /></IconButton>
@@ -126,7 +151,7 @@ export function AllJobPage() {
                                             </Box>
                                         </TableCell>
                                     </TableRow>
-                                ))) : <></>}
+                                ))) : <TableRow> <TableCell colSpan={6} align='center'>No job created</TableCell></TableRow>}
                         </TableBody>
                     </Table>
                 </TableContainer>

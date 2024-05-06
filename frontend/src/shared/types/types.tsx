@@ -107,7 +107,8 @@ type jobType = {
     "created": Date,
     "updated": Date,
     "openDate": Date,
-    "expireDate": Date
+    "expireDate": Date,
+    "isActive": boolean
 }
 
 type postDescriptionType = {
