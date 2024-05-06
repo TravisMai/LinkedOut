@@ -19,7 +19,11 @@ runs:
       shell: bash
       run: |
         echo "${{ inputs.variables-env }}" > .production.env
+        echo "${{ inputs.variables-env }}" > .development.env
+        echo "${{ inputs.variables-env }}" > .env
         scp .production.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/linkedout/backend
+        scp .development.env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/linkedout/backend
+        scp .env ${{ inputs.ssh-username }}@${{ inputs.ssh-host }}:/home/linkedout-noventiq/linkedout/backend
 
     - name: Install dependencies, build, and start the backend on the VM
       shell: bash
@@ -27,8 +31,8 @@ runs:
         ssh ${{ inputs.ssh-username }}@${{ inputs.ssh-host }} << EOF
           cd /home/linkedout-noventiq/linkedout/backend
           npm install
-          npm run build
-          pm2 list | grep backend && pm2 restart backend || pm2 start dist/main.js --name backend
+          pm2 list | grep backend && pm2 restart backend || pm2 start npm --name backend -- start
+          pm2 save --force
           sudo systemctl reload nginx
           sudo nginx -t
         EOF
