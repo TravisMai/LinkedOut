@@ -71,4 +71,9 @@ export class JobService {
   async findJobByTitle(value: string): Promise<Job> {
     return await this.jobRepository.findOne({ where: { title: value } });
   }
+
+  // find all job by company id
+  async findAllByCompanyId(id: string): Promise<Job[]> {
+    return await this.jobRepository.findAllJobByCompanyId(id);
+  }
 }

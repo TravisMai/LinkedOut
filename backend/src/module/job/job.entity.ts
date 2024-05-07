@@ -83,6 +83,7 @@ export class Job {
   updated: Date;
 
   @Column({ default: true })
+  @IsOptional()
   @IsBoolean()
   isActive: boolean;
 
