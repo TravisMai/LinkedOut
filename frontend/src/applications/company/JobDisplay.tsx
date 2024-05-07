@@ -7,42 +7,19 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import CompanyAppBar from './CompanyAppBar.component';
+import { getJwtToken } from '../../shared/utils/authUtils';
 
-const usingtoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhZTZjYWEzLTAwNTgtNDg3My05NjQxLTFiOGQxMWYwNGZlNCIsInVzZXJuYW1lIjoic3RhZmYgMDAwMSIsImVtYWlsIjoic3RhZmYyQGhjbXV0LmVkdS52biIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTY5NTc5NDE4NSwiZXhwIjoxNzI3MzUxNzg1fQ.bhG0pDXwTSGQ2iOSj8WN7IdP642uc6kFTAPlfeLBWMU";
-
-type jobType = {
-    "id": string,
-    "company": {
-        "id": string,
-        "name": string,
-        "email": string,
-        "avatar": string,
-        "workField": string,
-        "address": string,
-    },
-    "title": string,
-    "image": null,
-    "salary": null,
-    "level": string,
-    "workType": string,
-    "quantity": number,
-    "descriptions": {
-        "aboutUs": string,
-        "responsibilities": [string],
-        "requirements": [string],
-    }
-}
 
 const JobDisplayCompany: React.FC = () => {
     const { jobId } = useParams();
     const [job, setJob] = useState<jobType>();
 
 
-    const token = usingtoken;
+    const token = getJwtToken();
 
-    // Fetch all jobs
+    // Fetch job
     useQuery({
-        queryKey: "allJobs",
+        queryKey: "jobData",
         queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/" + jobId, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -92,7 +69,7 @@ const JobDisplayCompany: React.FC = () => {
                         <Typography variant="h6">Description</Typography>
                         <List sx={{ mb: 2 }}>
                             <ListItem>
-                                <ListItemText primary={job?.descriptions.aboutUs}></ListItemText>
+                                <ListItemText primary={job?.descriptions?.aboutUs}></ListItemText>
                             </ListItem>
                         </List>
                         {job?.workType === "Internship" ? <>
@@ -117,7 +94,7 @@ const JobDisplayCompany: React.FC = () => {
                             : null}
                         <Typography variant="h6">Responsibities</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions.responsibilities.map((responsibility) => (
+                            {job?.descriptions?.responsibilities.map((responsibility) => (
                                 <ListItem>
                                     <ListItemIcon><Search /></ListItemIcon>
                                     <ListItemText primary={responsibility}></ListItemText>
@@ -126,7 +103,7 @@ const JobDisplayCompany: React.FC = () => {
                         </List>
                         <Typography variant="h6">Requirements</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions.requirements.map((requirement) => (
+                            {job?.descriptions?.requirements.map((requirement) => (
                                 <ListItem>
                                     <ListItemIcon><Check /></ListItemIcon>
                                     <ListItemText primary={requirement}></ListItemText>

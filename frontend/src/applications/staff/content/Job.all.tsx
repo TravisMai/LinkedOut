@@ -93,7 +93,7 @@ export default function AllJob() {
                                     />
                                 </TableCell> */}
                                     <TableCell align="center">{row.title}</TableCell>
-                                    <TableCell align="center">{row.descriptions.responsibilities}</TableCell>
+                                    <TableCell align="center">{row.descriptions?.responsibilities}</TableCell>
                                     <TableCell align="center">{row.company.name}</TableCell>
                                     <TableCell align="center">21/12/2023</TableCell>
                                     <TableCell align="center">9</TableCell>

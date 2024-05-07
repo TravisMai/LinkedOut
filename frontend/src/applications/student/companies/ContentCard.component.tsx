@@ -31,9 +31,9 @@ export default function ContentCard({ company }: { company: companyType }) {
               </Typography>
               
               {/* <Typography variant="body2">
-                {company.descriptions.requirements[0]}
+                {company.descriptions?.requirements[0]}
                 <br />
-                {company.descriptions.responsibilities[0]}
+                {company.descriptions?.responsibilities[0]}
               </Typography> */}
             </div>
           </div>

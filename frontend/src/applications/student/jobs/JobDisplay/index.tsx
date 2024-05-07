@@ -271,7 +271,7 @@ const JobDisplay: React.FC = () => {
                     <Typography variant="h6">Description</Typography>
                     <List sx={{ mb: 2 }}>
                         <ListItem>
-                            <ListItemText primary={job?.descriptions.aboutUs}></ListItemText>
+                            <ListItemText primary={job?.descriptions?.aboutUs}></ListItemText>
                         </ListItem>
                     </List>
                     <Typography variant="h6">Level</Typography>
@@ -303,7 +303,7 @@ const JobDisplay: React.FC = () => {
                     }
                     <Typography variant="h6">Responsibities</Typography>
                     <List sx={{ mb: 2 }}>
-                        {job?.descriptions.responsibilities.map((responsibility, index) => (
+                        {job?.descriptions?.responsibilities.map((responsibility, index) => (
                             <ListItem key={index}>
                                 <ListItemIcon><Search /></ListItemIcon>
                                 <ListItemText primary={responsibility}></ListItemText>
@@ -312,7 +312,7 @@ const JobDisplay: React.FC = () => {
                     </List>
                     <Typography variant="h6">Requirements</Typography>
                     <List sx={{ mb: 2 }}>
-                        {job?.descriptions.requirements.map((requirement, index) => (
+                        {job?.descriptions?.requirements.map((requirement, index) => (
                             <ListItem key={index}>
                                 <ListItemIcon><Check /></ListItemIcon>
                                 <ListItemText primary={requirement}></ListItemText>
