@@ -1,6 +1,6 @@
 import { Check, Close, Search } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -13,23 +13,30 @@ import { getJwtToken } from '../../shared/utils/authUtils';
 const JobDisplayCompany: React.FC = () => {
     const { jobId } = useParams();
     const [job, setJob] = useState<jobType>();
+    const [companyJobs, setCompanyJobs] = useState<jobType[]>([]);
 
 
     const token = getJwtToken();
 
-    // Fetch job
+    // Fetch company's jobs
     useQuery({
-        queryKey: "jobData",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/" + jobId, {
+        queryKey: "companyJobs",
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/company", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: (data) => {
-            console.log(data.data);
-            setJob(data.data);
+            setCompanyJobs(data.data);
         }
     });
+
+    // Get job with match id from company jobs
+    React.useEffect(() => {
+        const job = companyJobs.find((job) => job.id === jobId);
+        setJob(job);
+    }, [companyJobs, jobId]);
+
 
     const [loading, setLoading] = React.useState(false);
     const [applied, setApplied] = React.useState(false);
@@ -52,7 +59,7 @@ const JobDisplayCompany: React.FC = () => {
                         <Box display="flex" gap={3}>
                             <Typography variant="h4">{job?.title}</Typography>
                             <LoadingButton variant="outlined" color="error" onClick={handleClick} loading={loading}>{!applied ? "Close" : <Close />}</LoadingButton>
-                            {job?.workType === "Internship" ? <Button variant="outlined" color="success" href='/company/applicant'>View applicants</Button> : null}
+                            {/* {job?.workType === "Internship" ? <Button variant="outlined" color="success" href='/company/applicant'>View applicants</Button> : null} */}
                         </Box>
                         <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
                         <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
@@ -76,7 +83,7 @@ const JobDisplayCompany: React.FC = () => {
                             <Typography variant="h6">Internship Program</Typography>
                             <List sx={{ mb: 2 }}>
                                 <ListItem>
-                                    <Link> <ListItemText primary={job?.company.name + " INTERNSHIP PROGRAM"}></ListItemText></Link>
+                                    <Link> <ListItemText primary={job?.title + " INTERNSHIP PROGRAM"}></ListItemText></Link>
                                 </ListItem>
                             </List>
 

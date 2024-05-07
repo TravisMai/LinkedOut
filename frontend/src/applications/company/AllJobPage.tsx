@@ -12,70 +12,37 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import CompanyAppBar from './CompanyAppBar.component';
 import { Typography } from '@mui/material';
-import { Add, Launch, RecentActors } from '@mui/icons-material';
+import { Add, Launch } from '@mui/icons-material';
 import { getJwtToken } from '../../shared/utils/authUtils';
 
-// function createData(
-//     companyId: number,
-//     logoLink: string,
-//     name: string,
-//     representative: string,
-//     phone: number,
-//     email: string,
-//     companyLink: string,
-// ) {
-//     return { companyId, logoLink, name, representative, phone, email, companyLink };
-// }
 
 
 
 export function AllJobPage() {
 
-    const [allCompany, setAllCompany] = useState<jobType[]>([]);
-    const [companyJob, setCompanyJob] = useState<jobType[]>([]);
-    const [companyId, setCompanyId] = useState<string>("");
+    const [companyJobs, setCompanyJobs] = useState<jobType[]>([]);
 
     const token = getJwtToken();
 
-    // Fetch all companies
+    // Fetch company's jobs
     useQuery({
-        queryKey: "allJobs",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/", {
+        queryKey: "companyJobs",
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/company", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: (data) => {
-            setAllCompany(data.data);
+            setCompanyJobs(data.data);
         }
     });
 
-    // Get company id
-    useQuery({
-        queryKey: "companyData",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        onSuccess: (data) => {
-            setCompanyId(data.data.id);
-        }
-    });
-
-    // Filter out only jobs of company
-    useEffect(() => {
-        if (companyId !== "") {
-            const jobs = allCompany.filter(job => job.company.id === companyId);
-            setCompanyJob(jobs);
-        }
-    }, [companyId, allCompany]);
-
+    
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
         <>
@@ -125,8 +92,8 @@ export function AllJobPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {companyJob.length > 0 ? (
-                                companyJob.map((row, index) => (
+                            {companyJobs.length > 0 ? (
+                                companyJobs.map((row, index) => (
                                     <TableRow
                                         key={row.id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -142,11 +109,10 @@ export function AllJobPage() {
                                         <TableCell align="center">{row.title}</TableCell>
                                         <TableCell align="center">{row.level}</TableCell>
                                         <TableCell align="center">{row.workType}</TableCell>
-                                        <TableCell align="center">{row.expireDate.toString()}</TableCell>
+                                        <TableCell align="center">{row.expireDate?.toString() ?? "---"}</TableCell>
                                         <TableCell align="center">{row.quantity}</TableCell>
                                         <TableCell align="center">
                                             <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                                <IconButton href={'/company/applicant/'}><RecentActors /></IconButton>
                                                 <IconButton href={'/company/jobs/' + row.id}><Launch /></IconButton>
                                             </Box>
                                         </TableCell>

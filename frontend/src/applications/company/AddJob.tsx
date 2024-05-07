@@ -26,10 +26,12 @@ interface createForm {
     title: string,
     level: string,
     workType: string,
+    // image: File,
     quantity: number,
     descriptions: postDescriptionType,
     openDate: Date,
     expireDate: Date,
+    salary: number,
     isActive: boolean,
 }
 
@@ -44,6 +46,7 @@ export default function AddJob() {
         level: '',
         workType: '',
         quantity: 0,
+        // image: new File([""], "filename"),
         descriptions: {
             aboutUs: '',
             responsibilities: [],
@@ -53,6 +56,7 @@ export default function AddJob() {
         },
         openDate: new Date(),
         expireDate: new Date(),
+        salary: 0,
         isActive: false,
     });
 
@@ -63,9 +67,9 @@ export default function AddJob() {
     // Handle input change
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-
+        const descriptionFields = ["responsibilities", "requirements", "preferredQualifications", "benefits"]
         // If the name is responsibilities or requirements, handle them as arrays
-        if (name === "responsibilities" || name === "requirements") {
+        if (descriptionFields.includes(name)) {
             setFormData((prevData) => ({
                 ...prevData,
                 descriptions: {
@@ -75,10 +79,12 @@ export default function AddJob() {
             }));
         } else {
             // For other fields, handle as usual
+
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
             }));
+
         }
     };
 
@@ -113,6 +119,16 @@ export default function AddJob() {
         }
     };
 
+    // Handle upload file
+    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = event.target.files?.[0];
+    //     if (file) {
+    //         setFormData((prevData) => ({
+    //             ...prevData,
+    //             image: file,
+    //         }));
+    //     }
+    // };
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, createForm>({
@@ -129,7 +145,7 @@ export default function AddJob() {
             setTimeout(() => {
                 setShowSuccess(false); // Hide the success message
                 navigate('/company/jobs'); // Navigate to the next screen
-            }, 5000);
+            }, 2000);
         },
         onError: () => {
             console.log(mutation.error);
@@ -146,8 +162,6 @@ export default function AddJob() {
     // Handlde submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formData);
-
         mutation.mutate(formData);
     };
 
@@ -243,7 +257,17 @@ export default function AddJob() {
                                     </Box>
                                 </Grid>
 
-
+                                {/* <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        name="image"
+                                        label="Image"
+                                        type="file"
+                                        autoComplete="image"
+                                        onChange={handleFileChange}
+                                    />
+                                </Grid> */}
 
                                 <Grid item xs={12}>
                                     <TextField
@@ -253,6 +277,17 @@ export default function AddJob() {
                                         label="Quantity"
                                         type="number"
                                         autoComplete="quantity"
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        name="salary"
+                                        label="Salary"
+                                        type="number"
+                                        autoComplete="salary"
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
@@ -273,6 +308,26 @@ export default function AddJob() {
                                         label="Requirements"
                                         type="text"
                                         autoComplete="requirements"
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        name="benefits"
+                                        label="Benefits"
+                                        type="text"
+                                        autoComplete="benefits"
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        name="preferredQualifications"
+                                        label="Preferred Qualifications"
+                                        type="text"
+                                        autoComplete="preferredQualifications"
                                         onChange={handleInputChange}
                                     />
                                 </Grid>
