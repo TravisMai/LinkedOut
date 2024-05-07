@@ -16,7 +16,7 @@ import { getJwtToken } from '../../../../shared/utils/authUtils';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         objective: string;
         id: string;
@@ -81,7 +81,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
     }, []);
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
+    const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
             return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
                 headers: {

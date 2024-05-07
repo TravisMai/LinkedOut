@@ -16,7 +16,7 @@ import { getJwtToken } from '../../../../shared/utils/authUtils';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
   data: {
     id: string;
     name: string;
@@ -77,7 +77,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   });
 
   // Mutation to send form data to server    
-  const mutation = useMutation<ResposeType, ErrorType, updateForm>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {

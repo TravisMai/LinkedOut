@@ -33,7 +33,7 @@ import { Paper } from '@mui/material';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         student: {
             id: string;
@@ -133,7 +133,7 @@ export default function CompanySignUp() {
     };
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, newForm>({
+    const mutation = useMutation<ResponseType, ErrorType, newForm>({
         mutationFn: (formData) => {
             const formDataToSend = new FormData();
             Object.entries(formData).forEach(([key, value]) => {

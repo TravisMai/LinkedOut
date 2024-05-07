@@ -34,7 +34,7 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         student: {
             id: string;
@@ -113,7 +113,7 @@ export default function StudentSignUp() {
     };
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, newForm>({
+    const mutation = useMutation<ResponseType, ErrorType, newForm>({
         mutationFn: (newForm) => axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/student", newForm),
         onSuccess: (data) => {
             console.log(data);

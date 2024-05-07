@@ -19,7 +19,7 @@ import { getJwtToken } from '../../shared/utils/authUtils';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         id: string;
         name: string;
@@ -127,7 +127,7 @@ export default function CompanyProfile() {
     };
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, updateForm>({
+    const mutation = useMutation<ResponseType, ErrorType, updateForm>({
         mutationFn: (updateForm) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/company/${companyId}`, updateForm, {
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -18,7 +18,7 @@ import { AttachFile, Delete } from '@mui/icons-material';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
   data: {
     resume: resumeType[] | null,
     id: string
@@ -80,7 +80,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   });
 
   // Mutation to send form data to server    
-  const mutation = useMutation<ResposeType, ErrorType, updateForm>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       console.log("AAAAAAAAAAAAAAAAAAAAAAAAA")
       const formDataToSend = new FormData();

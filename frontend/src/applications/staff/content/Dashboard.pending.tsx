@@ -15,7 +15,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
-type ResposeType = {
+type ResponseType = {
     data: {
         student: {
             id: string;
@@ -105,7 +105,7 @@ export default function Pending(props: any) {
 
     // Mutation to send form data to server    
     const queryClient = useQueryClient();
-    const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string, property: string }>({
+    const mutation = useMutation<ResponseType, ErrorType, { verify: boolean, id: string, property: string }>({
         mutationFn: ({ verify, id }) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${id}`,
             { property: verify },
             {

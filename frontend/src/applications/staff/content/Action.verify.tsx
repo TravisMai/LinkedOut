@@ -20,7 +20,7 @@ type studentType = {
     "isVerify": boolean,
 }
 
-type ResposeType = {
+type ResponseType = {
     data: {
         student: {
             id: string;
@@ -61,7 +61,7 @@ export default function Verify() {
     const queryClient = useQueryClient();
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, { verify: boolean, id: string }>({
+    const mutation = useMutation<ResponseType, ErrorType, { verify: boolean, id: string }>({
         mutationFn: ({ verify, id }) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${id}`,
             { isVerify: verify },
             {

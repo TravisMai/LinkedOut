@@ -17,7 +17,7 @@ import { Facebook, GitHub, Google, LinkedIn, Twitter } from '@mui/icons-material
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-type ResposeType = {
+type ResponseType = {
     data: {
         socialMedia: {
             github: string;
@@ -106,7 +106,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
     }, []);
 
     // Mutation to send form data to server    
-    const mutation = useMutation<ResposeType, ErrorType, updateForm | null>({
+    const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
         mutationFn: (formData) => {
             return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
                 headers: {
