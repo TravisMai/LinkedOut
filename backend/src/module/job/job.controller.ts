@@ -76,6 +76,30 @@ export class JobController {
     }
   }
 
+  // Get all jobs by company id
+  @Get('company')
+  @AllowRoles(['company'])
+  @UseGuards(JwtGuard)
+  async findAllByCompanyId(
+    @Req() req: any,
+    @Res() response: Response,
+  ): Promise<Response> {
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      const decodedToken = this.jwtService.decode(token) as { id: string };
+      const jobs = await this.jobService.findAllByCompanyId(decodedToken.id);
+      if (!jobs || jobs.length === 0) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'No job found!' });
+      }
+      // const limitedData = JobResponseDto.fromJobArray(jobs);
+      return response.status(HttpStatus.OK).json(jobs);
+    } catch (error) {
+      return response.status(error.status).json({ message: error.message });
+    }
+  }
+
   // create a job
   @Post()
   @AllowRoles(['company'])

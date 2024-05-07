@@ -39,4 +39,11 @@ export class JobRepository extends Repository<Job> {
 
     return await query.getMany();
   }
+
+  async findAllJobByCompanyId(companyId: string): Promise<Job[]> {
+    return await this.createQueryBuilder('job')
+      .innerJoin('job.company', 'company')
+      .where('company.id = :companyId', { companyId })
+      .getMany();
+  }
 }
