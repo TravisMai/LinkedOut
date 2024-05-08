@@ -5,7 +5,7 @@ import { CompanyModule } from '../company/company.module';
 import { StudentModule } from '../student/student.module';
 import { AuthService } from 'src/module/auth/auth.service';
 import { RedisModule } from 'src/module/redis/redis.module';
-import { Module, Logger, forwardRef } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { Internship } from './internship.entity';
 import { StaffModule } from '../staff/staff.module';
 import { JobModule } from '../job/job.module';
