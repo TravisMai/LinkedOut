@@ -14,6 +14,7 @@ import { InternshipModule } from 'src/module/internship/internship.module';
 import { JobApplicantsModule } from 'src/module/jobApplicants/jobApplicants.module';
 import { Module, ValidationPipe, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
+import { DatabaseInitializerService } from 'src/common/service/databaseInitialize.service';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { AppService } from './app.service';
     AuthService,
     Logger,
     AppService,
+    DatabaseInitializerService,
   ],
 })
 export class AppModule {}
