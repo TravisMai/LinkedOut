@@ -32,10 +32,7 @@ import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { JobService } from './job.service';
 import { JobResponseDto } from './dto/JobResponse.dto';
 import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
-import {
-  FileFieldsInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Controller('job')

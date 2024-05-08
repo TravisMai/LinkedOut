@@ -55,7 +55,9 @@ export class AppService {
         'job.created AS created',
         'job.updated AS updated',
       ])
-      .where('public.unaccent(job.title) ILIKE :keyword', { keyword: `%${keyword}%` })
+      .where('public.unaccent(job.title) ILIKE :keyword', {
+        keyword: `%${keyword}%`,
+      })
       .getRawMany();
   }
 

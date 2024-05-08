@@ -8,7 +8,7 @@ export class DatabaseInitializerService implements OnModuleInit {
   async onModuleInit() {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.query("CREATE EXTENSION IF NOT EXISTS unaccent");
+    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS unaccent');
     await queryRunner.release();
   }
 }
