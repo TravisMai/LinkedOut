@@ -12,37 +12,58 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import CompanyAppBar from './CompanyAppBar.component';
+import CompanyAppBar from '../CompanyAppBar.component';
 import { Typography } from '@mui/material';
-import { Add, Launch } from '@mui/icons-material';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 
+// function createData(
+//     companyId: number,
+//     logoLink: string,
+//     name: string,
+//     representative: string,
+//     phone: number,
+//     email: string,
+//     companyLink: string,
+// ) {
+//     return { companyId, logoLink, name, representative, phone, email, companyLink };
+// }
 
 
-export function AllJobPage() {
+type studentType = {
+    "id": string,
+    "name": string,
+    "email": string,
+    "phoneNumber": string,
+    "avatar": string,
 
-    const [companyJobs, setCompanyJobs] = useState<jobType[]>([]);
+}
+
+export function ApplicantsPage() {
+
+    const [allStudent, setAllStudent] = useState<studentType[]>([]);
+
 
     const token = getJwtToken();
 
-    // Fetch company's jobs
+    // Fetch all stdents
     useQuery({
-        queryKey: "companyJobs",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/company", {
+        queryKey: "allStudents",
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: (data) => {
-            setCompanyJobs(data.data);
+            console.log(data.data);
+            setAllStudent(data.data);
         }
     });
 
-    
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
         <>
@@ -55,7 +76,7 @@ export function AllJobPage() {
                 gutterBottom
                 sx={{ pt: 3 }}
             >
-                All jobs
+                Applicants
             </Typography>
             <div className='mt-8 w-5/6 mx-auto'>
                 <div className='flex flex-row space-x-2'>
@@ -63,7 +84,8 @@ export function AllJobPage() {
                         id="search"
                         type="search"
                         label="Search"
-                        value={searchTerm}
+
+                        value={searchTerm ? searchTerm : "Azure Cloud Intern"}
                         onChange={e => setSearchTerm(e.target.value)}
                         sx={{ width: 500 }}
                         InputProps={{
@@ -76,24 +98,22 @@ export function AllJobPage() {
                     />
                     <Button variant="contained">Search</Button>
                     <Button variant="outlined">Filter</Button>
-                    <Button variant="outlined" color='success' sx={{}} href='/company/jobs/add'><Add />Add</Button>
                 </div>
                 <TableContainer component={Paper} className='mt-5'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell align='center'>No.</TableCell>
-                                <TableCell align="center">Title</TableCell>
-                                <TableCell align="center">Level</TableCell>
-                                <TableCell align='center'>Work Type</TableCell>
-                                <TableCell align="center">Close day</TableCell>
-                                <TableCell align="center">Quantity</TableCell>
+                                <TableCell align="center">Name</TableCell>
+                                <TableCell align="center">Email</TableCell>
+                                <TableCell align="center">Phone</TableCell>
+                                <TableCell align="center">Applied</TableCell>
                                 <TableCell align="center">Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {companyJobs.length > 0 ? (
-                                companyJobs.map((row, index) => (
+                            {allStudent.length > 0 ?
+                                allStudent.map((row, index) => (
                                     <TableRow
                                         key={row.id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -106,18 +126,17 @@ export function AllJobPage() {
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                        <TableCell align="center">{row.title}</TableCell>
-                                        <TableCell align="center">{row.level}</TableCell>
-                                        <TableCell align="center">{row.workType}</TableCell>
-                                        <TableCell align="center">{row.expireDate?.toString() ?? "---"}</TableCell>
-                                        <TableCell align="center">{row.quantity}</TableCell>
+                                        <TableCell align="center">{row.name}</TableCell>
+                                        <TableCell align="center">{row.email}</TableCell>
+                                        <TableCell align="center">{row.phoneNumber}</TableCell>
+                                        <TableCell align="center">10/10/2023</TableCell>
                                         <TableCell align="center">
                                             <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                                <IconButton href={'/company/jobs/' + row.id}><Launch /></IconButton>
+                                                <IconButton href={'/company/applicant/' + row.id}><ContactEmergencyIcon /></IconButton>
                                             </Box>
                                         </TableCell>
                                     </TableRow>
-                                ))) : <TableRow> <TableCell colSpan={6} align='center'>No job created</TableCell></TableRow>}
+                                )) : <></>}
                         </TableBody>
                     </Table>
                 </TableContainer>

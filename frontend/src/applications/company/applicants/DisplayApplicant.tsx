@@ -1,7 +1,7 @@
 import { AccountCircle, CalendarMonth, Email, GitHub, Group, LinkedIn, More, Phone, School, Star, WorkHistory, WorkspacePremium } from "@mui/icons-material";
 import { Box, Button, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import React from "react";
-import CompanyAppBar from "./CompanyAppBar.component";
+import CompanyAppBar from "../CompanyAppBar.component";
 
 
 const data = {

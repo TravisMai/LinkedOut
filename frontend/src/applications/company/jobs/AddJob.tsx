@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
-import CompanyAppBar from './CompanyAppBar.component';
+import CompanyAppBar from '../CompanyAppBar.component';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 import dayjs from 'dayjs';
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -33,6 +33,7 @@ interface createForm {
     expireDate: Date,
     salary: number,
     isActive: boolean,
+    internshipPrograme: File,
 }
 
 export default function AddJob() {
@@ -55,9 +56,11 @@ export default function AddJob() {
             benefits: [],
         },
         openDate: new Date(),
-        expireDate: new Date(),
+        // expireDate is 7 days latter
+        expireDate: dayjs().add(7, 'day').toDate(),
         salary: 0,
         isActive: false,
+        internshipPrograme: new File([""], "filename"),
     });
 
     // Get jwt token
@@ -77,6 +80,14 @@ export default function AddJob() {
                     [name]: value.split(",").map(item => item.trim()), // Assuming responsibilities and requirements are comma-separated lists
                 },
             }));
+        } else if (name === "aboutUs") {
+            setFormData((prevData) => ({
+                ...prevData,
+                descriptions: {
+                    ...prevData.descriptions,
+                    [name]: value, // Assuming responsibilities and requirements are comma-separated lists
+                },
+            }));
         } else {
             // For other fields, handle as usual
 
@@ -87,6 +98,18 @@ export default function AddJob() {
 
         }
     };
+
+    // Handle upload file
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setFormData((prevData) => ({
+                ...prevData,
+                internshipPrograme: file,
+            }));
+        }
+    };
+
 
     // Handle checkbox change
     const [isInternship, setIsInternship] = useState(false);
@@ -119,17 +142,6 @@ export default function AddJob() {
         }
     };
 
-    // Handle upload file
-    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const file = event.target.files?.[0];
-    //     if (file) {
-    //         setFormData((prevData) => ({
-    //             ...prevData,
-    //             image: file,
-    //         }));
-    //     }
-    // };
-
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, createForm>({
         mutationFn: (formData) => axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job`, formData, {
@@ -137,6 +149,27 @@ export default function AddJob() {
                 Authorization: `Bearer ${token}`,
             }
         }),
+
+        // mutationFn: (formData) => {
+        //     const formDataToSend = new FormData();
+        //     Object.entries(formData).forEach(([key, value]) => {
+        //         if (value !== null) {
+        //             if (key === 'internshipPrograme') {
+        //                 formDataToSend.append(key, value as File); // Append file to FormData
+        //             } else {
+        //                 formDataToSend.append(key, value.toString()); // Convert other fields to string
+        //             }
+        //         }
+        //     });
+        //     return axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/job", formDataToSend, {
+        //         headers: {
+        //              Authorization: `Bearer ${token}`,
+        //             'Content-Type': 'multipart/form-data', // Set content type for file upload
+        //         },
+        //     });
+        // },
+
+
         onSuccess: (data) => {
             console.log(data);
             setSending(false);
@@ -164,6 +197,7 @@ export default function AddJob() {
         event.preventDefault();
         mutation.mutate(formData);
     };
+
 
     return (
         <>
@@ -236,7 +270,18 @@ export default function AddJob() {
                                         </Grid>
                                     </FormControl>
                                 </Grid>
-
+                                {isInternship &&
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            name="internshipPrograme"
+                                            label="Internship Program"
+                                            type="file"
+                                            autoComplete="internshipPrograme"
+                                            onChange={handleFileChange}
+                                        />
+                                    </Grid>
+                                }
 
                                 <Grid item xs={12}>
                                     <Box display={"flex"} flexDirection={'row'} gap={5}>
@@ -245,6 +290,7 @@ export default function AddJob() {
                                                 label="Open Date"
                                                 value={dayjs(formData.openDate)}
                                                 onChange={(newValue) => handleOpenDateChange(newValue?.toDate() ?? null)}
+                                                format='DD/MM/YYYY'
                                             />
                                         </LocalizationProvider>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -252,26 +298,24 @@ export default function AddJob() {
                                                 label="Expired Date"
                                                 value={dayjs(formData.expireDate)}
                                                 onChange={(newValue) => handleExpireDateChange(newValue?.toDate() ?? null)}
+                                                format='DD/MM/YYYY'
                                             />
                                         </LocalizationProvider>
                                     </Box>
                                 </Grid>
-
-                                {/* <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        name="image"
-                                        label="Image"
-                                        type="file"
-                                        autoComplete="image"
-                                        onChange={handleFileChange}
-                                    />
-                                </Grid> */}
-
                                 <Grid item xs={12}>
                                     <TextField
-                                        required
+                                        fullWidth
+                                        name="aboutUs"
+                                        label="Description"
+                                        type="text"
+                                        autoComplete="aboutUs"
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+
                                         fullWidth
                                         name="quantity"
                                         label="Quantity"
@@ -281,8 +325,8 @@ export default function AddJob() {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
+                                    {/* Display salary with 3 digits seperator, and a $ sign */}
                                     <TextField
-                                        required
                                         fullWidth
                                         name="salary"
                                         label="Salary"
@@ -290,6 +334,14 @@ export default function AddJob() {
                                         autoComplete="salary"
                                         onChange={handleInputChange}
                                     />
+                                    {/* <TextField
+                                        fullWidth
+                                        name="salary"
+                                        label="Salary"
+                                        type="number"
+                                        autoComplete="salary"
+                                        onChange={handleInputChange}
+                                    /> */}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField

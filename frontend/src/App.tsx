@@ -12,16 +12,15 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import CompanySignup from "./applications/signup/company";
 import StudentProfile from "./applications/student/profile";
 import { CompanyPage } from "./applications/company";
-import { AllJobPage } from "./applications/company/AllJobPage";
+import { AllJobPage } from "./applications/company/jobs/AllJobPage";
 import { CompanySettingPage } from "./applications/company/CompanySetting";
 import Providers from "./Providers";
 import StudentJobsPage from "./applications/student/jobs";
 import JobDisplay from "./applications/student/jobs/JobDisplay";
-import AddJob from "./applications/company/AddJob";
-import JobDisplayCompany from "./applications/company/JobDisplay";
-import { ApplicantsPage } from "./applications/company/ApplicantsPage";
-import DisplayApplicant from "./applications/company/DisplayApplicant";
-import CompanyMessage from "./applications/company/CompanyMessage";
+import AddJob from "./applications/company/jobs/AddJob";
+import JobDisplayCompany from "./applications/company/jobs/JobDisplay";
+import { ApplicantsPage } from "./applications/company/applicants/ApplicantsPage";
+import DisplayApplicant from "./applications/company/applicants/DisplayApplicant";
 import StaffLogin from "./applications/login/staff";
 import PrivateRoute from "./shared/routes/PrivateRoute";
 import DisplayCompany from "./applications/student/companies";
@@ -115,12 +114,6 @@ function App() {
                 element={
                   <PrivateRoute>
                     <DisplayApplicant />
-                  </PrivateRoute>
-                } />
-              <Route path="/company/message"
-                element={
-                  <PrivateRoute>
-                    <CompanyMessage />
                   </PrivateRoute>
                 } />
               <Route path="/company/jobs/add"

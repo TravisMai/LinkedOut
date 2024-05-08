@@ -14,7 +14,7 @@ import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();

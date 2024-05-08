@@ -1,13 +1,13 @@
-import { Check, Search } from '@mui/icons-material';
+import { Check, LockOutlined, Search } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { CardActionArea, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import CompanyAppBar from './CompanyAppBar.component';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import CompanyAppBar from '../CompanyAppBar.component';
+import { getJwtToken } from '../../../shared/utils/authUtils';
 
 
 const JobDisplayCompany: React.FC = () => {
@@ -60,7 +60,6 @@ const JobDisplayCompany: React.FC = () => {
         }, 1000);
     }
 
-
     // Handle update job
     interface updateForm {
         title: string | undefined,
@@ -90,7 +89,6 @@ const JobDisplayCompany: React.FC = () => {
     }, [job]);
 
 
-
     const mutation = useMutation<ResponseType, ErrorType, updateForm>({
         mutationFn: (formData) => {
             return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/job/${jobId}`, formData, {
@@ -99,7 +97,7 @@ const JobDisplayCompany: React.FC = () => {
                 },
             });
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             setLoading(false);
             setIsActive(!isActive);
         },
@@ -114,6 +112,27 @@ const JobDisplayCompany: React.FC = () => {
     );
 
 
+    // Fetch all applicants of the job
+    const [applicationList, setApplicationList] = useState<jobApplicationType[]>([]);
+    const [applied, setApplied] = useState<number>(0);
+    const [accepted, setAccepted] = useState<number>(0);
+
+    useQuery({
+        queryKey: "jobApplicants",
+        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${jobId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            setApplicationList(data.data);
+            // Count number of applied students
+            setApplied(data.data.length);
+            // Count number of accepted students
+            setAccepted(data.data.filter((application: jobApplicationType) => application.status === "Accepted").length);
+        }
+    });
+
     return (
         <>
             <CompanyAppBar />
@@ -121,13 +140,14 @@ const JobDisplayCompany: React.FC = () => {
             <Container>
                 <Grid container spacing={2} sx={{ mt: 3 }}>
                     <Grid item xs={7}>
-                        <Box display="flex" gap={3}>
+                        <Box display="flex" gap={3} alignItems={"center"}>
                             <Typography variant="h4">{job?.title}</Typography>
+                            {!isActive && <LockOutlined />}
                             {isActive ?
-                                <LoadingButton variant="outlined" color="error" onClick={handleCloseJob} loading={loading}>Job is Open, Click to Close Job</LoadingButton>
+                                <LoadingButton variant="outlined" color="error" onClick={handleCloseJob} loading={loading}> Job is Open, Click to Close Job</LoadingButton>
                                 :
                                 <>
-                                    <LoadingButton variant="outlined" color="success" onClick={handleOpenJob} loading={loading}>Job is Closed, Click to Open Job</LoadingButton>
+                                    <LoadingButton variant="outlined" color="success" onClick={handleOpenJob} loading={loading}> Job is Closed, Click to Open Job</LoadingButton>
 
                                 </>
                             }
@@ -136,40 +156,42 @@ const JobDisplayCompany: React.FC = () => {
                         <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h5">Open Date</Typography>
-                                <Typography variant="h6">16/11/2023</Typography>
+                                <Typography variant="h6">{job?.openDate ? job.openDate.toString().split('T')[0] : "---"}</Typography>
                             </Box>
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h5">Close Date</Typography>
-                                <Typography variant="h6">16/01/2024</Typography>
+                                <Typography variant="h6">{job?.expireDate ? job.expireDate.toString().split('T')[0] : "---"}</Typography>
                             </Box>
 
                         </Box>
-                        <Typography variant="h6">Description</Typography>
+                        {job?.descriptions?.aboutUs &&
+                            <>
+                                <Typography variant="h6">Description</Typography>
+                                <List sx={{ mb: 2 }}>
+                                    <ListItem>
+                                        <ListItemText primary={job?.descriptions?.aboutUs}></ListItemText>
+                                    </ListItem>
+                                </List>
+                            </>
+                        }
+                        {job?.workType === "Internship" && job?.internshipPrograme ?
+                            <>
+                                <Typography variant="h6">Internship Program</Typography>
+                                <List sx={{ mb: 2 }}>
+                                    <ListItem>
+                                        <Link href={job?.internshipPrograme}> <ListItemText primary="Internship program"></ListItemText></Link>
+                                    </ListItem>
+                                </List>
+                            </> : null
+                        }
+                        <Typography variant="h6">Quantity</Typography>
                         <List sx={{ mb: 2 }}>
                             <ListItem>
-                                <ListItemText primary={job?.descriptions?.aboutUs}></ListItemText>
+                                <ListItemText primary="Required" secondary={job?.quantity}></ListItemText>
+                                <ListItemText primary="Registered" secondary={applied}></ListItemText>
+                                <ListItemText primary="Accepted" secondary={accepted}></ListItemText>
                             </ListItem>
                         </List>
-                        {job?.workType === "Internship" ? <>
-                            <Typography variant="h6">Internship Program</Typography>
-                            <List sx={{ mb: 2 }}>
-                                <ListItem>
-                                    <Link> <ListItemText primary={job?.title + " INTERNSHIP PROGRAM"}></ListItemText></Link>
-                                </ListItem>
-                            </List>
-
-                            <Typography variant="h6">Quantity</Typography>
-                            <List sx={{ mb: 2 }}>
-                                <ListItem>
-                                    <ListItemText primary="Required" secondary={job?.quantity}></ListItemText>
-                                    <ListItemText primary="Registered" secondary={job?.quantity}></ListItemText>
-                                    <ListItemText primary="Accepted" secondary={job?.quantity}></ListItemText>
-                                    <ListItemText primary="Max Accept" secondary={job?.quantity}></ListItemText>
-
-                                </ListItem>
-                            </List>
-                        </>
-                            : null}
                         <Typography variant="h6">Responsibities</Typography>
                         <List sx={{ mb: 2 }}>
                             {job?.descriptions?.responsibilities.map((responsibility) => (
@@ -198,7 +220,8 @@ const JobDisplayCompany: React.FC = () => {
                         <Typography variant="h6">Salary</Typography>
                         <List sx={{ mb: 2 }}>
                             <ListItem>
-                                <ListItemText primary={job?.salary ? job.salary : "None"}></ListItemText>
+                                <ListItemText primary={job?.salary ? "VND " + job.salary.toLocaleString('en-US') : "None"}></ListItemText>
+
                             </ListItem>
                         </List>
 
@@ -208,7 +231,19 @@ const JobDisplayCompany: React.FC = () => {
                         <Typography variant="h6">APPLIED STUDENTS</Typography>
 
                         <List>
-                            <ListItem>
+                            {applicationList.map((application) => (
+                                <CardActionArea href={`../applicant/${application.student.id}`}>
+                                    <ListItem>
+                                        <ListItemIcon><img
+                                            src={application.student.avatar}
+                                            className='w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2'
+                                            alt="company avatar"
+                                        /></ListItemIcon>
+                                        <ListItemText primary={application.student.name} secondary={application.status + " " + application.updated.toString().split("T")[0]} ></ListItemText>
+                                    </ListItem>
+                                </CardActionArea>
+                            ))}
+                            {/* <ListItem>
                                 <ListItemIcon><img
                                     src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
                                     className='w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2'
@@ -216,7 +251,7 @@ const JobDisplayCompany: React.FC = () => {
                                 /></ListItemIcon>
                                 <ListItemText primary="Tran Tri Dat" secondary="Applied 10/10/2023"></ListItemText>
 
-                            </ListItem>
+                            </ListItem> */}
 
                         </List>
 
