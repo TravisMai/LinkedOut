@@ -11,6 +11,7 @@ import { CompanyModule } from '../company/company.module';
 import { JobController } from './job.controller';
 import { JobService } from './job.service';
 import { JobRepository } from './job.repository';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { JobRepository } from './job.repository';
     StudentModule,
   ],
   controllers: [JobController],
-  providers: [AuthService, Logger, JobService, JobRepository],
+  providers: [AuthService, Logger, JobService, JobRepository, AzureBlobService],
   exports: [JobService, JobRepository],
 })
 export class JobModule {}

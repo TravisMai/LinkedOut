@@ -18,6 +18,8 @@ import {
   Res,
   HttpStatus,
   Req,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { Job } from './job.entity';
 import { CompanyService } from '../company/company.service';
@@ -30,6 +32,11 @@ import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { JobService } from './job.service';
 import { JobResponseDto } from './dto/JobResponse.dto';
 import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
+import {
+  FileFieldsInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Controller('job')
 export class JobController {
@@ -41,6 +48,7 @@ export class JobController {
     private readonly studentService: StudentService,
     private readonly companyService: CompanyService,
     private readonly jobService: JobService,
+    private readonly azureBlobService: AzureBlobService,
   ) {}
 
   // get all the jobs
@@ -104,10 +112,21 @@ export class JobController {
   @Post()
   @AllowRoles(['company'])
   @UseGuards(JwtGuard, RolesGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'images', maxCount: 4 },
+      { name: 'internshipPrograme', maxCount: 1 },
+    ]),
+  )
   async create(
     @Body() job: Job,
     @Req() req: Request,
     @Res() response: Response,
+    @UploadedFiles()
+    files: {
+      images?: Express.Multer.File[];
+      internshipPrograme?: Express.Multer.File;
+    },
   ): Promise<Response> {
     try {
       const token = req.headers.authorization.split(' ')[1];
@@ -115,6 +134,38 @@ export class JobController {
       job.company = CompanyResponseDto.fromCompany(
         await this.companyService.findOne(decodedToken.id),
       );
+      // Check if 'descriptions' is in the request, and parse if it's a string
+      if (job.descriptions && typeof job.descriptions === 'string') {
+        job.descriptions = JSON.parse(job.descriptions);
+      }
+      // take the file, upload to azure then store the url in the image array
+      if (files.images && files.images.length > 0) {
+        const imageUrls: string[] = [];
+        for (const file of files.images) {
+          try {
+            const imageUrl = await this.azureBlobService.upload(file);
+            imageUrls.push(imageUrl);
+          } catch (error) {
+            return response
+              .status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .json({ message: error.message });
+          }
+        }
+        job.image = imageUrls;
+      }
+      // take the file, upload to azure then store the url in the internshipPrograme
+      if (files.internshipPrograme) {
+        try {
+          const internshipProgrameUrl = await this.azureBlobService.upload(
+            files.internshipPrograme[0],
+          );
+          job.internshipPrograme = internshipProgrameUrl;
+        } catch (error) {
+          return response
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+        }
+      }
       const newCreateJob = await this.jobService.create(job);
       const limitedData = JobResponseDto.fromJob(newCreateJob);
       await this.redisService.setObjectByKeyValue(
@@ -169,10 +220,12 @@ export class JobController {
   @Put(':id')
   @AllowRoles(['company'])
   @UseGuards(JwtGuard, RolesGuard)
+  @UseInterceptors(FilesInterceptor('images', 4))
   async update(
     @Param('id') id: string,
     @Body() job: Job,
     @Res() response: Response,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ): Promise<Response> {
     try {
       if (!validate(id)) {
@@ -180,6 +233,7 @@ export class JobController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
+      //
       const updateJob = await this.jobService.update(id, job);
       if (!updateJob) {
         return response
