@@ -17,7 +17,7 @@ export class Faculty {
   @IsNotEmpty()
   name: string;
 
-  @Column({default: '',})
+  @Column({ default: '' })
   @IsString()
   @IsOptional()
   avatar: string;

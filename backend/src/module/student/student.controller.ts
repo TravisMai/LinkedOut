@@ -97,7 +97,7 @@ export class StudentController {
   ): Promise<Response> {
     try {
       const cachedData = await this.redisService.getObjectByKey(StudentListKey);
-      if (false) {
+      if (cachedData) {
         return response.status(HttpStatus.OK).json(cachedData);
       } else {
         const findAllResult = await this.studentService.findAll();
@@ -114,7 +114,9 @@ export class StudentController {
         return response.status(HttpStatus.OK).json(findAllResult);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -152,7 +154,9 @@ export class StudentController {
         return response.status(HttpStatus.OK).json(student);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -164,7 +168,6 @@ export class StudentController {
     @Body() student: Student,
     @Res() response: Response,
   ): Promise<Response> {
-    // student.password = await bcrypt.hash(student.password, parseInt(process.env.BCRYPT_SALT));
     if (
       (await this.staffService.findByEmail(student.email)) ||
       (await this.studentService.findByEmail(student.email)) ||
@@ -189,7 +192,9 @@ export class StudentController {
         .status(HttpStatus.CREATED)
         .json({ student: newCreateStudent, token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -315,10 +320,7 @@ export class StudentController {
         }
       }
       const student = await this.studentService.findByEmail(loginData.email);
-      if (
-        !student
-        // || !(await bcrypt.compare(loginData.password, student.password))
-      ) {
+      if (!student) {
         return response
           .status(HttpStatus.UNAUTHORIZED)
           .json({ message: 'Invalid credentials' });
