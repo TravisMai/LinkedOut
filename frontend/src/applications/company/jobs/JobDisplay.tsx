@@ -232,7 +232,7 @@ const JobDisplayCompany: React.FC = () => {
 
                         <List>
                             {applicationList.map((application) => (
-                                <CardActionArea href={`../applicant/${application.student.id}`}>
+                                <CardActionArea href={`../applicant/${application.id}`}>
                                     <ListItem>
                                         <ListItemIcon><img
                                             src={application.student.avatar}

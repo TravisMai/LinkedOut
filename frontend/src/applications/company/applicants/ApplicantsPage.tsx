@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import CompanyAppBar from '../CompanyAppBar.component';
@@ -34,35 +34,70 @@ import { getJwtToken } from '../../../shared/utils/authUtils';
 // }
 
 
-type studentType = {
-    "id": string,
-    "name": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-
-}
-
 export function ApplicantsPage() {
-
-    const [allStudent, setAllStudent] = useState<studentType[]>([]);
-
 
     const token = getJwtToken();
 
-    // Fetch all stdents
+
+    const [companyJobs, setCompanyJobs] = useState<jobType[]>([]);
+
+    // Fetch company's jobs
     useQuery({
-        queryKey: "allStudents",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/", {
+        queryKey: "companyJobs",
+        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/company", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: (data) => {
-            console.log(data.data);
-            setAllStudent(data.data);
+            setCompanyJobs(data.data);
         }
     });
+
+
+
+
+    const [allApplications, setAllApplications] = useState<jobApplicationType[]>([]);
+
+    // Fetch all applications of each job when jobs are fetched
+    useEffect(() => {
+        setAllApplications([]);
+        const fetchApplications = async () => {
+            companyJobs.forEach(async (job) => {
+                try {
+                    const response = await axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${job.id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    setAllApplications((prevApplications) => [...prevApplications, ...response.data]);
+                } catch (error) {
+                    console.error(`Error fetching applications for job ${job.id}:`, error);
+                }
+            });
+        };
+
+        fetchApplications();
+    }, [companyJobs, token]);
+
+
+    // companyJobs.map((job) => {
+    //     queryKey: `allJobApplications_${job.id}`,
+    //         queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${job.id}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         }),
+    //             onSuccess: (data) => {
+    //                 // Append with current applications
+    //                 setAllApplications([...allApplications, ...data.data]);
+    //             }
+    // });
+    // useQuery({
+
+    // }, [companyJobs]);
+    console.log("Fetch all applications of each job", allApplications);
+
 
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
@@ -107,13 +142,15 @@ export function ApplicantsPage() {
                                 <TableCell align="center">Name</TableCell>
                                 <TableCell align="center">Email</TableCell>
                                 <TableCell align="center">Phone</TableCell>
-                                <TableCell align="center">Applied</TableCell>
+                                <TableCell align="center">Applied for</TableCell>
+                                <TableCell align="center">Applied on</TableCell>
+                                <TableCell align="center">Status</TableCell>
                                 <TableCell align="center">Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allStudent.length > 0 ?
-                                allStudent.map((row, index) => (
+                            {allApplications.length > 0 ?
+                                allApplications.map((row, index) => (
                                     <TableRow
                                         key={row.id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -126,10 +163,12 @@ export function ApplicantsPage() {
                                         className='h-10 mx-auto'
                                     />
                                 </TableCell> */}
-                                        <TableCell align="center">{row.name}</TableCell>
-                                        <TableCell align="center">{row.email}</TableCell>
-                                        <TableCell align="center">{row.phoneNumber}</TableCell>
-                                        <TableCell align="center">10/10/2023</TableCell>
+                                        <TableCell align="center">{row.student.name}</TableCell>
+                                        <TableCell align="center">{row.student.email}</TableCell>
+                                        <TableCell align="center">{row.student.phoneNumber}</TableCell>
+                                        <TableCell align="center">{row.job.title}</TableCell>
+                                        <TableCell align="center">{row.created.toString().split('T')[0]}</TableCell>
+                                        <TableCell align="center">{row.status}</TableCell>
                                         <TableCell align="center">
                                             <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
                                                 <IconButton href={'/company/applicant/' + row.id}><ContactEmergencyIcon /></IconButton>

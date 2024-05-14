@@ -66,7 +66,7 @@ export function AllJobPage() {
                 gutterBottom
                 sx={{ pt: 3 }}
             >
-                All jobs
+                Your jobs
             </Typography>
             <div className='mt-8 w-5/6 mx-auto'>
                 <div className='flex flex-row space-x-2'>
