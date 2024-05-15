@@ -23,12 +23,12 @@ export default function ContentCard({ job }: { job: jobType }) {
                 {job.title}
               </Typography>
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {job.descriptions?.aboutUs}
+                {job.descriptions?.aboutUs ? job.descriptions?.aboutUs : ""}
               </Typography>
               <Typography variant="body2">
-                {job.descriptions?.requirements[0]}
+                {job.descriptions?.requirements ? job.descriptions?.requirements[0] : ""}
                 <br />
-                {job.descriptions?.responsibilities[0]}
+                {job.descriptions?.responsibilities ? job.descriptions?.responsibilities[0] : ""}
               </Typography>
             </div>
           </div>

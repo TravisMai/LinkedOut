@@ -44,7 +44,7 @@ export function AllJobPage() {
 
 
     // Handle pagination
-    const itemsPerPage = 5;
+    const itemsPerPage = 7;
     const [currentPage, setCurrentPage] = useState(0);
 
     // Handle page change

@@ -6,11 +6,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation, useQuery } from "react-query";
+import { useMutation} from "react-query";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -25,7 +24,7 @@ type ResponseType = {
     name: string;
     email: string;
     phoneNumber: string;
-    avatar: string;
+    myfile: string;
     isGoogle: boolean;
     isVerify: boolean;
 
@@ -42,10 +41,16 @@ type ErrorType = {
 
 interface updateForm {
   name: string;
+  taxId: number | null;
+  workField: string | null;
+  address: string | null;
+  website: string | null;
+  myfile: File | null;
+  description: string | null;
   email: string;
   phoneNumber: string;
   password: string;
-  newPassword: string;
+  newPassword: string | null;
 }
 
 const countryCode = [
@@ -68,49 +73,65 @@ const countryCode = [
 ];
 
 export default function UpdateProfile() {
-  const navigate = useNavigate();
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [studentId, setStudentId] = useState('');
+  const [companyId, setCompanyId] = useState('');
 
   const [country, countryChange] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    newPassword: '',
     phoneNumber: '',
+    password: '',
+    taxId: null as number | null,
+    workField: null as string | null,
+    address: null as string | null,
+    website: null as string | null,
+    myfile: null as File | null,
+    description: null as string | null,
+    newPassword: null as string | null,
   });
 
 
   const token = getJwtToken();
 
   // Fetch current information
-  useQuery({
-    queryKey: "currentInfo",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-    onSuccess: (data) => {
-      console.log(data);
-      // Set student id
-      setStudentId(data.data.id);
-
-      // Set form data
-      if (formData.name === '' && formData.email === '' && formData.phoneNumber === '')
-        setFormData({
-          name: data.data.name,
-          email: data.data.email,
-          phoneNumber: data.data.phoneNumber,
-          password: '',
-          newPassword: '',
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-    },
-  });
+        const data = response.data;
 
+        // Set student id
+        setFormData({
+          name: data.name,
+          email: data.email,
+          // Cut out country code head from phone Number
+          phoneNumber: data.phoneNumber.substring(3),
+          password: '',
+          taxId: data.taxId,
+          workField: data.workField,
+          address: data.address,
+          website: data.website,
+          myfile: null,
+          description: data.description,
+          newPassword: null,
+        });
+        setCompanyId(data.id);
+
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Handle input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,6 +142,17 @@ export default function UpdateProfile() {
     }));
   };
 
+  // Handle upload file
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFormData((prevData) => ({
+        ...prevData,
+        myfile: file,
+      }));
+    }
+  };
+
   // Handle country selection change
   const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
@@ -129,20 +161,43 @@ export default function UpdateProfile() {
 
   // Mutation to send form data to server    
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
-    mutationFn: (updateForm) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, updateForm, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }),
-    onSuccess: (data) => {
-      console.log(data);
+    mutationFn: () => {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && key !== 'taxId') {
+          if (key === 'myfile') {
+            formDataToSend.append(key, value as File); // Append file to FormData
+          } else if (key === 'phoneNumber') {
+            if (formData.phoneNumber.charAt(0) !== '+') {
+              if (formData.phoneNumber.length === 10 && formData.phoneNumber.charAt(0) === '0') {
+                // Remove 0 and add country code
+                formData.phoneNumber = countryCode[country].numberPrefix + formData.phoneNumber.substring(1);
+              }
+              formData.phoneNumber = countryCode[country].numberPrefix + formData.phoneNumber;
+              formDataToSend.append(key, formData.phoneNumber.toString());
+            }
+          }
+          else {
+            formDataToSend.append(key, value.toString()); // Convert other fields to string
+          }
+
+        }
+      });
+      return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/company/${companyId}`, formDataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+    },
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false); // Hide the success message
-        navigate('/student'); // Navigate to the next screen
-      }, 5000);
+        window.location.reload();
+      }, 2000);
     },
     onError: () => {
       console.log(mutation.error);
@@ -150,7 +205,6 @@ export default function UpdateProfile() {
       setShowError(true);
     },
     onMutate: () => {
-      console.log(token);
       setSending(true);
       setShowError(false);
     }
@@ -165,13 +219,12 @@ export default function UpdateProfile() {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     // Add country code to phone number
-    if (formData.phoneNumber.charAt(0) !== '0')
-      formData.phoneNumber = '0' + formData.phoneNumber;
 
     mutation.mutate(formData);
   };
+
+
 
   return (
     <>
@@ -259,6 +312,7 @@ export default function UpdateProfile() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -274,7 +328,6 @@ export default function UpdateProfile() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    required
                     fullWidth
                     name="newPassword"
                     label="New Password"
@@ -283,6 +336,78 @@ export default function UpdateProfile() {
                     autoComplete="new-password"
                     value={formData.newPassword}
                     onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="address"
+                    type="text"
+                    label="Address"
+                    name="address"
+                    autoComplete="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="workField"
+                    type="text"
+                    label="Work Field"
+                    name="workField"
+                    autoComplete="workField"
+                    value={formData.workField}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="description"
+                    type="text"
+                    label="Description"
+                    name="description"
+                    autoComplete="description"
+                    multiline
+                    rows={4}
+                    value={formData.description}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="taxId"
+                    type="number"
+                    label="Tax ID"
+                    name="taxId"
+                    autoComplete="taxId"
+                    value={formData.taxId}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="website"
+                    type="text"
+                    label="Website"
+                    name="website"
+                    autoComplete="website"
+                    value={formData.website}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="myfile"
+                    type="file"
+                    label="Logo"
+                    name='myfile'
+                    onChange={handleFileChange} // Handle file input change
                   />
                 </Grid>
               </Grid>

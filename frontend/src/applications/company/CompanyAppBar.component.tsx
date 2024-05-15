@@ -10,12 +10,12 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 import { ThemeProvider, createTheme } from '@mui/material';
 import { indigo, purple } from '@mui/material/colors';
 import FormDialog from './UpdateDialog.component';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../shared/utils/authUtils';
 
@@ -31,6 +31,7 @@ const theme = createTheme({
 
 
 const CompanyAppBar = () => {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -56,6 +57,48 @@ const CompanyAppBar = () => {
     setOpen(true);
     handleCloseUserMenu();
   }
+
+
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    // Logout
+    // Mutation to logout
+    mutationLogout.mutate();
+  }
+
+  const mutationLogout = useMutation<ResponseType, ErrorType>({
+    mutationFn: () => axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/company/logout", {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    onSuccess: () => {
+      document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
+      // Delete cookie
+
+      console.log("Logout successfully");
+      // setSending(false);
+      // setShowError(false);
+      // setShowSuccess(true);
+      setTimeout(() => {
+        // setShowSuccess(false); // Hide the success message
+        navigate('/'); // Navigate to the next screen
+      }, 1000);
+    },
+    onError: (error) => {
+      // setSending(false);
+      // setShowError(true);
+      console.log("Logout failed");
+      console.log(error);
+    },
+    onMutate: () => {
+      console.log(token);
+      // setSending(true);
+      // setShowError(false);
+    }
+  }
+  );
+
 
   const handleCloseSettings = () => {
     setOpen(false);
@@ -172,11 +215,13 @@ const CompanyAppBar = () => {
                 </Button>
               ))}
             </Box>
-            <Typography sx={{ mr: 3 }}>
+            <Typography sx={{ mr: 1 }}>
               {companyData?.name ?? ''}
             </Typography>
             <Box sx={{ flexGrow: 0 }}>
-              <Avatar alt="Remy Sharp" src={companyData?.avatar ?? ''} />
+              <Button onClick={(event) => setAnchorElUser(event.currentTarget)} >
+                <Avatar alt="Remy Sharp" src={companyData?.avatar ?? ''} />
+              </Button>
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
@@ -196,7 +241,7 @@ const CompanyAppBar = () => {
                 <MenuItem key="settings" onClick={handleOpenSettings}>
                   <Typography textAlign="center">Settings</Typography>
                 </MenuItem>
-                <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                <MenuItem key="logout" onClick={handleLogout}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
               </Menu>
