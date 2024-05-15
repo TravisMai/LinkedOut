@@ -219,10 +219,21 @@ export class JobController {
   @Put(':id')
   @AllowRoles(['company'])
   @UseGuards(JwtGuard, RolesGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'images', maxCount: 4 },
+      { name: 'internshipPrograme', maxCount: 1 },
+    ]),
+  )
   async update(
     @Param('id') id: string,
     @Body() job: Job,
     @Res() response: Response,
+    @UploadedFiles()
+    files: {
+      images?: Express.Multer.File[];
+      internshipPrograme?: Express.Multer.File;
+    },
   ): Promise<Response> {
     try {
       if (!validate(id)) {
@@ -230,7 +241,39 @@ export class JobController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
-      //
+      if (job.descriptions && typeof job.descriptions === 'string') {
+        const descriptionsString = job.descriptions as string;
+        const replacedDescriptions = descriptionsString.replace(/'/g, '"');
+        job.descriptions = JSON.parse(replacedDescriptions);
+      }
+      // take the file, upload to azure then store the url in the image array
+      if (files.images && files.images.length > 0) {
+        const imageUrls: string[] = [];
+        for (const file of files.images) {
+          try {
+            const imageUrl = await this.azureBlobService.upload(file);
+            imageUrls.push(imageUrl);
+          } catch (error) {
+            return response
+              .status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .json({ message: error.message });
+          }
+        }
+        job.image = imageUrls;
+      }
+      // take the file, upload to azure then store the url in the internshipPrograme
+      if (files.internshipPrograme) {
+        try {
+          const internshipProgrameUrl = await this.azureBlobService.upload(
+            files.internshipPrograme[0],
+          );
+          job.internshipPrograme = internshipProgrameUrl;
+        } catch (error) {
+          return response
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+        }
+      }
       const updateJob = await this.jobService.update(id, job);
       if (!updateJob) {
         return response
