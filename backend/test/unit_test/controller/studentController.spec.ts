@@ -479,7 +479,9 @@ describe('StudentController', () => {
       await studentController.delete('1', res as any);
 
       expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Student deleted successfully!' });
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Student deleted successfully!',
+      });
     });
 
     it('should throw 404 NOT FOUND if the student is not found', async () => {
