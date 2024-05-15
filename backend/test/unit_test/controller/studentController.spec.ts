@@ -438,7 +438,9 @@ describe('StudentController', () => {
       );
 
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.json).toHaveBeenCalledWith({ message: `Cannot read properties of undefined (reading 'avatar')` });
+      expect(res.json).toHaveBeenCalledWith({
+        message: `Cannot read properties of undefined (reading 'avatar')`,
+      });
     });
 
     it('should update student information successfully', async () => {
