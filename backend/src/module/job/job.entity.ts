@@ -44,6 +44,7 @@ export class Job {
   @Column({ nullable: true })
   @IsOptional()
   @IsNumber()
+  @Transform(({ value }) => parseInt(value))
   salary: number;
 
   @Column({ default: 'No requirement' })

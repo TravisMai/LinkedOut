@@ -21,7 +21,10 @@ export class JobApplicants {
   @JoinColumn({ name: 'studentId' })
   student: Student;
 
-  @ManyToOne(() => Job, { eager: true })
+  @ManyToOne(() => Job, { 
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'jobId' })
   job: Job;
 
