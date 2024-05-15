@@ -5,9 +5,11 @@ import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import {useParams } from 'react-router-dom';
 import CompanyAppBar from '../CompanyAppBar.component';
 import { getJwtToken } from '../../../shared/utils/authUtils';
+import UpdateDialog from './UpdateDialog.component';
+import DeleteDialog from './DeleteDialog.component';
 
 
 const JobDisplayCompany: React.FC = () => {
@@ -60,7 +62,7 @@ const JobDisplayCompany: React.FC = () => {
         }, 1000);
     }
 
-    // Handle update job
+    // Handle open/close job
     interface updateForm {
         title: string | undefined,
         isActive: boolean | undefined,
@@ -75,7 +77,6 @@ const JobDisplayCompany: React.FC = () => {
         quantity: 0,
     });
 
-
     useEffect(() => {
         if (job) {
             setFormData({
@@ -87,7 +88,6 @@ const JobDisplayCompany: React.FC = () => {
             setIsActive(job.isActive);
         };
     }, [job]);
-
 
     const mutation = useMutation<ResponseType, ErrorType, updateForm>({
         mutationFn: (formData) => {
@@ -111,7 +111,6 @@ const JobDisplayCompany: React.FC = () => {
     }
     );
 
-
     // Fetch all applicants of the job
     const [applicationList, setApplicationList] = useState<jobApplicationType[]>([]);
     const [applied, setApplied] = useState<number>(0);
@@ -133,26 +132,82 @@ const JobDisplayCompany: React.FC = () => {
         }
     });
 
+
+    // Handle update job (dialog)
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const handleOpenDialog = () => {
+        setLoading(true);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        // Force the page to reload
+        window.location.reload();
+    }
+
+    const handleExit = () => {
+        setLoading(false);
+        setOpenDialog(false);
+    }
+
+
+    // Handle delete dialog
+
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
+    const handleOpenDeleteDialog = () => {
+        setLoading(true);
+        setOpenDeleteDialog(true);
+    };
+
+
+    const handleExitDelete = () => {
+        setLoading(false);
+        setOpenDeleteDialog(false);
+    }
+
+
     return (
         <>
             <CompanyAppBar />
 
             <Container>
                 <Grid container spacing={2} sx={{ mt: 3 }}>
+
                     <Grid item xs={7}>
+                        <Grid container columnSpacing={2} sx={{ marginBottom: 3 }}>
+                            {isActive ?
+                                <Grid item xs={3}>
+                                    <LoadingButton variant="contained" color="error" onClick={handleCloseJob} loading={loading}> Close Job </LoadingButton>
+                                </Grid>
+                                :
+                                <Grid item xs={3}>
+                                    <LoadingButton variant="contained" color="success" onClick={handleOpenJob} loading={loading}> Open Job </LoadingButton>
+                                </Grid>
+                            }
+                            <Grid item xs={3}>
+                                <LoadingButton variant="contained" color="primary" onClick={handleOpenDialog} loading={loading}> Update Job</LoadingButton>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <LoadingButton variant="outlined" color="error" onClick={handleOpenDeleteDialog} loading={loading}> Delete Job</LoadingButton>
+                            </Grid>
+
+
+                        </Grid>
+
                         <Box display="flex" gap={3} alignItems={"center"}>
+
                             <Typography variant="h4">{job?.title}</Typography>
                             {!isActive && <LockOutlined />}
-                            {isActive ?
-                                <LoadingButton variant="outlined" color="error" onClick={handleCloseJob} loading={loading}> Job is Open, Click to Close Job</LoadingButton>
-                                :
-                                <>
-                                    <LoadingButton variant="outlined" color="success" onClick={handleOpenJob} loading={loading}> Job is Closed, Click to Open Job</LoadingButton>
 
-                                </>
-                            }
+
                         </Box>
+
                         <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
+
+
+
                         <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h5">Open Date</Typography>
@@ -194,21 +249,21 @@ const JobDisplayCompany: React.FC = () => {
                         </List>
                         <Typography variant="h6">Responsibities</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions?.responsibilities.map((responsibility, index) => (
+                            {job?.descriptions?.responsibilities ? job?.descriptions?.responsibilities.map((responsibility, index) => (
                                 <ListItem key={job?.id + "responsibility" + index}>
                                     <ListItemIcon><Search /></ListItemIcon>
                                     <ListItemText primary={responsibility}></ListItemText>
                                 </ListItem>
-                            ))}
+                            )) : <></>}
                         </List>
                         <Typography variant="h6">Requirements</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions?.requirements.map((requirement, index) => (
+                            {job?.descriptions?.requirements ? job?.descriptions?.requirements.map((requirement, index) => (
                                 <ListItem key={job?.id + "requirement" + index}>
                                     <ListItemIcon><Check /></ListItemIcon>
                                     <ListItemText primary={requirement}></ListItemText>
                                 </ListItem>
-                            ))}
+                            )) : <></>}
                         </List>
                         <Typography variant="h6">Level</Typography>
                         <List sx={{ mb: 2 }}>
@@ -229,7 +284,7 @@ const JobDisplayCompany: React.FC = () => {
                     <Grid item xs={4}>
 
                         <Typography variant="h6">APPLIED STUDENTS</Typography>
-                        {}
+                        { }
                         <List>
                             {applicationList.length ? applicationList.map((application, index) => (
                                 <CardActionArea href={`../applicant/${application.id}`} key={application.id + index}>
@@ -242,7 +297,7 @@ const JobDisplayCompany: React.FC = () => {
                                         <ListItemText primary={application.student.name} secondary={application.status + " " + application.updated.toString().split("T")[0]} ></ListItemText>
                                     </ListItem>
                                 </CardActionArea>
-                            )): "No application yet"}
+                            )) : "No application yet"}
                             {/* <ListItem>
                                 <ListItemIcon><img
                                     src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
@@ -259,7 +314,8 @@ const JobDisplayCompany: React.FC = () => {
 
                 </Grid>
 
-
+                <UpdateDialog jobId={jobId || ''} state={openDialog} onExit={handleExit} onClose={handleCloseDialog} />
+                <DeleteDialog jobId={jobId || ''} state={openDeleteDialog} onExit={handleExitDelete}/>
 
             </Container >
         </>
