@@ -39,7 +39,7 @@ export class AppService {
         'company.created AS created',
         'company.updated AS updated',
       ])
-      .where('unaccent(company.name) ILIKE :keyword', {
+      .where('public.unaccent(company.name) ILIKE :keyword', {
         keyword: `%${keyword}%`,
       })
       .getRawMany();
@@ -55,7 +55,9 @@ export class AppService {
         'job.created AS created',
         'job.updated AS updated',
       ])
-      .where('unaccent(job.title) ILIKE :keyword', { keyword: `%${keyword}%` })
+      .where('public.unaccent(job.title) ILIKE :keyword', {
+        keyword: `%${keyword}%`,
+      })
       .getRawMany();
   }
 
@@ -69,7 +71,7 @@ export class AppService {
         'student.created AS created',
         'student.updated AS updated',
       ])
-      .where('unaccent(student.name) ILIKE :keyword', {
+      .where('public.unaccent(student.name) ILIKE :keyword', {
         keyword: `%${keyword}%`,
       })
       .getRawMany();

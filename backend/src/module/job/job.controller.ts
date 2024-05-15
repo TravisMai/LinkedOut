@@ -32,10 +32,7 @@ import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { JobService } from './job.service';
 import { JobResponseDto } from './dto/JobResponse.dto';
 import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
-import {
-  FileFieldsInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Controller('job')
@@ -220,12 +217,10 @@ export class JobController {
   @Put(':id')
   @AllowRoles(['company'])
   @UseGuards(JwtGuard, RolesGuard)
-  @UseInterceptors(FilesInterceptor('images', 4))
   async update(
     @Param('id') id: string,
     @Body() job: Job,
     @Res() response: Response,
-    @UploadedFiles() files: Array<Express.Multer.File>,
   ): Promise<Response> {
     try {
       if (!validate(id)) {

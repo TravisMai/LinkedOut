@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import validate = require('uuid-validate');
 import { Student } from './student.entity';

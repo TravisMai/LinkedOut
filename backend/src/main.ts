@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { INestApplication, Logger } from '@nestjs/common';
-import * as fs from 'fs';
 
 export let app: INestApplication;
 

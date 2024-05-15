@@ -15,7 +15,6 @@ import {
   HttpStatus,
   UseGuards,
   Req,
-  Query,
   Body,
 } from '@nestjs/common';
 import { AppService } from './app.service';
