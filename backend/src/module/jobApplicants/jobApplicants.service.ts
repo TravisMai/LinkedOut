@@ -46,4 +46,11 @@ export class JobApplicantsService {
   async delete(id: string): Promise<void> {
     await this.jobApplicantsRepository.delete(id);
   }
+
+  async findJobApplicantsById(id: string): Promise<JobApplicants> {
+    return await this.jobApplicantsRepository.findOne({
+      where: { id },
+      relations: ['job', 'student', 'resume'],
+    });
+  }
 }

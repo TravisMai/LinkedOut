@@ -270,7 +270,9 @@ export class StudentController {
       );
       return response.status(HttpStatus.OK).json(updateStudent);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 

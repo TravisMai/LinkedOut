@@ -6,6 +6,7 @@ import { CompanyService } from 'src/module/company/company.service';
 import { Faculty } from 'src/module/faculty/faculty.entity';
 import { RedisService } from 'src/module/redis/redis.service';
 import { StaffService } from 'src/module/staff/staff.service';
+import { StudentUpdateDto } from 'src/module/student/dto/studentUpdate.dto';
 import { StudentController } from 'src/module/student/student.controller';
 import { Student } from 'src/module/student/student.entity';
 import { StudentService } from 'src/module/student/student.service';
@@ -77,6 +78,19 @@ describe('StudentController', () => {
     role: '',
     created: undefined,
     updated: undefined,
+  };
+
+  const studentUpdateDto: StudentUpdateDto = {
+    name: 'John Doe',
+    email: 'test@gmail.com',
+    phoneNumber: '123456789',
+    avatar: 'avatar',
+    studentId: 123456,
+    isVerify: false,
+    isActive: true,
+    deleteResumeID: [],
+    resume: [],
+    resumeObjective: 'objective',
   };
 
   beforeEach(() => {
@@ -381,6 +395,111 @@ describe('StudentController', () => {
 
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
       expect(res.json).toHaveBeenCalledWith({ message: 'error' });
+    });
+  });
+
+  describe('update', () => {
+    it('should throw 400 error if the id is invalid', async () => {
+      const req = {
+        params: { id: '1' },
+        headers: { authorization: 'Bearer token' },
+      };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(false);
+
+      await studentController.update(
+        { avatar: [file], resume: [file] },
+        '1',
+        studentUpdateDto,
+        req as any,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Invalid UUID format' });
+    });
+
+    it('should throw 500 INTERNAL SERVER ERROR if detect unexpected field', async () => {
+      const req = {
+        params: { id: '1' },
+        headers: { authorization: 'Bearer token' },
+      };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(true);
+
+      await studentController.update(
+        { avatar: [file], resume: [file] },
+        '1',
+        studentUpdateDto,
+        req as any,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(res.json).toHaveBeenCalledWith({ message: `Cannot read properties of undefined (reading 'avatar')` });
+    });
+
+    it('should update student information successfully', async () => {
+      const req = {
+        params: { id: '1' },
+        headers: { authorization: 'Bearer token' },
+      };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(true);
+
+      jest.spyOn(studentService, 'findOne').mockResolvedValue(student);
+      jest.spyOn(azureBlobService, 'upload').mockResolvedValue('avatar');
+      jest.spyOn(studentService, 'update').mockResolvedValue(student);
+
+      await studentController.update(
+        { avatar: [file], resume: [file] },
+        '1',
+        studentUpdateDto,
+        req as any,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith(student);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete student successfully', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(studentService, 'findOne').mockResolvedValue(student);
+      jest.spyOn(studentService, 'delete').mockResolvedValue(undefined);
+
+      await studentController.delete('1', res as any);
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Student deleted successfully!' });
+    });
+
+    it('should throw 404 NOT FOUND if the student is not found', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(studentService, 'findOne').mockResolvedValue(null);
+
+      await studentController.delete('1', res as any);
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
+      expect(res.json).toHaveBeenCalledWith({ message: 'No student found!' });
+    });
+
+    it('should throw 400 BAD REQUEST if the id is invalid', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(false);
+
+      await studentController.delete('1', res as any);
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Invalid UUID format' });
     });
   });
 });
