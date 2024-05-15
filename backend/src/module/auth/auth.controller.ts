@@ -44,11 +44,8 @@ export class AuthController {
           const loginStudent = await this.studentService.findByEmail(
             payload.email,
           );
-          console.log('loginStudent', loginStudent);
           const limitedData = StudentResponseDto.fromStudent(loginStudent);
-          console.log('limitedData', limitedData);
           const token = this.authService.generateJwtToken(loginStudent);
-          console.log('token', token);
           return response
             .status(HttpStatus.OK)
             .json({ student: limitedData, token });
