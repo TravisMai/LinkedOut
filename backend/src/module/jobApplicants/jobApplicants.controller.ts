@@ -139,7 +139,7 @@ export class JobApplicantsController {
   ): Promise<Response> {
     try {
       const jobApplicant =
-        await this.jobApplicantsService.findJobApplicantsById(id);
+        await this.jobApplicantsService.findOne(id);
       if (!jobApplicant) {
         return response
           .status(HttpStatus.NOT_FOUND)
