@@ -164,7 +164,7 @@ export default function UpdateProfile() {
     mutationFn: () => {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null && key !== 'taxId') {
+        if (value !== null) {
           if (key === 'myfile') {
             formDataToSend.append(key, value as File); // Append file to FormData
           } else if (key === 'phoneNumber') {
@@ -272,7 +272,7 @@ export default function UpdateProfile() {
                     onChange={handleInputChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={4}>
                   <TextField
                     id="selectCountry"
                     select
@@ -290,7 +290,7 @@ export default function UpdateProfile() {
                     ))}
                   </TextField>
                 </Grid>
-                <Grid item xs={12} sm={9}>
+                <Grid item xs={12} sm={8}>
                   <TextField
                     required
                     fullWidth
@@ -339,13 +339,16 @@ export default function UpdateProfile() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                <TextField
+                    required
                     fullWidth
                     id="address"
-                    type="text"
                     label="Address"
                     name="address"
                     autoComplete="address"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     value={formData.address}
                     onChange={handleInputChange}
                   />
@@ -358,6 +361,9 @@ export default function UpdateProfile() {
                     label="Work Field"
                     name="workField"
                     autoComplete="workField"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     value={formData.workField}
                     onChange={handleInputChange}
                   />
@@ -372,6 +378,9 @@ export default function UpdateProfile() {
                     autoComplete="description"
                     multiline
                     rows={4}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     value={formData.description}
                     onChange={handleInputChange}
                   />
@@ -384,6 +393,9 @@ export default function UpdateProfile() {
                     label="Tax ID"
                     name="taxId"
                     autoComplete="taxId"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     value={formData.taxId}
                     onChange={handleInputChange}
                   />
@@ -396,6 +408,9 @@ export default function UpdateProfile() {
                     label="Website"
                     name="website"
                     autoComplete="website"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     value={formData.website}
                     onChange={handleInputChange}
                   />
@@ -407,6 +422,9 @@ export default function UpdateProfile() {
                     type="file"
                     label="Logo"
                     name='myfile'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     onChange={handleFileChange} // Handle file input change
                   />
                 </Grid>

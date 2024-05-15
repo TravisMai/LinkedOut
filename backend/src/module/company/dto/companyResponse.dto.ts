@@ -10,7 +10,7 @@ export class CompanyResponseDto {
   address: string;
   website: string;
   description: string;
-  taxId: number;
+  taxId: string;
 
   static fromCompany(company: Company): CompanyResponseDto {
     const dto = new CompanyResponseDto();

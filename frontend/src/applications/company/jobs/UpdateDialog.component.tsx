@@ -83,7 +83,7 @@ export default function UpdateDialog({ jobId, state, onExit, onClose }: { jobId:
                 workType: selectedJob.workType,
                 quantity: selectedJob.quantity,
                 descriptions: {
-                    aboutUs: selectedJob.descriptions.aboutUs,
+                    aboutUs: selectedJob?.descriptions?.aboutUs? selectedJob.descriptions.aboutUs : "",
                     responsibilities: selectedJob.descriptions.responsibilities,
                     requirements: selectedJob.descriptions.requirements,
                     preferredQualifications: selectedJob.descriptions.preferredQualifications,

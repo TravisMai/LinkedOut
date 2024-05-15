@@ -1,6 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
-import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 @Entity()
@@ -33,8 +33,8 @@ export class Company extends commonAttribute {
   @Column({ nullable: true })
   // @IsNumber()
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
-  taxId: number;
+  // @Transform(({ value }) => parseInt(value))
+  taxId: string;
 
   @Column({ default: false })
   isVerify: boolean;

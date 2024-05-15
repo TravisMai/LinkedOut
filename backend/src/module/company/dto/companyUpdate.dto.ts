@@ -49,9 +49,9 @@ export class CompanyUpdateDto {
   @IsOptional()
   description: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  taxId: number;
+  taxId: string;
 
   @IsBoolean()
   @IsOptional()

@@ -25,7 +25,7 @@ export default function StudentProfile2() {
 
     useQuery({
         queryKey: "studentInfo",
-        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/applicant/${applicantId}`, {
+        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/applicant/${applicantId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -44,13 +44,14 @@ export default function StudentProfile2() {
         setTimeout(() => {
             setStatus(status);
             setLoading(false);
-            // mutation.mutate(status);
+            console.log("Updating to ", status)
+            mutation.mutate(status);
         }, 1000);
     }
 
     const mutation = useMutation<ResponseType, ErrorType, string>({
         mutationFn: (status: string) => {
-            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/applicant/${applicantId}`, { "status": status }, {
+            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/update/${applicantId}`, { "status": status }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
