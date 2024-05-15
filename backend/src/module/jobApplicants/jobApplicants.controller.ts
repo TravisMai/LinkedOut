@@ -11,6 +11,7 @@ import {
   HttpStatus,
   Req,
   Body,
+  Put,
 } from '@nestjs/common';
 import { JobApplicants } from './jobApplicants.entity';
 import { StudentService } from '../student/student.service';
@@ -146,6 +147,30 @@ export class JobApplicantsController {
           .json({ message: 'Job applicant not found!' });
       }
       return response.status(HttpStatus.OK).json(jobApplicant);
+    } catch (error) {
+      return response.status(error.status).json({ message: error.message });
+    }
+  }
+
+  // update a job applicant
+  @Put('update/:id')
+  @AllowRoles(['company'])
+  @UseGuards(JwtGuard, RolesGuard)
+  async update(
+    @Req() req: Request,
+    @Res() response: Response,
+    @Param('id') id: string,
+    @Body() jobApplicant: JobApplicants,
+  ): Promise<Response> {
+    try {
+      const updatedJobApplicant =
+        await this.jobApplicantsService.update(id, jobApplicant);
+      if (!updatedJobApplicant) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Job applicant not found!' });
+      }
+      return response.status(HttpStatus.OK).json(updatedJobApplicant);
     } catch (error) {
       return response.status(error.status).json({ message: error.message });
     }
