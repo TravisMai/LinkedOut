@@ -32,7 +32,7 @@ interface createForm {
     openDate: Date,
     expireDate: Date,
     salary: number,
-    isActive: boolean,
+    // isActive: boolean,
     internshipPrograme: File,
 }
 
@@ -49,17 +49,17 @@ export default function AddJob() {
         quantity: 0,
         // image: new File([""], "filename"),
         descriptions: {
-            aboutUs: '',
-            responsibilities: [],
-            requirements: [],
-            preferredQualifications: [],
-            benefits: [],
+            aboutUs: "",
+            responsibilities: [""],
+            requirements: [""],
+            preferredQualifications: [""],
+            benefits: [""],
         },
         openDate: new Date(),
         // expireDate is 7 days latter
         expireDate: dayjs().add(7, 'day').toDate(),
         salary: 0,
-        isActive: false,
+        // isActive: false,
         internshipPrograme: new File([""], "filename"),
     });
 
@@ -144,30 +144,38 @@ export default function AddJob() {
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, createForm>({
-        mutationFn: (formData) => axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job`, formData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        }),
+        // mutationFn: (formData) => axios.post(`https://linkedout-hcmut.feedme.io.vn/api/v1/job`, formData, {
+        //     headers: {
+        //         Authorization: `Bearer ${token}`,
+        //     }
+        // }),
 
-        // mutationFn: (formData) => {
-        //     const formDataToSend = new FormData();
-        //     Object.entries(formData).forEach(([key, value]) => {
-        //         if (value !== null) {
-        //             if (key === 'internshipPrograme') {
-        //                 formDataToSend.append(key, value as File); // Append file to FormData
-        //             } else {
-        //                 formDataToSend.append(key, value.toString()); // Convert other fields to string
-        //             }
-        //         }
-        //     });
-        //     return axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/job", formDataToSend, {
-        //         headers: {
-        //              Authorization: `Bearer ${token}`,
-        //             'Content-Type': 'multipart/form-data', // Set content type for file upload
-        //         },
-        //     });
-        // },
+        mutationFn: (formData) => {
+            const formDataToSend = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                if (value !== null) {
+                    if (key === 'internshipPrograme' || key === 'images') {
+                        formDataToSend.append(key, value as File); // Append file to FormData
+                    } else if (key === 'descriptions') {
+                        // Convert description into string
+                        formDataToSend.append(key, JSON.stringify(value));
+                        console.log("String: ", formData[key])
+                    }
+                    else if (key === 'openDate' || key === 'expireDate') {
+                        // Stringify date
+                        formDataToSend.append(key, value.toISOString());
+                    } else {
+                        formDataToSend.append(key, value.toString()); // Convert other fields to string
+                    }
+                }
+            });
+            return axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/job", formDataToSend, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data', // Set content type for file upload
+                },
+            });
+        },
 
 
         onSuccess: (data) => {
@@ -186,6 +194,7 @@ export default function AddJob() {
             setShowError(true);
         },
         onMutate: () => {
+            console.log("Sending", formData)
             setSending(true);
             setShowError(false);
         }

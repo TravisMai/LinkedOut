@@ -194,8 +194,8 @@ const JobDisplayCompany: React.FC = () => {
                         </List>
                         <Typography variant="h6">Responsibities</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions?.responsibilities.map((responsibility) => (
-                                <ListItem>
+                            {job?.descriptions?.responsibilities.map((responsibility, index) => (
+                                <ListItem key={job?.id + "responsibility" + index}>
                                     <ListItemIcon><Search /></ListItemIcon>
                                     <ListItemText primary={responsibility}></ListItemText>
                                 </ListItem>
@@ -203,8 +203,8 @@ const JobDisplayCompany: React.FC = () => {
                         </List>
                         <Typography variant="h6">Requirements</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions?.requirements.map((requirement) => (
-                                <ListItem>
+                            {job?.descriptions?.requirements.map((requirement, index) => (
+                                <ListItem key={job?.id + "requirement" + index}>
                                     <ListItemIcon><Check /></ListItemIcon>
                                     <ListItemText primary={requirement}></ListItemText>
                                 </ListItem>
@@ -229,11 +229,11 @@ const JobDisplayCompany: React.FC = () => {
                     <Grid item xs={4}>
 
                         <Typography variant="h6">APPLIED STUDENTS</Typography>
-
+                        {}
                         <List>
-                            {applicationList.map((application) => (
-                                <CardActionArea href={`../applicant/${application.id}`}>
-                                    <ListItem>
+                            {applicationList.length ? applicationList.map((application, index) => (
+                                <CardActionArea href={`../applicant/${application.id}`} key={application.id + index}>
+                                    <ListItem >
                                         <ListItemIcon><img
                                             src={application.student.avatar}
                                             className='w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2'
@@ -242,7 +242,7 @@ const JobDisplayCompany: React.FC = () => {
                                         <ListItemText primary={application.student.name} secondary={application.status + " " + application.updated.toString().split("T")[0]} ></ListItemText>
                                     </ListItem>
                                 </CardActionArea>
-                            ))}
+                            )): "No application yet"}
                             {/* <ListItem>
                                 <ListItemIcon><img
                                     src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"

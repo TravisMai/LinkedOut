@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import CompanyAppBar from '../CompanyAppBar.component';
-import { Typography } from '@mui/material';
+import { Pagination, Stack, Typography } from '@mui/material';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 
 
@@ -99,6 +99,18 @@ export function ApplicantsPage() {
     console.log("Fetch all applications of each job", allApplications);
 
 
+    // Handle pagination
+    const itemsPerPage = 7;
+    const [currentPage, setCurrentPage] = useState(0);
+
+    // Handle page change
+    const handlePageChange = (value: number) => {
+        setCurrentPage(value);
+    };
+
+    const limitedApplications = allApplications.slice(itemsPerPage * currentPage, itemsPerPage * currentPage + itemsPerPage);
+
+
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
         <>
@@ -149,8 +161,8 @@ export function ApplicantsPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {allApplications.length > 0 ?
-                                allApplications.map((row, index) => (
+                            {limitedApplications.length > 0 ?
+                                limitedApplications.map((row, index) => (
                                     <TableRow
                                         key={row.id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -179,6 +191,14 @@ export function ApplicantsPage() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <div className='w-full mt-2 flex justify-center '>
+                    <Stack spacing={2} >
+                        <Pagination
+                            count={Math.ceil(allApplications.length / itemsPerPage)}
+                            onChange={(_event, value) => handlePageChange(value - 1)}
+                        />
+                    </Stack>
+                </div>
             </div>
         </>
     );
