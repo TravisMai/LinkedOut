@@ -127,4 +127,27 @@ export class JobApplicantsController {
       return response.status(error.status).json({ message: error.message });
     }
   }
+
+  // get a job applicant by jobApplicant id
+  @Get('applicant/:id')
+  @AllowRoles(['company', 'staff'])
+  @UseGuards(JwtGuard)
+  async findOne(
+    @Req() req: Request,
+    @Res() response: Response,
+    @Param('id') id: string,
+  ): Promise<Response> {
+    try {
+      const jobApplicant =
+        await this.jobApplicantsService.findJobApplicantsById(id);
+      if (!jobApplicant) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Job applicant not found!' });
+      }
+      return response.status(HttpStatus.OK).json(jobApplicant);
+    } catch (error) {
+      return response.status(error.status).json({ message: error.message });
+    }
+  }
 }

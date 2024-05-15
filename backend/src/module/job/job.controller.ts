@@ -133,7 +133,9 @@ export class JobController {
       );
       // Check if 'descriptions' is in the request, and parse if it's a string
       if (job.descriptions && typeof job.descriptions === 'string') {
-        job.descriptions = JSON.parse(job.descriptions);
+        const descriptionsString = job.descriptions as string;
+        const replacedDescriptions = descriptionsString.replace(/'/g, '"');
+        job.descriptions = JSON.parse(replacedDescriptions);
       }
       // take the file, upload to azure then store the url in the image array
       if (files.images && files.images.length > 0) {
