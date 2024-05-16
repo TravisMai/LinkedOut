@@ -92,7 +92,7 @@ const JobDisplayCompany: React.FC = () => {
                         <Typography variant="h6">Description</Typography>
                         <List sx={{ mb: 2 }}>
                             <ListItem>
-                                <ListItemText primary={job?.descriptions.aboutUs}></ListItemText>
+                                <ListItemText primary={job?.descriptions?.aboutUs ?? ""}></ListItemText>
                             </ListItem>
                         </List>
                         {job?.workType === "Internship" ? <>
@@ -117,21 +117,21 @@ const JobDisplayCompany: React.FC = () => {
                             : null}
                         <Typography variant="h6">Responsibities</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions.responsibilities.map((responsibility) => (
+                            {job?.descriptions?.responsibilities.map((responsibility) => (
                                 <ListItem>
                                     <ListItemIcon><Search /></ListItemIcon>
                                     <ListItemText primary={responsibility}></ListItemText>
                                 </ListItem>
-                            ))}
+                            )) ?? ""}
                         </List>
                         <Typography variant="h6">Requirements</Typography>
                         <List sx={{ mb: 2 }}>
-                            {job?.descriptions.requirements.map((requirement) => (
+                            {job?.descriptions?.requirements.map((requirement) => (
                                 <ListItem>
                                     <ListItemIcon><Check /></ListItemIcon>
                                     <ListItemText primary={requirement}></ListItemText>
                                 </ListItem>
-                            ))}
+                            )) ?? ""}
                         </List>
                         <Typography variant="h6">Level</Typography>
                         <List sx={{ mb: 2 }}>
