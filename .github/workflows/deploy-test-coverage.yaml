@@ -18,11 +18,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - run: |
+      - name: Build test coverage
+        run: |
           cd backend
           npm install
-      - name: Build test coverage
-        run: npm run test:cov
+          npm run test:cov
 
       - name: Deploy coverage report to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.3
