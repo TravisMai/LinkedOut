@@ -98,17 +98,23 @@ describe('StudentService', () => {
       studentId: 0,
       isVerify: false,
       isActive: false,
-      resume: []
+      resume: [],
     };
 
-    jest.spyOn(studentRepository, 'update').mockResolvedValue({} as UpdateResult);
+    jest
+      .spyOn(studentRepository, 'update')
+      .mockResolvedValue({} as UpdateResult);
     jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
 
-    await expect(studentService.update('1', updateDto)).resolves.toEqual(student);
+    await expect(studentService.update('1', updateDto)).resolves.toEqual(
+      student,
+    );
   });
 
   it('should delete a student', async () => {
-    jest.spyOn(studentRepository, 'delete').mockResolvedValue({} as UpdateResult);
+    jest
+      .spyOn(studentRepository, 'delete')
+      .mockResolvedValue({} as UpdateResult);
 
     await expect(studentService.delete('1')).resolves.not.toThrow();
   });
@@ -128,7 +134,11 @@ describe('StudentService', () => {
   it('should find a resume by student id and resume id', async () => {
     jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
 
-    await expect(studentService.getResumeById('1', '1')).resolves.toEqual({"id": "1", "title": "title", "url": "url"});
+    await expect(studentService.getResumeById('1', '1')).resolves.toEqual({
+      id: '1',
+      title: 'title',
+      url: 'url',
+    });
   });
 
   it('should find a resume by student id and resume id', async () => {

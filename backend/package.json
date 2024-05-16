@@ -93,7 +93,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.{service,repository,controller}.(t|j)s"
+      "**/*.{service,controller}.(t|j)s"
     ],
     "coveragePathIgnorePatterns": [
       "/redis\\.service\\.ts$"

@@ -44,10 +44,10 @@ describe('StudentController', () => {
     created: new Date(),
     updated: new Date(),
   };
+
   const student: Student = {
     id: '1',
     name: 'John Doe',
-    // add all the missing properties
     faculty: faculty,
     isVerify: false,
     studentId: 123456,
