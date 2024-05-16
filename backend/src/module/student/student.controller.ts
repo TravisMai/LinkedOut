@@ -258,11 +258,6 @@ export class StudentController {
       }
 
       const updateStudent = await this.studentService.update(id, student);
-      if (!updateStudent) {
-        return response
-          .status(HttpStatus.NOT_FOUND)
-          .json({ message: 'Student not found!' });
-      }
       await this.redisService.setObjectByKeyValue(
         `STUDENT:${id}`,
         updateStudent,

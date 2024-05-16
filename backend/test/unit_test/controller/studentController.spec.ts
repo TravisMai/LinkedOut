@@ -88,8 +88,11 @@ describe('StudentController', () => {
     studentId: 123456,
     isVerify: false,
     isActive: true,
-    deleteResumeID: [],
-    resume: [],
+    deleteResumeID: ['deleteResumeID'],
+    resume: [
+      { id: '1', title: 'title1', url: 'resumeUrl1' },
+      { id: '2', title: 'title2', url: 'resumeUrl2' },
+    ],
     resumeObjective: 'objective',
   };
 
