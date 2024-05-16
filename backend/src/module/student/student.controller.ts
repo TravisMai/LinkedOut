@@ -307,7 +307,7 @@ export class StudentController {
   @Post('login')
   async login(
     @Req() req: Request,
-    @Body() loginData: { email: string; password: string },
+    @Body() loginData: { email: string },
     @Res() response: Response,
   ): Promise<Response> {
     try {
@@ -335,7 +335,9 @@ export class StudentController {
       );
       return response.status(HttpStatus.OK).json({ token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -359,7 +361,9 @@ export class StudentController {
         .status(HttpStatus.OK)
         .json({ message: 'Logout successfully!' });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }

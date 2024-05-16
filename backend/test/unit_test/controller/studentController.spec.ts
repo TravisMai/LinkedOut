@@ -506,4 +506,109 @@ describe('StudentController', () => {
       expect(res.json).toHaveBeenCalledWith({ message: 'Invalid UUID format' });
     });
   });
+
+  describe('login', () => {
+    it('should login successfully', async () => {
+      const req = { headers: { authorization: 'Bearer token' } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(studentService, 'findByEmail').mockResolvedValue(student);
+      jest.spyOn(authService, 'generateJwtToken').mockReturnValue('token');
+
+      await studentController.login(
+        req as any,
+        { email: student.email },
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith({ token: 'token' });
+    });
+
+    it('should login successfully when cache data available', async () => {
+      const req = { headers: { authorization: 'Bearer token' } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest
+        .spyOn(redisService, 'getObjectByKey')
+        .mockResolvedValue('cacheToken');
+
+      await studentController.login(
+        req as any,
+        { email: student.email },
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith({ token: 'cacheToken' });
+    });
+
+    it('should throw 401 UNAUTHORIZED if the student is not found', async () => {
+      const req = { headers: { authorization: 'Bearer token' } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(studentService, 'findByEmail').mockResolvedValue(null);
+
+      await studentController.login(
+        req as any,
+        { email: student.email },
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.UNAUTHORIZED);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
+    });
+
+    it('should throw 500 INTERNAL SERVER ERROR if there is an unexpected error', async () => {
+      const req = { headers: { authorization: 'Bearer token' } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(studentService, 'findByEmail').mockImplementation(async () => {
+        throw new Error('error');
+      });
+
+      await studentController.login(
+        req as any,
+        { email: student.email },
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(res.json).toHaveBeenCalledWith({ message: 'error' });
+    });
+  });
+
+  describe('logout', () => {
+    it('should logout successfully', async () => {
+      const req = { headers: { authorization: 'Bearer token' } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest
+        .spyOn(redisService, 'deleteObjectByKey')
+        .mockResolvedValue(undefined);
+
+      await studentController.logout(req as any, res as any);
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Logout successfully!',
+      });
+    });
+
+    it('should throw 500 INTERNAL SERVER ERROR if there is an unexpected error', async () => {
+      const req = { headers: { authorization: 'Bearer token' } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest
+        .spyOn(redisService, 'deleteObjectByKey')
+        .mockImplementation(async () => {
+          throw new Error('error');
+        });
+
+      await studentController.logout(req as any, res as any);
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(res.json).toHaveBeenCalledWith({ message: 'error' });
+    });
+  });
 });
