@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1715850044188" clover="3.2.0">
-  <project timestamp="1715850044188" name="All files">
-    <metrics statements="951" coveredstatements="172" conditionals="191" coveredconditionals="49" methods="144" coveredmethods="13" elements="1286" coveredelements="234" complexity="0" loc="951" ncloc="951" packages="10" files="25" classes="25"/>
+<coverage generated="1715864732580" clover="3.2.0">
+  <project timestamp="1715864732580" name="All files">
+    <metrics statements="943" coveredstatements="177" conditionals="190" coveredconditionals="51" methods="140" coveredmethods="19" elements="1273" coveredelements="247" complexity="0" loc="943" ncloc="943" packages="9" files="24" classes="24"/>
     <package name="app">
       <metrics statements="42" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="app.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/app/app.controller.ts">
@@ -710,20 +710,6 @@
         <line num="58" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="module.redis">
-      <metrics statements="8" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="4" coveredmethods="0"/>
-      <file name="redis.service.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/redis/redis.service.ts">
-        <metrics statements="8" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="27" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="28" count="0" type="stmt"/>
-      </file>
-    </package>
     <package name="module.staff">
       <metrics statements="149" coveredstatements="8" conditionals="29" coveredconditionals="0" methods="20" coveredmethods="0"/>
       <file name="staff.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/staff/staff.controller.ts">
@@ -886,7 +872,7 @@
       </file>
     </package>
     <package name="module.student">
-      <metrics statements="161" coveredstatements="146" conditionals="54" coveredconditionals="49" methods="21" coveredmethods="13"/>
+      <metrics statements="161" coveredstatements="154" conditionals="54" coveredconditionals="51" methods="21" coveredmethods="19"/>
       <file name="student.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/student/student.controller.ts">
         <metrics statements="137" coveredstatements="133" conditionals="52" coveredconditionals="49" methods="9" coveredmethods="9"/>
         <line num="1" count="1" type="stmt"/>
@@ -1039,23 +1025,23 @@
         <line num="22" count="0" type="stmt"/>
       </file>
       <file name="student.service.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/student/student.service.ts">
-        <metrics statements="16" coveredstatements="8" conditionals="2" coveredconditionals="0" methods="10" coveredmethods="4"/>
+        <metrics statements="16" coveredstatements="16" conditionals="2" coveredconditionals="2" methods="10" coveredmethods="10"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
-        <line num="9" count="4" type="stmt"/>
+        <line num="9" count="10" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="56" count="2" type="cond" truecount="2" falsecount="0"/>
       </file>
     </package>
   </project>

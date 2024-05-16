@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.63% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/19</span>
+                <span class='fraction'>19/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -129,7 +129,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,34 +149,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Student } from './student.entity';
@@ -206,35 +206,35 @@ export class StudentService {
   }
 &nbsp;
   // update an student
-<span class="fstat-no" title="function not covered" >  async </span>update(id: string, student: StudentUpdateDto): Promise&lt;Student&gt; {
-<span class="cstat-no" title="statement not covered" >    await this.studentRepository.update(id, student);</span>
-<span class="cstat-no" title="statement not covered" >    return await this.studentRepository.findOne({ where: { id } });</span>
+  async update(id: string, student: StudentUpdateDto): Promise&lt;Student&gt; {
+    await this.studentRepository.update(id, student);
+    return await this.studentRepository.findOne({ where: { id } });
   }
 &nbsp;
   // delete an student
-<span class="fstat-no" title="function not covered" >  async </span>delete(id: string): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >    await this.studentRepository.delete({ id });</span>
+  async delete(id: string): Promise&lt;void&gt; {
+    await this.studentRepository.delete({ id });
   }
 &nbsp;
   // find an student by email
-<span class="fstat-no" title="function not covered" >  async </span>findByEmail(email: string): Promise&lt;Student&gt; {
-<span class="cstat-no" title="statement not covered" >    return await this.studentRepository.findOne({ where: { email } });</span>
+  async findByEmail(email: string): Promise&lt;Student&gt; {
+    return await this.studentRepository.findOne({ where: { email } });
   }
 &nbsp;
   // find a student by anything that related to student, it receives a string and return a student
-<span class="fstat-no" title="function not covered" >  async </span>findByAnything(value: string): Promise&lt;Student&gt; {
-<span class="cstat-no" title="statement not covered" >    return await this.studentRepository.findOne({</span>
+  async findByAnything(value: string): Promise&lt;Student&gt; {
+    return await this.studentRepository.findOne({
       where: [{ name: value }, { email: value }, { phoneNumber: value }],
     });
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async </span>getResumeById(studentId: string, resumeId: string): Promise&lt;ResumeDTO&gt; {
-    const student = <span class="cstat-no" title="statement not covered" >await this.studentRepository.findOne({</span>
+  async getResumeById(studentId: string, resumeId: string): Promise&lt;ResumeDTO&gt; {
+    const student = await this.studentRepository.findOne({
       where: { id: studentId },
     });
-    const resume = <span class="cstat-no" title="statement not covered" >student.resume?.find(<span class="fstat-no" title="function not covered" >(r</span>esume) =&gt; <span class="cstat-no" title="statement not covered" >resume.id === resumeId)</span>;</span>
+    const resume = student.resume?.find((resume) =&gt; resume.id === resumeId);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return resume ? resume : null;</span>
+    return resume ? resume : null;
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -244,7 +244,7 @@ export class StudentService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-16T09:00:44.150Z
+                at 2024-05-16T13:05:32.534Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
