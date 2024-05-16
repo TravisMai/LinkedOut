@@ -9,13 +9,13 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
+// import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 import MainListItems from './listItems.component';
 import ToggleList from './toggleList.component';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -285,12 +285,12 @@ export default function StaffPage() {
                         <Typography variant="h6" color="inherit" noWrap className='pr-2'>
                             {staffName}
                         </Typography>
-                        <IconButton color="inherit">
+                        {/* <IconButton color="inherit">
 
                             <Badge badgeContent={4} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                     </Toolbar>
                 </AppBar>
                 <Drawer variant="permanent" open={open}>

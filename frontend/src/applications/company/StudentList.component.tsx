@@ -49,6 +49,8 @@ const StudentList: React.FC = () => {
         fetchApplications();
     }, [companyJobs, token]);
 
+    // Filter all applicants with status "Applied"
+    const filteredApplications = allApplications.filter((application) => application.status === "Applied");
 
     return (
         <>
@@ -63,12 +65,12 @@ const StudentList: React.FC = () => {
                 Students may match you
             </Typography>
             <div className="mt-3 w-5/6  mx-auto h-fit flex flex-col space-y-3 pb-10">
-                {allApplications.length > 0 ? (
-                    allApplications.map((application: jobApplicationType) => (
+                {filteredApplications.length > 0 ? (
+                    filteredApplications.map((application: jobApplicationType) => (
                         <StudentCard key={application.id} application={application} />
                     ))
                 ) : (
-                    <p>Loading...</p>
+                    <p>Currently you have no waiting candidates</p>
                 )}
             </div>
         </>

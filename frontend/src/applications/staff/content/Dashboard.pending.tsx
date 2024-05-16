@@ -89,7 +89,7 @@ export default function Pending(props: any) {
 
 
     // Fetch all students
-    const [allStudent, setAllStudent] = useState<studentType[]>([]);
+    const [allPendingStudent, setAllPendingStudent] = useState<studentType[]>([]);
     useQuery({
         queryKey: "allStudent",
         queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student", {
@@ -99,9 +99,14 @@ export default function Pending(props: any) {
         }),
         onSuccess: (data) => {
             console.log(data.data);
-            setAllStudent(data.data);
+            // Filer out pending student
+            const pendingStudent = data.data.filter((student: studentType) => student.isVerify === false);
+            setAllPendingStudent(pendingStudent);
         }
     });
+
+    const limitedDisplay = 10;
+    const displayPending = allPendingStudent.slice(0, limitedDisplay);
 
     // Mutation to send form data to server    
     const queryClient = useQueryClient();
@@ -158,7 +163,7 @@ export default function Pending(props: any) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {allStudent.map((row) => (
+                    {displayPending?.map((row) => (
                         row.isVerify && !row.isActive ? null :
                             <TableRow key={row.id}>
                                 <TableCell>{row.studentId}</TableCell>
@@ -177,7 +182,7 @@ export default function Pending(props: any) {
                                     </Box>
                                 </TableCell>
                             </TableRow>
-                    ))}
+                    )) ?? "No pending verification"}
                 </TableBody>
             </Table>
             <Link color="primary" href="#" onClick={handleDisplay("Action / Verify")} sx={{ mt: 3 }}>
