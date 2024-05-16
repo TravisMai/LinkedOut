@@ -21,6 +21,9 @@ const JobDisplay: React.FC = () => {
     const [job, setJob] = useState<jobType>();
 
 
+    // Appilcant status
+    const [status, setStatus] = useState<string>("");
+
 
     // Fetch job information
     useQuery({
@@ -173,6 +176,7 @@ const JobDisplay: React.FC = () => {
                     response.data.forEach((job: jobApplicationType) => {
                         if (job.job.id === jobId) {
                             setApplied(true);
+                            setStatus(job.status);
                         }
                     });
                 }
@@ -240,31 +244,44 @@ const JobDisplay: React.FC = () => {
                 <Grid item xs={7}>
                     <Box display="flex" gap={3}>
                         <Typography variant="h4">{job?.title}</Typography>
-                        <LoadingButton
-                            variant="outlined"
-                            color={showError ? "error" : "primary"}
-                            onClick={handleClickApply}
-                            loading={loading}
-                            disabled={!studentData?.isVerify}
-                            type="button" // Ensure the button type is set to "button"
-                        >
-                            {!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}
-                        </LoadingButton>{isInternship && isInternStudent && <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData?.isVerify}>{!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}</LoadingButton>}
-                        {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+                        {status !== "Rejected" && status !== "Processing" && status !== "Approved" &&
+                            <>
+                                <LoadingButton
+                                    variant="outlined"
+                                    color={showError ? "error" : "primary"}
+                                    onClick={handleClickApply}
+                                    loading={loading}
+                                    disabled={!studentData?.isVerify}
+                                    type="button" // Ensure the button type is set to "button"
+                                >
+                                    {!applied && !showError ? "Apply" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied</>}
+                                </LoadingButton>
+                                {isInternship && isInternStudent &&
+                                    <LoadingButton variant="outlined" color="success" onClick={handleClickApplyInternship} loading={loading} disabled={!studentData?.isVerify}>
+                                        {!appliedIntern && !showError ? "Apply Intern" : showError ? <><PriorityHigh />Error</> : <> <Check />Applied Intern</>}
+                                    </LoadingButton>}
+                                {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                         {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Apply successfully</Alert>} */}
-
+                            </>
+                        }
                     </Box>
+                    {
+                        status === "Rejected" ? <Typography variant='h6' sx={{ marginTop: 1, color: "red" }}>You are not qualified for this job</Typography>
+                            : status === "Processing" ? <Typography variant='h6' sx={{ marginTop: 1, color: "blue" }}>Your application is being processed</Typography>
+                                : status === "Approved" ? <Typography variant='h6' sx={{ marginTop: 1, color: "green", fontWeight: "bold" }}>You has been approved for this job</Typography>
+                                    : <></>
+                    }
                     {isInternship &&
                         <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic', color: 'green', textAlign: 'center', mr: 10 }}>    Job available for internship    </Typography>
                     }
                     <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ my: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Open Date</Typography>
-                            <Typography variant="h6">{job?.openDate?.toString()}</Typography>
+                            <Typography variant="h6">{job?.openDate?.toString().split("T")[0] ?? "---"}</Typography>
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Close Date</Typography>
-                            <Typography variant="h6">{job?.expireDate?.toString()}</Typography>
+                            <Typography variant="h6">{job?.expireDate?.toString().split("T")[0] ?? "---"}</Typography>
                         </Box>
 
                     </Box>
@@ -303,21 +320,21 @@ const JobDisplay: React.FC = () => {
                     }
                     <Typography variant="h6">Responsibities</Typography>
                     <List sx={{ mb: 2 }}>
-                        {job?.descriptions?.responsibilities.map((responsibility, index) => (
+                        {job?.descriptions?.responsibilities?.map((responsibility, index) => (
                             <ListItem key={index}>
                                 <ListItemIcon><Search /></ListItemIcon>
                                 <ListItemText primary={responsibility}></ListItemText>
                             </ListItem>
-                        ))}
+                        )) ?? ""}
                     </List>
                     <Typography variant="h6">Requirements</Typography>
                     <List sx={{ mb: 2 }}>
-                        {job?.descriptions?.requirements.map((requirement, index) => (
+                        {job?.descriptions?.requirements?.map((requirement, index) => (
                             <ListItem key={index}>
                                 <ListItemIcon><Check /></ListItemIcon>
                                 <ListItemText primary={requirement}></ListItemText>
                             </ListItem>
-                        ))}
+                        )) ?? ""}
                     </List>
                     <Typography variant="h6">Level</Typography>
                     <List sx={{ mb: 2 }}>

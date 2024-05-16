@@ -6,7 +6,7 @@ import { CardActionArea} from '@mui/material';
 
 export default function ContentCard({ company }: { company: companyType }) {
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 275}}>
       <CardActionArea href={'/student/companies/' + company.id}>
         <CardContent>
           <div className='flex flex-row'>

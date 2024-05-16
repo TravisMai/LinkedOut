@@ -120,7 +120,7 @@ export default function StudentProfile2() {
                     <Container disableGutters={true}
                         sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
                         <Box display={'flex'} flexDirection={'row'} gap={2}>
-                            <LoadingButton variant="contained" color='success' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Accepted")} disabled={"Accepted" === status}>Accept</LoadingButton>
+                            <LoadingButton variant="contained" color='success' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Approved")} disabled={"Approved" === status}>Approve</LoadingButton>
                             <LoadingButton variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Processing")} disabled={"Processing" === status}>Process</LoadingButton>
                             <LoadingButton variant="contained" color='error' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Rejected")} disabled={"Rejected" === status}>Reject</LoadingButton>
                         </Box>

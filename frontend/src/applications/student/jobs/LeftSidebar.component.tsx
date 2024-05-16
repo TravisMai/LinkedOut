@@ -33,14 +33,6 @@ const LeftSidebar: React.FC = () => {
   const [showContent] = useState(false);
 
 
-  const handleClickScrollToJobs = () => {
-    // Trigger scrolling to the 'Waiting Jobs' section in the JobDisplay component
-    // You may implement a way to scroll to this section, perhaps using a state to toggle visibility or a ref to the component
-    console.log("Scrolling to jobs");
-    // JobDisplay.scrollToWaitingJobs();
-  };
-
-
   // Get jwt token
 
   const token = getJwtToken();
@@ -108,23 +100,23 @@ const LeftSidebar: React.FC = () => {
       <div className='flex flex-col bg-white rounded-lg '>
 
         <List component="nav" aria-label="mailbox folders" hidden={showContent}>
-          <ListItem button onClick={handleClickScrollToJobs} secondaryAction={
+          <ListItem secondaryAction={
             <Typography>{appliedList.length}</Typography>
           }>
             <ListItemText primary="Applied" >
             </ListItemText>
           </ListItem>
-          <ListItem button onClick={handleClickScrollToJobs} secondaryAction={
+          <ListItem secondaryAction={
             <Typography>{approvedList.length}</Typography>
           }>
             <ListItemText primary="Approved" />
           </ListItem>
-          <ListItem button onClick={handleClickScrollToJobs} secondaryAction={
+          <ListItem secondaryAction={
             <Typography>{pendingList.length}</Typography>
           }>
             <ListItemText primary="Pending" />
           </ListItem>
-          <ListItem button onClick={handleClickScrollToJobs} secondaryAction={
+          <ListItem secondaryAction={
             <Typography>{rejectedList.length}</Typography>
           }>
             <ListItemText primary="Rejected" />

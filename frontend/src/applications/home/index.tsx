@@ -25,7 +25,7 @@ export default function HomePage() {
                     <div className='flex flex-row justify-evenly mb-4' >
                         <img
                             src={Logo}
-                            className='w-1/5 h-1/5 rounded-full mx-auto animate-spin'
+                            className='w-1/5 h-1/5 rounded-full mx-auto'
                         />
                     </div>
                     <Typography

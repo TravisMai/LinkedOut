@@ -28,7 +28,8 @@ type jobType = {
 }
 
 const RightSidebar: React.FC = () => {
-    const [appliedJobs, setAppliedJobs] = useState<jobType[]>([]);
+    const numberOfRandom = 10;
+    const [randomJobs, setRandomJobs] = useState<jobType[]>([]);
 
     // Get jwt token
 
@@ -45,7 +46,8 @@ const RightSidebar: React.FC = () => {
         }),
         onSuccess: (data) => {
             console.log(data.data);
-            setAppliedJobs(data.data);
+            const randomJobs = data.data.sort(() => Math.random() - Math.random()).slice(0, numberOfRandom);
+            setRandomJobs(randomJobs);
         }
     });
 
@@ -56,12 +58,12 @@ const RightSidebar: React.FC = () => {
             <div className='flex flex-col bg-white rounded-lg items-center'>
                 <Typography variant='h5' className='pt-4 text-center'>Discover more jobs</Typography>
                 <List className='w-11/12 justify-center'>
-                    {appliedJobs.length > 0 ? (
-                        appliedJobs.map((job: jobType) => (
+                    {randomJobs.length > 0 ? (
+                        randomJobs.map((job: jobType) => (
                             <>
 
                                 <ListItemButton className='rounded-xl' href={'/student/jobs/' + job.id} >
-                                    <Grid container spacing={1}>
+                                    <Grid container spacing={2}>
                                         <Grid item xs={2}>
                                             <img
                                                 src={job.company.avatar}
@@ -70,11 +72,14 @@ const RightSidebar: React.FC = () => {
                                         </Grid>
                                         <Grid item xs={10}>
 
-                                            <Typography variant="body1" >
+                                            <Typography variant="h6" >
                                                 {job.title}
                                             </Typography>
-                                            <Typography variant='body2' color="text.secondary">
+                                            <Typography variant='body1' color="text.secondary">
                                                 {job.company.name}
+                                            </Typography>
+                                            <Typography variant='body2' color="text.secondary">
+                                                {job?.descriptions?.aboutUs ?? ""}
                                             </Typography>
 
                                         </Grid>

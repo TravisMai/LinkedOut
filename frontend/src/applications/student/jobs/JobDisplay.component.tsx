@@ -1,25 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Container, Divider, IconButton, Pagination, Stack, Typography } from '@mui/material';
-import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import { OpenInNew } from '@mui/icons-material';
 
 const JobDisplay: React.FC = () => {
-    const mySectionRef = useRef<HTMLDivElement>(null);
-
-    const waitingJobsRef = useRef<HTMLDivElement>(null);
-    const scrollToWaitingJobs = () => {
-        if (waitingJobsRef.current) {
-            waitingJobsRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-    useEffect(() => {
-        // If a prop function is provided, call it when the component mounts
-        scrollToWaitingJobs();
-    }, [scrollToWaitingJobs]);
-
+   
     // Get jwt token
 
     const token = getJwtToken();
@@ -74,7 +61,7 @@ const JobDisplay: React.FC = () => {
     // Get all job with status
     const appliedList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Applied');
     const approvedList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Approved');
-    const pendingList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Pending');
+    const pendingList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Processing');
     const rejectedList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Rejected');
 
 
@@ -156,7 +143,7 @@ const JobDisplay: React.FC = () => {
             </Container>
 
             {/* Approved jobs */}
-            <Container className='h-fit bg-white rounded-xl pb-2' ref={mySectionRef}>
+            <Container className='h-fit bg-white rounded-xl pb-2' >
                 <Typography variant='h5' className='pt-4'>Approved Jobs</Typography>
                 <Typography variant='caption'>Jobs that you have qualified</Typography>
                 {approvedList.length > 0 ? (
@@ -208,8 +195,8 @@ const JobDisplay: React.FC = () => {
 
             {/* Pending jobs */}
             <Container className='h-fit bg-white rounded-xl pb-2'>
-                <Typography variant='h5' className='pt-4'>Waiting Jobs</Typography>
-                <Typography variant='caption'>Jobs that waiting for response</Typography>
+                <Typography variant='h5' className='pt-4'>Processing Jobs</Typography>
+                <Typography variant='caption'>Jobs that processing</Typography>
                 {pendingList.length > 0 ? (
                     limitedPendingJobs.map((application: jobApplicationType) => (
                         <>
@@ -241,7 +228,7 @@ const JobDisplay: React.FC = () => {
                         </>
                     ))
                 ) : (
-                    <p>No waiting job</p>
+                    <p>No pricessing job</p>
                 )}
                 {pendingList.length > 0 &&
                     <div className='w-full mt-2 flex justify-center '>
@@ -283,7 +270,7 @@ const JobDisplay: React.FC = () => {
 
                                 </div>
                                 <IconButton aria-label="delete" className='h-fit' href={'/student/jobs/' + application.job.id}>
-                                    <MoreHoriz />
+                                    <OpenInNew />
                                 </IconButton>
                             </div>
                             <Divider />
