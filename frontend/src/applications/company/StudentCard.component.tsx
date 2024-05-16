@@ -1,40 +1,52 @@
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { CardActionArea, Grid } from '@mui/material';
 
-type studentType = {
-  "id": string,
-  "name": string,
-  "email": string,
-  "phoneNumber": string,
-  "avatar": string,
-  "isGoogle": boolean,
-  "isVerify": boolean,
-}
 
-export default function StudentCard({ student }: { student: studentType }) {
+export default function StudentCard({ application }: { application: jobApplicationType }) {
   return (
     <Card sx={{ minWidth: 275 }}>
-      <CardContent>
+      <CardActionArea href={'/company/applicant/'+application.id}>
+        <CardContent>
+          <Grid container spacing={4}>
+            <Grid item xs={2}>
+              <img
+                src={application.student.avatar}
+                className='w-full h-full object-cover rounded-xl'
+                alt="company avatar"
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <div className=''>
+                <Typography variant="h5" component="div">
+                  {application.student.name}
+                </Typography>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  {application.student.email}
+                </Typography>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  {application.student.phoneNumber}
+                </Typography>
+                <Typography sx={{}} color="text.secondary">
+                  {application.student.objective}
+                </Typography>
+                <Typography sx={{}} color="text.secondary">
+                  Skills: {application.student?.skill?.map(skill => skill.name).join(', ') ?? ""}
+                </Typography>
 
-        <Typography variant="h5" component="div">
-          {student.name}
-        </Typography>
-        <Typography sx={{ mb: 1.5, mt:1.5 }} color="text.secondary">
-          {student.phoneNumber}
-        </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {student.email}
-        </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {student.phoneNumber}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Contact this student</Button>
-      </CardActions>
+              </div>
+            </Grid>
+            <Grid item xs={2}>
+              Applying for
+              <Typography variant="h6" component="div">
+                {application.job.title}
+              </Typography>
+            </Grid>
+
+          </Grid>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 }
