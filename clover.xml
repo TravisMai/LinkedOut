@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1715839670186" clover="3.2.0">
-  <project timestamp="1715839670186" name="All files">
-    <metrics statements="953" coveredstatements="150" conditionals="188" coveredconditionals="41" methods="144" coveredmethods="11" elements="1285" coveredelements="202" complexity="0" loc="953" ncloc="953" packages="10" files="25" classes="25"/>
+<coverage generated="1715848571142" clover="3.2.0">
+  <project timestamp="1715848571142" name="All files">
+    <metrics statements="953" coveredstatements="170" conditionals="192" coveredconditionals="48" methods="144" coveredmethods="13" elements="1289" coveredelements="231" complexity="0" loc="953" ncloc="953" packages="10" files="25" classes="25"/>
     <package name="app">
       <metrics statements="42" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="app.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/app/app.controller.ts">
@@ -667,18 +667,18 @@
         <line num="128" count="0" type="stmt"/>
         <line num="136" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
-        <line num="144" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="145" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
-        <line num="151" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="143" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
         <line num="165" count="0" type="stmt"/>
-        <line num="167" count="0" type="stmt"/>
-        <line num="168" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="173" count="0" type="stmt"/>
-        <line num="175" count="0" type="stmt"/>
+        <line num="169" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
       </file>
       <file name="jobApplicants.repository.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/jobApplicants/jobApplicants.repository.ts">
         <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -706,8 +706,8 @@
         <line num="29" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
       </file>
     </package>
     <package name="module.redis">
@@ -886,9 +886,9 @@
       </file>
     </package>
     <package name="module.student">
-      <metrics statements="163" coveredstatements="124" conditionals="51" coveredconditionals="41" methods="21" coveredmethods="11"/>
+      <metrics statements="163" coveredstatements="144" conditionals="55" coveredconditionals="48" methods="21" coveredmethods="13"/>
       <file name="student.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/student/student.controller.ts">
-        <metrics statements="139" coveredstatements="111" conditionals="49" coveredconditionals="41" methods="9" coveredmethods="7"/>
+        <metrics statements="139" coveredstatements="131" conditionals="53" coveredconditionals="48" methods="9" coveredmethods="9"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -908,13 +908,13 @@
         <line num="40" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
         <line num="44" count="1" type="stmt"/>
-        <line num="46" count="22" type="stmt"/>
-        <line num="47" count="22" type="stmt"/>
-        <line num="48" count="22" type="stmt"/>
-        <line num="49" count="22" type="stmt"/>
-        <line num="50" count="22" type="stmt"/>
-        <line num="51" count="22" type="stmt"/>
-        <line num="52" count="22" type="stmt"/>
+        <line num="46" count="28" type="stmt"/>
+        <line num="47" count="28" type="stmt"/>
+        <line num="48" count="28" type="stmt"/>
+        <line num="49" count="28" type="stmt"/>
+        <line num="50" count="28" type="stmt"/>
+        <line num="51" count="28" type="stmt"/>
+        <line num="52" count="28" type="stmt"/>
         <line num="58" count="1" type="stmt"/>
         <line num="62" count="4" type="stmt"/>
         <line num="63" count="4" type="stmt"/>
@@ -1007,27 +1007,27 @@
         <line num="300" count="1" type="stmt"/>
         <line num="301" count="1" type="stmt"/>
         <line num="308" count="1" type="stmt"/>
-        <line num="313" count="0" type="stmt"/>
-        <line num="314" count="0" type="stmt"/>
-        <line num="315" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="316" count="0" type="stmt"/>
-        <line num="317" count="0" type="stmt"/>
-        <line num="320" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="321" count="0" type="stmt"/>
-        <line num="324" count="0" type="stmt"/>
-        <line num="325" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="326" count="0" type="stmt"/>
-        <line num="330" count="0" type="stmt"/>
-        <line num="331" count="0" type="stmt"/>
-        <line num="336" count="0" type="stmt"/>
-        <line num="338" count="0" type="stmt"/>
-        <line num="346" count="1" type="stmt"/>
-        <line num="350" count="0" type="stmt"/>
-        <line num="351" count="0" type="stmt"/>
-        <line num="352" count="0" type="stmt"/>
-        <line num="353" count="0" type="stmt"/>
-        <line num="358" count="0" type="stmt"/>
-        <line num="362" count="0" type="stmt"/>
+        <line num="313" count="4" type="stmt"/>
+        <line num="314" count="4" type="stmt"/>
+        <line num="315" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="316" count="4" type="stmt"/>
+        <line num="317" count="4" type="stmt"/>
+        <line num="320" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="321" count="1" type="stmt"/>
+        <line num="324" count="3" type="stmt"/>
+        <line num="325" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="326" count="1" type="stmt"/>
+        <line num="330" count="1" type="stmt"/>
+        <line num="331" count="1" type="stmt"/>
+        <line num="336" count="1" type="stmt"/>
+        <line num="338" count="1" type="stmt"/>
+        <line num="348" count="1" type="stmt"/>
+        <line num="352" count="2" type="stmt"/>
+        <line num="353" count="2" type="stmt"/>
+        <line num="354" count="2" type="stmt"/>
+        <line num="355" count="1" type="stmt"/>
+        <line num="360" count="1" type="stmt"/>
+        <line num="364" count="1" type="stmt"/>
       </file>
       <file name="student.repository.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/student/student.repository.ts">
         <metrics statements="8" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
