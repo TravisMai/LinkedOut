@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.66% </span>
+                <span class="strong">97.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>133/142</span>
+                <span class='fraction'>136/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.56% </span>
+                <span class="strong">94.23% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>48/53</span>
+                <span class='fraction'>49/52</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.24% </span>
+                <span class="strong">97.08% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>131/139</span>
+                <span class='fraction'>133/137</span>
             </div>
         
             
@@ -427,12 +427,7 @@
 <a name='L362'></a><a href='#L362'>362</a>
 <a name='L363'></a><a href='#L363'>363</a>
 <a name='L364'></a><a href='#L364'>364</a>
-<a name='L365'></a><a href='#L365'>365</a>
-<a name='L366'></a><a href='#L366'>366</a>
-<a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a>
-<a name='L369'></a><a href='#L369'>369</a>
-<a name='L370'></a><a href='#L370'>370</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L365'></a><a href='#L365'>365</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -667,15 +662,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -692,11 +687,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1035,16 +1025,16 @@ export class StudentController {
         student.avatar = await this.azureBlobService.upload(files.avatar[0]);
       }
       const currentResumes = findStudent.resume || <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (student.deleteResumeID &amp;&amp; student.deleteResumeID.length &gt; 0) {
-<span class="cstat-no" title="statement not covered" >        for (let i = <span class="cstat-no" title="statement not covered" >currentResumes.length - 1;</span> i &gt;= 0; i--) {</span>
+      if (student.deleteResumeID &amp;&amp; student.deleteResumeID.length &gt; 0) {
+        for (let i = currentResumes.length - 1; i &gt;= 0; i--) {
           const resume = <span class="cstat-no" title="statement not covered" >currentResumes[i];</span>
 <span class="cstat-no" title="statement not covered" >          <span class="missing-if-branch" title="if path not taken" >I</span>if (student.deleteResumeID.includes(resume.id)) {</span>
 <span class="cstat-no" title="statement not covered" >            await this.azureBlobService.delete(resume.url.split('/').pop());</span>
 <span class="cstat-no" title="statement not covered" >            currentResumes.splice(i, 1);</span>
           }
         }
-<span class="cstat-no" title="statement not covered" >        delete student.deleteResumeID;</span>
-<span class="cstat-no" title="statement not covered" >        student.resume = currentResumes;</span>
+        delete student.deleteResumeID;
+        student.resume = currentResumes;
       }
       const resumeObjective = student.resumeObjective
         ? student.resumeObjective
@@ -1061,11 +1051,6 @@ export class StudentController {
       }
 &nbsp;
       const updateStudent = await this.studentService.update(id, student);
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (!updateStudent) {
-<span class="cstat-no" title="statement not covered" >        return response</span>
-          .status(HttpStatus.NOT_FOUND)
-          .json({ message: 'Student not found!' });
-      }
       await this.redisService.setObjectByKeyValue(
         `STUDENT:${id}`,
         updateStudent,
@@ -1177,7 +1162,7 @@ export class StudentController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-16T08:36:11.098Z
+                at 2024-05-16T09:00:44.150Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
