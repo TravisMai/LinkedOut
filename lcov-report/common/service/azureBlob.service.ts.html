@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.31% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/19</span>
+                <span class='fraction'>19/19</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,72 +97,72 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@nestjs/common';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 &nbsp;
 @Injectable()
-export <span class="fstat-no" title="function not covered" >class A</span>zureBlobService {
-<span class="cstat-no" title="statement not covered" >  azureConnection = process.env.CONNECTION_STRING;</span>
-<span class="cstat-no" title="statement not covered" >  containerName = process.env.CONTAINER_NAME;</span>
+export class AzureBlobService {
+  azureConnection = process.env.CONNECTION_STRING;
+  containerName = process.env.CONTAINER_NAME;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  getBlobClient(</span>imageName: string): BlockBlobClient {
-    const blobClientService = <span class="cstat-no" title="statement not covered" >BlobServiceClient.fromConnectionString(</span>
+  getBlobClient(imageName: string): BlockBlobClient {
+    const blobClientService = BlobServiceClient.fromConnectionString(
       this.azureConnection,
     );
-    const containerClient = <span class="cstat-no" title="statement not covered" >blobClientService.getContainerClient(</span>
+    const containerClient = blobClientService.getContainerClient(
       this.containerName,
     );
-    const blobClient = <span class="cstat-no" title="statement not covered" >containerClient.getBlockBlobClient(imageName);</span>
-<span class="cstat-no" title="statement not covered" >    return blobClient;</span>
+    const blobClient = containerClient.getBlockBlobClient(imageName);
+    return blobClient;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async </span>upload(file: Express.Multer.File) {
-    const uniqueId = <span class="cstat-no" title="statement not covered" >Date.now() + '_' + Math.floor(Math.random() * 1000);</span>
-    const fileExtension = <span class="cstat-no" title="statement not covered" >file.originalname.split('.').pop();</span>
-    const uniqueFileName = <span class="cstat-no" title="statement not covered" >uniqueId + '.' + fileExtension;</span>
-    const blobClient = <span class="cstat-no" title="statement not covered" >this.getBlobClient(uniqueFileName);</span>
-<span class="cstat-no" title="statement not covered" >    await blobClient.uploadData(file.buffer);</span>
+  async upload(file: Express.Multer.File) {
+    const uniqueId = Date.now() + '_' + Math.floor(Math.random() * 1000);
+    const fileExtension = file.originalname.split('.').pop();
+    const uniqueFileName = uniqueId + '.' + fileExtension;
+    const blobClient = this.getBlobClient(uniqueFileName);
+    await blobClient.uploadData(file.buffer);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return blobClient.url;</span>
+    return blobClient.url;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async </span>delete(filename: string) {
-    const blobClient = <span class="cstat-no" title="statement not covered" >this.getBlobClient(filename);</span>
-<span class="cstat-no" title="statement not covered" >    await blobClient.deleteIfExists();</span>
+  async delete(filename: string) {
+    const blobClient = this.getBlobClient(filename);
+    await blobClient.deleteIfExists();
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -172,7 +172,7 @@ export <span class="fstat-no" title="function not covered" >class A</span>zureBl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-16T13:05:32.534Z
+                at 2024-05-16T16:36:52.390Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
