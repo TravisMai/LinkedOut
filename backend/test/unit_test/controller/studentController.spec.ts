@@ -423,7 +423,7 @@ describe('StudentController', () => {
       expect(res.json).toHaveBeenCalledWith({ message: 'Invalid UUID format' });
     });
 
-    it('should throw 500 INTERNAL SERVER ERROR if detect unexpected field', async () => {
+    it('should throw 404 NOT FOUND when no student found', async () => {
       const req = {
         params: { id: '1' },
         headers: { authorization: 'Bearer token' },
@@ -440,10 +440,38 @@ describe('StudentController', () => {
         res as any,
       );
 
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Student not found' });
+    });
+
+    it('should throw 500 INTERNAL SERVER ERROR if there is an unexpected error', async () => {
+      const req = {
+        params: { id: '1' },
+        headers: { authorization: 'Bearer token' },
+      };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(true);
+
+      jest.spyOn(studentService, 'findOne').mockResolvedValue(student);
+      jest.spyOn(azureBlobService, 'upload').mockResolvedValue('avatar');
+      jest.spyOn(studentService, 'update').mockResolvedValue(student);
+      jest
+        .spyOn(redisService, 'setObjectByKeyValue')
+        .mockImplementation(async (key: string, value: any, ttl: number) => {
+          throw new Error('error');
+        });
+
+      await studentController.update(
+        { avatar: [file], resume: [file] },
+        '1',
+        studentUpdateDto,
+        req as any,
+        res as any,
+      );
+
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.json).toHaveBeenCalledWith({
-        message: `Cannot read properties of undefined (reading 'avatar')`,
-      });
+      expect(res.json).toHaveBeenCalledWith({ message: 'error' });
     });
 
     it('should update student information successfully', async () => {

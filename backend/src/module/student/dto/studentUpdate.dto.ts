@@ -34,12 +34,12 @@ export class StudentUpdateDto {
 
   @IsBoolean()
   @IsOptional()
-  @Transform(({ value }) => value === "true")
+  @Transform(({ value }) => value === 'true')
   isVerify: boolean;
 
   @IsBoolean()
   @IsOptional()
-  @Transform(({ value }) => value === "true")
+  @Transform(({ value }) => value === 'true')
   isActive: boolean;
 
   @IsArray()
