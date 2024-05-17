@@ -18,16 +18,13 @@ export default function StudentProfile({ student, handleClose }: { student: stud
 
     // Handle verify
     const [verifyData] = useState({
-        isVerify: true,
+        isVerify: student.isVerify,
     });
     const handleVerify = () => {
-        mutationVerify.mutate(verifyData);
+        mutationVerify.mutate();
     }
-    interface verifyForm {
-        isVerify: boolean;
-    }
-    const mutationVerify = useMutation<ResponseType, ErrorType, verifyForm>({
-        mutationFn: (verifyData) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${student.id}`, verifyData, {
+    const mutationVerify = useMutation<ResponseType, ErrorType>({
+        mutationFn: () => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${student.id}`, { "isVerify": !verifyData.isVerify }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -47,24 +44,21 @@ export default function StudentProfile({ student, handleClose }: { student: stud
     );
 
     // Handle disable
-    const [disableData, setDisableData] = useState<disableForm>({
-        isActive: false,
+    const [disableData] = useState({
+        isActive: student.isActive,
     });
-    const handleDisable = (change: boolean) => {
-        setDisableData({ isActive: change });
-        mutationDisable.mutate(disableData);
+    const handleDisable = () => {
+        mutationDisable.mutate();
     }
-    interface disableForm {
-        isActive: boolean;
-    }
-    const mutationDisable = useMutation<ResponseType, ErrorType, disableForm>({
-        mutationFn: (disableData) => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${student.id}`, disableData, {
+    const mutationDisable = useMutation<ResponseType, ErrorType>({
+        mutationFn: () => axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${student.id}`, { "isActive": !disableData.isActive }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: () => {
             console.log("Success");
+            handleClose();
         },
         onError: (error) => {
             // setSending(false);
@@ -72,6 +66,8 @@ export default function StudentProfile({ student, handleClose }: { student: stud
             console.log(error);
         },
         onMutate: () => {
+            console.log("Init: ", disableData.isActive)
+            console.log("Sending: ", !disableData.isActive)
         }
     }
     );
@@ -143,9 +139,9 @@ export default function StudentProfile({ student, handleClose }: { student: stud
                 }
                 <LoadingButton variant="contained" color='primary' sx={{ width: "inherit", marginX: "auto" }}>Update</LoadingButton>
                 {!student.isActive ?
-                    <LoadingButton variant="contained" color='primary' sx={{ width: "inherit", marginX: "auto" }} onClick={() => { handleDisable(true) }}>Re-enable account</LoadingButton>
+                    <LoadingButton variant="contained" color='primary' sx={{ width: "inherit", marginX: "auto" }} onClick={() => { handleDisable() }}>Re-enable account</LoadingButton>
                     :
-                    <LoadingButton variant="contained" color='secondary' sx={{ width: "inherit", marginX: "auto" }} onClick={() => { handleDisable(false) }}>Disable</LoadingButton>
+                    <LoadingButton variant="contained" color='secondary' sx={{ width: "inherit", marginX: "auto" }} onClick={() => { handleDisable() }}>Disable</LoadingButton>
                 }
                 <LoadingButton variant="contained" color='error' sx={{ width: "inherit", marginX: "auto" }} onClick={handleDelete}>Delete</LoadingButton>
 

@@ -12,14 +12,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import StudentDialog from './Student.Dialog';
-import { Menu, MenuItem, Pagination, Stack, Tooltip, Typography } from '@mui/material';
+import { Pagination, Stack, Tooltip } from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
 
 export default function Student() {
     const [allStudent, setAllStudent] = useState<studentType[]>([]);
@@ -27,7 +26,7 @@ export default function Student() {
     // Student Profile Dialog
     const [openDialog, setOpenDialog] = React.useState(false);
     const queryClient = useQueryClient();
-    const handleCloseSettings = () => {
+    const handleCloseDialog = () => {
         queryClient.invalidateQueries("allStudent123");
         setOpenDialog(false);
     }
@@ -40,17 +39,8 @@ export default function Student() {
         setOpenDialog(true);
     }
 
-    // Action Menu
-    const [anchorAction, setAnchorAction] = React.useState<null | HTMLElement>(null);
-    const handleOpenActionMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorAction(event.currentTarget);
-    };
-    const handleCloseActionMenu = () => {
-        setAnchorAction(null);
-    };
 
     // Get jwt token
-
 
     const token = getJwtToken();
 
@@ -63,6 +53,7 @@ export default function Student() {
             },
         }),
         onSuccess: (data) => {
+            console.log("I fetched all students");
             console.log(data.data);
             setAllStudent(data.data);
         }
@@ -125,7 +116,7 @@ export default function Student() {
                             >
                                 {/* <TableCell align='left'></TableCell> */}
                                 <TableCell align="left">{++index}</TableCell>
-                                <TableCell align='left'>{row.name} {row.isVerify ? '' : "(Not verified)"}</TableCell>
+                                <TableCell align='left'>{row.name} {row.isVerify ? '' : "(Not verified)"} {!row.isActive && "(Disabled)"}</TableCell>
                                 <TableCell align='left'>{row.email}</TableCell>
                                 <TableCell align='left'>{row.phoneNumber}</TableCell>
 
@@ -137,34 +128,8 @@ export default function Student() {
                                 <TableCell align="left">
                                     <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
                                         <Tooltip title="Student Info">
-                                            <IconButton onClick={() => { handleOpenStudent(row.id) }}><AccountBoxIcon /></IconButton>
+                                            <IconButton onClick={() => { handleOpenStudent(row.id) }}><OpenInNew /></IconButton>
                                         </Tooltip>
-                                        <Tooltip title="Actions">
-                                            <IconButton onClick={handleOpenActionMenu}><MoreHorizIcon /></IconButton>
-                                        </Tooltip>
-                                        <Menu
-                                            sx={{ mt: '45px' }}
-                                            id="menu-action"
-                                            anchorEl={anchorAction}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            keepMounted
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            open={Boolean(anchorAction)}
-                                            onClose={handleCloseActionMenu}
-                                        >
-                                            <MenuItem key="verify" onClick={handleOpenActionMenu}>
-                                                <Typography textAlign="center">Verify</Typography>
-                                            </MenuItem>
-                                            <MenuItem key="delete" onClick={handleCloseActionMenu}>
-                                                <Typography textAlign="center">Delete</Typography>
-                                            </MenuItem>
-                                        </Menu>
                                     </Box>
                                 </TableCell>
                             </TableRow>
@@ -173,7 +138,7 @@ export default function Student() {
 
                 </Table>
             </TableContainer>
-            <div className='w-full mt-2 flex justify-center '>
+            <div className='w-full mt-2 mb-6 flex justify-center '>
                 <Stack spacing={2} >
                     <Pagination
                         count={Math.ceil(allStudent.length / itemsPerPage)}
@@ -185,7 +150,7 @@ export default function Student() {
                 <StudentDialog
                     student={selectedStudent}
                     state={openDialog}
-                    onClose={handleCloseSettings}
+                    onClose={handleCloseDialog}
                 />
             )}
         </div>
