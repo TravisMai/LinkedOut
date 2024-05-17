@@ -12,32 +12,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../../shared/utils/authUtils';
-
-type companyType = {
-    "id": string,
-    "name": string,
-    "email": string,
-    "phoneNumber": string,
-    "avatar": string,
-    "workField": string,
-    "address": string,
-    "website": null,
-    "description": string,
-    "taxId": null
-}
-
-// const rows = [
-//     createData(926382, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-//     createData(396283, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-//     createData(928683, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-//     createData(682463, 'https://internship.cse.hcmut.edu.vn/img/favicon.png?t=55418264', 'Noventiq', 'Tran Tri Dat', 30152512, 'Dat.Tran@Noventiq.com', 'https://mui.com'),
-// ];
+import { Pagination, Stack, Tooltip } from '@mui/material';
+import CompanyDialog from './Company.Dialog';
+import { OpenInNew } from '@mui/icons-material';
 
 
 export default function Company() {
@@ -59,6 +40,36 @@ export default function Company() {
             setAllCompany(data.data);
         }
     });
+
+    // Handle pagination
+    const itemsPerPage = 10; // Number of items per page
+
+    // State variables for pagination
+    const [currentPage, setCurrentPage] = useState(0);
+
+    // Handle page change
+    const handlePageChange = (value: number) => {
+        setCurrentPage(value);
+    };
+
+    // Limit display
+    const limitedDisplay = allCompany.slice(itemsPerPage * currentPage, itemsPerPage * currentPage + itemsPerPage);
+
+    // company Profile Dialog
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const queryClient = useQueryClient();
+    const handleCloseDialog = () => {
+        queryClient.invalidateQueries("allcompany123");
+        setOpenDialog(false);
+    }
+
+    const [selectedCompany, setSelectedCompany] = useState<companyType>();
+    const handleOpenCompany = (companyId: string) => {
+        // Get the company from allcompanys that match
+        const company = allCompany.find((company) => company.id === companyId);
+        setSelectedCompany(company);
+        setOpenDialog(true);
+    }
 
     const [searchTerm, setSearchTerm] = React.useState("");
     return (
@@ -82,48 +93,62 @@ export default function Company() {
                 <Button variant="contained">Search</Button>
                 <Button variant="outlined">Filter</Button>
             </div>
-            <TableContainer component={Paper} className='mt-5'>
+            <TableContainer component={Paper} className='mt-5 px-5'>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align='center'>No.</TableCell>
-                            {/* <TableCell align='center'>Logo</TableCell> */}
-                            <TableCell align="center">Name</TableCell>
-                            <TableCell align="center">Representative</TableCell>
-                            <TableCell align="center">Phone</TableCell>
-                            <TableCell align="center">Email</TableCell>
-                            <TableCell align="center">Action</TableCell>
+                            <TableCell align='left'>No.</TableCell>
+                            <TableCell align='center'>Logo</TableCell>
+                            <TableCell align="left">Name</TableCell>
+                            <TableCell align="left">Phone</TableCell>
+                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {allCompany.map((row, index) => (
+                        {limitedDisplay?.map((row, index) => (
                             <TableRow
                                 key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
 
-                                <TableCell align='center'>{++index}</TableCell>
-                                {/* <TableCell align="center">
+                                <TableCell align='left'>{++index}</TableCell>
+                                <TableCell align="center">
                                     <img
                                         src={row.avatar}
                                         className='h-10 mx-auto'
                                     />
-                                </TableCell> */}
-                                <TableCell align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.description}</TableCell>
-                                <TableCell align="center">{row.phoneNumber}</TableCell>
-                                <TableCell align="center">{row.email}</TableCell>
-                                <TableCell align="center">
+                                </TableCell>
+                                <TableCell align="left">{row.name}</TableCell>
+                                <TableCell align="left">{row.phoneNumber}</TableCell>
+                                <TableCell align="left">{row.email}</TableCell>
+                                <TableCell align="left">
                                     <Box sx={{ '& > :not(style)': { m: 0.1 } }}>
-                                        <IconButton><ContactEmergencyIcon /></IconButton>
-                                        <IconButton><MoreHorizIcon /></IconButton>
+                                        <Tooltip title="company Info">
+                                            <IconButton onClick={() => { handleOpenCompany(row.id) }}><OpenInNew /></IconButton>
+                                        </Tooltip>
                                     </Box>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        )) ?? "No company found"}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <div className='w-full mt-2 mb-6 flex justify-center '>
+                <Stack spacing={2} >
+                    <Pagination
+                        count={Math.ceil(allCompany.length / itemsPerPage)}
+                        onChange={(_event, value) => handlePageChange(value - 1)}
+                    />
+                </Stack>
+            </div>
+            {selectedCompany && (
+                <CompanyDialog
+                    company={selectedCompany}
+                    state={openDialog}
+                    onClose={handleCloseDialog}
+                />
+            )}
         </div>
     );
 }

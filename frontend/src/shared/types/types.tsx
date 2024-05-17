@@ -8,7 +8,9 @@ type companyType = {
     "address": string,
     "website": null,
     "description": string,
-    "taxId": null
+    "taxId": null,
+    "isVerify": boolean,
+    "isActive": boolean
 }
 
 type studentType = {
