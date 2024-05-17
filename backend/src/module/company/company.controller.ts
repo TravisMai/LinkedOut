@@ -112,7 +112,9 @@ export class CompanyController {
         return response.status(HttpStatus.OK).json(limitedData);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -151,7 +153,9 @@ export class CompanyController {
         return response.status(HttpStatus.OK).json(limitedData);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -192,7 +196,9 @@ export class CompanyController {
         .status(HttpStatus.CREATED)
         .json({ company: limitedData, token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -259,7 +265,9 @@ export class CompanyController {
       );
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -325,7 +333,9 @@ export class CompanyController {
       );
       return response.status(HttpStatus.OK).json({ token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -349,7 +359,9 @@ export class CompanyController {
         .status(HttpStatus.OK)
         .json({ message: 'Logout successfully!' });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }
