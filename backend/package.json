@@ -95,9 +95,7 @@
     "collectCoverageFrom": [
       "**/*.{service,controller}.(t|j)s"
     ],
-    "coveragePathIgnorePatterns": [
-      "/redis\\.service\\.ts$"
-    ],
+    "coveragePathIgnorePatterns": [],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
