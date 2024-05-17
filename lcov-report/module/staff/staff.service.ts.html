@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.07% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,49 +110,49 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Staff } from './staff.entity';
@@ -162,43 +162,43 @@ import { StaffUpdateDto } from './dto/staffUpdate.dto';
 &nbsp;
 @Injectable()
 export class StaffService {
-<span class="fstat-no" title="function not covered" >  constructor(private <span class="cstat-no" title="statement not covered" >s</span>taffRepository: S</span>taffRepository) {}
+  constructor(private staffRepository: StaffRepository) {}
 &nbsp;
   // get all the staffs
-<span class="fstat-no" title="function not covered" >  async </span>findAll(): Promise&lt;Staff[]&gt; {
-<span class="cstat-no" title="statement not covered" >    return await this.staffRepository.find();</span>
+  async findAll(): Promise&lt;Staff[]&gt; {
+    return await this.staffRepository.find();
   }
 &nbsp;
   // get one staff by id
-<span class="fstat-no" title="function not covered" >  async </span>findOne(id: string): Promise&lt;Staff&gt; {
-<span class="cstat-no" title="statement not covered" >    return await this.staffRepository.findOne({ where: { id } });</span>
+  async findOne(id: string): Promise&lt;Staff&gt; {
+    return await this.staffRepository.findOne({ where: { id } });
   }
 &nbsp;
   // create a new staff
-<span class="fstat-no" title="function not covered" >  async </span>create(staff: Staff): Promise&lt;Staff&gt; {
-    const newStaff = <span class="cstat-no" title="statement not covered" >await this.staffRepository.createStaff(staff);</span>
-<span class="cstat-no" title="statement not covered" >    return await this.staffRepository.save(newStaff);</span>
+  async create(staff: Staff): Promise&lt;Staff&gt; {
+    const newStaff = await this.staffRepository.createStaff(staff);
+    return await this.staffRepository.save(newStaff);
   }
 &nbsp;
   // update an staff
-<span class="fstat-no" title="function not covered" >  async </span>update(id: string, staff: StaffUpdateDto): Promise&lt;Staff&gt; {
-<span class="cstat-no" title="statement not covered" >    await this.staffRepository.update(id, staff);</span>
-<span class="cstat-no" title="statement not covered" >    return await this.staffRepository.findOne({ where: { id } });</span>
+  async update(id: string, staff: StaffUpdateDto): Promise&lt;Staff&gt; {
+    await this.staffRepository.update(id, staff);
+    return await this.staffRepository.findOne({ where: { id } });
   }
 &nbsp;
   // delete an staff
-<span class="fstat-no" title="function not covered" >  async </span>delete(id: string): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >    await this.staffRepository.delete({ id });</span>
+  async delete(id: string): Promise&lt;void&gt; {
+    await this.staffRepository.delete({ id });
   }
 &nbsp;
   // find an staff by email
-<span class="fstat-no" title="function not covered" >  async </span>findByEmail(email: string): Promise&lt;Staff&gt; {
-<span class="cstat-no" title="statement not covered" >    return await this.staffRepository.findOne({ where: { email } });</span>
+  async findByEmail(email: string): Promise&lt;Staff&gt; {
+    return await this.staffRepository.findOne({ where: { email } });
   }
 &nbsp;
   // get a random staff
-<span class="fstat-no" title="function not covered" >  async </span>getRandomStaff(): Promise&lt;Staff&gt; {
-<span class="cstat-no" title="statement not covered" >    return await this.staffRepository.getRandomStaff();</span>
+  async getRandomStaff(): Promise&lt;Staff&gt; {
+    return await this.staffRepository.getRandomStaff();
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -208,7 +208,7 @@ export class StaffService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-17T02:15:18.078Z
+                at 2024-05-17T03:49:17.681Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
