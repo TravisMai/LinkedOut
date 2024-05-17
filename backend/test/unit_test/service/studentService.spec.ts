@@ -1,7 +1,9 @@
 import { Faculty } from 'src/module/faculty/faculty.entity';
+import { StudentUpdateDto } from 'src/module/student/dto/studentUpdate.dto';
 import { Student } from 'src/module/student/student.entity';
 import { StudentRepository } from 'src/module/student/student.repository';
 import { StudentService } from 'src/module/student/student.service';
+import { UpdateResult } from 'typeorm';
 
 describe('StudentService', () => {
   let studentService: StudentService;
@@ -24,7 +26,7 @@ describe('StudentService', () => {
     year: 2021,
     major: 'Computer Science',
     classCode: 'CS123',
-    resume: [],
+    resume: [{ id: '1', title: 'title', url: 'url' }],
     isActive: true,
     process: 'pending',
     socialMedia: {
@@ -78,10 +80,72 @@ describe('StudentService', () => {
     await expect(studentService.findOne('1')).resolves.toEqual(student);
   });
 
-  it('should add a student to the list', async () => {
+  it('should create a student', async () => {
     jest.spyOn(studentRepository, 'createStudent').mockResolvedValue(student);
     jest.spyOn(studentRepository, 'save').mockResolvedValue(student);
 
     await expect(studentService.create(student)).resolves.toEqual(student);
+  });
+
+  it('should update a student', async () => {
+    const updateDto: StudentUpdateDto = {
+      deleteResumeID: [],
+      resumeObjective: '',
+      name: '',
+      email: '',
+      phoneNumber: '',
+      avatar: '',
+      studentId: 0,
+      isVerify: false,
+      isActive: false,
+      resume: [],
+    };
+
+    jest
+      .spyOn(studentRepository, 'update')
+      .mockResolvedValue({} as UpdateResult);
+    jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
+
+    await expect(studentService.update('1', updateDto)).resolves.toEqual(
+      student,
+    );
+  });
+
+  it('should delete a student', async () => {
+    jest
+      .spyOn(studentRepository, 'delete')
+      .mockResolvedValue({} as UpdateResult);
+
+    await expect(studentService.delete('1')).resolves.not.toThrow();
+  });
+
+  it('should find a student by email', async () => {
+    jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
+
+    await expect(studentService.findByEmail('')).resolves.toEqual(student);
+  });
+
+  it('should find a student by anything', async () => {
+    jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
+
+    await expect(studentService.findByAnything('')).resolves.toEqual(student);
+  });
+
+  it('should find a resume by student id and resume id', async () => {
+    jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
+
+    await expect(studentService.getResumeById('1', '1')).resolves.toEqual({
+      id: '1',
+      title: 'title',
+      url: 'url',
+    });
+  });
+
+  it('should find a resume by student id and resume id', async () => {
+    const studentWithNullResume = student;
+    studentWithNullResume.resume = null;
+    jest.spyOn(studentRepository, 'findOne').mockResolvedValue(student);
+
+    await expect(studentService.getResumeById('1', '1')).resolves.toEqual(null);
   });
 });

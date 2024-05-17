@@ -93,9 +93,10 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.{service,controller}.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
+    "coveragePathIgnorePatterns": [],
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
 }

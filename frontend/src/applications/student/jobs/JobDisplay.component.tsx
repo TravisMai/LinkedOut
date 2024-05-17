@@ -116,7 +116,7 @@ const JobDisplay: React.FC = () => {
                                         {application.job.company.name}
                                     </Typography>
                                     <Typography variant='body2' color="text.secondary">
-                                        {application.job.descriptions?.aboutUs}
+                                        {application.job?.descriptions?.aboutUs ?? ""}
                                     </Typography>
 
                                 </div>
@@ -165,7 +165,7 @@ const JobDisplay: React.FC = () => {
                                         {application.job.company.name}
                                     </Typography>
                                     <Typography variant='body2' color="text.secondary">
-                                        {application.job.descriptions?.aboutUs}
+                                        {application.job?.descriptions?.aboutUs ?? ""}
                                     </Typography>
 
                                 </div>
@@ -216,7 +216,7 @@ const JobDisplay: React.FC = () => {
                                         {application.job.company.name}
                                     </Typography>
                                     <Typography variant='body2' color="text.secondary">
-                                        {application.job.descriptions?.aboutUs}
+                                        {application.job?.descriptions?.aboutUs ?? ""}
                                     </Typography>
 
                                 </div>
@@ -265,7 +265,7 @@ const JobDisplay: React.FC = () => {
                                         {application.job.company.name}
                                     </Typography>
                                     <Typography variant='body2' color="text.secondary">
-                                        {application.job.descriptions?.aboutUs}
+                                        {application.job?.descriptions?.aboutUs ?? ""}
                                     </Typography>
 
                                 </div>

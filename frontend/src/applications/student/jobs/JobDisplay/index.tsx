@@ -288,7 +288,7 @@ const JobDisplay: React.FC = () => {
                     <Typography variant="h6">Description</Typography>
                     <List sx={{ mb: 2 }}>
                         <ListItem>
-                            <ListItemText primary={job?.descriptions?.aboutUs}></ListItemText>
+                            <ListItemText primary={job?.descriptions?.aboutUs ?? ""}></ListItemText>
                         </ListItem>
                     </List>
                     <Typography variant="h6">Level</Typography>

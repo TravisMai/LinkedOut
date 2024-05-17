@@ -7,6 +7,8 @@ import { StudentService } from '../student/student.service';
 import { Response } from 'express';
 import { StudentResponseDto } from '../student/dto/studentResponse.dto';
 import { StaffResponseDto } from '../staff/dto/staffResponse.dto';
+import { Student } from '../student/student.entity';
+import { Staff } from '../staff/staff.entity';
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -28,51 +30,57 @@ export class AuthController {
     @Body('role') role: string,
     @Res() response: Response,
   ): Promise<any> {
-    console.log('token', token);
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    const payload = await this.getPayloadFromToken(token);
 
-    console.log('ticket', ticket);
-
-    const payload = ticket.getPayload();
     switch (role) {
       case 'student':
-        console.log('student', payload.email);
-        try {
-          const loginStudent = await this.studentService.findByEmail(
-            payload.email,
-          );
-          const limitedData = StudentResponseDto.fromStudent(loginStudent);
-          const token = this.authService.generateJwtToken(loginStudent);
-          return response
-            .status(HttpStatus.OK)
-            .json({ student: limitedData, token });
-        } catch (error) {
-          return response.status(error.status).json({ message: error.message });
-        }
+        return this.handleLogin(
+          this.studentService,
+          'student',
+          payload,
+          response,
+        );
       case 'staff':
-        console.log('staff', payload.email);
-        try {
-          const loginStaff = await this.staffService.findByEmail(payload.email);
-          const limitedData = StaffResponseDto.fromStaff(loginStaff);
-          const token = this.authService.generateJwtToken(loginStaff);
-          return response
-            .status(HttpStatus.OK)
-            .json({ staff: limitedData, token });
-        } catch (error) {
-          return response.status(error.status).json({ message: error.message });
-        }
+        return this.handleLogin(this.staffService, 'staff', payload, response);
       default:
-        console.log('default');
         return response
           .status(HttpStatus.FORBIDDEN)
           .json({ message: 'Unauthorized access' });
     }
   }
 
-  // this will receive the role:string and the jwtToken which will take from the header from the frontend and return true if the role is match with the payload.role
+  async getPayloadFromToken(token: string) {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    return ticket.getPayload();
+  }
+
+  private async handleLogin(
+    service: StudentService | StaffService,
+    role: 'student' | 'staff',
+    payload: any,
+    response: Response,
+  ) {
+    try {
+      const loginUser = await service.findByEmail(payload.email);
+      let limitedData;
+      if (role === 'student') {
+        limitedData = StudentResponseDto.fromStudent(loginUser as Student);
+      } else if (role === 'staff') {
+        limitedData = StaffResponseDto.fromStaff(loginUser as Staff);
+      }
+      const token = this.authService.generateJwtToken(loginUser);
+      return response
+        .status(HttpStatus.OK)
+        .json({ [role]: limitedData, token });
+    } catch (error) {
+      return response.status(error.status).json({ message: error.message });
+    }
+  }
+
   @Post('/check-role')
   async checkRole(
     @Body('role') role: string,

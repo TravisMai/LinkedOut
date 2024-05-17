@@ -24,6 +24,7 @@ export class Student extends commonAttribute {
   faculty: Faculty;
 
   @Column({ default: false })
+  @Transform(({ value }) => value === 'true')
   isVerify: boolean;
 
   @Transform(({ value }) => parseInt(value))
@@ -61,6 +62,7 @@ export class Student extends commonAttribute {
   resume: ResumeDTO[];
 
   @Column({ default: true })
+  @Transform(({ value }) => value === 'true')
   isActive: boolean;
 
   @Column({ default: 'Recieved' })

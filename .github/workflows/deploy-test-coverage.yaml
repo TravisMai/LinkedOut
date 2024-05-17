@@ -1,0 +1,31 @@
+name: unittest
+
+permissions:
+  checks: write
+  contents: write
+  issues: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  deploy-unittest-coverage-page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build test coverage
+        run: |
+          cd backend
+          npm install
+          npm run test:cov
+
+      - name: Deploy coverage report to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.3
+        with:
+          branch: gh-pages
+          folder: backend/coverage

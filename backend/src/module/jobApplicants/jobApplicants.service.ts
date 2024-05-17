@@ -47,8 +47,14 @@ export class JobApplicantsService {
     await this.jobApplicantsRepository.delete(id);
   }
 
-  async update(id: string, jobApplicants: JobApplicants): Promise<JobApplicants> {
-    const updateJobApplicants = this.jobApplicantsRepository.update(id, jobApplicants);
+  async update(
+    id: string,
+    jobApplicants: JobApplicants,
+  ): Promise<JobApplicants> {
+    const updateJobApplicants = this.jobApplicantsRepository.update(
+      id,
+      jobApplicants,
+    );
     return await this.jobApplicantsRepository.findOne({ where: { id } });
   }
 }

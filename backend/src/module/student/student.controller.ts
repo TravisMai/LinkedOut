@@ -198,7 +198,7 @@ export class StudentController {
     }
   }
 
-  // update an student
+  // update a student
   @Put(':id')
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -220,15 +220,24 @@ export class StudentController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
+      if (student.isActive && typeof student.isActive === 'string') {
+        student.isActive = student.isActive === 'true';
+      }
+      if (student.isVerify && typeof student.isVerify === 'string') {
+        student.isVerify = student.isVerify === 'true';
+      }
       const findStudent = await this.studentService.findOne(id);
-      // const decodedToken = this.jwtService.decode(
-      //   req.headers.authorization.split(' ')[1],
-      // ) as { id: string };
-      if (files.avatar && files.avatar[0]) {
-        findStudent.avatar &&
-          (await this.azureBlobService.delete(
+      if (!findStudent) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Student not found' });
+      }
+      if (files?.avatar?.[0]) {
+        if (findStudent.avatar) {
+          await this.azureBlobService.delete(
             findStudent.avatar.split('/').pop(),
-          ));
+          );
+        }
         student.avatar = await this.azureBlobService.upload(files.avatar[0]);
       }
       const currentResumes = findStudent.resume || [];
@@ -243,11 +252,9 @@ export class StudentController {
         delete student.deleteResumeID;
         student.resume = currentResumes;
       }
-      const resumeObjective = student.resumeObjective
-        ? student.resumeObjective
-        : findStudent.name;
+      const resumeObjective = student.resumeObjective || findStudent.name;
       delete student.resumeObjective;
-      if (files.resume && files.resume[0]) {
+      if (files?.resume?.[0]) {
         const resumeUrl = await this.azureBlobService.upload(files.resume[0]);
         const newResumeDto = new ResumeDTO();
         newResumeDto.id = uuidv4();
@@ -256,13 +263,7 @@ export class StudentController {
         const updatedResumes = [...currentResumes, newResumeDto];
         student.resume = updatedResumes;
       }
-
       const updateStudent = await this.studentService.update(id, student);
-      if (!updateStudent) {
-        return response
-          .status(HttpStatus.NOT_FOUND)
-          .json({ message: 'Student not found!' });
-      }
       await this.redisService.setObjectByKeyValue(
         `STUDENT:${id}`,
         updateStudent,
@@ -297,6 +298,7 @@ export class StudentController {
     }
     await this.studentService.delete(id);
     await this.redisService.deleteObjectByKey(`STUDENT:${id}`);
+    await this.redisService.deleteObjectByKey(StudentListKey);
     await this.azureBlobService.delete(student.avatar.split('/').pop());
     return response
       .status(HttpStatus.OK)
@@ -307,7 +309,7 @@ export class StudentController {
   @Post('login')
   async login(
     @Req() req: Request,
-    @Body() loginData: { email: string; password: string },
+    @Body() loginData: { email: string },
     @Res() response: Response,
   ): Promise<Response> {
     try {
@@ -335,7 +337,9 @@ export class StudentController {
       );
       return response.status(HttpStatus.OK).json({ token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -359,7 +363,9 @@ export class StudentController {
         .status(HttpStatus.OK)
         .json({ message: 'Logout successfully!' });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }

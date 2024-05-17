@@ -139,8 +139,7 @@ export class JobApplicantsController {
     @Param('id') id: string,
   ): Promise<Response> {
     try {
-      const jobApplicant =
-        await this.jobApplicantsService.findOne(id);
+      const jobApplicant = await this.jobApplicantsService.findOne(id);
       if (!jobApplicant) {
         return response
           .status(HttpStatus.NOT_FOUND)
@@ -163,8 +162,10 @@ export class JobApplicantsController {
     @Body() jobApplicant: JobApplicants,
   ): Promise<Response> {
     try {
-      const updatedJobApplicant =
-        await this.jobApplicantsService.update(id, jobApplicant);
+      const updatedJobApplicant = await this.jobApplicantsService.update(
+        id,
+        jobApplicant,
+      );
       if (!updatedJobApplicant) {
         return response
           .status(HttpStatus.NOT_FOUND)

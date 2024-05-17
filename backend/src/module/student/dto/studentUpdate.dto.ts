@@ -7,7 +7,7 @@ import {
   IsString,
   IsArray,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ResumeDTO } from './resume.dto';
 
@@ -34,10 +34,12 @@ export class StudentUpdateDto {
 
   @IsBoolean()
   @IsOptional()
+  @Transform(({ value }) => value === 'true')
   isVerify: boolean;
 
   @IsBoolean()
   @IsOptional()
+  @Transform(({ value }) => value === 'true')
   isActive: boolean;
 
   @IsArray()
