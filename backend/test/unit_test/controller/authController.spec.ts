@@ -4,11 +4,7 @@ import { AuthService } from '../../../src/module/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { StaffService } from '../../../src/module/staff/staff.service';
 import { StudentService } from '../../../src/module/student/student.service';
-import {
-  LoginTicket,
-  OAuth2Client,
-  TokenPayload,
-} from 'google-auth-library';
+import { LoginTicket, OAuth2Client, TokenPayload } from 'google-auth-library';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
 import { StudentResponseDto } from '../../../src/module/student/dto/studentResponse.dto';
@@ -204,9 +200,7 @@ describe('AuthController', () => {
       mockGetPayloadFromToken.mockResolvedValue(mockPayload);
 
       jest.spyOn(staffService, 'findByEmail').mockResolvedValue(staff);
-      jest
-        .spyOn(StaffResponseDto, 'fromStaff')
-        .mockReturnValue(limitedData);
+      jest.spyOn(StaffResponseDto, 'fromStaff').mockReturnValue(limitedData);
       jest.spyOn(authService, 'generateJwtToken').mockReturnValue('jwt-token');
 
       const authController = new AuthController(

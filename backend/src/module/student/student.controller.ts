@@ -198,7 +198,7 @@ export class StudentController {
     }
   }
 
-  // update an student
+  // update a student
   @Put(':id')
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -221,11 +221,17 @@ export class StudentController {
           .json({ message: 'Invalid UUID format' });
       }
       const findStudent = await this.studentService.findOne(id);
-      if (files.avatar && files.avatar[0]) {
-        findStudent.avatar &&
-          (await this.azureBlobService.delete(
+      if (!findStudent) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Student not found' });
+      }
+      if (files?.avatar?.[0]) {
+        if (findStudent.avatar) {
+          await this.azureBlobService.delete(
             findStudent.avatar.split('/').pop(),
-          ));
+          );
+        }
         student.avatar = await this.azureBlobService.upload(files.avatar[0]);
       }
       const currentResumes = findStudent.resume || [];
@@ -240,11 +246,9 @@ export class StudentController {
         delete student.deleteResumeID;
         student.resume = currentResumes;
       }
-      const resumeObjective = student.resumeObjective
-        ? student.resumeObjective
-        : findStudent.name;
+      const resumeObjective = student.resumeObjective || findStudent.name;
       delete student.resumeObjective;
-      if (files.resume && files.resume[0]) {
+      if (files?.resume?.[0]) {
         const resumeUrl = await this.azureBlobService.upload(files.resume[0]);
         const newResumeDto = new ResumeDTO();
         newResumeDto.id = uuidv4();
@@ -253,8 +257,9 @@ export class StudentController {
         const updatedResumes = [...currentResumes, newResumeDto];
         student.resume = updatedResumes;
       }
-
+      console.log('student', student);
       const updateStudent = await this.studentService.update(id, student);
+      console.log('update', updateStudent);
       await this.redisService.setObjectByKeyValue(
         `STUDENT:${id}`,
         updateStudent,
