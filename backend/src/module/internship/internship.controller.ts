@@ -110,7 +110,9 @@ export class InternshipController {
       const newInternship = await this.internshipService.create(internship);
       return response.status(HttpStatus.CREATED).json(newInternship);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -128,7 +130,9 @@ export class InternshipController {
       }
       return response.status(HttpStatus.OK).json(internships);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -148,7 +152,9 @@ export class InternshipController {
       }
       return response.status(HttpStatus.OK).json(internship);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -168,7 +174,9 @@ export class InternshipController {
       );
       return response.status(HttpStatus.OK).json(updatedInternship);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -189,7 +197,9 @@ export class InternshipController {
       }
       return response.status(HttpStatus.OK).json(internships);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }

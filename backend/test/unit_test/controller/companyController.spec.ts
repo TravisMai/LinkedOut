@@ -1,10 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from 'src/module/auth/auth.service';
 import { RedisService } from 'src/module/redis/redis.service';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 import * as bcrypt from 'bcrypt';
-import { HttpStatus, Response } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { CompanyController } from 'src/module/company/company.controller';
 import { StaffService } from 'src/module/staff/staff.service';
 import { StudentService } from 'src/module/student/student.service';

@@ -75,7 +75,9 @@ export class JobApplicantsController {
         await this.jobApplicantsService.create(jobApplicants);
       return response.status(HttpStatus.CREATED).json(newJobApplicants);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -102,7 +104,9 @@ export class JobApplicantsController {
       }
       return response.status(HttpStatus.OK).json(jobApplicants);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -125,7 +129,9 @@ export class JobApplicantsController {
       }
       return response.status(HttpStatus.OK).json(jobApplicants);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -147,7 +153,9 @@ export class JobApplicantsController {
       }
       return response.status(HttpStatus.OK).json(jobApplicant);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -173,7 +181,9 @@ export class JobApplicantsController {
       }
       return response.status(HttpStatus.OK).json(updatedJobApplicant);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }
