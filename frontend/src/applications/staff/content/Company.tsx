@@ -91,7 +91,6 @@ export default function Company() {
                     }}
                 />
                 <Button variant="contained">Search</Button>
-                <Button variant="outlined">Filter</Button>
             </div>
             <TableContainer component={Paper} className='mt-5 px-5'>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -112,7 +111,7 @@ export default function Company() {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
 
-                                <TableCell align='left'>{++index}</TableCell>
+                                <TableCell align='left'>{++index + itemsPerPage * currentPage}</TableCell>
                                 <TableCell align="center">
                                     <img
                                         src={row.avatar}

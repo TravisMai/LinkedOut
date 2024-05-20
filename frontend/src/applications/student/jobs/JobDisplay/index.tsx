@@ -277,11 +277,11 @@ const JobDisplay: React.FC = () => {
                     <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ my: 3, border: 1, borderRadius: 3 }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Open Date</Typography>
-                            <Typography variant="h6">{job?.openDate?.toString().split("T")[0] ?? "---"}</Typography>
+                            <Typography variant="h6">{job?.openDate?.toString()?.split("T")?.[0] ?? "---"}</Typography>
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Typography variant="h5">Close Date</Typography>
-                            <Typography variant="h6">{job?.expireDate?.toString().split("T")[0] ?? "---"}</Typography>
+                            <Typography variant="h6">{job?.expireDate?.toString()?.split("T")?.[0] ?? "---"}</Typography>
                         </Box>
 
                     </Box>

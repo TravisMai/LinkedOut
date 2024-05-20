@@ -86,7 +86,6 @@ export function AllJobPage() {
                         }}
                     />
                     <Button variant="contained">Search</Button>
-                    <Button variant="outlined">Filter</Button>
                     <Button variant="outlined" color='success' sx={{}} href='/company/jobs/add'><Add />Add</Button>
                 </div>
                 <TableContainer component={Paper} className='mt-5'>

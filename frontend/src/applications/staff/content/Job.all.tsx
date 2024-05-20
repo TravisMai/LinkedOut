@@ -63,7 +63,6 @@ export default function AllJob() {
                         }}
                     />
                     <Button variant="contained">Search</Button>
-                    <Button variant="outlined">Filter</Button>
                 </div>
                 <TableContainer component={Paper} className='mt-5'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">

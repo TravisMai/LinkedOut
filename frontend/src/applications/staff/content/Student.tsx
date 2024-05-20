@@ -94,7 +94,6 @@ export default function Student() {
                     }}
                 />
                 <Button variant="contained">Search</Button>
-                <Button variant="outlined">Filter</Button>
             </div>
             <TableContainer component={Paper} className='mt-5 px-5'>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -115,7 +114,7 @@ export default function Student() {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 {/* <TableCell align='left'></TableCell> */}
-                                <TableCell align="left">{++index}</TableCell>
+                                <TableCell align="left">{++index + itemsPerPage * currentPage}</TableCell>
                                 <TableCell align='left'>{row.name} {row.isVerify ? '' : "(Not verified)"} {!row.isActive && "(Disabled)"}</TableCell>
                                 <TableCell align='left'>{row.email}</TableCell>
                                 <TableCell align='left'>{row.phoneNumber}</TableCell>

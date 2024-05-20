@@ -163,7 +163,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mx: 2, mt: 5, mb: 2 }}>
               <Grid container spacing={2} rowSpacing={3} justifyContent="center">
-                {currentResume.map((item: resumeType, index) => (
+                {currentResume?.map((item: resumeType, index) => (
                   <>
                     <Grid item container columnSpacing={3} alignItems={"center"} justifyContent={"between"} className='pl-5'>
                       <Grid item xs={1}>
@@ -200,7 +200,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                     </Grid>
                   </>
 
-                ))}
+                )) ?? "" }
               </Grid>
               {/* Add new workingHistory */}
               {!showAddNew &&

@@ -43,7 +43,7 @@ export default function ApplyDialog({ isApplied, chooseResume, state, onExit, on
             console.log(data);
             // Set current resumes
             setCurrentResume(data.data.resume);
-            setResumeChoice(data.data.resume[0].id);
+            setResumeChoice(data.data?.resume?.[0]?.id ?? "You don't have any resume yet");
         },
         onError: (error: ErrorType) => {
             console.log(error.response.data.message);
@@ -123,11 +123,11 @@ export default function ApplyDialog({ isApplied, chooseResume, state, onExit, on
                                         value={resumeChoice}
                                         onChange={handleChange}
                                     >
-                                        {currentResume.map((resume, index) => (
+                                        {currentResume?.map((resume, index) => (
                                             <Link href={resume.url} key={index}>
                                                 <FormControlLabel value={resume.id} control={<Radio />} label={resume.title} />
                                             </Link>
-                                        ))}
+                                        )) ?? "You don't have any resume yet"}
                                         {/* <FormControlLabel value="female" control={<Radio />} label="Female" />
                                         <FormControlLabel value="male" control={<Radio />} label="Male" /> */}
                                     </RadioGroup>

@@ -144,7 +144,6 @@ export function ApplicantsPage() {
                         }}
                     />
                     <Button variant="contained">Search</Button>
-                    <Button variant="outlined">Filter</Button>
                 </div>
                 <TableContainer component={Paper} className='mt-5'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -168,7 +167,7 @@ export function ApplicantsPage() {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
 
-                                        <TableCell align='center'>{++index}</TableCell>
+                                        <TableCell align='center'>{++index + itemsPerPage * currentPage}</TableCell>
                                         {/* <TableCell align="center">
                                     <img
                                         src={row.avatar}

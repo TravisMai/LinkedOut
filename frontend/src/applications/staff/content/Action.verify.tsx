@@ -116,7 +116,6 @@ export default function Verify() {
                     }}
                 />
                 <Button variant="contained">Search</Button>
-                <Button variant="outlined">Filter</Button>
             </div>
             {/* <Paper elevation={3} className="mt-5">
                 <div className="flex flex-row justify-between items-center px-5 py-3">
