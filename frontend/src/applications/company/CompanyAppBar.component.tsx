@@ -19,7 +19,7 @@ import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { getJwtToken } from '../../shared/utils/authUtils';
 
-const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicant']];
+const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicant'], ['Internships', '/company/internship']];
 // const settings = ['Settings', 'Logout'];
 
 const theme = createTheme({

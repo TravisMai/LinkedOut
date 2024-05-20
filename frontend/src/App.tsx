@@ -25,6 +25,8 @@ import StaffLogin from "./applications/login/staff";
 import PrivateRoute from "./shared/routes/PrivateRoute";
 import DisplayCompany from "./applications/student/companies";
 import CompanyDisplay from "./applications/student/companies/CompanyDisplay";
+import { AllInternshipJobsPage } from "./applications/company/internships/AllInternshipJobsPage";
+import InternshipDisplay from "./applications/company/internships/InternshipDisplay";
 
 const queryClient = new QueryClient()
 
@@ -126,6 +128,18 @@ function App() {
                 element={
                   <PrivateRoute>
                     <JobDisplayCompany />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/internship"
+                element={
+                  <PrivateRoute>
+                    <AllInternshipJobsPage />
+                  </PrivateRoute>
+                } />
+              <Route path="/company/internship/:internshipId"
+                element={
+                  <PrivateRoute>
+                    <InternshipDisplay />
                   </PrivateRoute>
                 } />
               <Route path="/company/setting"
