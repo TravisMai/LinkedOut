@@ -1,323 +1,192 @@
-import { Check, LockOutlined, Search } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
-import { CardActionArea, Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import {useParams } from 'react-router-dom';
-import CompanyAppBar from '../CompanyAppBar.component';
-import { getJwtToken } from '../../../shared/utils/authUtils';
+import { AccountCircle, AttachFile, CalendarMonth, DoneOutline, Edit, Email, Fingerprint, Phone, Star, WorkOutline } from "@mui/icons-material";
+import { Box, Button, Container, Grid, IconButton, Link, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
+import CompanyAppBar from "../CompanyAppBar.component";
+import { getJwtToken } from "../../../shared/utils/authUtils";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import InternshipUpdateDialog from "./InternshipUpdateDialog.component";
 
 
-const InternshipDisplay: React.FC = () => {
-    const { jobId } = useParams();
-    const [job, setJob] = useState<jobType>();
-    const [companyJobs, setCompanyJobs] = useState<jobType[]>([]);
-    const [loading, setLoading] = React.useState(false);
-    const [isActive, setIsActive] = useState<boolean>(false);
-
+export default function InternshipDisplay() {
+    const { internshipId } = useParams();
 
     const token = getJwtToken();
 
-    // Fetch company's jobs
-    useQuery({
-        queryKey: "companyJobs23",
-        queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job/company", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        onSuccess: (data) => {
-            setCompanyJobs(data.data);
-        }
-    });
+    // Fetch for internship info
 
-    // Get job with match id from company jobs
-    React.useEffect(() => {
-        const selectedJob = companyJobs.find((job) => job.id === jobId);
-        if (selectedJob) {
-            setJob(selectedJob);
-        }
-    }, [companyJobs]);
+    const [internship, setInternship] = useState<internshipType>();
+    // const [status, setStatus] = useState<string>("");
 
 
-    function handleOpenJob() {
-        setLoading(true);
-        // set isActive of formData to true
-        const updatedFormData = { ...formData, isActive: true };
-        setTimeout(() => {
-            mutation.mutate(updatedFormData);
-        }, 1000);
-    }
+    // Handle dialog
+    const [updateField, setUpdateField] = React.useState("");
 
-    function handleCloseJob() {
-        setLoading(true);
-        // set isActive to false
-        const updatedFormData = { ...formData, isActive: false };
-        setTimeout(() => {
-            mutation.mutate(updatedFormData);
-        }, 1000);
-    }
-
-    // Handle open/close job
-    interface updateForm {
-        title: string | undefined,
-        isActive: boolean | undefined,
-        workType: string | undefined,
-        quantity: number | undefined,
-    }
-
-    const [formData, setFormData] = useState<updateForm>({
-        title: '',
-        isActive: false,
-        workType: '',
-        quantity: 0,
-    });
-
-    useEffect(() => {
-        if (job) {
-            setFormData({
-                title: job.title,
-                isActive: job.isActive,
-                workType: job.workType,
-                quantity: job.quantity,
-            });
-            setIsActive(job.isActive);
-        };
-    }, [job]);
-
-    const mutation = useMutation<ResponseType, ErrorType, updateForm>({
-        mutationFn: (formData) => {
-            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/job/${jobId}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-        },
-        onSuccess: () => {
-            setLoading(false);
-            setIsActive(!isActive);
-        },
-        onError: () => {
-            console.log(mutation.error);
-            setLoading(false);
-        },
-        onMutate: () => {
-            setLoading(true);
-        }
-    }
-    );
-
-    // Fetch all applicants of the job
-    const [applicationList, setApplicationList] = useState<jobApplicationType[]>([]);
-    const [applied, setApplied] = useState<number>(0);
-    const [accepted, setAccepted] = useState<number>(0);
-
-    useQuery({
-        queryKey: "jobApplicants",
-        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${jobId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        onSuccess: (data) => {
-            setApplicationList(data.data);
-            // Count number of applied students
-            setApplied(data.data.length);
-            // Count number of accepted students
-            setAccepted(data.data.filter((application: jobApplicationType) => application.status === "Accepted").length);
-        }
-    });
-
-
-    // Handle update job (dialog)
     const [openDialog, setOpenDialog] = React.useState(false);
-    const handleOpenDialog = () => {
-        setLoading(true);
+    const handleOpenDialog = (field: string) => {
         setOpenDialog(true);
+        setUpdateField(field);
     };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
         // Force the page to reload
         window.location.reload();
+        // Forece refetch the data
+        // getStudentInfo.refetch();
     }
 
     const handleExit = () => {
-        setLoading(false);
         setOpenDialog(false);
     }
 
 
-    // Handle delete dialog
+    useQuery({
+        queryKey: "internshipInfo",
+        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/389524f9-43cc-4284-ba28-6a1b5b61f43c`, {
+            // queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
+        onSuccess: (data) => {
+            setInternship(data.data);
+            // setStatus(data.data.status);
+        }
+    });
 
-    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
-    const handleOpenDeleteDialog = () => {
-        setLoading(true);
-        setOpenDeleteDialog(true);
-    };
-
-
-    const handleExitDelete = () => {
-        setLoading(false);
-        setOpenDeleteDialog(false);
-    }
 
 
     return (
         <>
             <CompanyAppBar />
+            <Grid container spacing={2} className='bg-[#f3f2f0] min-h-screen' sx={{ mt: 1 }}>
+                <Grid item xs={3}>
+                    <Container disableGutters={true}
+                        sx={{ width: 9 / 10, bgcolor: "white", display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3, ml: 5 }}>
+                        <Container disableGutters={true}
+                            sx={{
+                                alignContent: "center",
+                                display: 'flex',
+                                flexDirection: "column",
+                                alignItems: "center",
+                                gap: 1,
+                            }} >
+                            <img
+                                src={`${internship?.jobApplicants?.student.avatar}`} // Append a unique query parameter to bypass browser caching
+                                className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
+                            />
+                            {/* <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={() => handleOpenDialog("avatar")}>Change photo</Button>
+                            {studentData?.isVerify ? <Chip color="success" icon={<Check />} label="Verified" /> : <Chip color="warning" icon={<ExclamationCircleOutlined />} label="Not Verified" />} */}
+                            {/* <Chip color="success" icon={<Check />} label="Verified" /> */}
 
-            <Container>
-                <Grid container spacing={2} sx={{ mt: 3 }}>
+                        </Container>
 
-                    <Grid item xs={7}>
-                        <Grid container columnSpacing={2} sx={{ marginBottom: 3 }}>
-                            {isActive ?
-                                <Grid item xs={3}>
-                                    <LoadingButton variant="contained" color="error" onClick={handleCloseJob} loading={loading}> Close Job </LoadingButton>
-                                </Grid>
-                                :
-                                <Grid item xs={3}>
-                                    <LoadingButton variant="contained" color="success" onClick={handleOpenJob} loading={loading}> Open Job </LoadingButton>
-                                </Grid>
-                            }
-                            <Grid item xs={3}>
-                                <LoadingButton variant="contained" color="primary" onClick={handleOpenDialog} loading={loading}> Update Job</LoadingButton>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <LoadingButton variant="outlined" color="error" onClick={handleOpenDeleteDialog} loading={loading}> Delete Job</LoadingButton>
-                            </Grid>
-
-
-                        </Grid>
-
-                        <Box display="flex" gap={3} alignItems={"center"}>
-
-                            <Typography variant="h4">{job?.title}</Typography>
-                            {!isActive && <LockOutlined />}
-
-
-                        </Box>
-
-                        <Typography variant="h5" sx={{ my: 2, fontStyle: 'italic' }}>{job?.workType}</Typography>
-
-
-
-                        <Box display="flex" width={4 / 5} justifyContent="space-evenly" sx={{ mb: 3, border: 1, borderRadius: 3 }}>
-                            <Box display="flex" flexDirection="column" alignItems="center">
-                                <Typography variant="h5">Open Date</Typography>
-                                <Typography variant="h6">{job?.openDate ? job.openDate.toString().split('T')[0] : "---"}</Typography>
+                        <Typography variant="body2" className='pl-5'> <AccountCircle /> Name: <span className="font-bold">{internship?.jobApplicants?.student.name} </span> </Typography>
+                        <Typography variant="body2" className='pl-5'><Fingerprint /> Student ID: <span className="font-bold">{internship?.jobApplicants?.student.studentId} </span></Typography>
+                        <Typography variant="body2" className='pl-5'><Email /> Email: <span className="font-bold">{internship?.jobApplicants?.student.email} </span></Typography>
+                        <Typography variant="body2" className='pl-5'><Phone /> Phone: <span className="font-bold">{internship?.jobApplicants?.student.phoneNumber} </span></Typography>
+                        <Typography variant="body2" className='pl-5'><Star /> Major: <span className="font-bold">{internship?.jobApplicants?.student.major} </span></Typography>
+                        <Typography variant="body2" className='pl-5'><CalendarMonth /> Year: <span className="font-bold">{internship?.jobApplicants?.student.year} </span></Typography>
+                        <Container disableGutters={true}
+                            sx={{
+                                alignContent: "center",
+                                display: 'flex',
+                                flexDirection: "column",
+                                alignItems: "center",
+                            }} >
+                            <Button variant="outlined" color="primary" sx={{}} href={"/company/applicant/" + internship?.jobApplicants.id} size="large">View full profile</Button>
+                        </Container>
+                    </Container>
+                </Grid>
+                <Grid item xs={8.8}>
+                    <Container disableGutters={true}
+                        sx={{ display: "flex", flexDirection: "column", gap: 2, borderRadius: 3, my: 3, pb: 3 }}>
+                        {/* <Box display={'flex'} flexDirection={'row'} gap={2}>
+                            <LoadingButton variant="contained" color='success' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Approved")} disabled={"Approved" === status}>Approve</LoadingButton>
+                            <LoadingButton variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Processing")} disabled={"Processing" === status}>Process</LoadingButton>
+                            <LoadingButton variant="contained" color='error' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Rejected")} disabled={"Rejected" === status}>Reject</LoadingButton>
+                        </Box> */}
+                        <Paper>
+                            <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                    Applied for
+                                </Typography>
+                                {/* <IconButton size="small" onClick={() => handleOpenDialog("resume")}><Edit /></IconButton> */}
                             </Box>
-                            <Box display="flex" flexDirection="column" alignItems="center">
-                                <Typography variant="h5">Close Date</Typography>
-                                <Typography variant="h6">{job?.expireDate ? job.expireDate.toString().split('T')[0] : "---"}</Typography>
+                            <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                                <List>
+                                    {internship?.jobApplicants?.resume.title ?
+                                        <ListItem>
+                                            <ListItemIcon><WorkOutline /></ListItemIcon>
+                                            <Link href={"/company/jobs/" + internship?.jobApplicants?.job.id}>
+                                                <ListItemText
+                                                    primary={internship?.jobApplicants?.job.title}
+                                                />
+                                            </Link>
+                                        </ListItem>
+                                        : <></>
+                                    }
+                                </List>
+                            </Typography>
+                        </Paper>
+
+                        <Paper>
+                            <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                    Result
+                                </Typography>
+                                <IconButton size="small" onClick={() => handleOpenDialog("result")}><Edit /></IconButton>
+
                             </Box>
-
-                        </Box>
-                        {job?.descriptions?.aboutUs &&
-                            <>
-                                <Typography variant="h6">Description</Typography>
-                                <List sx={{ mb: 2 }}>
-                                    <ListItem>
-                                        <ListItemText primary={job?.descriptions?.aboutUs}></ListItemText>
-                                    </ListItem>
+                            <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                                <List>
+                                    {internship?.result ?
+                                        <ListItem>
+                                            <ListItemIcon><DoneOutline /></ListItemIcon>
+                                            <ListItemText
+                                                primary={internship?.result}
+                                            />
+                                        </ListItem>
+                                        : <>No result set</>
+                                    }
                                 </List>
-                            </>
-                        }
-                        {job?.workType === "Internship" && job?.internshipPrograme ?
-                            <>
-                                <Typography variant="h6">Internship Program</Typography>
-                                <List sx={{ mb: 2 }}>
-                                    <ListItem>
-                                        <Link href={job?.internshipPrograme}> <ListItemText primary="Internship program"></ListItemText></Link>
-                                    </ListItem>
+                            </Typography>
+                        </Paper>
+
+                        <Paper>
+                            <Box sx={{ display: 'flex', alignItems: 'left', pl: 2, pt: 2, pb: 1 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                    Uploaded file
+                                </Typography>
+                                <IconButton size="small" onClick={() => handleOpenDialog("file")}><Edit /></IconButton>
+                            </Box>
+                            <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
+                                <List>
+                                    {internship?.document ?
+                                        internship?.document.map((doc) => (
+                                            <ListItem>
+                                                <ListItemIcon><AttachFile /></ListItemIcon>
+                                                <ListItemText
+                                                    primary={doc}
+                                                />
+                                            </ListItem>
+                                        ))
+                                        : <>No file uploaded</>
+                                    }
                                 </List>
-                            </> : null
-                        }
-                        <Typography variant="h6">Quantity</Typography>
-                        <List sx={{ mb: 2 }}>
-                            <ListItem>
-                                <ListItemText primary="Required" secondary={job?.quantity}></ListItemText>
-                                <ListItemText primary="Registered" secondary={applied}></ListItemText>
-                                <ListItemText primary="Accepted" secondary={accepted}></ListItemText>
-                            </ListItem>
-                        </List>
-                        <Typography variant="h6">Responsibities</Typography>
-                        <List sx={{ mb: 2 }}>
-                            {job?.descriptions?.responsibilities ? job?.descriptions?.responsibilities.map((responsibility, index) => (
-                                <ListItem key={job?.id + "responsibility" + index}>
-                                    <ListItemIcon><Search /></ListItemIcon>
-                                    <ListItemText primary={responsibility}></ListItemText>
-                                </ListItem>
-                            )) : <></>}
-                        </List>
-                        <Typography variant="h6">Requirements</Typography>
-                        <List sx={{ mb: 2 }}>
-                            {job?.descriptions?.requirements ? job?.descriptions?.requirements.map((requirement, index) => (
-                                <ListItem key={job?.id + "requirement" + index}>
-                                    <ListItemIcon><Check /></ListItemIcon>
-                                    <ListItemText primary={requirement}></ListItemText>
-                                </ListItem>
-                            )) : <></>}
-                        </List>
-                        <Typography variant="h6">Level</Typography>
-                        <List sx={{ mb: 2 }}>
-                            <ListItem>
-                                <ListItemText primary={job?.level}></ListItemText>
-                            </ListItem>
-                        </List>
+                            </Typography>
+                        </Paper>
 
-                        <Typography variant="h6">Salary</Typography>
-                        <List sx={{ mb: 2 }}>
-                            <ListItem>
-                                <ListItemText primary={job?.salary ? "VND " + job.salary.toLocaleString('en-US') : "None"}></ListItemText>
 
-                            </ListItem>
-                        </List>
-
-                    </Grid>
-                    <Grid item xs={4}>
-
-                        <Typography variant="h6">APPLIED STUDENTS</Typography>
-                        { }
-                        <List>
-                            {applicationList.length ? applicationList.map((application, index) => (
-                                <CardActionArea href={`../applicant/${application.id}`} key={application.id + index}>
-                                    <ListItem >
-                                        <ListItemIcon><img
-                                            src={application.student.avatar}
-                                            className='w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2'
-                                            alt="company avatar"
-                                        /></ListItemIcon>
-                                        <ListItemText primary={application.student.name} secondary={application.status + " " + application.updated.toString().split("T")[0]} ></ListItemText>
-                                    </ListItem>
-                                </CardActionArea>
-                            )) : "No application yet"}
-                            {/* <ListItem>
-                                <ListItemIcon><img
-                                    src="https://img.freepik.com/premium-photo/happy-young-students-studying-college-library-with-stack-books_21730-4486.jpg"
-                                    className='w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2'
-                                    alt="company avatar"
-                                /></ListItemIcon>
-                                <ListItemText primary="Tran Tri Dat" secondary="Applied 10/10/2023"></ListItemText>
-
-                            </ListItem> */}
-
-                        </List>
-
-                    </Grid>
+                    </Container>
 
                 </Grid>
-
-                {/* <UpdateDialog jobId={jobId || ''} state={openDialog} onExit={handleExit} onClose={handleCloseDialog} />
-                <DeleteDialog jobId={jobId || ''} state={openDeleteDialog} onExit={handleExitDelete}/> */}
-
-            </Container >
+            </Grid>
+            {internship && <InternshipUpdateDialog field={updateField} state={openDialog} onExit={handleExit} onClose={handleCloseDialog} internshipId={internship.id} />}
         </>
-    );
-};
+    )
 
-export default InternshipDisplay;
+}
