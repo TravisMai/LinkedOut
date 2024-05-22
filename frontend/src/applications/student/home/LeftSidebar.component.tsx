@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Container, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
@@ -29,7 +29,7 @@ const LeftSidebar: React.FC = () => {
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
   
-  const fetchAppliedJobs = (studentId: string) => {
+  const fetchAppliedJobs = useCallback((studentId: string) => {
     axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ const LeftSidebar: React.FC = () => {
       .catch(error => {
         console.error("Error fetching applied jobs:", error);
       });
-  };
+  }, [token, setAppliedJobs]);
 
   useEffect(() => {
     if (studentData && studentData.id) {

@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Container, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getJwtToken } from '../../../../shared/utils/authUtils';
@@ -164,49 +164,53 @@ const JobDisplay: React.FC = () => {
 
     // Check submitted
     // Get all applied jobs
-    const fetchAppliedJobs = (studentId: string) => {
-        axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then(response => {
-                // console.log(response.data);
-                // setAppliedJobs(response.data);
-                if (response.data && response.data.length > 0) {
-                    response.data.forEach((job: jobApplicationType) => {
-                        if (job.job.id === jobId) {
-                            setApplied(true);
-                            setStatus(job.status);
-                        }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching applied jobs:", error);
-            });
-    };
-    // Get all internship applied
-    const fetchAppliedIntern = (studentId: string) => {
-        axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/candidate/${studentId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then(response => {
-                if (response.data && response.data.length > 0) {
-                    response.data.forEach((intern: internshipType) => {
-                        // console
-                        if (intern.jobApplicants.job.id === jobId) {
-                            setAppliedIntern(true);
-                        }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching applied jobs:", error);
-            });
-    };
+    const fetchAppliedJobs = useCallback((studentId: string) => {
+    axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
+    })
+    .then(response => {
+        if (response.data && response.data.length > 0) {
+        response.data.forEach((job: jobApplicationType) => {
+            if (job.job.id === jobId) {
+            setApplied(true);
+            setStatus(job.status);
+            }
+        });
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching applied jobs:", error);
+    });
+    }, [token, jobId, setApplied, setStatus]);
+
+    const fetchAppliedIntern = useCallback((studentId: string) => {
+    axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/candidate/${studentId}`, {
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
+    })
+    .then(response => {
+        if (response.data && response.data.length > 0) {
+        response.data.forEach((intern: internshipType) => {
+            if (intern.jobApplicants.job.id === jobId) {
+            setAppliedIntern(true);
+            }
+        });
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching applied jobs:", error);
+    });
+    }, [token, jobId, setAppliedIntern]);
+
+    useEffect(() => {
+    if (studentData && studentData.id) {
+        fetchAppliedJobs(studentData.id);
+        fetchAppliedIntern(studentData.id);
+    }
+    }, [studentData, fetchAppliedJobs, fetchAppliedIntern]);
 
 
     useEffect(() => {
@@ -214,7 +218,7 @@ const JobDisplay: React.FC = () => {
             fetchAppliedJobs(studentData.id);
             fetchAppliedIntern(studentData.id);
         }
-    }, [studentData, fetchAppliedIntern]);
+    }, [studentData, fetchAppliedIntern, fetchAppliedJobs]);
 
 
 

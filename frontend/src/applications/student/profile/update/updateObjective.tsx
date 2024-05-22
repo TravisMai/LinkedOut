@@ -78,7 +78,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
@@ -89,7 +89,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
                 },
             });
         },
-        onSuccess: (_data) => {
+        onSuccess: () => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);

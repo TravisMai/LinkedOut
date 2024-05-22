@@ -103,7 +103,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
         };
 
         fetchData();
-    }, []);
+    }, [token, formData]);
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
@@ -114,7 +114,7 @@ export default function UpdateSocialMedia({ onClose }: { onClose: () => void }) 
                 },
             });
         },
-        onSuccess: (_data) => {
+        onSuccess: () => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);

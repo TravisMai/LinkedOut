@@ -80,7 +80,7 @@ export default function UpdateAdditionalInformation({ onClose }: { onClose: () =
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
@@ -121,7 +121,7 @@ export default function UpdateAdditionalInformation({ onClose }: { onClose: () =
         const { id, value } = event.target;
         const [index, key] = id.split('-');
         const updatedFormData = { ...formData };
-        let idx = parseInt(index)
+        const idx = parseInt(index)
         updatedFormData.additionalInformation[idx][key as keyof additionalInformationType] = value;
         setFormData(updatedFormData);
     };

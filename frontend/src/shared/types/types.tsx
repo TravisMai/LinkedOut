@@ -92,8 +92,7 @@ type referenceType = {
     "phone": string
 }
 
-type facultyType = {
-}
+type facultyType = Record<string, never>;
 
 type jobType = {
     "id": string,
@@ -132,7 +131,6 @@ type jobApplicationType = {
     "created": Date,
     "updated": Date
 }
-
 
 type ErrorType = {
     response: {
