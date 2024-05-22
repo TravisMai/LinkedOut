@@ -2,7 +2,6 @@ import {
   IsBoolean,
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -49,9 +48,9 @@ export class CompanyUpdateDto {
   @IsOptional()
   description: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  taxId: number;
+  taxId: string;
 
   @IsBoolean()
   @IsOptional()

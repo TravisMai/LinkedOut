@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
-import { Tag } from 'antd';
+import { Tag } from "antd";
 import {
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-} from '@ant-design/icons';
-import { useMutation, useQuery } from 'react-query';
-import axios from 'axios';
-import { IconButton, InputBase, Paper, Menu, MenuItem } from '@mui/material';
-import { getJwtToken } from '../../shared/utils/authUtils';
-import { BusinessOutlined, HomeOutlined, Search, WorkOutline } from '@mui/icons-material';
-
+} from "@ant-design/icons";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
+import { IconButton, InputBase, Paper, Menu, MenuItem } from "@mui/material";
+import { getJwtToken } from "../../shared/utils/authUtils";
+import {
+  BusinessOutlined,
+  HomeOutlined,
+  Search,
+  WorkOutline,
+} from "@mui/icons-material";
 
 type ResponseType = {
-  data: any
-}
+  data: any;
+};
 
 const Navbar: React.FC = () => {
   const [studentEmail, setStudentEmail] = useState("");
@@ -23,16 +27,16 @@ const Navbar: React.FC = () => {
   const [, setStudentProcess] = useState("");
   const [studentAvatar, setStudentAvatar] = useState("");
 
-
   // Fetch for student info
   const token = getJwtToken();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
   });
 
   useEffect(() => {
@@ -41,62 +45,54 @@ const Navbar: React.FC = () => {
       setStudentStatus(getStudentInfo.data.data.isVerify);
       setStudentProcess(getStudentInfo.data.data.process);
       setStudentAvatar(getStudentInfo.data.data.avatar);
-
-
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [
+    getStudentInfo.isSuccess,
+    getStudentInfo.data?.data.email,
+    getStudentInfo.data?.data.isVerify,
+    getStudentInfo.data?.data.process,
+    getStudentInfo.data?.data.avatar,
+  ]);
 
   const location = useLocation();
-  const pathName = location?.pathname.split('/')[1];
+  const pathName = location?.pathname.split("/")[1];
 
-  const [searchString, setSearchString] = useState('')
-  const [searchResults, setSearchResults] = useState([] as any)
+  const [searchString, setSearchString] = useState("");
+  const [searchResults, setSearchResults] = useState([] as any);
   // Handle searchString change
-  const handleSearchStringChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchStringChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchString(event.target.value);
   };
 
   // Mutation to get search results
   const mutation = useMutation<ResponseType, ErrorType, string | null>({
     mutationFn: (searchString) => {
-      return axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/app?search=${searchString}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      return axios.get(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/app?search=${searchString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
     },
     onSuccess: (data) => {
-      console.log(data.data);
       setSearchResults(data.data);
-      // setSending(false);
-      // setShowError(false);
-      // setShowSuccess(true);
-      // handleClose();
     },
     onError: () => {
-      // console.log(mutation.error);
-      // setSending(false);
-      // setShowError(true);
+      console.log(mutation.error);
     },
-    onMutate: () => {
-      // setSending(true);
-      // setShowError(false);
-    }
-  }
-  );
+  });
 
   const handleSearch = (e: any) => {
     e.preventDefault();
-    console.log("Base string: ", searchString);
     // Encode encodeURIComponent
     const encodedString = encodeURIComponent(searchString);
-    console.log("Encoded string: ", encodedString);
-    // Fetch from api 
+    // Fetch from api
     mutation.mutate(encodedString);
-  }
-
-
-
+  };
 
   // Handle search result menu
   const [openMenuSearch, setOpenMenuSearch] = React.useState(false);
@@ -107,43 +103,42 @@ const Navbar: React.FC = () => {
     setOpenMenuSearch(false);
   };
 
-
-
-
   return (
     <div className="w-full h-14 bg-white grid grid-cols-7 gap-4 fixed z-50 border-b-2 border-b-slate-200">
       <div className="h-14 col-span-2 grid grid-cols-5 items-center">
-        <div className='h-14 col-span-1'>
+        <div className="h-14 col-span-1">
           <Link to="/">
-            <img src={Logo} alt='Home Page' className='h-12 mt-1 mx-auto ml-4 rounded-lg' />
+            <img
+              src={Logo}
+              alt="Home Page"
+              className="h-12 mt-1 mx-auto ml-4 rounded-lg"
+            />
           </Link>
         </div>
         <div className="col-span-4">
-          {/* <input
-            placeholder="Search for Jobs, People, and more..."
-            className="bg-gray-200 rounded-full w-full h-full focus:outline-none m-auto px-3"
-            onSubmit={() => { console.log('searching') }}
-          /> */}
-          {/* Search and send to api /app?search= */}
           <Paper
             component="form"
             elevation={0}
-            variant='outlined'
-            sx={{ display: 'flex', alignItems: 'center', width: 400, height: 'fit', backgroundColor: '#eeeeee' }}
+            variant="outlined"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: 400,
+              height: "fit",
+              backgroundColor: "#eeeeee",
+            }}
             onSubmit={handleSearch}
             // anchorPosition here
-            name='anchorPosition'
+            name="anchorPosition"
           >
             <Menu
               id="basic-menu"
               open={openMenuSearch}
               onClose={handleClose}
-              anchorEl={document.getElementsByName('anchorPosition')[0]}
-
+              anchorEl={document.getElementsByName("anchorPosition")[0]}
             >
               {searchResults ? (
                 <MenuItem onClick={handleClose}>{searchResults.id}</MenuItem>
-
               ) : (
                 <MenuItem>No results found</MenuItem>
               )}
@@ -151,17 +146,20 @@ const Navbar: React.FC = () => {
             <InputBase
               sx={{ ml: 1, flex: 1 }}
               placeholder="Search for Jobs, Companies, and more..."
-              inputProps={{ 'aria-label': 'search google maps' }}
+              inputProps={{ "aria-label": "search google maps" }}
               value={searchString}
               onChange={handleSearchStringChange}
             />
 
-            <IconButton type="submit" sx={{ p: '10px' }} aria-label="search" onClick={handleClick}>
+            <IconButton
+              type="submit"
+              sx={{ p: "10px" }}
+              aria-label="search"
+              onClick={handleClick}
+            >
               <Search />
             </IconButton>
           </Paper>
-
-
 
           {/* <Paper
             component="form"
@@ -193,12 +191,13 @@ const Navbar: React.FC = () => {
                 99+
               </div> */}
               <div
-                className={`${pathName === '' || undefined
-                  ? 'text-primary'
-                  : 'text-gray-400'
-                  }`}
+                className={`${
+                  pathName === "" || undefined
+                    ? "text-primary"
+                    : "text-gray-400"
+                }`}
               >
-                <HomeOutlined fontSize='large' />
+                <HomeOutlined fontSize="large" />
               </div>
             </div>
           </div>
@@ -210,10 +209,11 @@ const Navbar: React.FC = () => {
                 99+
               </div> */}
               <div
-                className={`${pathName === 'watch' ? 'text-primary' : 'text-gray-400'
-                  }`}
+                className={`${
+                  pathName === "watch" ? "text-primary" : "text-gray-400"
+                }`}
               >
-                <WorkOutline fontSize='large' />
+                <WorkOutline fontSize="large" />
               </div>
             </div>
           </div>
@@ -225,10 +225,11 @@ const Navbar: React.FC = () => {
                 99+
               </div> */}
               <div
-                className={`${pathName === 'marketplace' ? 'text-primary' : 'text-gray-400'
-                  }`}
+                className={`${
+                  pathName === "marketplace" ? "text-primary" : "text-gray-400"
+                }`}
               >
-                <BusinessOutlined fontSize='large' />
+                <BusinessOutlined fontSize="large" />
               </div>
             </div>
           </div>
@@ -250,21 +251,32 @@ const Navbar: React.FC = () => {
         </Link> */}
       </div>
       <div className="col-span-2 grid grid-cols-10 items-center justify-end">
-        <div className='w-fit col-span-3 items-center mt-1'>
-          {
-            studentStatus === true ? (
-              <Tag icon={<CheckCircleOutlined />} color="success" className='w-full overflow-hidden'>Verified</Tag>
-            ) : (
-              <Tag icon={<ExclamationCircleOutlined />} color="warning" className='w-full overflow-hidden'>Not Verified</Tag>
-            )
-          }
+        <div className="w-fit col-span-3 items-center mt-1">
+          {studentStatus === true ? (
+            <Tag
+              icon={<CheckCircleOutlined />}
+              color="success"
+              className="w-full overflow-hidden"
+            >
+              Verified
+            </Tag>
+          ) : (
+            <Tag
+              icon={<ExclamationCircleOutlined />}
+              color="warning"
+              className="w-full overflow-hidden"
+            >
+              Not Verified
+            </Tag>
+          )}
           {/* <Tag icon={<SyncOutlined spin />} color="processing" className='w-full overflow-hidden'>Processing</Tag> */}
-
         </div>
         <div className="h-10 w-full col-span-7 mx-1 pr-2 ">
           <Link to="/student/profile">
             <button className="mx-4 h-10 px-2 w-fit grid grid-cols-5 space-x-1 items-center focus:outline-none hover:bg-gray-300 rounded-full">
-              <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">{studentEmail}</p>
+              <p className="overflow-clip col-span-4 text-ellipsis text-sm w-full hover:text-visible">
+                {studentEmail}
+              </p>
               <div>
                 <img
                   src={studentAvatar}

@@ -160,7 +160,7 @@ export class InternshipController {
 
   // update an internship
   @Put(':id')
-  @AllowRoles(['staff'])
+  @AllowRoles(['staff', 'company'])
   @UseGuards(JwtGuard, RolesGuard)
   async update(
     @Res() response: Response,
@@ -205,7 +205,7 @@ export class InternshipController {
 
   // get all internship by jobId
   @Get('job/:id')
-  @AllowRoles(['staff'])
+  @AllowRoles(['staff', 'company'])
   @UseGuards(JwtGuard, RolesGuard)
   async findByJobId(
     @Res() response: Response,

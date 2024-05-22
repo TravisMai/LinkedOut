@@ -1,6 +1,6 @@
-import React from 'react';
-import Navbar from '../../applications/student/navbar.component';
-import MainContentContainer from './mainLayout';
+import React from "react";
+import Navbar from "../../applications/student/navbar.component";
+import MainContentContainer from "./mainLayout";
 
 interface IProps {
   children?: React.ReactNode;

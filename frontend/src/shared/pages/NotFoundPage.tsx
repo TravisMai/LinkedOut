@@ -11,7 +11,7 @@ const NotFoundPage = () => {
         <li className="text-blue-700">/login/company</li>
       </ol>
     </>
-  )
-}
+  );
+};
 
-export default NotFoundPage
+export default NotFoundPage;

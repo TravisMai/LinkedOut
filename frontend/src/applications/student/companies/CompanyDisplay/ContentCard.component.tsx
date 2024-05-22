@@ -1,17 +1,15 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
-
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
 
 export default function ContentCard({ job }: { job: jobType }) {
   return (
     <Card sx={{ minWidth: 275 }}>
-      <CardActionArea href={'/student/jobs/' + job.id}>
+      <CardActionArea href={"/student/jobs/" + job.id}>
         <CardContent>
-          <div className='flex flex-row'>
-            
-            <div className='basis-5/6'>
+          <div className="flex flex-row">
+            <div className="basis-5/6">
               <Typography variant="h5" component="div">
                 {job.title}
               </Typography>

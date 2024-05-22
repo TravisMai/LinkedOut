@@ -1,4 +1,3 @@
 export default function Update() {
-    return (<div className='mt-20'>Update</div>)
-
+  return <div className="mt-20">Update</div>;
 }
