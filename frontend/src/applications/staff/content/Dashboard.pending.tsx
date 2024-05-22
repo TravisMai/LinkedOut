@@ -97,8 +97,6 @@ export default function Pending(props: any) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
-      // Filer out pending student
       const pendingStudent = data.data.filter(
         (student: studentType) => student.isVerify === false,
       );
@@ -126,15 +124,8 @@ export default function Pending(props: any) {
           },
         },
       ),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries("allStudent");
-      // setSending(false);
-      // setShowError(false);
-      // setShowSuccess(true);
-      // setTimeout(() => {
-      //     setShowSuccess(false); // Hide the success message
-      // }, 5000);
     },
     onError: () => {
       console.log(mutation.error);

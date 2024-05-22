@@ -43,7 +43,6 @@ export default function Dashboard(props: any) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllStudent(data.data);
     },
   });
@@ -60,7 +59,6 @@ export default function Dashboard(props: any) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllCompany(data.data);
     },
   });
@@ -77,7 +75,6 @@ export default function Dashboard(props: any) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllJob(data.data);
     },
   });

@@ -79,30 +79,17 @@ const Navbar: React.FC = () => {
       );
     },
     onSuccess: (data) => {
-      console.log(data.data);
       setSearchResults(data.data);
-      // setSending(false);
-      // setShowError(false);
-      // setShowSuccess(true);
-      // handleClose();
     },
     onError: () => {
-      // console.log(mutation.error);
-      // setSending(false);
-      // setShowError(true);
-    },
-    onMutate: () => {
-      // setSending(true);
-      // setShowError(false);
+      console.log(mutation.error);
     },
   });
 
   const handleSearch = (e: any) => {
     e.preventDefault();
-    console.log("Base string: ", searchString);
     // Encode encodeURIComponent
     const encodedString = encodeURIComponent(searchString);
-    console.log("Encoded string: ", encodedString);
     // Fetch from api
     mutation.mutate(encodedString);
   };
@@ -129,12 +116,6 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className="col-span-4">
-          {/* <input
-            placeholder="Search for Jobs, People, and more..."
-            className="bg-gray-200 rounded-full w-full h-full focus:outline-none m-auto px-3"
-            onSubmit={() => { console.log('searching') }}
-          /> */}
-          {/* Search and send to api /app?search= */}
           <Paper
             component="form"
             elevation={0}

@@ -165,7 +165,6 @@ export default function AddJob() {
           } else if (key === "descriptions") {
             // Convert description into string
             formDataToSend.append(key, JSON.stringify(value));
-            console.log("String: ", formData[key]);
           } else if (key === "openDate" || key === "expireDate") {
             // Stringify date
             formDataToSend.append(key, value.toISOString());
@@ -186,8 +185,7 @@ export default function AddJob() {
       );
     },
 
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -202,7 +200,6 @@ export default function AddJob() {
       setShowError(true);
     },
     onMutate: () => {
-      console.log("Sending", formData);
       setSending(true);
       setShowError(false);
     },

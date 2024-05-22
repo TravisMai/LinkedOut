@@ -94,7 +94,6 @@ export default function CompanyProfile() {
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
       // Set company id
       setCompanyId(data.data.id);
 
@@ -145,8 +144,7 @@ export default function CompanyProfile() {
           },
         },
       ),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -161,21 +159,14 @@ export default function CompanyProfile() {
       setShowError(true);
     },
     onMutate: () => {
-      console.log(token);
       setSending(true);
       setShowError(false);
     },
   });
 
-  // Function to store JWT token in cookie
-  // const storeJwtToken = (token: string) => {
-  //     document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-  // };
-
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     // Add country code to phone number
     if (formData.phoneNumber.charAt(0) == "0")
       // Remove first character if it is 0

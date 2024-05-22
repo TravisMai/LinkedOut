@@ -75,7 +75,6 @@ export default function StudentLogin() {
         loginForm,
       ),
     onSuccess: (data) => {
-      console.log(data);
       const token = data.data.token;
       document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
       setSending(false);
@@ -92,7 +91,6 @@ export default function StudentLogin() {
       console.log(error);
     },
     onMutate: () => {
-      console.log(formData);
       setSending(true);
       setShowError(false);
     },

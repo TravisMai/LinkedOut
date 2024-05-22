@@ -61,7 +61,6 @@ export default function Verify() {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllStudent(data.data);
     },
   });
@@ -84,24 +83,11 @@ export default function Verify() {
           },
         },
       ),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries("allStudent");
-      // setSending(false);
-      // setShowError(false);
-      // setShowSuccess(true);
-      // setTimeout(() => {
-      //     setShowSuccess(false); // Hide the success message
-      // }, 5000);
     },
     onError: () => {
       console.log(mutation.error);
-      // setSending(false);
-      // setShowError(true);
-    },
-    onMutate: () => {
-      // setSending(true);
-      // setShowError(false);
     },
   });
 

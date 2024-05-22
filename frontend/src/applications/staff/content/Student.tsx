@@ -53,8 +53,6 @@ export default function Student() {
         },
       }),
     onSuccess: (data) => {
-      console.log("I fetched all students");
-      console.log(data.data);
       setAllStudent(data.data);
     },
   });

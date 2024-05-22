@@ -14,7 +14,6 @@ export default function CompanyProfile({
   company: companyType;
   handleClose: () => void;
 }) {
-  console.log("ID: ", company.id);
   // Fetch for company info
   const token = getJwtToken();
 
@@ -37,7 +36,6 @@ export default function CompanyProfile({
         },
       ),
     onSuccess: () => {
-      console.log("Success");
       handleClose();
     },
     onError: (error) => {
@@ -67,17 +65,10 @@ export default function CompanyProfile({
         },
       ),
     onSuccess: () => {
-      console.log("Success");
       handleClose();
     },
     onError: (error) => {
-      // setSending(false);
-      // setShowError(true);
       console.log(error);
-    },
-    onMutate: () => {
-      console.log("Init: ", disableData.isActive);
-      console.log("Sending: ", !disableData.isActive);
     },
   });
 
@@ -98,9 +89,7 @@ export default function CompanyProfile({
       );
     },
     onSuccess: () => {
-      console.log("Deleted");
       handleClose();
-      // window.location.reload();
     },
     onError: () => {
       console.log(mutationDelete.error);

@@ -63,7 +63,6 @@ export default function ApplyDialog({
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
       // Set current resumes
       setCurrentResume(data.data.resume);
       setResumeChoice(

@@ -35,7 +35,6 @@ export default function Company() {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllCompany(data.data);
     },
   });

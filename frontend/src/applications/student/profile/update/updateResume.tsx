@@ -74,8 +74,6 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
-
       // Set student id
       setStudentId(data.data.id);
       // Set current resume
@@ -86,7 +84,6 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAAA");
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
@@ -106,8 +103,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
         },
       );
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -127,9 +123,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
-    console.log("BBBBBBBBBBBBBBBBBBBBb");
   };
 
   // Handle file input change

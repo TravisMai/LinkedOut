@@ -76,7 +76,6 @@ export default function StudentProfile2() {
     setTimeout(() => {
       setStatus(status);
       setLoading(false);
-      console.log("Updating to ", status);
       mutation.mutate(status);
     }, 1000);
   };
@@ -93,10 +92,8 @@ export default function StudentProfile2() {
         },
       );
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       setLoading(false);
-      console.log("Updated", data.data);
-      // set new status
     },
     onError: () => {
       console.log(mutation.error);

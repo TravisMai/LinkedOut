@@ -47,7 +47,6 @@ const JobDisplay: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setJob(data.data);
     },
   });

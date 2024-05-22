@@ -138,7 +138,6 @@ export default function StudentSignUp() {
             formDataToSend.append(key, value.toString()); // Convert other fields to string
           }
         }
-        console.log(formDataToSend);
       });
       return axios.post(
         "https://linkedout-hcmut.feedme.io.vn/api/v1/student",
@@ -150,8 +149,7 @@ export default function StudentSignUp() {
         },
       );
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -174,7 +172,6 @@ export default function StudentSignUp() {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
 
     // Add country code to phone number
     if (formData.phoneNumber.charAt(0) !== "0")

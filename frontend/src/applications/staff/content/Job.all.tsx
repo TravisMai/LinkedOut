@@ -36,7 +36,6 @@ export default function AllJob() {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllJob(data.data);
     },
   });

@@ -118,7 +118,6 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
   };
 

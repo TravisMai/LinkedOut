@@ -85,23 +85,6 @@ export function ApplicantsPage() {
     fetchApplications();
   }, [companyJobs, token]);
 
-  // companyJobs.map((job) => {
-  //     queryKey: `allJobApplications_${job.id}`,
-  //         queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${job.id}`, {
-  //             headers: {
-  //                 Authorization: `Bearer ${token}`,
-  //             },
-  //         }),
-  //             onSuccess: (data) => {
-  //                 // Append with current applications
-  //                 setAllApplications([...allApplications, ...data.data]);
-  //             }
-  // });
-  // useQuery({
-
-  // }, [companyJobs]);
-  console.log("Fetch all applications of each job", allApplications);
-
   // Handle pagination
   const itemsPerPage = 7;
   const [currentPage, setCurrentPage] = useState(0);

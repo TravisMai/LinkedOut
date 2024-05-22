@@ -27,7 +27,6 @@ const CompanyDisplay: React.FC = () => {
         },
       ),
     onSuccess: (data) => {
-      console.log(data.data);
       setCompany(data.data);
     },
   });
@@ -43,7 +42,6 @@ const CompanyDisplay: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setJobs(data.data);
     },
   });

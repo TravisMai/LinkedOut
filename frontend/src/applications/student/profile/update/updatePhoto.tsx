@@ -68,8 +68,6 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
-
       // Set student id
       setStudentId(data.data.id);
     },
@@ -97,8 +95,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
         },
       );
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -118,7 +115,6 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
   };
 

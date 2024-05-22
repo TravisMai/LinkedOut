@@ -10,7 +10,6 @@ const GoogleLoginButton = (params: { role: string }) => {
       useOneTap
       locale="en"
       onSuccess={async (credentialResponse) => {
-        console.log("Login Success", credentialResponse.credential);
         const response = await axios.post(
           "https://linkedout-hcmut.feedme.io.vn/api/v1/auth/google-login",
           {
@@ -19,7 +18,6 @@ const GoogleLoginButton = (params: { role: string }) => {
           },
         );
         const data = response.data;
-        console.log("data", data);
         document.cookie = `jwtToken=${data.token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
         navigate("/" + role);
       }}

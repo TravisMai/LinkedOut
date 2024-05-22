@@ -31,7 +31,6 @@ const JobDisplay: React.FC = () => {
   useEffect(() => {
     if (getStudentInfo.isSuccess) {
       setStudentData(getStudentInfo.data.data);
-      // console.log(getStudentInfo.data.data.id)
     }
   }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
@@ -57,7 +56,6 @@ const JobDisplay: React.FC = () => {
           },
         )
         .then((response) => {
-          console.log(response.data);
           setAppliedJobs(response.data);
         })
         .catch((error) => {

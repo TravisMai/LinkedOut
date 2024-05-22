@@ -38,7 +38,6 @@ const BrowseCompany: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllCompanies(data.data);
     },
   });

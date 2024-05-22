@@ -45,7 +45,6 @@ const RightSidebar: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       const randomJobs = data.data
         .sort(() => Math.random() - Math.random())
         .slice(0, numberOfRandom);

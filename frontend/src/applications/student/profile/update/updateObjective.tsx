@@ -116,7 +116,6 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
   };
 
@@ -127,7 +126,6 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
       ...prevData,
       [name]: value,
     }));
-    console.log("Data: ", formData);
   };
 
   return (

@@ -122,7 +122,6 @@ export default function UpdateCertificate({
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
   };
 

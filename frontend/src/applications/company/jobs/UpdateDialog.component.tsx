@@ -225,7 +225,6 @@ export default function UpdateDialog({
           }
         }
       });
-      console.log("Sendinggggggggggg", formDataToSend);
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/job/${jobId}`,
         formDataToSend,
@@ -238,8 +237,7 @@ export default function UpdateDialog({
       );
     },
 
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -254,7 +252,6 @@ export default function UpdateDialog({
       setShowError(true);
     },
     onMutate: () => {
-      console.log("Sending", formData);
       setSending(true);
       setShowError(false);
     },

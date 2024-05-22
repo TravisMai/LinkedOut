@@ -151,7 +151,6 @@ export default function UpdateSocialMedia({
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
   };
 
@@ -164,7 +163,6 @@ export default function UpdateSocialMedia({
         [name]: value,
       },
     }));
-    console.log("Data: ", formData);
   };
 
   return (

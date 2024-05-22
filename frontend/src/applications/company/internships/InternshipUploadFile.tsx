@@ -79,9 +79,6 @@ export default function UploadFile({
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
-
-      // Set student id
       // Set current resume
       setCurrentResume(data.data.resume);
     },
@@ -90,7 +87,6 @@ export default function UploadFile({
   // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAAA");
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
@@ -110,8 +106,7 @@ export default function UploadFile({
         },
       );
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -131,9 +126,7 @@ export default function UploadFile({
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     mutation.mutate(formData);
-    console.log("BBBBBBBBBBBBBBBBBBBBb");
   };
 
   // Handle file input change

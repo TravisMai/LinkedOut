@@ -36,7 +36,6 @@ const NewsFeed: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setAllJobs(data.data);
     },
   });

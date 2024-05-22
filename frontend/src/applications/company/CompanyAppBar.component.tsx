@@ -85,28 +85,15 @@ const CompanyAppBar = () => {
         },
       ),
     onSuccess: () => {
-      document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
       // Delete cookie
+      document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
 
-      console.log("Logout successfully");
-      // setSending(false);
-      // setShowError(false);
-      // setShowSuccess(true);
       setTimeout(() => {
-        // setShowSuccess(false); // Hide the success message
-        navigate("/"); // Navigate to the next screen
+        navigate("/");
       }, 1000);
     },
     onError: (error) => {
-      // setSending(false);
-      // setShowError(true);
-      console.log("Logout failed");
       console.log(error);
-    },
-    onMutate: () => {
-      console.log(token);
-      // setSending(true);
-      // setShowError(false);
     },
   });
 
@@ -128,7 +115,6 @@ const CompanyAppBar = () => {
         },
       }),
     onSuccess: (data) => {
-      console.log(data.data);
       setcompanyData(data.data);
     },
   });

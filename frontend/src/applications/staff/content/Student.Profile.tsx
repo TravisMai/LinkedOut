@@ -22,7 +22,6 @@ export default function StudentProfile({
   student: studentType;
   handleClose: () => void;
 }) {
-  console.log("ID: ", student.id);
   // Fetch for student info
   const token = getJwtToken();
 
@@ -45,12 +44,9 @@ export default function StudentProfile({
         },
       ),
     onSuccess: () => {
-      console.log("Success");
       handleClose();
     },
     onError: (error) => {
-      // setSending(false);
-      // setShowError(true);
       console.log(error);
     },
     onMutate: () => {},
@@ -75,17 +71,10 @@ export default function StudentProfile({
         },
       ),
     onSuccess: () => {
-      console.log("Success");
       handleClose();
     },
     onError: (error) => {
-      // setSending(false);
-      // setShowError(true);
       console.log(error);
-    },
-    onMutate: () => {
-      console.log("Init: ", disableData.isActive);
-      console.log("Sending: ", !disableData.isActive);
     },
   });
 
@@ -106,9 +95,7 @@ export default function StudentProfile({
       );
     },
     onSuccess: () => {
-      console.log("Deleted");
       handleClose();
-      // window.location.reload();
     },
     onError: () => {
       console.log(mutationDelete.error);

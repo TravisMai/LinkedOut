@@ -30,7 +30,6 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
       ),
     onSuccess: (data) => {
       setInternshipList(data.data);
-      console.log("AAAAAAAAAAAAAAAA");
     },
   });
 

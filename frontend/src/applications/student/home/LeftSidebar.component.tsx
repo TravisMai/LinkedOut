@@ -50,7 +50,6 @@ const LeftSidebar: React.FC = () => {
           },
         )
         .then((response) => {
-          console.log(response.data);
           setAppliedJobs(response.data);
         })
         .catch((error) => {

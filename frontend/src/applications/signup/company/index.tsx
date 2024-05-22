@@ -159,8 +159,7 @@ export default function CompanySignUp() {
         },
       );
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setSending(false);
       setShowError(false);
       setShowSuccess(true);
@@ -183,12 +182,10 @@ export default function CompanySignUp() {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // console.log(formData);
     // Add country code to phone number
     if (formData.phoneNumber.charAt(0) !== "0")
       formData.phoneNumber = "0" + formData.phoneNumber;
 
-    console.log(formData);
     mutation.mutate(formData);
   };
 
