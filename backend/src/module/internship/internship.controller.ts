@@ -205,7 +205,7 @@ export class InternshipController {
 
   // get all internship by jobId
   @Get('job/:id')
-  @AllowRoles(['staff'])
+  @AllowRoles(['staff', 'company'])
   @UseGuards(JwtGuard, RolesGuard)
   async findByJobId(
     @Res() response: Response,

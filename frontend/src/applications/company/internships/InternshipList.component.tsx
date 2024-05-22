@@ -11,31 +11,32 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
     const token = getJwtToken();
 
     // Fetch all applicants of the job
-    const [applicationList, setApplicationList] = useState<jobApplicationType[]>([]);
+    const [internshipList, setInternshipList] = useState<internshipType[]>([]);
 
     useQuery({
         queryKey: "jobApplicants",
-        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${jobId}`, {
+        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/job/${jobId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }),
         onSuccess: (data) => {
-            setApplicationList(data.data);
+            setInternshipList(data.data);
+            console.log("AAAAAAAAAAAAAAAA")
         }
     });
 
     return (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {applicationList.map((application) => (
-                <>
-                    <ListItemButton alignItems="flex-start" href={'/company/internship/' + application.id}>
+            {internshipList?.map((internship) => (
+                <div key={internship.id}>
+                    <ListItemButton alignItems="flex-start" href={'/company/internship/' + internship.id}>
                         <ListItemAvatar>
-                            <Avatar alt="Remy Sharp" src={application.student.avatar} />
+                            <Avatar alt="Remy Sharp" src={internship?.jobApplicants?.student?.avatar ?? ""} />
                         </ListItemAvatar>
                         <ListItemText
-                            primary={application.student.name}
-                            secondary={application.student.email}
+                            primary={internship?.jobApplicants?.student?.name ?? ""}
+                            secondary={internship?.jobApplicants?.student?.email ?? ""}
                         />
                         <ListItemText
                             primary={"Result"}
@@ -47,7 +48,7 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
                         />
                     </ListItemButton>
                     <Divider variant="inset" component="li" />
-                </>
+                </div>
 
             ))}
 
