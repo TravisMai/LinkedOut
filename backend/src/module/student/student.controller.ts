@@ -264,6 +264,7 @@ export class StudentController {
         student.resume = updatedResumes;
       }
       const updateStudent = await this.studentService.update(id, student);
+      await this.redisService.deleteObjectByKey(StudentListKey);
       await this.redisService.setObjectByKeyValue(
         `STUDENT:${id}`,
         updateStudent,

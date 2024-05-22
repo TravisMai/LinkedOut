@@ -77,7 +77,9 @@ export class JobController {
         return response.status(HttpStatus.OK).json(limitedData);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -101,7 +103,9 @@ export class JobController {
       // const limitedData = JobResponseDto.fromJobArray(jobs);
       return response.status(HttpStatus.OK).json(jobs);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -141,29 +145,17 @@ export class JobController {
       if (files.images && files.images.length > 0) {
         const imageUrls: string[] = [];
         for (const file of files.images) {
-          try {
-            const imageUrl = await this.azureBlobService.upload(file);
-            imageUrls.push(imageUrl);
-          } catch (error) {
-            return response
-              .status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .json({ message: error.message });
-          }
+          const imageUrl = await this.azureBlobService.upload(file);
+          imageUrls.push(imageUrl);
         }
         job.image = imageUrls;
       }
       // take the file, upload to azure then store the url in the internshipPrograme
       if (files.internshipPrograme) {
-        try {
-          const internshipProgrameUrl = await this.azureBlobService.upload(
-            files.internshipPrograme[0],
-          );
-          job.internshipPrograme = internshipProgrameUrl;
-        } catch (error) {
-          return response
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
-        }
+        const internshipProgrameUrl = await this.azureBlobService.upload(
+          files.internshipPrograme[0],
+        );
+        job.internshipPrograme = internshipProgrameUrl;
       }
       const newCreateJob = await this.jobService.create(job);
       const limitedData = JobResponseDto.fromJob(newCreateJob);
@@ -174,7 +166,9 @@ export class JobController {
       );
       return response.status(HttpStatus.CREATED).json({ job: newCreateJob });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -211,7 +205,9 @@ export class JobController {
         return response.status(HttpStatus.OK).json(job);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -250,29 +246,17 @@ export class JobController {
       if (files.images && files.images.length > 0) {
         const imageUrls: string[] = [];
         for (const file of files.images) {
-          try {
-            const imageUrl = await this.azureBlobService.upload(file);
-            imageUrls.push(imageUrl);
-          } catch (error) {
-            return response
-              .status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .json({ message: error.message });
-          }
+          const imageUrl = await this.azureBlobService.upload(file);
+          imageUrls.push(imageUrl);
         }
         job.image = imageUrls;
       }
       // take the file, upload to azure then store the url in the internshipPrograme
       if (files.internshipPrograme) {
-        try {
-          const internshipProgrameUrl = await this.azureBlobService.upload(
-            files.internshipPrograme[0],
-          );
-          job.internshipPrograme = internshipProgrameUrl;
-        } catch (error) {
-          return response
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
-        }
+        const internshipProgrameUrl = await this.azureBlobService.upload(
+          files.internshipPrograme[0],
+        );
+        job.internshipPrograme = internshipProgrameUrl;
       }
       const updateJob = await this.jobService.update(id, job);
       if (!updateJob) {
@@ -288,7 +272,9 @@ export class JobController {
       );
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -342,7 +328,9 @@ export class JobController {
       );
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }

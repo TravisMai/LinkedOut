@@ -111,7 +111,9 @@ export class StaffController {
         return response.status(HttpStatus.OK).json(limitedData);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -148,7 +150,9 @@ export class StaffController {
         return response.status(HttpStatus.OK).json(limitedData);
       }
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -160,7 +164,6 @@ export class StaffController {
     @Body() staff: Staff,
     @Res() response: Response,
   ): Promise<Response> {
-    // staff.password = await bcrypt.hash(staff.password, parseInt(process.env.BCRYPT_SALT));
     if (
       (await this.staffService.findByEmail(staff.email)) ||
       (await this.studentService.findByEmail(staff.email)) ||
@@ -186,7 +189,9 @@ export class StaffController {
         .status(HttpStatus.CREATED)
         .json({ staff: limitedData, token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -212,7 +217,6 @@ export class StaffController {
       const decodedToken = this.jwtService.decode(
         req.headers.authorization.split(' ')[1],
       ) as { id: string };
-      // if (!(await bcrypt.compare(staff.password, findStaff.password)) ||
       if (id !== decodedToken.id) {
         return response
           .status(HttpStatus.UNAUTHORIZED)
@@ -239,7 +243,9 @@ export class StaffController {
       );
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -274,7 +280,7 @@ export class StaffController {
   @Post('login')
   async login(
     @Req() req: Request,
-    @Body() loginData: { email: string; password: string },
+    @Body() loginData: { email: string },
     @Res() response: Response,
   ): Promise<Response> {
     try {
@@ -289,10 +295,7 @@ export class StaffController {
         }
       }
       const staff = await this.staffService.findByEmail(loginData.email);
-      if (
-        !staff
-        // || !(await bcrypt.compare(loginData.password, staff.password))
-      ) {
+      if (!staff) {
         return response
           .status(HttpStatus.UNAUTHORIZED)
           .json({ message: 'Invalid credentials' });
@@ -305,7 +308,9 @@ export class StaffController {
       );
       return response.status(HttpStatus.OK).json({ token });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 
@@ -329,7 +334,9 @@ export class StaffController {
         .status(HttpStatus.OK)
         .json({ message: 'Logout successfully!' });
     } catch (error) {
-      return response.status(error.status).json({ message: error.message });
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
     }
   }
 }
