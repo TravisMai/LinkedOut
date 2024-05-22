@@ -47,8 +47,7 @@ export default function UpdateResult({ onClose, internshipId }: { onClose: () =>
     // Fetch current information
     useQuery({
         queryKey: "internshipInfo",
-        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/389524f9-43cc-4284-ba28-6a1b5b61f43c`, {
-            // queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {
+        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -61,14 +60,13 @@ export default function UpdateResult({ onClose, internshipId }: { onClose: () =>
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType>({
         mutationFn: () => {
-            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/389524f9-43cc-4284-ba28-6a1b5b61f43c`, { result: result }, {
-                // return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {"result": result}, {
+            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, { "result": result }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
         },
-        onSuccess: (_data) => {
+        onSuccess: () => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);

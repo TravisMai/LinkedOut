@@ -334,7 +334,7 @@ export default function AddJob() {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {/* Display salary with 3 digits seperator, and a $ sign */}
+                                    {/* Display salary with 3 digits separator, and a $ sign */}
                                     <TextField
                                         fullWidth
                                         name="salary"

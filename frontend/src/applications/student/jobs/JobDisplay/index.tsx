@@ -48,7 +48,7 @@ const JobDisplay: React.FC = () => {
     const [appliedIntern, setAppliedIntern] = React.useState(false);
     const [showError, setShowError] = useState(false);
 
-    const [resumeId, setResumeId] = useState<String>("");
+    const [resumeId, setResumeId] = useState<string>("");
 
     function handleClickApply() {
         setLoading(true);
@@ -134,13 +134,14 @@ const JobDisplay: React.FC = () => {
         if (getStudentInfo.isSuccess) {
             setStudentData(getStudentInfo.data.data);
         }
-    }, [getStudentInfo.isSuccess]);
+    }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
     useEffect(() => {
         if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
             setStudentData(getStudentInfo.data.data);
         }
-    }, [getStudentInfo.isSuccess]);
+    }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
+
 
     const [isInternship, setIsInternship] = useState(false);
     const [isInternStudent, setIsInternStudent] = useState(false);
@@ -213,7 +214,7 @@ const JobDisplay: React.FC = () => {
             fetchAppliedJobs(studentData.id);
             fetchAppliedIntern(studentData.id);
         }
-    }, [studentData]);
+    }, [studentData, fetchAppliedIntern]);
 
 
 

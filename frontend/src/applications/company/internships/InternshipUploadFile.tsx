@@ -47,7 +47,6 @@ export default function UploadFile({ onClose, internshipId }: { onClose: () => v
     const [sending, setSending] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [studentId, setStudentId] = useState('');
     const [currentResume, setCurrentResume] = useState<resumeType[]>([]); // State to store current resume
     const [showAddNew, setShowAddNew] = useState(false); // State to show/hide add new working history button
 
@@ -72,7 +71,6 @@ export default function UploadFile({ onClose, internshipId }: { onClose: () => v
             console.log(data);
 
             // Set student id
-            setStudentId(data.data.id);
             // Set current resume
             setCurrentResume(data.data.resume);
 
@@ -91,7 +89,7 @@ export default function UploadFile({ onClose, internshipId }: { onClose: () => v
                     }
                 }
             });
-            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
+            return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Set content type for file upload
                     Authorization: `Bearer ${token}`,

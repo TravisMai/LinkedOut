@@ -180,7 +180,7 @@ export default function StaffPage() {
         };
 
         checkAuthentication();
-    }, []);
+    }, [token]);
 
     // const [openSub, setOpenSub] = React.useState(true);
 

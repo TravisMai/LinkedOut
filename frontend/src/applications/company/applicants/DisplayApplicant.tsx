@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 
 type ResponseType = {
-    data: {}
+    data: any;
 }
 
 export default function StudentProfile2() {

@@ -52,13 +52,13 @@ const LeftSidebar: React.FC = () => {
       setStudentData(getStudentInfo.data.data);
       // console.log(getStudentInfo.data.data.id)
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
   useEffect(() => {
     if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
       setStudentData(getStudentInfo.data.data);
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
 
   // Get all applied jobs

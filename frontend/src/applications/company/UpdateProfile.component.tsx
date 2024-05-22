@@ -131,7 +131,7 @@ export default function UpdateProfile() {
     };
 
     fetchData();
-  }, []);
+  });
 
   // Handle input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

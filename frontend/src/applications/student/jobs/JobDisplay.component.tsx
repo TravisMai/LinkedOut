@@ -26,13 +26,13 @@ const JobDisplay: React.FC = () => {
             setStudentData(getStudentInfo.data.data);
             // console.log(getStudentInfo.data.data.id)
         }
-    }, [getStudentInfo.isSuccess]);
+    }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
     useEffect(() => {
         if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
             setStudentData(getStudentInfo.data.data);
         }
-    }, [getStudentInfo.isSuccess]);
+    }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
 
     // Get all applied jobs
@@ -56,7 +56,7 @@ const JobDisplay: React.FC = () => {
         if (studentData && studentData.id) {
             fetchAppliedJobs(studentData.id);
         }
-    }, [studentData]);
+    }, [studentData, fetchAppliedJobs]);
 
     // Get all job with status
     const appliedList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Applied');

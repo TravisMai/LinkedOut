@@ -20,21 +20,15 @@ const LeftSidebar: React.FC = () => {
     })
   });
   useEffect(() => {
-    if (getStudentInfo.isSuccess) {
-      setStudentData(getStudentInfo.data.data);
-      // console.log(getStudentInfo.data.data.id)
-    }
-  }, [getStudentInfo.isSuccess]);
-
-  useEffect(() => {
-    if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
+    if (getStudentInfo.isSuccess && getStudentInfo.data?.data) {
       setStudentData(getStudentInfo.data.data);
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
 
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>();
+  
   const fetchAppliedJobs = (studentId: string) => {
     axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
       headers: {
@@ -54,7 +48,7 @@ const LeftSidebar: React.FC = () => {
     if (studentData && studentData.id) {
       fetchAppliedJobs(studentData.id);
     }
-  }, [studentData]);
+  }, [studentData, fetchAppliedJobs]);
 
   // Count jobs with status
   const countAppliedJobs = appliedJobs?.filter(job => job.status === "Applied").length;

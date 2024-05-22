@@ -44,8 +44,7 @@ export default function InternshipDisplay() {
 
     useQuery({
         queryKey: "internshipInfo",
-        queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/389524f9-43cc-4284-ba28-6a1b5b61f43c`, {
-            // queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {
+            queryFn: () => axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

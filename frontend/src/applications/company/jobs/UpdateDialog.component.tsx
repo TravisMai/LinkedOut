@@ -96,7 +96,7 @@ export default function UpdateDialog({ jobId, state, onExit, onClose }: { jobId:
             });
             setIsInternship(selectedJob.workType === "Internship");
         }
-    }, [companyJobs]);
+    }, [jobId, companyJobs]);
 
 
     // Get jwt token
@@ -379,7 +379,7 @@ export default function UpdateDialog({ jobId, state, onExit, onClose }: { jobId:
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        {/* Display salary with 3 digits seperator, and a $ sign */}
+                                        {/* Display salary with 3 digits separator, and a $ sign */}
                                         <TextField
                                             fullWidth
                                             name="salary"

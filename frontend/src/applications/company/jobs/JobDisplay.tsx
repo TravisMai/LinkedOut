@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import {useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CompanyAppBar from '../CompanyAppBar.component';
 import { getJwtToken } from '../../../shared/utils/authUtils';
 import UpdateDialog from './UpdateDialog.component';
@@ -41,7 +41,7 @@ const JobDisplayCompany: React.FC = () => {
         if (selectedJob) {
             setJob(selectedJob);
         }
-    }, [companyJobs]);
+    }, [companyJobs, jobId]);
 
 
     function handleOpenJob() {
@@ -86,8 +86,8 @@ const JobDisplayCompany: React.FC = () => {
                 quantity: job.quantity,
             });
             setIsActive(job.isActive);
-        };
-    }, [job]);
+        }
+    }, [jobId, job]);
 
     const mutation = useMutation<ResponseType, ErrorType, updateForm>({
         mutationFn: (formData) => {
@@ -247,7 +247,7 @@ const JobDisplayCompany: React.FC = () => {
                                 <ListItemText primary="Accepted" secondary={accepted}></ListItemText>
                             </ListItem>
                         </List>
-                        <Typography variant="h6">Responsibities</Typography>
+                        <Typography variant="h6">Responsibilities</Typography>
                         <List sx={{ mb: 2 }}>
                             {job?.descriptions?.responsibilities ? job?.descriptions?.responsibilities.map((responsibility, index) => (
                                 <ListItem key={job?.id + "responsibility" + index}>
@@ -315,7 +315,7 @@ const JobDisplayCompany: React.FC = () => {
                 </Grid>
 
                 <UpdateDialog jobId={jobId || ''} state={openDialog} onExit={handleExit} onClose={handleCloseDialog} />
-                <DeleteDialog jobId={jobId || ''} state={openDeleteDialog} onExit={handleExitDelete}/>
+                <DeleteDialog jobId={jobId || ''} state={openDeleteDialog} onExit={handleExitDelete} />
 
             </Container >
         </>

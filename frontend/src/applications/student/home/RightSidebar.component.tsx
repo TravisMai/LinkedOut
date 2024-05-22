@@ -37,7 +37,7 @@ const RightSidebar: React.FC = () => {
     }),
     onSuccess: (data) => {
       console.log(data.data);
-      // Set random 10 companies from all comapnies
+      // Set random 10 companies from all companies
       const randomCompany = data.data.sort(() => Math.random() - Math.random()).slice(0, numberOfRandom);
       setRandomCompany(randomCompany);
     
