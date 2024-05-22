@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Container, Divider, IconButton, Pagination, Stack, Typography } from '@mui/material';
@@ -37,21 +37,21 @@ const JobDisplay: React.FC = () => {
 
     // Get all applied jobs
     const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>([]);
-    const fetchAppliedJobs = (studentId: string) => {
+    const fetchAppliedJobs = useCallback((studentId: string) => {
         axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
-            .then(response => {
-                console.log(response.data);
-                setAppliedJobs(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching applied jobs:", error);
-            });
-    };
-
+        .then(response => {
+          console.log(response.data);
+          setAppliedJobs(response.data);
+        })
+        .catch(error => {
+          console.error("Error fetching applied jobs:", error);
+        });
+      }, [token, setAppliedJobs]);
+      
     useEffect(() => {
         if (studentData && studentData.id) {
             fetchAppliedJobs(studentData.id);

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Get JWT token from cookie
-export const getJwtToken = (): String | undefined => {
+export const getJwtToken = (): string | undefined => {
     const tokenString = document.cookie.split("; ").find((cookie) => cookie.startsWith("jwtToken="))?.split("=")[1];
     if (tokenString) {
         return tokenString;
@@ -10,7 +10,7 @@ export const getJwtToken = (): String | undefined => {
     }
 };
 
-export const validateJwtToken = async (token: String, role: String): Promise<boolean> => {
+export const validateJwtToken = async (token: string, role: string): Promise<boolean> => {
     try {
         await axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/${role}/me`, {
             headers: {

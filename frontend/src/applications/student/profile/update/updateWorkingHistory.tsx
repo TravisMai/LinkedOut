@@ -80,7 +80,7 @@ export default function UpdateWorkingHistory({ onClose }: { onClose: () => void 
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
@@ -91,7 +91,7 @@ export default function UpdateWorkingHistory({ onClose }: { onClose: () => void 
                 },
             });
         },
-        onSuccess: (_data) => {
+        onSuccess: () => {
             setSending(false);
             setShowError(false);
             setShowSuccess(true);
@@ -121,7 +121,7 @@ export default function UpdateWorkingHistory({ onClose }: { onClose: () => void 
         const { id, value } = event.target;
         const [index, key] = id.split('-');
         const updatedFormData = { ...formData };
-        let idx = parseInt(index)
+        const idx = parseInt(index)
         updatedFormData.workingHistory[idx][key as keyof workingHistoryType] = value;
         setFormData(updatedFormData);
     };

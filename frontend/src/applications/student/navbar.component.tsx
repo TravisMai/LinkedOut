@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
 
 
     }
-  }, [getStudentInfo.isSuccess]);
+  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data.email, getStudentInfo.data?.data.isVerify, getStudentInfo.data?.data.process, getStudentInfo.data?.data.avatar]);
 
   const location = useLocation();
   const pathName = location?.pathname.split('/')[1];

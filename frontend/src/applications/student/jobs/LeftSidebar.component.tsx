@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
 import { getJwtToken } from '../../../shared/utils/authUtils';
@@ -63,7 +63,7 @@ const LeftSidebar: React.FC = () => {
 
   // Get all applied jobs
   const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>([]);
-  const fetchAppliedJobs = (studentId: string) => {
+  const fetchAppliedJobs = useCallback((studentId: string) => {
     axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -76,13 +76,13 @@ const LeftSidebar: React.FC = () => {
       .catch(error => {
         console.error("Error fetching applied jobs:", error);
       });
-  };
+  }, [token, setAppliedJobs]);
 
   useEffect(() => {
     if (studentData && studentData.id) {
       fetchAppliedJobs(studentData.id);
     }
-  }, [studentData]);
+  }, [studentData, fetchAppliedJobs]);
 
   // Get all job with status
   const appliedList = appliedJobs.filter((job: jobApplicationType) => job.status === 'Applied');

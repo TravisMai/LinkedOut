@@ -11,7 +11,7 @@ import UpdateDialog from "./update/updateDialog.component";
 import { useNavigate } from "react-router-dom";
 
 type ResponseType = {
-    data: {}
+    data: any
 }
 
 
@@ -39,7 +39,7 @@ export default function StudentProfile() {
         if (getStudentInfo.isSuccess) {
             setStudentData(getStudentInfo.data.data);
         }
-    }, [getStudentInfo.isSuccess]);
+    }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
     const [updateField, setUpdateField] = React.useState("");
 

@@ -80,7 +80,7 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     // Mutation to send form data to server    
     const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
@@ -121,7 +121,7 @@ export default function UpdateCertificate({ onClose }: { onClose: () => void }) 
         const { id, value } = event.target;
         const [index, key] = id.split('-');
         const updatedFormData = { ...formData };
-        let idx = parseInt(index)
+        const idx = parseInt(index)
         updatedFormData.certificate[idx][key as keyof certificateType] = value;
         setFormData(updatedFormData);
     };
