@@ -58,12 +58,12 @@ type ErrorType = {
 
 interface newForm {
     name: string;
-    taxId: number | null;
-    workField: string | null;
-    address: string | null;
-    website: string | null;
-    myfile: File | null;
-    description: string | null;
+    taxId: string | '';
+    workField: string | '';
+    address: string | '';
+    website: string | '';
+    myfile: File;
+    description: string | '';
     email: string;
     phoneNumber: string;
     password: string;
@@ -100,12 +100,12 @@ export default function CompanySignUp() {
         email: '',
         phoneNumber: '',
         password: '',
-        taxId: null as number | null,
-        workField: null as string | null,
-        address: null as string | null,
-        website: null as string | null,
-        myfile: null as File | null,
-        description: null as string | null,
+        taxId: '',
+        workField: '',
+        address: '',
+        website: '',
+        myfile: new File([], ''),
+        description: '',
     });
 
     // Handle input change
@@ -137,7 +137,7 @@ export default function CompanySignUp() {
         mutationFn: (formData) => {
             const formDataToSend = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
-                if (value !== null) {
+                if (value !== null && value !== '') {
                     if (key === 'myfile') {
                         formDataToSend.append(key, value as File); // Append file to FormData
                     } else {
@@ -180,10 +180,7 @@ export default function CompanySignUp() {
         if (formData.phoneNumber.charAt(0) !== '0')
             formData.phoneNumber = '0' + formData.phoneNumber;
 
-        // Convert taxId to number
-        formData.taxId = Number(formData.taxId); //HERE
-
-
+        
         console.log(formData);
         mutation.mutate(formData);
     };
@@ -387,7 +384,7 @@ export default function CompanySignUp() {
                                         Submit
                                     </LoadingButton>
                                 </Box>
-                                {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
+                                {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response?.data?.message}</Alert>}
                                 {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Create acccount successfully! Navigating back to login page.......</Alert>}
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>

@@ -6,9 +6,9 @@ type companyType = {
     "avatar": string,
     "workField": string,
     "address": string,
-    "website": null,
+    "website": string,
     "description": string,
-    "taxId": null,
+    "taxId": string,
     "isVerify": boolean,
     "isActive": boolean
 }
