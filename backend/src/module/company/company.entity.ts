@@ -1,7 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { commonAttribute } from 'src/common/entities/commonAttribute.entity';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
 @Entity()
 export class Company extends commonAttribute {
