@@ -5,18 +5,6 @@ import { getJwtToken } from "../../../shared/utils/authUtils";
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 
-type companyType = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  avatar: string;
-  workField: string;
-  address: string;
-  website: null;
-  description: string;
-  taxId: null;
-};
 
 const LeftSidebar: React.FC = () => {
   // Get jwt token
@@ -79,19 +67,14 @@ const LeftSidebar: React.FC = () => {
     }
   }, [studentData, fetchAppliedJobs]); // Include fetchAppliedJobs
 
-  // Get all different companies (get display 1 for each) from fetech applied jobs
-  const [companies, setCompanies] = React.useState<companyType[]>([]);
-  useEffect(() => {
-    if (appliedJobs.length > 0) {
-      const companies = appliedJobs.map((job) => job.job.company);
-      const uniqueCompanies = Array.from(new Set(companies.map((a) => a.id)))
-        .map((id) => {
-          return companies.find((a) => a.id === id);
-        })
-        .filter((company) => company !== undefined) as companyType[];
-      setCompanies(uniqueCompanies);
-    }
-  }, [appliedJobs]);
+  // Get all different companies from the applied jobs
+  const companies = appliedJobs
+    .map((job) => job.job.company)
+    .filter(
+      (company, index, self) =>
+        index === self.findIndex((t) => t.id === company.id),
+    );
+
 
   return (
     <div className="w-4/5 mx-auto my-6 pb-6 h-fit flex flex-col rounded-lg border-2 items-center bg-white">
@@ -108,7 +91,7 @@ const LeftSidebar: React.FC = () => {
                 <li
                   key={idx}
                   className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
-                  // ref={`/student/companies/${row.id}`}
+                // ref={`/student/companies/${row.id}`}
                 >
                   <img
                     className="w-8 h-8 rounded-full"
