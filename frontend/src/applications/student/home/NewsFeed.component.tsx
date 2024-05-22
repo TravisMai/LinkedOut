@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import ContentCard from './ContentCard.component';
-import { useQuery } from 'react-query';
-import axios from 'axios';
-import { getJwtToken } from '../../../shared/utils/authUtils';
-import { Pagination, Stack } from '@mui/material';
+import React, { useState } from "react";
+import ContentCard from "./ContentCard.component";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { getJwtToken } from "../../../shared/utils/authUtils";
+import { Pagination, Stack } from "@mui/material";
 
 const NewsFeed: React.FC = () => {
   const [allJobs, setAllJobs] = useState<jobType[]>([]);
@@ -21,21 +21,24 @@ const NewsFeed: React.FC = () => {
   };
 
   // Limit display jobs
-  const limitedJobs = allJobs.slice(itemsPerPage * currentPage, itemsPerPage * currentPage + itemsPerPage);
-
+  const limitedJobs = allJobs.slice(
+    itemsPerPage * currentPage,
+    itemsPerPage * currentPage + itemsPerPage,
+  );
 
   // Fetch all jobs
   useQuery({
     queryKey: "allJobs",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     onSuccess: (data) => {
       console.log(data.data);
       setAllJobs(data.data);
-    }
+    },
   });
 
   return (
@@ -47,8 +50,8 @@ const NewsFeed: React.FC = () => {
       ) : (
         <p>Loading...</p>
       )}
-      <div className='w-full mt-2 flex justify-center '>
-        <Stack spacing={2} >
+      <div className="w-full mt-2 flex justify-center ">
+        <Stack spacing={2}>
           <Pagination
             count={Math.ceil(allJobs.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
@@ -56,7 +59,6 @@ const NewsFeed: React.FC = () => {
         </Stack>
       </div>
     </div>
-
   );
 };
 

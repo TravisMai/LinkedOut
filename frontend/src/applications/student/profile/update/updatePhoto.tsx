@@ -1,17 +1,17 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMutation, useQuery } from "react-query";
-import axios from 'axios';
-import Alert from '@mui/material/Alert';
-import { useState } from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { getJwtToken } from '../../../../shared/utils/authUtils';
+import axios from "axios";
+import Alert from "@mui/material/Alert";
+import { useState } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { getJwtToken } from "../../../../shared/utils/authUtils";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -25,17 +25,16 @@ type ResponseType = {
     avatar: string;
     isGoogle: boolean;
     isVerify: boolean;
-
   };
-}
+};
 
 type ErrorType = {
   response: {
     data: {
       message: string;
-    }
-  }
-}
+    };
+  };
+};
 
 interface updateForm {
   avatar: string;
@@ -49,11 +48,11 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [studentId, setStudentId] = useState('');
+  const [studentId, setStudentId] = useState("");
   const [filePreview, setFilePreview] = useState<string | null>(null); // State to store file preview URL
 
   const [formData, setFormData] = useState({
-    avatar: '',
+    avatar: "",
   });
 
   // Get jwt token
@@ -62,37 +61,41 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   // Fetch current information
   useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     onSuccess: (data) => {
       console.log(data);
 
       // Set student id
       setStudentId(data.data.id);
-
-    }
+    },
   });
 
-  // Mutation to send form data to server    
+  // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
-          if (key === 'avatar') {
+          if (key === "avatar") {
             formDataToSend.append(key, value as File); // Append file to FormData
           }
         }
       });
-      return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Set content type for file upload
-          Authorization: `Bearer ${token}`,
+      return axios.put(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set content type for file upload
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
     },
     onSuccess: (data) => {
       console.log(data);
@@ -109,9 +112,8 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
     onMutate: () => {
       setSending(true);
       setShowError(false);
-    }
-  }
-  );
+    },
+  });
 
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
@@ -134,20 +136,17 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
     }
   };
 
-
-
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-
         <Container component="main" style={{ width: "600px" }}>
           <CssBaseline />
           <Box
             sx={{
               marginTop: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Typography component="h1" variant="h5">
@@ -170,12 +169,15 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
                 </Grid>
               </Grid>
               {/* Display current photo */}
-              <img
-                src={filePreview || ''}
-                className="my-3"
-              />
+              <img src={filePreview || ""} className="my-3" />
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
                 <LoadingButton
                   loading={sending}
                   fullWidth
@@ -187,16 +189,21 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
                   Update Photo
                 </LoadingButton>
               </Box>
-              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-              <Grid container justifyContent="flex-end">
-
-              </Grid>
+              {showError && (
+                <Alert sx={{ mb: 2 }} severity="error">
+                  {mutation.error?.response.data.message}
+                </Alert>
+              )}
+              {showSuccess && (
+                <Alert sx={{ mb: 2 }} severity="success">
+                  Update successfully. Back to main page...
+                </Alert>
+              )}
+              <Grid container justifyContent="flex-end"></Grid>
             </Box>
           </Box>
         </Container>
-      </ThemeProvider >
-
+      </ThemeProvider>
     </>
   );
 }

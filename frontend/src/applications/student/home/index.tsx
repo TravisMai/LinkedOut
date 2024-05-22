@@ -1,7 +1,7 @@
-import React from 'react';
-import LeftSidebar from './LeftSidebar.component';
-import NewsFeedScreen from './NewsFeed.component';
-import RightSidebar from './RightSidebar.component';
+import React from "react";
+import LeftSidebar from "./LeftSidebar.component";
+import NewsFeedScreen from "./NewsFeed.component";
+import RightSidebar from "./RightSidebar.component";
 
 const StudentPage: React.FC = () => {
   return (

@@ -1,19 +1,19 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMutation} from "react-query";
-import axios from 'axios';
-import Alert from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useMutation } from "react-query";
+import axios from "axios";
+import Alert from "@mui/material/Alert";
+import { useEffect, useState } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+import MenuItem from "@mui/material/MenuItem";
+import InputAdornment from "@mui/material/InputAdornment";
+import { getJwtToken } from "../../shared/utils/authUtils";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -27,17 +27,16 @@ type ResponseType = {
     myfile: string;
     isGoogle: boolean;
     isVerify: boolean;
-
   };
-}
+};
 
 type ErrorType = {
   response: {
     data: {
       message: string;
-    }
-  }
-}
+    };
+  };
+};
 
 interface updateForm {
   name: string;
@@ -55,20 +54,20 @@ interface updateForm {
 
 const countryCode = [
   {
-    label: 'VNM',
-    numberPrefix: '+84',
+    label: "VNM",
+    numberPrefix: "+84",
   },
   {
-    label: 'AUS',
-    numberPrefix: '+61',
+    label: "AUS",
+    numberPrefix: "+61",
   },
   {
-    label: 'USA',
-    numberPrefix: '+1',
+    label: "USA",
+    numberPrefix: "+1",
   },
   {
-    label: 'JPN',
-    numberPrefix: '+81',
+    label: "JPN",
+    numberPrefix: "+81",
   },
 ];
 
@@ -76,14 +75,14 @@ export default function UpdateProfile() {
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [companyId, setCompanyId] = useState('');
+  const [companyId, setCompanyId] = useState("");
 
   const [country, countryChange] = useState(0);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    password: '',
+    name: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
     taxId: null as number | null,
     workField: null as string | null,
     address: null as string | null,
@@ -93,18 +92,20 @@ export default function UpdateProfile() {
     newPassword: null as string | null,
   });
 
-
   const token = getJwtToken();
 
   // Fetch current information
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await axios.get(
+          "https://linkedout-hcmut.feedme.io.vn/api/v1/company/me",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
         const data = response.data;
 
         // Set student id
@@ -113,7 +114,7 @@ export default function UpdateProfile() {
           email: data.email,
           // Cut out country code head from phone Number
           phoneNumber: data.phoneNumber.substring(3),
-          password: '',
+          password: "",
           taxId: data.taxId,
           workField: data.workField,
           address: data.address,
@@ -123,10 +124,8 @@ export default function UpdateProfile() {
           newPassword: null,
         });
         setCompanyId(data.id);
-
-        
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -154,41 +153,53 @@ export default function UpdateProfile() {
   };
 
   // Handle country selection change
-  const handleCountryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedCountryIndex = countryCode.findIndex((option) => option.label === event.target.value);
+  const handleCountryChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ) => {
+    const selectedCountryIndex = countryCode.findIndex(
+      (option) => option.label === event.target.value,
+    );
     countryChange(selectedCountryIndex);
   };
 
-  // Mutation to send form data to server    
+  // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: () => {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
-          if (key === 'myfile') {
+          if (key === "myfile") {
             formDataToSend.append(key, value as File); // Append file to FormData
-          } else if (key === 'phoneNumber') {
-            if (formData.phoneNumber.charAt(0) !== '+') {
-              if (formData.phoneNumber.length === 10 && formData.phoneNumber.charAt(0) === '0') {
+          } else if (key === "phoneNumber") {
+            if (formData.phoneNumber.charAt(0) !== "+") {
+              if (
+                formData.phoneNumber.length === 10 &&
+                formData.phoneNumber.charAt(0) === "0"
+              ) {
                 // Remove 0 and add country code
-                formData.phoneNumber = countryCode[country].numberPrefix + formData.phoneNumber.substring(1);
+                formData.phoneNumber =
+                  countryCode[country].numberPrefix +
+                  formData.phoneNumber.substring(1);
               }
-              formData.phoneNumber = countryCode[country].numberPrefix + formData.phoneNumber;
+              formData.phoneNumber =
+                countryCode[country].numberPrefix + formData.phoneNumber;
               formDataToSend.append(key, formData.phoneNumber.toString());
             }
-          }
-          else {
+          } else {
             formDataToSend.append(key, value.toString()); // Convert other fields to string
           }
-
         }
       });
-      return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/company/${companyId}`, formDataToSend, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        }
-      });
+      return axios.put(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/company/${companyId}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
     },
     onSuccess: () => {
       setSending(false);
@@ -207,9 +218,8 @@ export default function UpdateProfile() {
     onMutate: () => {
       setSending(true);
       setShowError(false);
-    }
-  }
-  );
+    },
+  });
 
   // Function to store JWT token in cookie
   // const storeJwtToken = (token: string) => {
@@ -224,22 +234,20 @@ export default function UpdateProfile() {
     mutation.mutate(formData);
   };
 
-
-
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="lg" >
+        <Container component="main" maxWidth="lg">
           <CssBaseline />
           <Box
             sx={{
               marginTop: 8,
               marginBottom: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '70%',
-              marginX: 'auto',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "70%",
+              marginX: "auto",
             }}
           >
             <Typography component="h1" variant="h5">
@@ -281,7 +289,6 @@ export default function UpdateProfile() {
                     fullWidth
                     value={countryCode[country].label} // Use the selected country from state
                     onChange={handleCountryChange} // Handle country selection change
-
                   >
                     {countryCode.map((option) => (
                       <MenuItem key={option.label} value={option.label}>
@@ -303,12 +310,13 @@ export default function UpdateProfile() {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          {countryCode[country].numberPrefix} {/* Use the selected country's number prefix */}
+                          {countryCode[country].numberPrefix}{" "}
+                          {/* Use the selected country's number prefix */}
                         </InputAdornment>
                       ),
                     }}
                     inputProps={{
-                      pattern: "^[0-9]{9,10}$" // Only allows numeric characters
+                      pattern: "^[0-9]{9,10}$", // Only allows numeric characters
                     }}
                   />
                 </Grid>
@@ -339,7 +347,7 @@ export default function UpdateProfile() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     required
                     fullWidth
                     id="address"
@@ -421,7 +429,7 @@ export default function UpdateProfile() {
                     id="myfile"
                     type="file"
                     label="Logo"
-                    name='myfile'
+                    name="myfile"
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -430,7 +438,13 @@ export default function UpdateProfile() {
                 </Grid>
               </Grid>
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
                 <LoadingButton
                   loading={sending}
                   fullWidth
@@ -442,16 +456,21 @@ export default function UpdateProfile() {
                   Update
                 </LoadingButton>
               </Box>
-              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-              <Grid container justifyContent="flex-end">
-
-              </Grid>
+              {showError && (
+                <Alert sx={{ mb: 2 }} severity="error">
+                  {mutation.error?.response.data.message}
+                </Alert>
+              )}
+              {showSuccess && (
+                <Alert sx={{ mb: 2 }} severity="success">
+                  Update successfully. Back to main page...
+                </Alert>
+              )}
+              <Grid container justifyContent="flex-end"></Grid>
             </Box>
           </Box>
         </Container>
-      </ThemeProvider >
-
+      </ThemeProvider>
     </>
   );
 }

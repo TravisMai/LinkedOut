@@ -1,26 +1,24 @@
-import axios from 'axios';
-import React, { useCallback, useEffect } from 'react';
-import { useQuery } from 'react-query';
-import { getJwtToken } from '../../../shared/utils/authUtils';
-import { Link } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import axios from "axios";
+import React, { useCallback, useEffect } from "react";
+import { useQuery } from "react-query";
+import { getJwtToken } from "../../../shared/utils/authUtils";
+import { Link } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 type companyType = {
-  "id": string,
-  "name": string,
-  "email": string,
-  "phoneNumber": string,
-  "avatar": string,
-  "workField": string,
-  "address": string,
-  "website": null,
-  "description": string,
-  "taxId": null
-}
-
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  avatar: string;
+  workField: string;
+  address: string;
+  website: null;
+  description: string;
+  taxId: null;
+};
 
 const LeftSidebar: React.FC = () => {
-
   // Get jwt token
 
   const token = getJwtToken();
@@ -29,11 +27,12 @@ const LeftSidebar: React.FC = () => {
   const [studentData, setStudentData] = React.useState<studentType>();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
   });
   useEffect(() => {
     if (getStudentInfo.isSuccess) {
@@ -48,19 +47,23 @@ const LeftSidebar: React.FC = () => {
     }
   }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
-
   // Get all applied jobs
-  const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>([]);
+  const [appliedJobs, setAppliedJobs] = React.useState<jobApplicationType[]>(
+    [],
+  );
 
   // Wrap fetchAppliedJobs in useCallback
   const fetchAppliedJobs = useCallback(
     (studentId: string) => {
       axios
-        .get(`https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        .get(
+          `https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/candidate/${studentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        })
+        )
         .then((response) => {
           setAppliedJobs(response.data);
         })
@@ -68,47 +71,45 @@ const LeftSidebar: React.FC = () => {
           console.error("Error fetching applied jobs:", error);
         });
     },
-    [token] // Make sure to add token as dependency
+    [token], // Make sure to add token as dependency
   );
 
   useEffect(() => {
     if (studentData && studentData.id) {
       fetchAppliedJobs(studentData.id);
     }
-  }, [studentData, fetchAppliedJobs]);  // Include fetchAppliedJobs  
+  }, [studentData, fetchAppliedJobs]); // Include fetchAppliedJobs
 
   // Get all different companies (get display 1 for each) from fetech applied jobs
   const [companies, setCompanies] = React.useState<companyType[]>([]);
   useEffect(() => {
     if (appliedJobs.length > 0) {
-      const companies = appliedJobs.map(job => job.job.company);
-      const uniqueCompanies = Array.from(new Set(companies.map(a => a.id)))
-        .map(id => {
-          return companies.find(a => a.id === id);
+      const companies = appliedJobs.map((job) => job.job.company);
+      const uniqueCompanies = Array.from(new Set(companies.map((a) => a.id)))
+        .map((id) => {
+          return companies.find((a) => a.id === id);
         })
-        .filter(company => company !== undefined) as companyType[];
+        .filter((company) => company !== undefined) as companyType[];
       setCompanies(uniqueCompanies);
     }
   }, [appliedJobs]);
 
-
-
   return (
     <div className="w-4/5 mx-auto my-6 pb-6 h-fit flex flex-col rounded-lg border-2 items-center bg-white">
-      <div className='w-full border-b-2 flex justify-evenly'>
+      <div className="w-full border-b-2 flex justify-evenly">
         <p className="font-semibold text-xl text-black my-4">
           Connected company
         </p>
       </div>
       <div className="w-10/12 pt-4">
         <ul className="w-full text-gray-600">
-          {companies.length > 0 ? companies
-            .map((row, idx) => (
+          {companies.length > 0 ? (
+            companies.map((row, idx) => (
               <Link to={`/student/companies/${row.id}`}>
                 <li
                   key={idx}
                   className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200"
-                // ref={`/student/companies/${row.id}`}
+                  // ref={`/student/companies/${row.id}`}
                 >
                   <img
                     className="w-8 h-8 rounded-full"
@@ -118,7 +119,12 @@ const LeftSidebar: React.FC = () => {
                   <p className="text-sm font-semibold">{row.name}</p>
                 </li>
               </Link>
-            )) : <Typography className='text-center'>No company connected</Typography>}
+            ))
+          ) : (
+            <Typography className="text-center">
+              No company connected
+            </Typography>
+          )}
         </ul>
       </div>
     </div>

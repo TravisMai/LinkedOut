@@ -1,25 +1,30 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import { Link, useNavigate } from 'react-router-dom';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
-import { ThemeProvider, createTheme } from '@mui/material';
-import { indigo, purple } from '@mui/material/colors';
-import FormDialog from './UpdateDialog.component';
-import { useMutation, useQuery } from 'react-query';
-import axios from 'axios';
-import { getJwtToken } from '../../shared/utils/authUtils';
+import { ThemeProvider, createTheme } from "@mui/material";
+import { indigo, purple } from "@mui/material/colors";
+import FormDialog from "./UpdateDialog.component";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
+import { getJwtToken } from "../../shared/utils/authUtils";
 
-const pages = [['Home', '/company'], ['Jobs', '/company/jobs'], ['Applicants', '/company/applicant'], ['Internships', '/company/internship']];
+const pages = [
+  ["Home", "/company"],
+  ["Jobs", "/company/jobs"],
+  ["Applicants", "/company/applicant"],
+  ["Internships", "/company/internship"],
+];
 // const settings = ['Settings', 'Logout'];
 
 const theme = createTheme({
@@ -29,11 +34,14 @@ const theme = createTheme({
   },
 });
 
-
 const CompanyAppBar = () => {
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
 
   // Setting dialog state
   const [open, setOpen] = React.useState(false);
@@ -56,22 +64,26 @@ const CompanyAppBar = () => {
   const handleOpenSettings = () => {
     setOpen(true);
     handleCloseUserMenu();
-  }
-
+  };
 
   const handleLogout = () => {
     handleCloseUserMenu();
     // Logout
     // Mutation to logout
     mutationLogout.mutate();
-  }
+  };
 
   const mutationLogout = useMutation<ResponseType, ErrorType>({
-    mutationFn: () => axios.post("https://linkedout-hcmut.feedme.io.vn/api/v1/company/logout", {}, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+    mutationFn: () =>
+      axios.post(
+        "https://linkedout-hcmut.feedme.io.vn/api/v1/company/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ),
     onSuccess: () => {
       document.cookie = `jwtToken=; expires=${new Date(Date.now() - 60 * 60 * 1000)}; path=/`;
       // Delete cookie
@@ -82,7 +94,7 @@ const CompanyAppBar = () => {
       // setShowSuccess(true);
       setTimeout(() => {
         // setShowSuccess(false); // Hide the success message
-        navigate('/'); // Navigate to the next screen
+        navigate("/"); // Navigate to the next screen
       }, 1000);
     },
     onError: (error) => {
@@ -95,14 +107,12 @@ const CompanyAppBar = () => {
       console.log(token);
       // setSending(true);
       // setShowError(false);
-    }
-  }
-  );
-
+    },
+  });
 
   const handleCloseSettings = () => {
     setOpen(false);
-  }
+  };
 
   // Fetch company data
   const [companyData, setcompanyData] = React.useState<companyType | null>();
@@ -111,23 +121,28 @@ const CompanyAppBar = () => {
   // Fetch company data
   useQuery({
     queryKey: "companyData",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     onSuccess: (data) => {
       console.log(data.data);
       setcompanyData(data.data);
-    }
+    },
   });
 
   return (
-    <ThemeProvider theme={theme} >
+    <ThemeProvider theme={theme}>
       <AppBar position="static" color="primary">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <img src={Logo} alt='Home Page' className='h-12 hidden md:flex  mr-3' />
+            <img
+              src={Logo}
+              alt="Home Page"
+              className="h-12 hidden md:flex  mr-3"
+            />
             <Typography
               variant="h6"
               noWrap
@@ -135,18 +150,18 @@ const CompanyAppBar = () => {
               href="/company"
               sx={{
                 mr: 2,
-                display: { xs: 'none', md: 'flex' },
+                display: { xs: "none", md: "flex" },
                 // fontFamily: 'monospace',
                 fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'primary',
-                textDecoration: 'none',
+                letterSpacing: ".3rem",
+                color: "primary",
+                textDecoration: "none",
               }}
             >
               LinkedOut
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -161,18 +176,18 @@ const CompanyAppBar = () => {
                 id="menu-appbar"
                 anchorEl={anchorElNav}
                 anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
+                  vertical: "bottom",
+                  horizontal: "left",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
+                  vertical: "top",
+                  horizontal: "left",
                 }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{
-                  display: { xs: 'block', md: 'none' },
+                  display: { xs: "block", md: "none" },
                 }}
               >
                 {pages.map((page) => (
@@ -191,49 +206,45 @@ const CompanyAppBar = () => {
               href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
-                display: { xs: 'flex', md: 'none' },
+                display: { xs: "flex", md: "none" },
                 flexGrow: 1,
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
               }}
             >
               Linked Out
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
                   key={page[0]}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  <Link to={page[1]}>
-                    {page[0]}
-                  </Link>
+                  <Link to={page[1]}>{page[0]}</Link>
                 </Button>
               ))}
             </Box>
-            <Typography sx={{ mr: 1 }}>
-              {companyData?.name ?? ''}
-            </Typography>
+            <Typography sx={{ mr: 1 }}>{companyData?.name ?? ""}</Typography>
             <Box sx={{ flexGrow: 0 }}>
-              <Button onClick={(event) => setAnchorElUser(event.currentTarget)} >
-                <Avatar alt="Remy Sharp" src={companyData?.avatar ?? ''} />
+              <Button onClick={(event) => setAnchorElUser(event.currentTarget)}>
+                <Avatar alt="Remy Sharp" src={companyData?.avatar ?? ""} />
               </Button>
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{ mt: "45px" }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
@@ -249,12 +260,11 @@ const CompanyAppBar = () => {
 
             {/* Dialog */}
             <FormDialog state={open} onClose={handleCloseSettings} />
-
           </Toolbar>
         </Container>
       </AppBar>
     </ThemeProvider>
   );
-}
+};
 
-export default CompanyAppBar
+export default CompanyAppBar;

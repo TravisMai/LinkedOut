@@ -1,37 +1,37 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMutation, useQuery } from "react-query";
-import axios from 'axios';
-import Alert from '@mui/material/Alert';
-import { useState } from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { getJwtToken } from '../../../../shared/utils/authUtils';
-import { AttachFile, Delete } from '@mui/icons-material';
+import axios from "axios";
+import Alert from "@mui/material/Alert";
+import { useState } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { getJwtToken } from "../../../../shared/utils/authUtils";
+import { AttachFile, Delete } from "@mui/icons-material";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 type ResponseType = {
   data: {
-    resume: resumeType[] | null,
-    id: string
+    resume: resumeType[] | null;
+    id: string;
   };
-}
+};
 
 type ErrorType = {
   response: {
     data: {
       message: string;
-    }
-  }
-}
+    };
+  };
+};
 
 interface updateForm {
   resume: File | null;
@@ -47,11 +47,15 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [studentId, setStudentId] = useState('');
+  const [studentId, setStudentId] = useState("");
   const [currentResume, setCurrentResume] = useState<resumeType[]>([]); // State to store current resume
   const [showAddNew, setShowAddNew] = useState(false); // State to show/hide add new working history button
 
-  const [formData, setFormData] = useState<{ resume: File | null, deleteResumeID: string[] | null, resumeObjective: string | null }>({
+  const [formData, setFormData] = useState<{
+    resume: File | null;
+    deleteResumeID: string[] | null;
+    resumeObjective: string | null;
+  }>({
     resume: null,
     deleteResumeID: null,
     resumeObjective: null,
@@ -63,11 +67,12 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
   // Fetch current information
   useQuery({
     queryKey: "studentInfo2",
-    queryFn: () => axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     onSuccess: (data) => {
       console.log(data);
 
@@ -75,28 +80,31 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
       setStudentId(data.data.id);
       // Set current resume
       setCurrentResume(data.data.resume);
-
-    }
+    },
   });
 
-  // Mutation to send form data to server    
+  // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAAA")
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAA");
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
-          if (key === 'myfile') {
+          if (key === "myfile") {
             formDataToSend.append(key, value as File); // Append file to FormData
           }
         }
       });
-      return axios.put(`https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Set content type for file upload
-          Authorization: `Bearer ${token}`,
+      return axios.put(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set content type for file upload
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
     },
     onSuccess: (data) => {
       console.log(data);
@@ -113,9 +121,8 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
     onMutate: () => {
       setSending(true);
       setShowError(false);
-    }
-  }
-  );
+    },
+  });
 
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
@@ -143,35 +150,49 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
     }));
   };
 
-
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-
         <Container component="main" style={{ width: "600px" }}>
           <CssBaseline />
           <Box
             sx={{
               marginTop: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Typography component="h1" variant="h5">
               Update Résumé
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ mx: 2, mt: 5, mb: 2 }}>
-              <Grid container spacing={2} rowSpacing={3} justifyContent="center">
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ mx: 2, mt: 5, mb: 2 }}
+            >
+              <Grid
+                container
+                spacing={2}
+                rowSpacing={3}
+                justifyContent="center"
+              >
                 {currentResume?.map((item: resumeType, index) => (
                   <>
-                    <Grid item container columnSpacing={3} alignItems={"center"} justifyContent={"between"} className='pl-5'>
+                    <Grid
+                      item
+                      container
+                      columnSpacing={3}
+                      alignItems={"center"}
+                      justifyContent={"between"}
+                      className="pl-5"
+                    >
                       <Grid item xs={1}>
                         <AttachFile />
                       </Grid>
-                      <Grid item xs={9} sx={{ minWidth: "250px" }} >
+                      <Grid item xs={9} sx={{ minWidth: "250px" }}>
                         <Link href={item.url} target="_blank" rel="noreferrer">
-                          <Typography variant='h6'>{item.title}</Typography>
+                          <Typography variant="h6">{item.title}</Typography>
                         </Link>
                       </Grid>
                       <Grid item xs={1} sx={{ justifyItems: "right" }}>
@@ -179,7 +200,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                         <LoadingButton
                           loading={sending}
                           variant="outlined"
-                          color='error'
+                          color="error"
                           onClick={() => {
                             const updatedFormData = { ...formData };
                             // Add new field to delete list
@@ -196,40 +217,37 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                           <Delete />
                         </LoadingButton>
                       </Grid>
-
                     </Grid>
                   </>
-
-                )) ?? "" }
+                )) ?? ""}
               </Grid>
               {/* Add new workingHistory */}
-              {!showAddNew &&
+              {!showAddNew && (
                 <Grid container justifyContent="center">
                   <LoadingButton
                     loading={sending}
-                    color='success'
+                    color="success"
                     variant="contained"
                     onClick={() => {
-                      setShowAddNew(true)
+                      setShowAddNew(true);
                     }}
                     sx={{ mt: 2, mb: 2 }}
                   >
                     Upload new file
                   </LoadingButton>
                 </Grid>
-              }
-              {showAddNew &&
+              )}
+              {showAddNew && (
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <Grid container spacing={2}>
-
                     <Grid item>
                       <TextField
                         fullWidth
                         id="title"
                         type="text"
                         label="Title"
-                        placeholder='Enter your resume name'
-                        variant='standard'
+                        placeholder="Enter your resume name"
+                        variant="standard"
                         // Image only
                         name="resumeObjective"
                         autoComplete="title"
@@ -238,7 +256,6 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                       />
                     </Grid>
                     <Grid item xs={12} spacing={2}>
-
                       <TextField
                         required
                         fullWidth
@@ -253,17 +270,28 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                     </Grid>
                   </Grid>
                 </Box>
-
-              }
+              )}
               {/* Display current photo */}
 
-              {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-              {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
-              <Grid container justifyContent="flex-end">
+              {showError && (
+                <Alert sx={{ mb: 2 }} severity="error">
+                  {mutation.error?.response.data.message}
+                </Alert>
+              )}
+              {showSuccess && (
+                <Alert sx={{ mb: 2 }} severity="success">
+                  Update successfully. Back to main page...
+                </Alert>
+              )}
+              <Grid container justifyContent="flex-end"></Grid>
 
-              </Grid>
-
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
                 <LoadingButton
                   loading={sending}
                   fullWidth
@@ -277,12 +305,19 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
               </Box>
             </Box>
 
-            {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-            {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>}
+            {showError && (
+              <Alert sx={{ mb: 2 }} severity="error">
+                {mutation.error?.response.data.message}
+              </Alert>
+            )}
+            {showSuccess && (
+              <Alert sx={{ mb: 2 }} severity="success">
+                Update successfully. Back to main page...
+              </Alert>
+            )}
           </Box>
         </Container>
-      </ThemeProvider >
-
+      </ThemeProvider>
     </>
   );
 }
