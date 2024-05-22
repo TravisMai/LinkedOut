@@ -29,4 +29,12 @@ export class InternshipRepository extends Repository<Internship> {
       .where('student.id = :studentId', { studentId })
       .getMany();
   }
+
+  async findByJobId(jobId: string): Promise<Internship[]> {
+    return await this.createQueryBuilder('internship')
+      .leftJoinAndSelect('internship.jobApplicants', 'jobApplicants')
+      .leftJoinAndSelect('jobApplicants.job', 'job')
+      .where('job.id = :jobId', { jobId })
+      .getMany();
+  }
 }

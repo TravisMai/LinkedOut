@@ -44,4 +44,8 @@ export class InternshipService {
   async findByCandidateId(studentId: string): Promise<Internship[]> {
     return await this.internshipRepository.findByCandidateId(studentId);
   }
+
+  async findByJobId(jobId: string): Promise<Internship[]> {
+    return await this.internshipRepository.findByJobId(jobId);
+  }
 }
