@@ -69,6 +69,7 @@ describe('InternshipController', () => {
       update: jest.fn(),
       delete: jest.fn(),
       findByCandidateId: jest.fn(),
+      findByJobId: jest.fn(),
     };
     const mockInternshipRepository: Partial<InternshipRepository> = {
       findByCandidateId: jest.fn(),
@@ -335,6 +336,59 @@ describe('InternshipController', () => {
 
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
       expect(res.json).toHaveBeenCalledWith({ message: 'Test error' });
+    });
+  });
+
+  describe('findByJobId', () => {
+    it('should return all internships by job id', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+      const internships = [new Internship()];
+
+      jest.spyOn(internshipService, 'findByJobId').mockResolvedValue(internships);
+
+      await controller.findByJobId(res as any, 'job-id');
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith(internships);
+    });
+
+    it('should return 404 if no internships found for job', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(internshipService, 'findByJobId').mockResolvedValue([]);
+
+      await controller.findByJobId(res as any, 'job-id');
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'No internships found!',
+      });
+    });
+
+    it('should handle errors', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest
+        .spyOn(internshipService, 'findByJobId')
+        .mockRejectedValue(new Error('Test error'));
+
+      await controller.findByJobId(res as any, 'job-id');
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Test error' });
+    });
+
+    it('should return 404 if no internships found', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      jest.spyOn(internshipService, 'findByJobId').mockResolvedValue([]);
+
+      await controller.findByJobId(res as any, 'job-id');
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'No internships found!',
+      });
     });
   });
 });
