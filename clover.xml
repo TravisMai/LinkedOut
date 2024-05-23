@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1716400295823" clover="3.2.0">
-  <project timestamp="1716400295824" name="All files">
-    <metrics statements="879" coveredstatements="847" conditionals="253" coveredconditionals="233" methods="130" coveredmethods="125" elements="1262" coveredelements="1205" complexity="0" loc="879" ncloc="879" packages="10" files="19" classes="19"/>
+<coverage generated="1716481558190" clover="3.2.0">
+  <project timestamp="1716481558190" name="All files">
+    <metrics statements="879" coveredstatements="853" conditionals="253" coveredconditionals="238" methods="130" coveredmethods="126" elements="1262" coveredelements="1217" complexity="0" loc="879" ncloc="879" packages="10" files="19" classes="19"/>
     <package name="app">
       <metrics statements="26" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
       <file name="app.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/app/app.controller.ts">
@@ -285,9 +285,9 @@
       </file>
     </package>
     <package name="module.internship">
-      <metrics statements="101" coveredstatements="86" conditionals="32" coveredconditionals="23" methods="18" coveredmethods="14"/>
+      <metrics statements="101" coveredstatements="92" conditionals="32" coveredconditionals="28" methods="18" coveredmethods="15"/>
       <file name="internship.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/internship/internship.controller.ts">
-        <metrics statements="87" coveredstatements="73" conditionals="32" coveredconditionals="23" methods="9" coveredmethods="6"/>
+        <metrics statements="87" coveredstatements="79" conditionals="32" coveredconditionals="28" methods="9" coveredmethods="7"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -302,13 +302,13 @@
         <line num="24" count="1" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
-        <line num="30" count="15" type="stmt"/>
-        <line num="31" count="15" type="stmt"/>
-        <line num="32" count="15" type="stmt"/>
-        <line num="33" count="15" type="stmt"/>
-        <line num="34" count="15" type="stmt"/>
-        <line num="35" count="15" type="stmt"/>
-        <line num="36" count="15" type="stmt"/>
+        <line num="30" count="19" type="stmt"/>
+        <line num="31" count="19" type="stmt"/>
+        <line num="32" count="19" type="stmt"/>
+        <line num="33" count="19" type="stmt"/>
+        <line num="34" count="19" type="stmt"/>
+        <line num="35" count="19" type="stmt"/>
+        <line num="36" count="19" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
         <line num="49" count="3" type="stmt"/>
         <line num="50" count="3" type="stmt"/>
@@ -369,12 +369,12 @@
         <line num="198" count="1" type="stmt"/>
         <line num="200" count="1" type="stmt"/>
         <line num="210" count="1" type="stmt"/>
-        <line num="214" count="0" type="stmt"/>
-        <line num="215" count="0" type="stmt"/>
-        <line num="216" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="217" count="0" type="stmt"/>
-        <line num="221" count="0" type="stmt"/>
-        <line num="223" count="0" type="stmt"/>
+        <line num="214" count="4" type="stmt"/>
+        <line num="215" count="4" type="stmt"/>
+        <line num="216" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="217" count="2" type="stmt"/>
+        <line num="221" count="1" type="stmt"/>
+        <line num="223" count="1" type="stmt"/>
       </file>
       <file name="internship.service.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/internship/internship.service.ts">
         <metrics statements="14" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="8"/>
