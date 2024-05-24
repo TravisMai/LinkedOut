@@ -29,6 +29,10 @@ export function AllInternshipJobsPage() {
   const internshipJobs = companyJobs.filter(
     (job) => job.workType === "Internship",
   );
+  // Sort descending by date
+  internshipJobs.sort((a, b) => {
+    return new Date(b.created).getTime() - new Date(a.created).getTime();
+  });
 
   return (
     <>

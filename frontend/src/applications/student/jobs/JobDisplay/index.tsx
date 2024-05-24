@@ -475,11 +475,13 @@ const JobDisplay: React.FC = () => {
           </List>
         </Grid>
         <Grid item xs={4}>
-          <img
-            src={job?.company.avatar}
-            className="w-full object-cover rounded-xl border-2 border-gray-200 mb-2"
-            alt="company avatar"
-          />
+          <Link href={"/student/companies/" + job?.company.id}>
+            <img
+              src={job?.company.avatar}
+              className="w-full object-cover rounded-xl border-2 border-gray-200 mb-2"
+              alt="company avatar"
+            />
+          </Link>
           <Typography variant="h6">{job?.company.name}</Typography>
 
           <List>
@@ -514,7 +516,7 @@ const JobDisplay: React.FC = () => {
         onExit={handleExit}
         onClose={handleCloseDialog}
       />
-    </Container>
+    </Container >
   );
 };
 
