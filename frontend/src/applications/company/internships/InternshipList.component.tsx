@@ -18,7 +18,7 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
   const [internshipList, setInternshipList] = useState<internshipType[]>([]);
 
   useQuery({
-    queryKey: "jobApplicants",
+    queryKey: "jobApplicants" + jobId,
     queryFn: () =>
       axios.get(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/internship/job/${jobId}`,
@@ -29,13 +29,15 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
         },
       ),
     onSuccess: (data) => {
+      console.log("data", data.data)
       setInternshipList(data.data);
     },
   });
 
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {internshipList?.map((internship) => (
+
+      {internshipList.length > 0 ? internshipList?.map((internship) => (
         <div key={internship.id}>
           <ListItemButton
             alignItems="flex-start"
@@ -43,7 +45,6 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
           >
             <ListItemAvatar>
               <Avatar
-                alt="Remy Sharp"
                 src={internship?.jobApplicants?.student?.avatar ?? ""}
               />
             </ListItemAvatar>
@@ -51,7 +52,7 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
               primary={internship?.jobApplicants?.student?.name ?? ""}
               secondary={internship?.jobApplicants?.student?.email ?? ""}
             />
-            <ListItemText primary={"Result"} secondary={"---"} />
+            <ListItemText primary={"Result"} secondary={internship?.result ?? "---"} />
             <ListItemText
               primary={"Uploaded files"}
               secondary={"CTTT, CV, +3"}
@@ -59,7 +60,7 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
           </ListItemButton>
           <Divider variant="inset" component="li" />
         </div>
-      ))}
+      )) : "No applicant"}
     </List>
   );
 }
