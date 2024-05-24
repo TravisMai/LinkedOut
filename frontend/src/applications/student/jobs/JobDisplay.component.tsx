@@ -64,12 +64,42 @@ const JobDisplay: React.FC = () => {
     },
     [token, setAppliedJobs],
   );
-
   useEffect(() => {
     if (studentData && studentData.id) {
       fetchAppliedJobs(studentData.id);
     }
   }, [studentData, fetchAppliedJobs]);
+
+  // Fetch applied internship
+  const [appliedInternships, setAppliedInternships] = React.useState<internshipType[]>(
+    [],
+  );
+  const fetchAppliedInternships = useCallback(
+    (studentId: string) => {
+      axios
+        .get(
+          `https://linkedout-hcmut.feedme.io.vn/api/v1/internship/candidate/${studentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+        .then((response) => {
+          setAppliedInternships(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching applied jobs:", error);
+        });
+    },
+    [token, setAppliedInternships],
+  );
+  useEffect(() => {
+    if (studentData && studentData.id) {
+      fetchAppliedInternships(studentData.id);
+    }
+  }, [studentData, fetchAppliedInternships]);
+
 
   // Get all job with status
   const appliedList = appliedJobs.filter(
@@ -89,6 +119,7 @@ const JobDisplay: React.FC = () => {
   const itemsPerPage = 2; // Number of items per page
 
   // State variables for pagination
+  const [currentPageInternship, setCurrentPageInternship] = useState(0);
   const [currentPageApplied, setCurrentPageApplied] = useState(0);
   const [currentPageApproved, setCurrentPageApproved] = useState(0);
   const [currentPagePending, setCurrentPagePending] = useState(0);
@@ -96,6 +127,7 @@ const JobDisplay: React.FC = () => {
 
   // Handle page change
   const handlePageChange = (value: number, page: string) => {
+    if (page === "internship") setCurrentPageInternship(value);
     if (page === "applied") setCurrentPageApplied(value);
     if (page === "approved") setCurrentPageApproved(value);
     if (page === "pending") setCurrentPagePending(value);
@@ -103,6 +135,10 @@ const JobDisplay: React.FC = () => {
   };
 
   // Limit display jobs
+  const limitedAppliedInternships = appliedInternships.slice(
+    itemsPerPage * currentPageInternship,
+    itemsPerPage * currentPageInternship + itemsPerPage,
+  );
   const limitedAppliedJobs = appliedList.slice(
     itemsPerPage * currentPageApplied,
     itemsPerPage * currentPageApplied + itemsPerPage,
@@ -122,6 +158,60 @@ const JobDisplay: React.FC = () => {
 
   return (
     <div className="mt-6 w-full h-fit flex flex-col space-y-6 px-5 pb-10">
+
+      {/* Applied internship job */}
+      <Container className="h-fit bg-white rounded-xl pb-2">
+        <Typography variant="h5" className="pt-4">
+          Applied internship job
+        </Typography>
+        {appliedInternships.length > 0 ? (
+          limitedAppliedInternships.map((internship: internshipType) => (
+            <>
+              <div className="flex flex-row mt-5 mb-3">
+                <div className="mr-4 basis-1/12 center">
+                  <img
+                    src={internship.jobApplicants.job.company?.avatar}
+                    className="w-full h-3/4 object-cover rounded-xl"
+                    alt="company avatar"
+                  />
+                </div>
+                <div className="basis-11/12">
+                  <Typography variant="h5">{internship.jobApplicants.job.title}{" "}({internship.jobApplicants.status})</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {internship.jobApplicants.job.company.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {internship.jobApplicants.job?.descriptions?.aboutUs ?? ""}
+                  </Typography>
+                </div>
+                <IconButton
+                  aria-label="delete"
+                  className="h-fit"
+                  href={"/student/jobs/" + internship.jobApplicants.job.id}
+                >
+                  <OpenInNew />
+                </IconButton>
+              </div>
+              <Divider />
+            </>
+          ))
+        ) : (
+          <p>No internship applied</p>
+        )}
+        {appliedInternships.length > 0 && (
+          <div className="w-full mt-2 flex justify-center ">
+            <Stack spacing={2}>
+              <Pagination
+                count={Math.ceil(appliedInternships.length / itemsPerPage)}
+                onChange={(_event, value) =>
+                  handlePageChange(value - 1, "internship")
+                }
+              />
+            </Stack>
+          </div>
+        )}
+      </Container>
+
       {/* Applied jobs */}
       <Container className="h-fit bg-white rounded-xl pb-2">
         <Typography variant="h5" className="pt-4">
