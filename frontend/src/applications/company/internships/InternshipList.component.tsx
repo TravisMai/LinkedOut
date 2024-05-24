@@ -29,8 +29,8 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
         },
       ),
     onSuccess: (data) => {
-      console.log("data", data.data)
-      setInternshipList(data.data);
+      // Filter out internships with jobApplicant status is approved
+      setInternshipList(data.data.filter((internship: internshipType) => internship.jobApplicants.status === "Approved"));
     },
   });
 
