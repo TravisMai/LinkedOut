@@ -12,6 +12,8 @@ import {
   Res,
   HttpStatus,
   Req,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { JobApplicants } from '../jobApplicants/jobApplicants.entity';
 import { StudentService } from '../student/student.service';
@@ -23,6 +25,11 @@ import { JobService } from '../job/job.service';
 import { InternshipService } from '../internship/internship.service';
 import { InternshipRepository } from '../internship/internship.repository';
 import { Internship } from './internship.entity';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { InternshipUpdateDto } from './dto/internshipUpdate.dto';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
+import { InternshipDocumentDTO } from './dto/document.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('internship')
 export class InternshipController {
@@ -34,6 +41,7 @@ export class InternshipController {
     private readonly internshipService: InternshipService,
     private readonly internshipRepository: InternshipRepository,
     private readonly staffService: StaffService,
+    private readonly azureBlobService: AzureBlobService,
   ) {}
 
   // apply for an internship, when the student applies for an internship, the student will be added to the internship and the jobApplicants table
@@ -161,17 +169,48 @@ export class InternshipController {
   // update an internship
   @Put(':id')
   @AllowRoles(['staff', 'company'])
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'document', maxCount: 1 }]))
   @UseGuards(JwtGuard, RolesGuard)
   async update(
+    @UploadedFiles()
+    files: { document?: Express.Multer.File[] },
     @Res() response: Response,
     @Param('id') id: string,
-    @Body() internship: Internship,
+    @Body() internship: InternshipUpdateDto,
   ): Promise<Response> {
     try {
-      const updatedInternship = await this.internshipService.update(
-        id,
-        internship,
-      );
+      const findInternship = await this.internshipService.findOne(id);
+      const currentDocument = findInternship.document || [];
+      if (
+        internship.deleteDocumentID &&
+        internship.deleteDocumentID.length > 0
+      ) {
+        for (let i = currentDocument.length - 1; i >= 0; i--) {
+          const document = currentDocument[i];
+          if (internship.deleteDocumentID.includes(document.id)) {
+            await this.azureBlobService.delete(document.url.split('/').pop());
+            currentDocument.splice(i, 1);
+          }
+        }
+        delete internship.deleteDocumentID;
+        internship.document = currentDocument;
+      }
+      const documentName =
+        internship.documentName || files?.document?.[0]?.originalname;
+      if (files?.document?.[0]) {
+        const documentUrl = await this.azureBlobService.upload(
+          files.document[0],
+        );
+        const newDocumentDto = new InternshipDocumentDTO();
+        newDocumentDto.id = uuidv4();
+        newDocumentDto.name = documentName;
+        newDocumentDto.url = documentUrl;
+        const updatedDocument = [...currentDocument, newDocumentDto];
+        internship.document = updatedDocument;
+      }
+      const updatedInternship = await this.internshipService.update(id, {
+        ...internship,
+      } as unknown as Internship);
       return response.status(HttpStatus.OK).json(updatedInternship);
     } catch (error) {
       return response

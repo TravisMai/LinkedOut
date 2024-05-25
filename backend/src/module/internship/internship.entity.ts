@@ -10,8 +10,9 @@ import {
 } from 'typeorm';
 import { JobApplicants } from '../jobApplicants/jobApplicants.entity';
 import { Staff } from '../staff/staff.entity';
-import { Transform } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsArray, IsOptional, ValidateNested } from 'class-validator';
+import { InternshipDocumentDTO } from './dto/document.dto';
 
 @Entity()
 export class Internship {
@@ -20,7 +21,7 @@ export class Internship {
 
   @OneToOne(() => JobApplicants, {
     eager: true,
-    onDelete: 'CASCADE', // Ensures related jobApplicants are deleted when internship is deleted
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'jobApplicantId' })
   jobApplicants: JobApplicants;
@@ -29,11 +30,12 @@ export class Internship {
   @JoinColumn({ name: 'staffId' })
   staff: Staff;
 
-  // chỉnh này qua jsonb
-  @Column('text', { array: true, nullable: true })
-  @IsString({ each: true })
+  @Column({ type: 'jsonb', nullable: true })
+  @IsArray()
   @IsOptional()
-  document: string[];
+  @ValidateNested({ each: true })
+  @Type(() => InternshipDocumentDTO)
+  document: InternshipDocumentDTO[];
 
   @Column({ nullable: true })
   @Transform(({ value }) => parseInt(value))

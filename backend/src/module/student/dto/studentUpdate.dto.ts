@@ -30,6 +30,7 @@ export class StudentUpdateDto {
 
   @IsNumber()
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   studentId: number;
 
   @IsBoolean()

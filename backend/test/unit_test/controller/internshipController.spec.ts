@@ -1,6 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
 import { InternshipController } from 'src/module/internship/internship.controller';
 import { StudentService } from 'src/module/student/student.service';
 import { HttpStatus } from '@nestjs/common';
@@ -13,6 +11,11 @@ import { JobApplicantsService } from 'src/module/jobApplicants/jobApplicants.ser
 import { StaffService } from 'src/module/staff/staff.service';
 import { ResumeDTO } from 'src/module/student/dto/resume.dto';
 import { Staff } from 'src/module/staff/staff.entity';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
+import { Readable } from 'typeorm/platform/PlatformTools';
+import { InternshipUpdateDto } from 'src/module/internship/dto/internshipUpdate.dto';
+import { CompanyResponseDto } from 'src/module/company/dto/companyResponse.dto';
+import { Faculty } from 'src/module/faculty/faculty.entity';
 
 jest.mock('@nestjs/jwt');
 jest.mock('src/module/student/student.service');
@@ -31,6 +34,97 @@ describe('InternshipController', () => {
   let jobService: JobService;
   let internshipService: InternshipService;
   let internshipRepository: InternshipRepository;
+  let azureBlobService: AzureBlobService;
+
+  const file: Express.Multer.File = {
+    fieldname: '',
+    originalname: '',
+    encoding: '',
+    mimetype: '',
+    size: 0,
+    stream: new Readable(),
+    destination: '',
+    filename: '',
+    path: '',
+    buffer: undefined,
+  };
+
+  const job_applicants = {
+    id: 'applicant-id',
+    student: {
+      faculty: new Faculty(),
+      isVerify: false,
+      studentId: 0,
+      gpa: 0,
+      year: 0,
+      major: '',
+      classCode: '',
+      resume: [],
+      isActive: false,
+      process: '',
+      socialMedia: {
+        github: '',
+        linkedin: '',
+        google: '',
+        facebook: '',
+        twitter: '',
+      },
+      objective: '',
+      education: [],
+      workingHistory: [],
+      certificate: [],
+      skill: [],
+      additionalInformation: [],
+      reference: [],
+      id: '',
+      name: '',
+      email: '',
+      phoneNumber: '',
+      avatar: '',
+      role: '',
+      created: undefined,
+      updated: undefined,
+    },
+    job: {
+      id: '1',
+      company: new CompanyResponseDto(),
+      title: '',
+      image: [],
+      salary: 0,
+      level: '',
+      internshipPrograme: '',
+      workType: '',
+      quantity: 0,
+      descriptions: undefined,
+      created: undefined,
+      updated: undefined,
+      isActive: false,
+      openDate: undefined,
+      expireDate: undefined,
+    },
+    resume: {
+      id: '',
+      title: '',
+      url: '',
+    },
+    status: '',
+    created: new Date(),
+    updated: new Date(),
+  };
+
+  const staff: Staff = {
+    id: '1',
+    name: 'John Doe',
+    email: '',
+    phoneNumber: '',
+    avatar: '',
+    role: '',
+    created: new Date(),
+    updated: new Date(),
+    faculty: new Faculty(),
+    isAdmin: false,
+    staffId: 0,
+  };
 
   beforeEach(async () => {
     const mockJwtService: Partial<JwtService> = {
@@ -74,6 +168,10 @@ describe('InternshipController', () => {
     const mockInternshipRepository: Partial<InternshipRepository> = {
       findByCandidateId: jest.fn(),
     };
+    const mockAzureBlobService: Partial<AzureBlobService> = {
+      upload: jest.fn(),
+      delete: jest.fn(),
+    };
 
     jwtService = mockJwtService as JwtService;
     staffService = mockStaffService as StaffService;
@@ -82,6 +180,7 @@ describe('InternshipController', () => {
     jobApplicantsService = mockJobApplicantsService as JobApplicantsService;
     internshipService = mockInternshipService as InternshipService;
     internshipRepository = mockInternshipRepository as InternshipRepository;
+    azureBlobService = mockAzureBlobService as AzureBlobService;
     controller = new InternshipController(
       jwtService,
       studentService,
@@ -90,6 +189,7 @@ describe('InternshipController', () => {
       internshipService,
       internshipRepository,
       staffService,
+      azureBlobService,
     );
   });
 
@@ -269,28 +369,95 @@ describe('InternshipController', () => {
   describe('update', () => {
     it('should update an internship and return updated internship', async () => {
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-      const internship = new Internship();
+      const internship = new InternshipUpdateDto();
       const updatedInternship = new Internship();
 
+      jest
+        .spyOn(internshipService, 'findOne')
+        .mockResolvedValue(updatedInternship);
+      jest.spyOn(azureBlobService, 'upload').mockResolvedValue('document-url');
       jest
         .spyOn(internshipService, 'update')
         .mockResolvedValue(updatedInternship);
 
-      await controller.update(res as any, 'internship-id', internship);
+      await controller.update(
+        { document: [file] },
+        res as any,
+        'internship-id',
+        internship,
+      );
 
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith(updatedInternship);
+    });
+
+    it('should delete specified documents and update internship', async () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+      const internship = new InternshipUpdateDto();
+      internship.deleteDocumentID = ['doc-id-1'];
+
+      const existingDocument = {
+        id: 'doc-id-1',
+        name: 'doc-1',
+        url: 'http://example.com/doc1',
+      };
+      const findInternship: Internship = {
+        id: 'internship-id',
+        jobApplicants: job_applicants,
+        staff: staff,
+        result: 10,
+        document: [existingDocument],
+        created: undefined,
+        updated: undefined,
+      };
+
+      const updatedInternship = new Internship();
+
+      jest
+        .spyOn(internshipService, 'findOne')
+        .mockResolvedValue(findInternship);
+      jest.spyOn(azureBlobService, 'delete').mockResolvedValue(undefined);
+      jest
+        .spyOn(internshipService, 'update')
+        .mockResolvedValue(updatedInternship);
+
+      await controller.update(
+        { document: [] },
+        res as any,
+        'internship-id',
+        internship,
+      );
+
+      expect(azureBlobService.delete).toHaveBeenCalledWith('doc1');
+      expect(internshipService.update).toHaveBeenCalledWith(
+        'internship-id',
+        expect.objectContaining({
+          document: [],
+        }),
+      );
       expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
       expect(res.json).toHaveBeenCalledWith(updatedInternship);
     });
 
     it('should handle errors', async () => {
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-      const internship = new Internship();
+      const internship = new InternshipUpdateDto();
+      const updatedInternship = new Internship();
 
+      jest
+        .spyOn(internshipService, 'findOne')
+        .mockResolvedValue(updatedInternship);
+      jest.spyOn(azureBlobService, 'upload').mockResolvedValue('document-url');
       jest
         .spyOn(internshipService, 'update')
         .mockRejectedValue(new Error('Test error'));
 
-      await controller.update(res as any, 'internship-id', internship);
+      await controller.update(
+        { document: [file] },
+        res as any,
+        'internship-id',
+        internship,
+      );
 
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
       expect(res.json).toHaveBeenCalledWith({ message: 'Test error' });
@@ -344,7 +511,9 @@ describe('InternshipController', () => {
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
       const internships = [new Internship()];
 
-      jest.spyOn(internshipService, 'findByJobId').mockResolvedValue(internships);
+      jest
+        .spyOn(internshipService, 'findByJobId')
+        .mockResolvedValue(internships);
 
       await controller.findByJobId(res as any, 'job-id');
 

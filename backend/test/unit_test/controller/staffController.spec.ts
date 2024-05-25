@@ -38,14 +38,6 @@ describe('StaffController', () => {
     buffer: undefined,
   };
 
-  const faculty: Faculty = {
-    id: '',
-    name: 'Engineering',
-    avatar: 'avatar',
-    created: new Date(),
-    updated: new Date(),
-  };
-
   const staff: Staff = {
     id: '1',
     name: 'John Doe',

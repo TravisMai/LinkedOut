@@ -13,6 +13,7 @@ import { InternshipController } from './internship.controller';
 import { InternshipService } from './internship.service';
 import { InternshipRepository } from './internship.repository';
 import { JobApplicantsModule } from '../jobApplicants/jobApplicants.module';
+import { AzureBlobService } from 'src/common/service/azureBlob.service';
 
 @Module({
   imports: [
@@ -29,7 +30,13 @@ import { JobApplicantsModule } from '../jobApplicants/jobApplicants.module';
     JobApplicantsModule,
   ],
   controllers: [InternshipController],
-  providers: [AuthService, Logger, InternshipService, InternshipRepository],
+  providers: [
+    AuthService,
+    Logger,
+    InternshipService,
+    InternshipRepository,
+    AzureBlobService,
+  ],
   exports: [InternshipService, InternshipRepository],
 })
 export class InternshipModule {}
