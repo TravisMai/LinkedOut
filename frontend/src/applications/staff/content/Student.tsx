@@ -104,6 +104,7 @@ export default function Student() {
               <TableCell align="left">Name</TableCell>
               <TableCell align="left">Email</TableCell>
               <TableCell align="left">Phone</TableCell>
+              <TableCell align="left">Status</TableCell>
               <TableCell align="left">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -123,6 +124,7 @@ export default function Student() {
                 </TableCell>
                 <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="left">{row.phoneNumber}</TableCell>
+                <TableCell align="left">{row.process}</TableCell>
 
                 {/* <TableCell align="center">
                                     <Link color="primary" href={row.companyLink} target="_blank" sx={{ mt: 3 }}>

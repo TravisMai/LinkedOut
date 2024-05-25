@@ -7,8 +7,8 @@ import {
   Star,
   Fingerprint,
 } from "@mui/icons-material";
-import { Chip, Container, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { Chip, Container, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useMutation } from "react-query";
@@ -49,7 +49,7 @@ export default function StudentProfile({
     onError: (error) => {
       console.log(error);
     },
-    onMutate: () => {},
+    onMutate: () => { },
   });
 
   // Handle disable
@@ -64,6 +64,29 @@ export default function StudentProfile({
       axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${student.id}`,
         { isActive: !disableData.isActive },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ),
+    onSuccess: () => {
+      handleClose();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  // Handle update
+  const handleUpdate = () => {
+    mutationUpdate.mutate();
+  };
+  const mutationUpdate = useMutation<ResponseType, ErrorType>({
+    mutationFn: () =>
+      axios.put(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${student.id}`,
+        { process: status },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,8 +123,21 @@ export default function StudentProfile({
     onError: () => {
       console.log(mutationDelete.error);
     },
-    onMutate: () => {},
+    onMutate: () => { },
   });
+
+  // Handle update form
+  const [status, setStatus] = useState('');
+
+  useEffect(() => {
+    setStatus(student.process);
+  }, [student.process]);
+
+  const handleChooseStatus = (event: SelectChangeEvent) => {
+    setStatus(event.target.value);
+  };
+
+  console.log("status", status)
 
   return (
     <Grid container direction={"column"}>
@@ -177,6 +213,30 @@ export default function StudentProfile({
             alignItems: "center",
           }}
         ></Container>
+
+        <FormControl sx={{ minWidth: 120, mx: 2 }}>
+          <InputLabel id="demo-simple-select-helper-label">Status</InputLabel>
+          <Select
+            labelId="status-select"
+            id="status-select"
+            value={status}
+            label="Status"
+            // defaultValue={"Received"}
+            onChange={handleChooseStatus}
+          >
+            <MenuItem value={"Received"}>Received</MenuItem>
+            <MenuItem value={"Registerd"}>Registerd</MenuItem>
+            <MenuItem value={"Intern"}>Intern</MenuItem>
+          </Select>
+        </FormControl>
+        <LoadingButton
+          variant="contained"
+          color="primary"
+          sx={{ width: "inherit", marginX: "auto" }}
+          onClick={handleUpdate}
+        >
+          Update
+        </LoadingButton>
         {!student.isVerify && (
           <LoadingButton
             variant="contained"
@@ -187,13 +247,6 @@ export default function StudentProfile({
             Verify
           </LoadingButton>
         )}
-        <LoadingButton
-          variant="contained"
-          color="primary"
-          sx={{ width: "inherit", marginX: "auto" }}
-        >
-          Update
-        </LoadingButton>
         {!student.isActive ? (
           <LoadingButton
             variant="contained"
