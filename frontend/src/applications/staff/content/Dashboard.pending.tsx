@@ -107,41 +107,66 @@ export default function Pending(props: any) {
   const limitedDisplay = 10;
   const displayPending = allPendingStudent.slice(0, limitedDisplay);
 
+  // Handlde verify student
+  const handleVerify = (verify: boolean, id: string, property: string) => {
+    mutationVerify.mutate({ verify, id, property });
+  };
+
   // Mutation to send form data to server
   const queryClient = useQueryClient();
-  const mutation = useMutation<
-    ResponseType,
-    ErrorType,
-    { verify: boolean; id: string; property: string }
-  >({
-    mutationFn: ({ verify, id }) =>
-      axios.put(
+  const mutationVerify = useMutation<ResponseType, ErrorType, { verify: boolean; id: string; property: string }>({
+    mutationFn: ({ verify, id, property }) => {
+      // Create an object with a dynamic property
+      const requestBody = {
+        [property]: verify
+      };
+
+      return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${id}`,
-        { property: verify },
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: () => {
+      // Invalidate and refetch 'allStudent' queries to reflect changes
+      queryClient.invalidateQueries("allStudent");
+    },
+    onError: () => {
+      // Log the error if mutation fails
+      console.error(mutationVerify.error);
+    },
+    onMutate: () => {
+      // Optional callback to perform actions just before the mutation
+    },
+  });
+
+  // Handle delte student
+  const handleDelete = (studentId: string) => {
+    mutationDelete.mutate({ studentId });
+  };
+  const mutationDelete = useMutation<ResponseType, ErrorType, { studentId: string }>({
+    mutationFn: ({ studentId }) => {
+      return axios.delete(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
-      ),
+      );
+    },
     onSuccess: () => {
       queryClient.invalidateQueries("allStudent");
     },
     onError: () => {
-      console.log(mutation.error);
-      // setSending(false);
-      // setShowError(true);
+      console.log(mutationDelete.error);
     },
-    onMutate: () => {
-      // setSending(true);
-      // setShowError(false);
-    },
+    onMutate: () => { },
   });
-
-  // Handlde verify student
-  const handleSubmit = (verify: boolean, id: string, property: string) => {
-    mutation.mutate({ verify, id, property });
-  };
 
   return (
     <React.Fragment>
@@ -174,12 +199,12 @@ export default function Pending(props: any) {
                 <TableCell align="right">
                   <Box sx={{ "& > :not(style)": { m: 0.1 } }}>
                     <IconButton
-                      onClick={() => handleSubmit(true, row.id, "isVerify")}
+                      onClick={() => handleVerify(true, row.id, "isVerify")}
                     >
                       <CheckIcon />
                     </IconButton>
                     <IconButton
-                      onClick={() => handleSubmit(false, row.id, "isActive")}
+                      onClick={() => handleDelete(row.id)}
                     >
                       <CloseIcon />
                     </IconButton>

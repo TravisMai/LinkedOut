@@ -372,7 +372,7 @@ export default function StudentSignUp() {
                       type="submit"
                       variant="contained"
                       disabled={showSuccess}
-                      sx={{ mt: 2, mb: 2 }}
+                      sx={{ mt: 2, mb: 1 }}
                     >
                       Submit
                     </LoadingButton>
@@ -395,6 +395,14 @@ export default function StudentSignUp() {
                       </Link>
                     </Grid>
                   </Grid>
+                  <Grid container justifyContent="flex-end">
+                    <Grid item>
+                      <Link href="/" variant="body2">
+                        Return to home page
+                      </Link>
+                    </Grid>
+                  </Grid>
+
                 </Box>
               </Box>
             </Container>

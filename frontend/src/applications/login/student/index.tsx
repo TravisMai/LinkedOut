@@ -55,6 +55,9 @@ export default function StudentLogin() {
             <Link href="/signup/student" variant="body2">
               Request for an account
             </Link>
+            <Link href="/" variant="body2" sx={{mt:1}}>
+              {"Return to home page"}
+            </Link>
           </Container>
         </Grid>
       </Grid>

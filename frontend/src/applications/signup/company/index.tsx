@@ -420,6 +420,13 @@ export default function CompanySignUp() {
                     </Link>
                   </Grid>
                 </Grid>
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Link href="/" variant="body2">
+                      Return to home page
+                    </Link>
+                  </Grid>
+                </Grid>
               </Box>
             </Box>
           </Grid>
