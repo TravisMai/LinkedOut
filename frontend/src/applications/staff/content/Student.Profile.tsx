@@ -225,7 +225,7 @@ export default function StudentProfile({
             onChange={handleChooseStatus}
           >
             <MenuItem value={"Received"}>Received</MenuItem>
-            <MenuItem value={"Registerd"}>Registerd</MenuItem>
+            <MenuItem value={"Registered"}>Registered</MenuItem>
             <MenuItem value={"Intern"}>Intern</MenuItem>
           </Select>
         </FormControl>
