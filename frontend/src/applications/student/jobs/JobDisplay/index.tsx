@@ -68,12 +68,14 @@ const JobDisplay: React.FC = () => {
 
   const [applyingInternship, setApplyingInternship] = useState(false);
   function handleClickApplyInternship() {
-    if (!applied)
-      handleOpenDialog();
-    else
-      mutationApplyInternship.mutate();
     setLoading(true);
     setApplyingInternship(true);
+    setTimeout(() => {
+      if (!applied)
+        handleOpenDialog();
+      else
+        mutationApplyInternship.mutate();
+    }, 1000);
   }
 
   const mutationApply = useMutation<ResponseType, ErrorType>({
@@ -96,11 +98,13 @@ const JobDisplay: React.FC = () => {
           setAppliedIntern(!appliedIntern);
         setLoading(false);
         setShowError(false);
+        setApplyingInternship(false);
         setApplied(!applied);
       }
     },
     onError: () => {
       console.log(mutationApply.error);
+      setApplyingInternship(false);
       setLoading(false);
       setShowError(true);
     },
@@ -121,13 +125,15 @@ const JobDisplay: React.FC = () => {
     onSuccess: () => {
       setLoading(false);
       setShowError(false);
-      setApplied(!applied);
+      if (!applied) setApplied(!applied);
       setAppliedIntern(!appliedIntern);
+      setApplyingInternship(false);
     },
     onError: () => {
       console.log(mutationApplyInternship.error);
       setLoading(false);
       setShowError(true);
+      setApplyingInternship(false);
     },
     onMutate: () => {
       // setLoading(true);
@@ -388,7 +394,7 @@ const JobDisplay: React.FC = () => {
                     <ListItemIcon>
                       <Search />
                     </ListItemIcon>
-                    <ListItemText primary={document}></ListItemText>
+                    <ListItemText primary={document.name}></ListItemText>
                   </ListItem>
                 )) ?? "No document uploaded"}
               </List>

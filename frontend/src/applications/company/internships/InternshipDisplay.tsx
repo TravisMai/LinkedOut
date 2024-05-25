@@ -301,7 +301,7 @@ export default function InternshipDisplay() {
                         <ListItemIcon>
                           <AttachFile />
                         </ListItemIcon>
-                        <ListItemText primary={doc} />
+                        <ListItemText primary={doc.name} />
                       </ListItem>
                     ))
                   ) : (
