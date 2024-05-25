@@ -179,7 +179,11 @@ export default function CompanyLogin() {
                 </Alert>
               )}
               <Grid container>
-                <Grid item xs></Grid>
+                <Grid item xs>
+                <Link href="/" variant="body2">
+                    {"Return to home page"}
+                  </Link>
+                </Grid>
                 <Grid item>
                   <Link href="/signup/company" variant="body2">
                     {"Don't have an account? Sign Up"}

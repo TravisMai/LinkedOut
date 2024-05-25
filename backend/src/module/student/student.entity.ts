@@ -65,7 +65,7 @@ export class Student extends commonAttribute {
   @Transform(({ value }) => value === 'true')
   isActive: boolean;
 
-  @Column({ default: 'Recieved' })
+  @Column({ default: 'Received' })
   process: string;
 
   @Column({ type: 'jsonb', nullable: true })

@@ -159,7 +159,7 @@ export default function ApplyDialog({
                     value={resumeChoice}
                     onChange={handleChange}
                   >
-                    {currentResume?.map((resume, index) => (
+                    {currentResume.length > 0 ? currentResume?.map((resume, index) => (
                       <Link href={resume.url} key={index}>
                         <FormControlLabel
                           value={resume.id}
@@ -167,30 +167,31 @@ export default function ApplyDialog({
                           label={resume.title}
                         />
                       </Link>
-                    )) ?? "You don't have any resume yet"}
+                    )) : "You must first upload a resume to apply"}
                     {/* <FormControlLabel value="female" control={<Radio />} label="Female" />
                                         <FormControlLabel value="male" control={<Radio />} label="Male" /> */}
                   </RadioGroup>
                 </FormControl>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "start",
-                  }}
-                >
-                  <LoadingButton
-                    // loading={sending}
-                    fullWidth
-                    type="submit"
-                    variant="contained"
-                    // disabled={showSuccess}
-                    sx={{ mt: 2, mb: 2 }}
+                {currentResume.length > 0 ?
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "start",
+                    }}
                   >
-                    Apply
-                  </LoadingButton>
-                </Box>
+                    <LoadingButton
+                      // loading={sending}
+                      fullWidth
+                      type="submit"
+                      variant="contained"
+                      // disabled={showSuccess}
+                      sx={{ mt: 2, mb: 2 }}
+                    >
+                      Apply
+                    </LoadingButton>
+                  </Box>
+                : <div className="mt-3"></div>}
                 {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                             {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>} */}
               </Box>

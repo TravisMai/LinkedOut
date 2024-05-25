@@ -2,6 +2,7 @@ import {
   Apartment,
   Check,
   Email,
+  FileUpload,
   PriorityHigh,
   Search,
   Work,
@@ -10,6 +11,7 @@ import { LoadingButton } from "@mui/lab";
 import {
   Container,
   Grid,
+  IconButton,
   Link,
   List,
   ListItem,
@@ -62,25 +64,16 @@ const JobDisplay: React.FC = () => {
   function handleClickApply() {
     setLoading(true);
     handleOpenDialog();
-    // event.preventDefault();
-
-    // setTimeout(() => {
-    //     mutationApply.mutate();
-    //     // setLoading(false);
-    //     // !applied ? setApplied(true) : setApplied(false);
-    // }, 1000);
   }
 
+  const [applyingInternship, setApplyingInternship] = useState(false);
   function handleClickApplyInternship() {
-    // handleOpenDialog();
-    setLoading(true);
-    // event.preventDefault();
-
-    setTimeout(() => {
+    if (!applied)
+      handleOpenDialog();
+    else
       mutationApplyInternship.mutate();
-      // setLoading(false);
-      // !applied ? setApplied(true) : setApplied(false);
-    }, 1000);
+    setLoading(true);
+    setApplyingInternship(true);
   }
 
   const mutationApply = useMutation<ResponseType, ErrorType>({
@@ -96,9 +89,15 @@ const JobDisplay: React.FC = () => {
       );
     },
     onSuccess: () => {
-      setLoading(false);
-      setShowError(false);
-      setApplied(!applied);
+      if (applyingInternship)
+        mutationApplyInternship.mutate();
+      else {
+        if (appliedIntern)
+          setAppliedIntern(!appliedIntern);
+        setLoading(false);
+        setShowError(false);
+        setApplied(!applied);
+      }
     },
     onError: () => {
       console.log(mutationApply.error);
@@ -122,7 +121,8 @@ const JobDisplay: React.FC = () => {
     onSuccess: () => {
       setLoading(false);
       setShowError(false);
-      setApplied(true);
+      setApplied(!applied);
+      setAppliedIntern(!appliedIntern);
     },
     onError: () => {
       console.log(mutationApplyInternship.error);
@@ -207,6 +207,7 @@ const JobDisplay: React.FC = () => {
     [token, jobId, setApplied, setStatus],
   );
 
+  const [thisIntern, setThisIntern] = useState<internshipType>();
   const fetchAppliedIntern = useCallback(
     (studentId: string) => {
       axios
@@ -222,6 +223,7 @@ const JobDisplay: React.FC = () => {
           if (response.data && response.data.length > 0) {
             response.data.forEach((intern: internshipType) => {
               if (intern.jobApplicants.job.id === jobId) {
+                setThisIntern(intern);
                 setAppliedIntern(true);
               }
             });
@@ -259,6 +261,7 @@ const JobDisplay: React.FC = () => {
     setOpenDialog(false);
     setTimeout(() => {
       mutationApply.mutate();
+
     }, 1000);
   };
 
@@ -266,7 +269,6 @@ const JobDisplay: React.FC = () => {
   const handleExit = () => {
     setOpenDialog(false);
     setLoading(false);
-    //     !applied ? setApplied(true) : setApplied(false);
   };
 
   return (
@@ -285,7 +287,7 @@ const JobDisplay: React.FC = () => {
                     onClick={handleClickApply}
                     loading={loading}
                     disabled={!studentData?.isVerify}
-                    type="button" // Ensure the button type is set to "button"
+                    type="button"
                   >
                     {!applied && !showError ? (
                       "Apply"
@@ -326,11 +328,10 @@ const JobDisplay: React.FC = () => {
                       )}
                     </LoadingButton>
                   )}
-                  {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
-                        {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Apply successfully</Alert>} */}
                 </>
               )}
           </Box>
+
           {status === "Rejected" ? (
             <Typography variant="h6" sx={{ marginTop: 1, color: "red" }}>
               You are not qualified for this job
@@ -349,6 +350,7 @@ const JobDisplay: React.FC = () => {
           ) : (
             <></>
           )}
+
           {isInternship && (
             <Typography
               variant="h5"
@@ -364,6 +366,37 @@ const JobDisplay: React.FC = () => {
               Job available for internship{" "}
             </Typography>
           )}
+
+          {status === "Approved" && isInternship ?
+            <>
+              {/* Bullet list of documents */}
+              <Box
+                sx={{ display: "flex", alignItems: "left" }}
+              >
+                <Typography variant="h6" sx={{ mt: 2 }}>Documents</Typography>
+                <IconButton
+                  size="small"
+                  sx={{ mt: 1, ml: 1 }}
+                // onClick={() => handleOpenDialog("resume")}
+                >
+                  <FileUpload />
+                </IconButton>
+              </Box>
+              <List sx={{ mb: 2 }}>
+                {thisIntern?.document?.map((document, index) => (
+                  <ListItem key={index}>
+                    <ListItemIcon>
+                      <Search />
+                    </ListItemIcon>
+                    <ListItemText primary={document}></ListItemText>
+                  </ListItem>
+                )) ?? "No document uploaded"}
+              </List>
+            </>
+            : ""
+          }
+
+
           <Box
             display="flex"
             width={4 / 5}
@@ -464,7 +497,6 @@ const JobDisplay: React.FC = () => {
               <ListItemText primary={job?.level}></ListItemText>
             </ListItem>
           </List>
-
           <Typography variant="h6">Salary</Typography>
           <List sx={{ mb: 2 }}>
             <ListItem>
@@ -475,11 +507,13 @@ const JobDisplay: React.FC = () => {
           </List>
         </Grid>
         <Grid item xs={4}>
-          <img
-            src={job?.company.avatar}
-            className="w-full object-cover rounded-xl border-2 border-gray-200 mb-2"
-            alt="company avatar"
-          />
+          <Link href={"/student/companies/" + job?.company.id}>
+            <img
+              src={job?.company.avatar}
+              className="w-full object-cover rounded-xl border-2 border-gray-200 mb-2"
+              alt="company avatar"
+            />
+          </Link>
           <Typography variant="h6">{job?.company.name}</Typography>
 
           <List>
@@ -514,7 +548,14 @@ const JobDisplay: React.FC = () => {
         onExit={handleExit}
         onClose={handleCloseDialog}
       />
-    </Container>
+      <ApplyDialog
+        isApplied={applied}
+        chooseResume={setResumeId}
+        state={openDialog}
+        onExit={handleExit}
+        onClose={handleCloseDialog}
+      />
+    </Container >
   );
 };
 

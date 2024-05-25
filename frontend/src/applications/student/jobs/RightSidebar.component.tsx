@@ -4,31 +4,8 @@ import { useQuery } from "react-query";
 import { Grid, List, ListItemButton, Typography } from "@mui/material";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 
-type jobType = {
-  id: string;
-  company: {
-    id: string;
-    name: string;
-    email: string;
-    avatar: string;
-    workField: string;
-    address: string;
-  };
-  title: string;
-  image: null;
-  salary: null;
-  level: string;
-  workType: string;
-  quantity: number;
-  descriptions: {
-    aboutUs: string;
-    responsibilities: [string];
-    requirements: [string];
-  };
-};
-
 const RightSidebar: React.FC = () => {
-  const numberOfRandom = 10;
+  const numberOfRandom =7;
   const [randomJobs, setRandomJobs] = useState<jobType[]>([]);
 
   // Get jwt token
