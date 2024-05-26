@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 
 export let app: INestApplication;
 
@@ -13,6 +13,7 @@ async function bootstrap() {
     credentials: true, // Allow sending cookies or HTTP authentication
   });
   app.setGlobalPrefix('/api/v1');
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const PORT = process.env.PORT || 3000;
   await app.listen(PORT, () => {
     logger.verbose(`Server is listening in PORT ${PORT}`);

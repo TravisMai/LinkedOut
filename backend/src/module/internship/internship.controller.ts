@@ -197,6 +197,7 @@ export class InternshipController {
       }
       const documentName =
         internship.documentName || files?.document?.[0]?.originalname;
+      delete internship.documentName;
       if (files?.document?.[0]) {
         const documentUrl = await this.azureBlobService.upload(
           files.document[0],

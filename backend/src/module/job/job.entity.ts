@@ -86,6 +86,7 @@ export class Job {
   @Column({ default: true })
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
   isActive: boolean;
 
   @Column({ type: 'timestamp', nullable: true })

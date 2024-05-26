@@ -11,6 +11,7 @@ export class JobResponseDto {
   level: string;
   workType: string;
   quantity: number;
+  isActive: boolean;
   expireDate: Date;
   descriptions: PostDescription;
 
@@ -24,6 +25,7 @@ export class JobResponseDto {
     dto.level = job.level;
     dto.workType = job.workType;
     dto.quantity = job.quantity;
+    dto.isActive = job.isActive;
     dto.expireDate = job.expireDate;
     dto.descriptions = job.descriptions;
     return dto;

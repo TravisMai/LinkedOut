@@ -34,6 +34,7 @@ import { JobResponseDto } from './dto/JobResponse.dto';
 import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
+import { plainToClass } from 'class-transformer';
 
 @Controller('job')
 export class JobController {
