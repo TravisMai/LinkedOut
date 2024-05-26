@@ -140,12 +140,18 @@ type ErrorType = {
 
 type internshipType = {
   id: string;
-  document: string[];
+  document: documentType[];
   result: number;
   created: Date;
   updated: Date;
   jobApplicants: jobApplicationType;
   staff: staffType;
+};
+
+type documentType = {
+  id: string;
+  name: string;
+  url: string;
 };
 
 type staffType = {

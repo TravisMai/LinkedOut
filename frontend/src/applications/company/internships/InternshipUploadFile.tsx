@@ -14,14 +14,14 @@ import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { AttachFile, Delete } from "@mui/icons-material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 type ResponseType = {
   data: {
-    resume: resumeType[] | null;
-    id: string;
+    documents: documentType[] | null;
   };
 };
 
@@ -34,9 +34,9 @@ type ErrorType = {
 };
 
 interface updateForm {
-  resume: File | null;
-  deleteResumeID: string[] | null;
-  resumeObjective: string | null;
+  document: File | null;
+  deleteDocumentID: string[];
+  documentName: string;
 }
 
 export default function UploadFile({
@@ -53,17 +53,17 @@ export default function UploadFile({
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [currentResume, setCurrentResume] = useState<resumeType[]>([]); // State to store current resume
+  const [currentDocuments, setCurrentDocuments] = useState<documentType[]>([]); // State to store current documents
   const [showAddNew, setShowAddNew] = useState(false); // State to show/hide add new working history button
 
   const [formData, setFormData] = useState<{
-    resume: File | null;
-    deleteResumeID: string[] | null;
-    resumeObjective: string | null;
+    document: File | null;
+    deleteDocumentID: string[];
+    documentName: string;
   }>({
-    resume: null,
-    deleteResumeID: null,
-    resumeObjective: null,
+    document: null,
+    deleteDocumentID: [],
+    documentName: "---",
   });
 
   // Get jwt token
@@ -71,16 +71,16 @@ export default function UploadFile({
 
   // Fetch current information
   useQuery({
-    queryKey: "studentInfo2",
+    queryKey: "internshipInfo",
     queryFn: () =>
-      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/student/me", {
+      axios.get(`https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
     onSuccess: (data) => {
-      // Set current resume
-      setCurrentResume(data.data.resume);
+      // Set current document
+      setCurrentDocuments(data.data.document);
     },
   });
 
@@ -90,14 +90,25 @@ export default function UploadFile({
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
-          if (key === "myfile") {
+          if (key === "document") {
             formDataToSend.append(key, value as File); // Append file to FormData
+          }
+          else if (key === "documentName") {
+            if (value !== "---") {
+              formDataToSend.append(key, value);
+            }
+          }
+          else if (key === "deleteDocumentID") // add deleteDocumentID array as an array
+          {
+            (value as string[]).forEach((id) => {
+              formDataToSend.append("deleteDocumentID[]", id);
+            })
           }
         }
       });
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/internship/${internshipId}`,
-        formData,
+        formDataToSend,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Set content type for file upload
@@ -134,16 +145,16 @@ export default function UploadFile({
     const file = event.target.files?.[0]; // Get the first file from the input
     setFormData((prevData: any) => ({
       ...prevData,
-      resume: file, // Update the myfile field with the selected file
+      document: file, // Update the myfile field with the selected file
     }));
   };
 
-  // Handle input change
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  // Handle document type change
+  const handleChooseDocumentName = (event: SelectChangeEvent) => {
+    const { value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      documentName: value,
     }));
   };
 
@@ -174,7 +185,7 @@ export default function UploadFile({
                 rowSpacing={3}
                 justifyContent="center"
               >
-                {currentResume?.map((item: resumeType, index) => (
+                {currentDocuments?.map((item: documentType, index) => (
                   <>
                     <Grid
                       item
@@ -189,7 +200,7 @@ export default function UploadFile({
                       </Grid>
                       <Grid item xs={9} sx={{ minWidth: "250px" }}>
                         <Link href={item.url} target="_blank" rel="noreferrer">
-                          <Typography variant="h6">{item.title}</Typography>
+                          <Typography variant="h6">{item.name}</Typography>
                         </Link>
                       </Grid>
                       <Grid item xs={1} sx={{ justifyItems: "right" }}>
@@ -201,14 +212,14 @@ export default function UploadFile({
                           onClick={() => {
                             const updatedFormData = { ...formData };
                             // Add new field to delete list
-                            if (updatedFormData?.deleteResumeID === null) {
-                              updatedFormData.deleteResumeID = [item.id];
+                            if (updatedFormData?.deleteDocumentID === null) {
+                              updatedFormData.deleteDocumentID = [item.id];
                             } else {
-                              updatedFormData.deleteResumeID.push(item.id);
+                              updatedFormData.deleteDocumentID.push(item.id);
                             }
                             setFormData(updatedFormData);
-                            // Also delete the field from current resume
-                            currentResume.splice(index, 1);
+                            // Also delete the field from current documents
+                            currentDocuments.splice(index, 1);
                           }}
                         >
                           <Delete />
@@ -218,7 +229,7 @@ export default function UploadFile({
                   </>
                 )) ?? ""}
               </Grid>
-              {/* Add new workingHistory */}
+              {/* Add new document */}
               {!showAddNew && (
                 <Grid container justifyContent="center">
                   <LoadingButton
@@ -236,52 +247,35 @@ export default function UploadFile({
               )}
               {showAddNew && (
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                  <Grid container spacing={2}>
+                  <Grid container direction={"column"} spacing={2}>
+                    <Grid item>
+                      <FormControl sx={{ minWidth: 200 }}>
+                        <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
+                        <Select
+                          labelId="documentName-select"
+                          id="documentName-select"
+                          value={formData.documentName === "---" ? "" : formData.documentName}
+                          label="Type"
+                          onChange={handleChooseDocumentName}
+                        >
+                          <MenuItem value={"Recruiting result"}>Recruiting result</MenuItem>
+                          <MenuItem value={"Internship result"}>Internship result</MenuItem>
+                          <MenuItem value={"Internship evaluation"}>Internship evaluation</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
                     <Grid item>
                       <TextField
-                        fullWidth
-                        id="title"
-                        type="text"
-                        label="Title"
-                        placeholder="Enter your resume name"
-                        variant="standard"
-                        // Image only
-                        name="resumeObjective"
-                        autoComplete="title"
-                        onChange={handleInputChange}
-                        style={{ width: "500px" }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} spacing={2}>
-                      <TextField
                         required
-                        fullWidth
-                        id="resume"
+                        id="document"
                         type="file"
-                        // Image only
-                        name="resume"
-                        autoComplete="resume"
+                        name="document"
                         onChange={handleFileChange}
-                        style={{ width: "500px" }}
                       />
                     </Grid>
                   </Grid>
                 </Box>
               )}
-              {/* Display current photo */}
-
-              {showError && (
-                <Alert sx={{ mb: 2 }} severity="error">
-                  {mutation.error?.response.data.message}
-                </Alert>
-              )}
-              {showSuccess && (
-                <Alert sx={{ mb: 2 }} severity="success">
-                  Update successfully. Back to main page...
-                </Alert>
-              )}
-              <Grid container justifyContent="flex-end"></Grid>
-
               <Box
                 sx={{
                   display: "flex",

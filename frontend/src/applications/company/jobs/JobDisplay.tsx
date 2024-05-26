@@ -72,10 +72,10 @@ const JobDisplayCompany: React.FC = () => {
 
   // Handle open/close job
   interface updateForm {
-    title: string | undefined;
-    isActive: boolean | undefined;
-    workType: string | undefined;
-    quantity: number | undefined;
+    title: string;
+    isActive: boolean;
+    workType: string;
+    quantity: number;
   }
 
   const [formData, setFormData] = useState<updateForm>({
@@ -371,33 +371,33 @@ const JobDisplayCompany: React.FC = () => {
           </Grid>
           <Grid item xs={4}>
             <Typography variant="h6">APPLIED STUDENTS</Typography>
-            {}
+            { }
             <List>
               {applicationList.length
                 ? applicationList.map((application, index) => (
-                    <CardActionArea
-                      href={`../applicant/${application.id}`}
-                      key={application.id + index}
-                    >
-                      <ListItem>
-                        <ListItemIcon>
-                          <img
-                            src={application.student.avatar}
-                            className="w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2"
-                            alt="company avatar"
-                          />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={application.student.name}
-                          secondary={
-                            application.status +
-                            " " +
-                            application.updated.toString().split("T")[0]
-                          }
-                        ></ListItemText>
-                      </ListItem>
-                    </CardActionArea>
-                  ))
+                  <CardActionArea
+                    href={`../applicant/${application.id}`}
+                    key={application.id + index}
+                  >
+                    <ListItem>
+                      <ListItemIcon>
+                        <img
+                          src={application.student.avatar}
+                          className="w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2"
+                          alt="company avatar"
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={application.student.name}
+                        secondary={
+                          application.status +
+                          " " +
+                          application.updated.toString().split("T")[0]
+                        }
+                      ></ListItemText>
+                    </ListItem>
+                  </CardActionArea>
+                ))
                 : "No application yet"}
               {/* <ListItem>
                                 <ListItemIcon><img

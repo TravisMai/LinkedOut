@@ -295,13 +295,13 @@ export default function InternshipDisplay() {
               </Box>
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
-                  {internship?.document ? (
+                  {internship?.document && internship?.document.length > 0 ? (
                     internship?.document.map((doc) => (
                       <ListItem>
                         <ListItemIcon>
                           <AttachFile />
                         </ListItemIcon>
-                        <ListItemText primary={doc} />
+                        <ListItemText primary={doc.name} />
                       </ListItem>
                     ))
                   ) : (
