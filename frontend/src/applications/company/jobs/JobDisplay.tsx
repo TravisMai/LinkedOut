@@ -105,6 +105,7 @@ const JobDisplayCompany: React.FC = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Set content type for file upload
           },
         },
       );

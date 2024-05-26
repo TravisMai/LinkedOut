@@ -193,11 +193,6 @@ export default function InternshipDisplay() {
               pb: 3,
             }}
           >
-            {/* <Box display={'flex'} flexDirection={'row'} gap={2}>
-                            <LoadingButton variant="contained" color='success' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Approved")} disabled={"Approved" === status}>Approve</LoadingButton>
-                            <LoadingButton variant="contained" color='primary' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Processing")} disabled={"Processing" === status}>Process</LoadingButton>
-                            <LoadingButton variant="contained" color='error' sx={{ mt: 1, width: 1 / 6 }} size="small" loading={loading} onClick={() => handleUpdate("Rejected")} disabled={"Rejected" === status}>Reject</LoadingButton>
-                        </Box> */}
             <Paper>
               <Box
                 sx={{
@@ -297,6 +292,7 @@ export default function InternshipDisplay() {
                 <List>
                   {internship?.document && internship?.document.length > 0 ? (
                     internship?.document.map((doc) => (
+                      doc.name!=="Internship report" &&
                       <ListItem>
                         <ListItemIcon>
                           <AttachFile />

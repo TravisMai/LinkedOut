@@ -1,4 +1,4 @@
-import { Container, Grid, List, Typography } from "@mui/material";
+import { Container, Grid, List, Pagination, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useState } from "react";
@@ -47,6 +47,23 @@ const CompanyDisplay: React.FC = () => {
   });
   // Extract job of current company
   const companyJobs = jobs.filter((job) => job.company.id === companyId);
+
+  // Handle pagination
+  const itemsPerPage = 5; // Number of items per page
+
+  // State variables for pagination
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Handle page change
+  const handlePageChange = (value: number) => {
+    setCurrentPage(value);
+  };
+
+  // Limit display jobs
+  const limitedJobs = companyJobs.slice(
+    itemsPerPage * currentPage,
+    itemsPerPage * currentPage + itemsPerPage,
+  );
 
   return (
     <Container>
@@ -102,11 +119,22 @@ const CompanyDisplay: React.FC = () => {
           <Typography variant="h5">Posted jobs</Typography>
           {/* Display if companyJobs.length >0, else display text "No posted job" */}
           {companyJobs.length > 0 ? (
-            <List>
-              {companyJobs.map((job) => (
-                <ContentCard key={job.id} job={job} />
-              ))}
-            </List>
+            <>
+              <div className="w-full mt-2 flex justify-center ">
+                <Stack spacing={2}>
+                  <Pagination
+                    count={Math.ceil(companyJobs.length / itemsPerPage)}
+                    onChange={(_event, value) => handlePageChange(value - 1)}
+                  />
+                </Stack>
+              </div>
+              <List>
+                {limitedJobs.map((job) => (
+                  <ContentCard key={job.id} job={job} />
+                ))}
+              </List>
+
+            </>
           ) : (
             <Typography>No posted job</Typography>
           )}

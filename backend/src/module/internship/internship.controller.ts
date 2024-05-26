@@ -168,7 +168,7 @@ export class InternshipController {
 
   // update an internship
   @Put(':id')
-  @AllowRoles(['staff', 'company'])
+  @AllowRoles(['staff', 'company', 'student'])
   @UseInterceptors(FileFieldsInterceptor([{ name: 'document', maxCount: 1 }]))
   @UseGuards(JwtGuard, RolesGuard)
   async update(

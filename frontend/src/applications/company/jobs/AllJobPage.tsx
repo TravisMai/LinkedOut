@@ -118,12 +118,6 @@ export function AllJobPage() {
                     <TableCell align="center">
                       {itemsPerPage * currentPage + ++index}
                     </TableCell>
-                    {/* <TableCell align="center">
-                                    <img
-                                        src={row.avatar}
-                                        className='h-10 mx-auto'
-                                    />
-                                </TableCell> */}
                     <TableCell align="center">{row.title}</TableCell>
                     <TableCell align="center">{row.level}</TableCell>
                     <TableCell align="center">{row.workType}</TableCell>

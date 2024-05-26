@@ -36,7 +36,6 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
 
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-
       {internshipList.length > 0 ? internshipList?.map((internship) => (
         <div key={internship.id}>
           <ListItemButton
@@ -55,7 +54,11 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
             <ListItemText primary={"Result"} secondary={internship?.result ?? "---"} />
             <ListItemText
               primary={"Uploaded files"}
-              secondary={"CTTT, CV, +3"}
+              secondary={
+                internship?.document
+                  ?.map((doc) => doc.name)
+                  .join(", ") ?? "---"
+              }
             />
           </ListItemButton>
           <Divider variant="inset" component="li" />
