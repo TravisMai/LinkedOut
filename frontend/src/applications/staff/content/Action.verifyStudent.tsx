@@ -2,8 +2,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -37,7 +36,6 @@ type ResponseType = {
 };
 
 export default function Verify() {
-  const [searchTerm, setSearchTerm] = React.useState("");
 
   const [allPendingStudent, setAllPendingStudent] = useState<studentType[]>([]);
 
@@ -121,6 +119,15 @@ export default function Verify() {
     mutationVerifyStudent.mutate({ verify, id, property });
   };
 
+  // Filter verify that have email match partially or all of the searchTerm
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filteredVerify, setFilteredVerify] = React.useState<studentType[]>([]);
+  useEffect(() => {
+    setFilteredVerify(allPendingStudent.filter((verify) =>
+      verify.email.toLowerCase().includes(searchTerm.toLowerCase()),
+    ));
+  }, [searchTerm, allPendingStudent]);
+
   // Handle pagination
   const itemsPerPage = 10; // Number of items per page
 
@@ -133,7 +140,7 @@ export default function Verify() {
   };
 
   // Limit display
-  const limitedDisplay = allPendingStudent.slice(
+  const limitedDisplay = filteredVerify.slice(
     itemsPerPage * currentPage,
     itemsPerPage * currentPage + itemsPerPage,
   );
@@ -144,7 +151,7 @@ export default function Verify() {
         <TextField
           id="search"
           type="search"
-          label="Search"
+          label="Search by email"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ width: 500 }}
@@ -156,7 +163,6 @@ export default function Verify() {
             ),
           }}
         />
-        <Button variant="contained">Search</Button>
       </div>
       <TableContainer component={Paper} className="mt-5">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -205,7 +211,7 @@ export default function Verify() {
       <div className="w-full mt-2 mb-6 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(allPendingStudent.length / itemsPerPage)}
+            count={Math.ceil(filteredVerify.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

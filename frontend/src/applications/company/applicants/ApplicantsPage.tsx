@@ -20,18 +20,6 @@ import CompanyAppBar from "../CompanyAppBar.component";
 import { Pagination, Stack, Typography } from "@mui/material";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 
-// function createData(
-//     companyId: number,
-//     logoLink: string,
-//     name: string,
-//     representative: string,
-//     phone: number,
-//     email: string,
-//     companyLink: string,
-// ) {
-//     return { companyId, logoLink, name, representative, phone, email, companyLink };
-// }
-
 export function ApplicantsPage() {
   const token = getJwtToken();
 
@@ -85,6 +73,15 @@ export function ApplicantsPage() {
     fetchApplications();
   }, [companyJobs, token]);
 
+  // Filter students that have name match partially or all of the searchTerm
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filteredStudent, setFilteredStudent] = React.useState<jobApplicationType[]>([]);
+  useEffect(() => {
+    setFilteredStudent(allApplications.filter((applicant) =>
+      applicant.student.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    ));
+  }, [searchTerm, allApplications]);
+
   // Handle pagination
   const itemsPerPage = 7;
   const [currentPage, setCurrentPage] = useState(0);
@@ -94,12 +91,11 @@ export function ApplicantsPage() {
     setCurrentPage(value);
   };
 
-  const limitedApplications = allApplications.slice(
+  const limitedApplications = filteredStudent.slice(
     itemsPerPage * currentPage,
     itemsPerPage * currentPage + itemsPerPage,
   );
 
-  const [searchTerm, setSearchTerm] = React.useState("");
   return (
     <>
       <CompanyAppBar />
@@ -118,8 +114,8 @@ export function ApplicantsPage() {
           <TextField
             id="search"
             type="search"
-            label="Search"
-            value={searchTerm ? searchTerm : "Azure Cloud Intern"}
+            label="Search by student name"
+            value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 500 }}
             InputProps={{
@@ -156,12 +152,6 @@ export function ApplicantsPage() {
                     <TableCell align="center">
                       {++index + itemsPerPage * currentPage}
                     </TableCell>
-                    {/* <TableCell align="center">
-                                    <img
-                                        src={row.avatar}
-                                        className='h-10 mx-auto'
-                                    />
-                                </TableCell> */}
                     <TableCell align="center">{row.student.name}</TableCell>
                     <TableCell align="center">{row.student.email}</TableCell>
                     <TableCell align="center">
@@ -190,7 +180,7 @@ export function ApplicantsPage() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(allApplications.length / itemsPerPage)}
+              count={Math.ceil(filteredStudent.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>

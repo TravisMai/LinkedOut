@@ -9,10 +9,9 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { getJwtToken } from "../../../shared/utils/authUtils";
@@ -39,6 +38,15 @@ export default function Company() {
     },
   });
 
+  // Filter companies that have name match partially or all of the searchTerm
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filteredCompany, setFilteredCompany] = React.useState<companyType[]>([]);
+  useEffect(() => {
+    setFilteredCompany(allCompany.filter((company) =>
+      company.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    ));
+  }, [searchTerm, allCompany]);
+
   // Handle pagination
   const itemsPerPage = 10; // Number of items per page
 
@@ -51,7 +59,7 @@ export default function Company() {
   };
 
   // Limit display
-  const limitedDisplay = allCompany.slice(
+  const limitedDisplay = filteredCompany.slice(
     itemsPerPage * currentPage,
     itemsPerPage * currentPage + itemsPerPage,
   );
@@ -72,14 +80,13 @@ export default function Company() {
     setOpenDialog(true);
   };
 
-  const [searchTerm, setSearchTerm] = React.useState("");
   return (
     <div className="mt-10">
       <div className="flex flex-row space-x-2">
         <TextField
           id="search"
           type="search"
-          label="Search"
+          label="Search by company name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ width: 500 }}
@@ -91,7 +98,6 @@ export default function Company() {
             ),
           }}
         />
-        <Button variant="contained">Search</Button>
       </div>
       <TableContainer component={Paper} className="mt-5 px-5">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -141,7 +147,7 @@ export default function Company() {
       <div className="w-full mt-2 mb-6 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(allCompany.length / itemsPerPage)}
+            count={Math.ceil(filteredCompany.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

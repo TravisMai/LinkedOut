@@ -21,10 +21,7 @@ export default function InternshipJobCard({ job }: { job: jobType }) {
           sx={{ backgroundColor: "#f3f2f0" }}
         >
           <Typography variant="h5" component="div">
-            {job.title}{" "}
-            {job?.expireDate
-              ? `(${job.expireDate.toString().split("T")[0]})`
-              : ""}
+            {job.title}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

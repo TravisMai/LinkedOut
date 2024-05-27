@@ -9,10 +9,9 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { getJwtToken } from "../../../shared/utils/authUtils";
@@ -57,6 +56,15 @@ export default function Student() {
     },
   });
 
+  // Filter students that have name match partially or all of the searchTerm
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filteredStudent, setFilteredStudent] = React.useState<studentType[]>([]);
+  useEffect(() => {
+    setFilteredStudent(allStudent.filter((student) =>
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    ));
+  }, [searchTerm, allStudent]);
+
   // Handle pagination
   const itemsPerPage = 10; // Number of items per page
 
@@ -69,19 +77,20 @@ export default function Student() {
   };
 
   // Limit display
-  const limitedDisplay = allStudent.slice(
+  const limitedDisplay = filteredStudent.slice(
     itemsPerPage * currentPage,
     itemsPerPage * currentPage + itemsPerPage,
   );
 
-  const [searchTerm, setSearchTerm] = React.useState("");
+
+
   return (
     <div className="mt-10">
       <div className="flex flex-row space-x-2">
         <TextField
           id="search"
           type="search"
-          label="Search"
+          label="Search by student name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ width: 500 }}
@@ -93,7 +102,6 @@ export default function Student() {
             ),
           }}
         />
-        <Button variant="contained">Search</Button>
       </div>
       <TableContainer component={Paper} className="mt-5 px-5">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -125,12 +133,6 @@ export default function Student() {
                 <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="left">{row.phoneNumber}</TableCell>
                 <TableCell align="left">{row.process}</TableCell>
-
-                {/* <TableCell align="center">
-                                    <Link color="primary" href={row.companyLink} target="_blank" sx={{ mt: 3 }}>
-                                        {row.company}
-                                    </Link>
-                                </TableCell> */}
                 <TableCell align="left">
                   <Box sx={{ "& > :not(style)": { m: 0.1 } }}>
                     <Tooltip title="Student Info">
@@ -152,7 +154,7 @@ export default function Student() {
       <div className="w-full mt-2 mb-6 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(allStudent.length / itemsPerPage)}
+            count={Math.ceil(filteredStudent.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

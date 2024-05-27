@@ -9,11 +9,10 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { getJwtToken } from "../../../shared/utils/authUtils";
@@ -41,6 +40,15 @@ export default function AllJob() {
     },
   });
 
+  // Filter jobs that have name match partially or all of the searchTerm
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filteredJob, setFilteredJob] = React.useState<jobType[]>([]);
+  useEffect(() => {
+    setFilteredJob(allJob.filter((job) =>
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    ));
+  }, [searchTerm, allJob]);
+
   // Handle pagination
   const itemsPerPage = 7;
   const [currentPage, setCurrentPage] = useState(0);
@@ -50,7 +58,7 @@ export default function AllJob() {
     setCurrentPage(value);
   };
 
-  const limitedJobs = allJob.slice(
+  const limitedJobs = filteredJob.slice(
     itemsPerPage * currentPage,
     itemsPerPage * currentPage + itemsPerPage,
   );
@@ -71,7 +79,6 @@ export default function AllJob() {
     setOpenDialog(true);
   };
 
-  const [searchTerm, setSearchTerm] = React.useState("");
   return (
     <>
       <div className="mt-8 w-full mx-auto">
@@ -79,7 +86,7 @@ export default function AllJob() {
           <TextField
             id="search"
             type="search"
-            label="Search"
+            label="Search by job title"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 500 }}
@@ -91,7 +98,6 @@ export default function AllJob() {
               ),
             }}
           />
-          <Button variant="contained">Search</Button>
         </div>
         <TableContainer component={Paper} className="mt-5">
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -135,7 +141,7 @@ export default function AllJob() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(allJob.length / itemsPerPage)}
+              count={Math.ceil(filteredJob.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>
