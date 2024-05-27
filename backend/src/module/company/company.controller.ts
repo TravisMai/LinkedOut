@@ -292,6 +292,7 @@ export class CompanyController {
     }
     await this.companyService.delete(id);
     await this.redisService.deleteObjectByKey(`COMPANY:${id}`);
+    await this.redisService.deleteObjectByKey(CompanyListKey);
     await this.azureBlobService.delete(company.avatar.split('/').pop());
     return response
       .status(HttpStatus.OK)
