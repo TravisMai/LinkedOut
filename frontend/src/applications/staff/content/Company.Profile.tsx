@@ -1,9 +1,7 @@
-import { Check } from "@mui/icons-material";
-import { Chip, Container, Grid, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, Container, Grid, List, Pagination, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { getJwtToken } from "../../../shared/utils/authUtils";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 
@@ -17,60 +15,40 @@ export default function CompanyProfile({
   // Fetch for company info
   const token = getJwtToken();
 
-  // Handle verify
-  const [verifyData] = useState({
-    isVerify: company.isVerify,
-  });
-  const handleVerify = () => {
-    mutationVerify.mutate();
-  };
-  const mutationVerify = useMutation<ResponseType, ErrorType>({
-    mutationFn: () =>
-      axios.put(
-        `https://linkedout-hcmut.feedme.io.vn/api/v1/company/${company.id}`,
-        { isVerify: !verifyData.isVerify },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+  // Fetch all jobs
+  const [jobs, setJobs] = useState<jobType[]>([]);
+  useQuery({
+    queryKey: "allJobs",
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/job", {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      ),
-    onSuccess: () => {
-      handleClose();
+      }),
+    onSuccess: (data) => {
+      setJobs(data.data);
     },
-    onError: (error) => {
-      // setSending(false);
-      // setShowError(true);
-      console.log(error);
-    },
-    onMutate: () => {},
   });
+  // Extract job of current company
+  const companyJobs = jobs.filter((job) => job.company.id === company.id);
 
-  // Handle disable
-  const [disableData] = useState({
-    isActive: company.isActive,
-  });
-  const handleDisable = () => {
-    mutationDisable.mutate();
+  // Handle pagination
+  const itemsPerPage = 3; // Number of items per page
+
+  // State variables for pagination
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Handle page change
+  const handlePageChange = (value: number) => {
+    setCurrentPage(value);
   };
-  const mutationDisable = useMutation<ResponseType, ErrorType>({
-    mutationFn: () =>
-      axios.put(
-        `https://linkedout-hcmut.feedme.io.vn/api/v1/company/${company.id}`,
-        { isActive: !disableData.isActive },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      ),
-    onSuccess: () => {
-      handleClose();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+
+  // Limit display jobs
+  const limitedJobs = companyJobs.slice(
+    itemsPerPage * currentPage,
+    itemsPerPage * currentPage + itemsPerPage,
+  );
+
 
   // Handle delete
 
@@ -90,11 +68,12 @@ export default function CompanyProfile({
     },
     onSuccess: () => {
       handleClose();
+
     },
     onError: () => {
       console.log(mutationDelete.error);
     },
-    onMutate: () => {},
+    onMutate: () => { },
   });
 
   return (
@@ -128,32 +107,18 @@ export default function CompanyProfile({
               src={`${company?.avatar}`} // Append a unique query parameter to bypass browser caching
               className=" w-full rounded-xl mx-auto  border-2 border-blue-300"
             />
-            {company?.isVerify ? (
-              <Chip color="success" icon={<Check />} label="Verified" />
-            ) : (
-              <Chip
-                color="warning"
-                icon={<ExclamationCircleOutlined />}
-                label="Not Verified"
-              />
-            )}
-            {/* <Chip color="success" icon={<Check />} label="Verified" /> */}
           </Container>
 
           <Typography variant="body1" className="pl-5">
-            {" "}
             Name: <span className="font-bold">{company?.name} </span>{" "}
           </Typography>
           <Typography variant="body1" className="pl-5">
-            {" "}
             Email: <span className="font-bold">{company?.email} </span>
           </Typography>
           <Typography variant="body1" className="pl-5">
-            {" "}
             Phone: <span className="font-bold">{company?.phoneNumber} </span>
           </Typography>
           <Typography variant="body1" className="pl-5">
-            {" "}
             Address: <span className="font-bold">{company?.address} </span>
           </Typography>
           <Typography variant="body1" className="pl-5">
@@ -179,46 +144,6 @@ export default function CompanyProfile({
               alignItems: "center",
             }}
           ></Container>
-          {!company.isVerify && (
-            <LoadingButton
-              variant="contained"
-              color="success"
-              sx={{ width: "inherit", marginX: "auto" }}
-              onClick={handleVerify}
-            >
-              Verify
-            </LoadingButton>
-          )}
-          <LoadingButton
-            variant="contained"
-            color="primary"
-            sx={{ width: "inherit", marginX: "auto" }}
-          >
-            Update
-          </LoadingButton>
-          {!company.isActive ? (
-            <LoadingButton
-              variant="contained"
-              color="primary"
-              sx={{ width: "inherit", marginX: "auto" }}
-              onClick={() => {
-                handleDisable();
-              }}
-            >
-              Re-enable account
-            </LoadingButton>
-          ) : (
-            <LoadingButton
-              variant="contained"
-              color="secondary"
-              sx={{ width: "inherit", marginX: "auto" }}
-              onClick={() => {
-                handleDisable();
-              }}
-            >
-              Disable
-            </LoadingButton>
-          )}
           <LoadingButton
             variant="contained"
             color="error"
@@ -248,6 +173,41 @@ export default function CompanyProfile({
             {" "}
             Posted Jobs
           </Typography>
+          {companyJobs.length > 0 ? (
+            <>
+              <div className="w-full mt-2 flex justify-center ">
+                <Stack spacing={2}>
+                  <Pagination
+                    count={Math.ceil(companyJobs.length / itemsPerPage)}
+                    onChange={(_event, value) => handlePageChange(value - 1)}
+                    boundaryCount={0}
+                    siblingCount={0}
+                  />
+                </Stack>
+              </div>
+              <List>
+                {limitedJobs.map((job) => (
+                  <Card sx={{ width:170, mt: 2 }}>
+                    <CardActionArea href={"/student/jobs/" + job.id}>
+                      <CardContent>
+                        <div className="flex flex-row">
+                          <div className="basis-5/6">
+                            <Typography variant="h5" component="div">
+                              {job.title}
+                            </Typography>
+                            
+                          </div>
+                        </div>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                ))}
+              </List>
+
+            </>
+          ) : (
+            <Typography>No posted job</Typography>
+          )}
         </Container>
       </Grid>
     </Grid>
