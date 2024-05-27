@@ -13,11 +13,12 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { getJwtToken } from "../../../shared/utils/authUtils";
+import { Pagination, Stack, Tooltip } from "@mui/material";
+import JobDialog from "./Job.Dialog";
 
 export default function AllJob() {
   const [allJob, setAllJob] = useState<jobType[]>([]);
@@ -39,6 +40,36 @@ export default function AllJob() {
       setAllJob(data.data);
     },
   });
+
+  // Handle pagination
+  const itemsPerPage = 7;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Handle page change
+  const handlePageChange = (value: number) => {
+    setCurrentPage(value);
+  };
+
+  const limitedJobs = allJob.slice(
+    itemsPerPage * currentPage,
+    itemsPerPage * currentPage + itemsPerPage,
+  );
+
+  // Job Dialog
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const queryClient = useQueryClient();
+  const handleCloseDialog = () => {
+    queryClient.invalidateQueries("allJobs");
+    setOpenDialog(false);
+  };
+
+  const [selectedJob, setSelectedJob] = useState<jobType>();
+  const handleOpenJob = (jobId: string) => {
+    // Get the company from allcompanys that match
+    const company = allJob.find((job) => job.id === jobId);
+    setSelectedJob(company);
+    setOpenDialog(true);
+  };
 
   const [searchTerm, setSearchTerm] = React.useState("");
   return (
@@ -68,41 +99,32 @@ export default function AllJob() {
               <TableRow>
                 <TableCell align="center">No.</TableCell>
                 <TableCell align="center">Title</TableCell>
-                <TableCell align="center">Description</TableCell>
                 <TableCell align="center">Company</TableCell>
-                <TableCell align="center">Close day</TableCell>
-                <TableCell align="center">Applied</TableCell>
+                <TableCell align="center">Work Type</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {allJob.map((row, index) => (
+              {limitedJobs.map((row, index) => (
                 <TableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell align="center">{++index}</TableCell>
-                  {/* <TableCell align="center">
-                                    <img
-                                        src={row.avatar}
-                                        className='h-10 mx-auto'
-                                    />
-                                </TableCell> */}
+                  <TableCell align="center">{++index + itemsPerPage * currentPage}</TableCell>
                   <TableCell align="center">{row.title}</TableCell>
-                  <TableCell align="center">
-                    {row?.descriptions?.responsibilities ?? ""}
-                  </TableCell>
                   <TableCell align="center">{row.company.name}</TableCell>
-                  <TableCell align="center">21/12/2023</TableCell>
-                  <TableCell align="center">9</TableCell>
+                  <TableCell align="center">{row?.id}</TableCell>
                   <TableCell align="center">
                     <Box sx={{ "& > :not(style)": { m: 0.1 } }}>
-                      <IconButton>
-                        <ContactEmergencyIcon />
-                      </IconButton>
-                      <IconButton>
-                        <MoreHorizIcon />
-                      </IconButton>
+                      <Tooltip title="company Info">
+                        <IconButton
+                          onClick={() => {
+                            handleOpenJob(row.id);
+                          }}
+                        >
+                          <ContactEmergencyIcon />
+                        </IconButton>
+                      </Tooltip>
                     </Box>
                   </TableCell>
                 </TableRow>
@@ -110,6 +132,21 @@ export default function AllJob() {
             </TableBody>
           </Table>
         </TableContainer>
+        <div className="w-full mt-2 flex justify-center ">
+          <Stack spacing={2}>
+            <Pagination
+              count={Math.ceil(allJob.length / itemsPerPage)}
+              onChange={(_event, value) => handlePageChange(value - 1)}
+            />
+          </Stack>
+        </div>
+        {selectedJob && (
+          <JobDialog
+            job={selectedJob}
+            state={openDialog}
+            onClose={handleCloseDialog}
+          />
+        )}
       </div>
     </>
   );

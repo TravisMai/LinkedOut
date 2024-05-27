@@ -109,13 +109,13 @@ export default function UpdateDialog({
         quantity: selectedJob.quantity,
         descriptions: {
           aboutUs: selectedJob?.descriptions?.aboutUs
-            ? selectedJob.descriptions.aboutUs
+            ? selectedJob?.descriptions?.aboutUs
             : "",
-          responsibilities: selectedJob.descriptions.responsibilities,
-          requirements: selectedJob.descriptions.requirements,
+          responsibilities: selectedJob?.descriptions?.responsibilities,
+          requirements: selectedJob?.descriptions?.requirements,
           preferredQualifications:
-            selectedJob.descriptions.preferredQualifications,
-          benefits: selectedJob.descriptions.benefits,
+            selectedJob?.descriptions?.preferredQualifications,
+          benefits: selectedJob?.descriptions?.benefits,
         },
         openDate: new Date(selectedJob.openDate),
         expireDate: new Date(selectedJob.expireDate),
