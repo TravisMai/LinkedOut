@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1716733695618" clover="3.2.0">
-  <project timestamp="1716733695618" name="All files">
-    <metrics statements="905" coveredstatements="879" conditionals="262" coveredconditionals="247" methods="130" coveredmethods="126" elements="1297" coveredelements="1252" complexity="0" loc="905" ncloc="905" packages="10" files="19" classes="19"/>
+<coverage generated="1716820998785" clover="3.2.0">
+  <project timestamp="1716820998785" name="All files">
+    <metrics statements="907" coveredstatements="881" conditionals="262" coveredconditionals="247" methods="130" coveredmethods="126" elements="1299" coveredelements="1254" complexity="0" loc="907" ncloc="907" packages="10" files="19" classes="19"/>
     <package name="app">
       <metrics statements="26" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
       <file name="app.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/app/app.controller.ts">
@@ -130,9 +130,9 @@
       </file>
     </package>
     <package name="module.company">
-      <metrics statements="146" coveredstatements="145" conditionals="47" coveredconditionals="46" methods="17" coveredmethods="17"/>
+      <metrics statements="147" coveredstatements="146" conditionals="47" coveredconditionals="46" methods="17" coveredmethods="17"/>
       <file name="company.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/company/company.controller.ts">
-        <metrics statements="133" coveredstatements="132" conditionals="47" coveredconditionals="46" methods="9" coveredmethods="9"/>
+        <metrics statements="134" coveredstatements="133" conditionals="47" coveredconditionals="46" methods="9" coveredmethods="9"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -244,28 +244,29 @@
         <line num="294" count="1" type="stmt"/>
         <line num="295" count="1" type="stmt"/>
         <line num="296" count="1" type="stmt"/>
-        <line num="303" count="1" type="stmt"/>
-        <line num="308" count="4" type="stmt"/>
+        <line num="297" count="1" type="stmt"/>
+        <line num="304" count="1" type="stmt"/>
         <line num="309" count="4" type="stmt"/>
-        <line num="310" count="4" type="cond" truecount="1" falsecount="0"/>
-        <line num="311" count="4" type="stmt"/>
+        <line num="310" count="4" type="stmt"/>
+        <line num="311" count="4" type="cond" truecount="1" falsecount="0"/>
         <line num="312" count="4" type="stmt"/>
-        <line num="315" count="3" type="cond" truecount="1" falsecount="0"/>
-        <line num="316" count="1" type="stmt"/>
-        <line num="319" count="2" type="stmt"/>
-        <line num="320" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="324" count="1" type="stmt"/>
-        <line num="328" count="1" type="stmt"/>
+        <line num="313" count="4" type="stmt"/>
+        <line num="316" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="317" count="1" type="stmt"/>
+        <line num="320" count="2" type="stmt"/>
+        <line num="321" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="325" count="1" type="stmt"/>
         <line num="329" count="1" type="stmt"/>
-        <line num="334" count="1" type="stmt"/>
-        <line num="336" count="1" type="stmt"/>
-        <line num="346" count="1" type="stmt"/>
-        <line num="350" count="2" type="stmt"/>
+        <line num="330" count="1" type="stmt"/>
+        <line num="335" count="1" type="stmt"/>
+        <line num="337" count="1" type="stmt"/>
+        <line num="347" count="1" type="stmt"/>
         <line num="351" count="2" type="stmt"/>
         <line num="352" count="2" type="stmt"/>
-        <line num="353" count="1" type="stmt"/>
-        <line num="358" count="1" type="stmt"/>
-        <line num="362" count="1" type="stmt"/>
+        <line num="353" count="2" type="stmt"/>
+        <line num="354" count="1" type="stmt"/>
+        <line num="359" count="1" type="stmt"/>
+        <line num="363" count="1" type="stmt"/>
       </file>
       <file name="company.service.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/company/company.service.ts">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
@@ -421,9 +422,9 @@
       </file>
     </package>
     <package name="module.job">
-      <metrics statements="141" coveredstatements="135" conditionals="45" coveredconditionals="41" methods="17" coveredmethods="17"/>
+      <metrics statements="142" coveredstatements="136" conditionals="45" coveredconditionals="41" methods="17" coveredmethods="17"/>
       <file name="job.controller.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/job/job.controller.ts">
-        <metrics statements="125" coveredstatements="119" conditionals="45" coveredconditionals="41" methods="8" coveredmethods="8"/>
+        <metrics statements="126" coveredstatements="120" conditionals="45" coveredconditionals="41" methods="8" coveredmethods="8"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -541,14 +542,15 @@
         <line num="301" count="1" type="stmt"/>
         <line num="302" count="1" type="stmt"/>
         <line num="303" count="1" type="stmt"/>
-        <line num="312" count="1" type="stmt"/>
-        <line num="316" count="3" type="stmt"/>
-        <line num="318" count="3" type="stmt"/>
-        <line num="319" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="323" count="1" type="stmt"/>
-        <line num="327" count="1" type="stmt"/>
-        <line num="330" count="1" type="stmt"/>
-        <line num="332" count="1" type="stmt"/>
+        <line num="304" count="1" type="stmt"/>
+        <line num="313" count="1" type="stmt"/>
+        <line num="317" count="3" type="stmt"/>
+        <line num="319" count="3" type="stmt"/>
+        <line num="320" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="324" count="1" type="stmt"/>
+        <line num="328" count="1" type="stmt"/>
+        <line num="331" count="1" type="stmt"/>
+        <line num="333" count="1" type="stmt"/>
       </file>
       <file name="job.service.ts" path="/home/runner/work/LinkedOut/LinkedOut/backend/src/module/job/job.service.ts">
         <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="9"/>
