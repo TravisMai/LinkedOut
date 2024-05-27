@@ -113,7 +113,7 @@ export default function AllJob() {
                   <TableCell align="center">{++index + itemsPerPage * currentPage}</TableCell>
                   <TableCell align="center">{row.title}</TableCell>
                   <TableCell align="center">{row.company.name}</TableCell>
-                  <TableCell align="center">{row?.id}</TableCell>
+                  <TableCell align="center">{row?.workType}</TableCell>
                   <TableCell align="center">
                     <Box sx={{ "& > :not(style)": { m: 0.1 } }}>
                       <Tooltip title="company Info">

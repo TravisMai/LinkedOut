@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, Container, Grid, List, Pagination, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Container, Grid, List, Pagination, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useMutation, useQuery } from "react-query";
@@ -187,19 +187,16 @@ export default function CompanyProfile({
               </div>
               <List>
                 {limitedJobs.map((job) => (
-                  <Card sx={{ width:170, mt: 2 }}>
-                    <CardActionArea href={"/student/jobs/" + job.id}>
-                      <CardContent>
-                        <div className="flex flex-row">
-                          <div className="basis-5/6">
-                            <Typography variant="h5" component="div">
-                              {job.title}
-                            </Typography>
-                            
-                          </div>
+                  <Card sx={{ width: 170, mt: 2 }}>
+                    <CardContent>
+                      <div className="flex flex-row">
+                        <div className="basis-5/6">
+                          <Typography variant="h5" component="div">
+                            {job.title}
+                          </Typography>
                         </div>
-                      </CardContent>
-                    </CardActionArea>
+                      </div>
+                    </CardContent>
                   </Card>
                 ))}
               </List>

@@ -1,3 +1,104 @@
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { getJwtToken } from "../../../shared/utils/authUtils";
+import {  Link, Pagination, Stack,Typography } from "@mui/material";
+
 export default function AllDocument() {
-  return <div className="mt-20">AllDocument</div>;
+  const [allInternship, setAllInternship] = useState<internshipType[]>([]);
+
+  // Get jwt token
+
+  const token = getJwtToken();
+
+  // Fetch all internships
+  useQuery({
+    queryKey: "allInternship",
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/internship", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    onSuccess: (data) => {
+      // Filter only internships that have jobApplicants with status "Approved"
+      setAllInternship(data.data.filter((internship: internshipType) => internship.jobApplicants.status === "Approved"));
+    },
+  });
+
+
+  // Handle pagination
+  const itemsPerPage = 7;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Handle page change
+  const handlePageChange = (value: number) => {
+    setCurrentPage(value);
+  };
+
+  const limitedJobs = allInternship.slice(
+    itemsPerPage * currentPage,
+    itemsPerPage * currentPage + itemsPerPage,
+  );
+
+
+  return (
+    <>
+      <div className="mt-8 w-full mx-auto">
+        <Typography variant="h5" className="text-center">All Internship Documents</Typography>
+        <TableContainer component={Paper} className="mt-5">
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">No.</TableCell>
+                <TableCell align="center">Company</TableCell>
+                <TableCell align="center">Job</TableCell>
+                <TableCell align="center">Student</TableCell>
+                <TableCell align="center">Documents</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {limitedJobs.map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell align="center">{++index + itemsPerPage * currentPage}</TableCell>
+                  <TableCell align="center">{row.jobApplicants.job.company.name}</TableCell>
+                  <TableCell align="center">{row.jobApplicants.job.title}</TableCell>
+                  <TableCell align="center">{row.jobApplicants.student.name}</TableCell>
+                  <TableCell align="center">
+                    <Stack>
+                      {/* List all documents name */}
+                      {row?.document?.map((document) => (
+                        <Link href={document.url} target="_blank">
+                          {document.name}
+                        </Link>
+                      ))}
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div className="w-full mt-2 flex justify-center ">
+          <Stack spacing={2}>
+            <Pagination
+              count={Math.ceil(allInternship.length / itemsPerPage)}
+              onChange={(_event, value) => handlePageChange(value - 1)}
+            />
+          </Stack>
+        </div>
+
+      </div>
+    </>
+  );
 }
