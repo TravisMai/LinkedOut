@@ -22,7 +22,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import Dashboard from "./content/Dashboard";
 import Student from "./content/Student";
 import Company from "./content/Company";
-import Verify from "./content/Action.verify";
+import VerifyStudent from "./content/Action.verifyStudent";
 import Update from "./content/Action.update";
 import AllJob from "./content/Job.all";
 import ManageJob from "./content/Job.manage";
@@ -380,7 +380,7 @@ export default function StaffPage() {
                 <Company />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={"Action / Verify"}>
-                <Verify />
+                <VerifyStudent />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={"Action / Update"}>
                 <Update />
