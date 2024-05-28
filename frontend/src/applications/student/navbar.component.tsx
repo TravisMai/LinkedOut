@@ -8,14 +8,21 @@ import {
 } from "@ant-design/icons";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
-import { IconButton, InputBase, Paper, Menu, MenuItem } from "@mui/material";
+import { IconButton, InputBase, Paper, Menu, MenuItem, CardActionArea } from "@mui/material";
 import { getJwtToken } from "../../shared/utils/authUtils";
 import {
+  ApartmentOutlined,
   BusinessOutlined,
   HomeOutlined,
   Search,
   WorkOutline,
 } from "@mui/icons-material";
+
+type SearchResultsType = {
+  entity: string;
+  id: string;
+  original_search_field: string;
+};
 
 type ResponseType = {
   data: any;
@@ -58,7 +65,7 @@ const Navbar: React.FC = () => {
   const pathName = location?.pathname.split("/")[1];
 
   const [searchString, setSearchString] = useState("");
-  const [searchResults, setSearchResults] = useState([] as any);
+  const [searchResults, setSearchResults] = useState<SearchResultsType[]>([]);
   // Handle searchString change
   const handleSearchStringChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -69,8 +76,9 @@ const Navbar: React.FC = () => {
   // Mutation to get search results
   const mutation = useMutation<ResponseType, ErrorType, string | null>({
     mutationFn: (searchString) => {
-      return axios.get(
-        `https://linkedout-hcmut.feedme.io.vn/api/v1/app?search=${searchString}`,
+      return axios.post(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/app/`,
+        { search: searchString },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -79,7 +87,7 @@ const Navbar: React.FC = () => {
       );
     },
     onSuccess: (data) => {
-      setSearchResults(data.data);
+      setSearchResults(data.data.filter((result: SearchResultsType) => result.entity !== "student"));
     },
     onError: () => {
       console.log(mutation.error);
@@ -136,11 +144,25 @@ const Navbar: React.FC = () => {
               open={openMenuSearch}
               onClose={handleClose}
               anchorEl={document.getElementsByName("anchorPosition")[0]}
+              // Set max height
+              sx={{
+                maxHeight: 600,
+              }}
             >
-              {searchResults ? (
-                <MenuItem onClick={handleClose}>{searchResults.id}</MenuItem>
-              ) : (
-                <MenuItem>No results found</MenuItem>
+              {searchResults?.length > 0 && searchResults?.map ? searchResults?.map((result) => (
+                <CardActionArea href={"/student/" + ((result.entity === "job") ? "jobs" : (result.entity === "company") ? "companies" : "") + "/" + result.id}>
+                  <MenuItem onClick={handleClose}>
+                    {result.entity === "job" ? <>
+                      <WorkOutline fontSize="small" sx={{ mr: 1 }} />{"Job "}
+                    </> :
+                      (result.entity === "company") ? <>
+                        <ApartmentOutlined fontSize="small" sx={{ mr: 1 }} />{"Company "}
+                      </>
+                        : ""}
+                    - {result.original_search_field}</MenuItem>
+                </CardActionArea>
+              )) : (
+                <MenuItem>No result found</MenuItem>
               )}
             </Menu>
             <InputBase
@@ -191,11 +213,10 @@ const Navbar: React.FC = () => {
                 99+
               </div> */}
               <div
-                className={`${
-                  pathName === "" || undefined
-                    ? "text-primary"
-                    : "text-gray-400"
-                }`}
+                className={`${pathName === "" || undefined
+                  ? "text-primary"
+                  : "text-gray-400"
+                  }`}
               >
                 <HomeOutlined fontSize="large" />
               </div>
@@ -209,9 +230,8 @@ const Navbar: React.FC = () => {
                 99+
               </div> */}
               <div
-                className={`${
-                  pathName === "watch" ? "text-primary" : "text-gray-400"
-                }`}
+                className={`${pathName === "watch" ? "text-primary" : "text-gray-400"
+                  }`}
               >
                 <WorkOutline fontSize="large" />
               </div>
@@ -225,9 +245,8 @@ const Navbar: React.FC = () => {
                 99+
               </div> */}
               <div
-                className={`${
-                  pathName === "marketplace" ? "text-primary" : "text-gray-400"
-                }`}
+                className={`${pathName === "marketplace" ? "text-primary" : "text-gray-400"
+                  }`}
               >
                 <BusinessOutlined fontSize="large" />
               </div>
