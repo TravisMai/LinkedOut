@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function ContentCard({ company }: { company: companyType }) {
   return (
@@ -12,9 +13,10 @@ export default function ContentCard({ company }: { company: companyType }) {
             <div className="mr-4 basis-1/6 items-center">
               <img
                 src={
-                  company.avatar
-                    ? company.avatar
-                    : "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-png-image-free-download-searchpng-employee.png"
+                  company?.avatar
+                    ? company?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
                 }
                 className="w-fit mx-auto object-cover rounded-xl max-h-52"
                 alt="company avatar"

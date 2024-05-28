@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
-
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 const LeftSidebar: React.FC = () => {
   // Get jwt token
@@ -69,8 +69,8 @@ const LeftSidebar: React.FC = () => {
 
   // Get all different companies from the applied jobs
   const companies = appliedJobs
-    .map((job) => job.job.company)
-    .filter(
+    ?.map((job) => job.job.company)
+    ?.filter(
       (company, index, self) =>
         index === self.findIndex((t) => t.id === company.id),
     );
@@ -85,8 +85,8 @@ const LeftSidebar: React.FC = () => {
       </div>
       <div className="w-10/12 pt-4">
         <ul className="w-full text-gray-600">
-          {companies.length > 0 ? (
-            companies.map((row, idx) => (
+          {companies?.length > 0 ? (
+            companies?.map((row, idx) => (
               <Link to={`/student/companies/${row.id}`}>
                 <li
                   key={idx}
@@ -95,7 +95,12 @@ const LeftSidebar: React.FC = () => {
                 >
                   <img
                     className="w-8 h-8 rounded-full"
-                    src={row.avatar}
+                    src={
+                      !row?.avatar?.includes("https://scontent")
+                        ? row?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
                     alt="user"
                   />
                   <p className="text-sm font-semibold">{row.name}</p>

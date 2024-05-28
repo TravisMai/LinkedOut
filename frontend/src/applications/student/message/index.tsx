@@ -15,7 +15,7 @@ const StudentMessage: React.FC = () => {
   return (
     <Grid container spacing={2} className="bg-[#f3f2f0] min-h-screen">
       <Grid item xs={3} className="border-r-4 m-8">
-        {recentMessages.map((message) => (
+        {recentMessages?.map((message) => (
           <>
             <ListItemButton key={message.user} className="bg-white">
               <div className="w-12 h-12 rounded-full overflow-hidden mr-3">

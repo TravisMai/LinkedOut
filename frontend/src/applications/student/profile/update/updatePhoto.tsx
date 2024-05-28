@@ -49,7 +49,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [studentId, setStudentId] = useState("");
-  const [filePreview, setFilePreview] = useState<string | null>(null); // State to store file preview URL
+  const [filePreview, setFilePreview] = useState<string>(""); // State to store file preview URL
 
   const [formData, setFormData] = useState({
     avatar: "",
@@ -78,7 +78,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
     mutationFn: (formData) => {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null) {
+        if (value !== null && value!=="") {
           if (key === "avatar") {
             formDataToSend.append(key, value as File); // Append file to FormData
           }
@@ -86,7 +86,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
       });
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
-        formData,
+        formDataToSend,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Set content type for file upload
@@ -128,7 +128,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
     if (file) {
       setFilePreview(URL.createObjectURL(file)); // Generate preview URL for the selected file
     } else {
-      setFilePreview(null); // Clear preview if no file is selected
+      setFilePreview(""); // Clear preview if no file is selected
     }
   };
 

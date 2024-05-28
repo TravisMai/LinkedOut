@@ -31,6 +31,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import InternshipUpdateDialog from "./InternshipUpdateDialog.component";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function InternshipDisplay() {
   const { internshipId } = useParams();
@@ -115,7 +116,12 @@ export default function InternshipDisplay() {
               }}
             >
               <img
-                src={`${internship?.jobApplicants?.student.avatar}`} // Append a unique query parameter to bypass browser caching
+                src={
+                  !internship?.jobApplicants?.student?.avatar?.includes("https://scontent")
+                    ? internship?.jobApplicants?.student?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                }
                 className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
               />
               {/* <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={() => handleOpenDialog("avatar")}>Change photo</Button>
@@ -290,9 +296,9 @@ export default function InternshipDisplay() {
               </Box>
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
-                  {internship?.document && internship?.document.length > 0 ? (
-                    internship?.document.map((doc) => (
-                      doc.name!=="Internship report" &&
+                  {internship?.document && internship?.document?.length > 0 ? (
+                    internship?.document?.map((doc) => (
+                      doc.name !== "Internship report" &&
                       <ListItem>
                         <ListItemIcon>
                           <AttachFile />

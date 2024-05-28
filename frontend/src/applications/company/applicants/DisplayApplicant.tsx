@@ -36,6 +36,7 @@ import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 type ResponseType = {
   data: any;
@@ -138,7 +139,12 @@ export default function StudentProfile2() {
               }}
             >
               <img
-                src={`${applicant?.student.avatar}`} // Append a unique query parameter to bypass browser caching
+                src={
+                  !applicant?.student?.avatar?.includes("https://scontent")
+                    ? applicant?.student?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                }
                 className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
               />
               {/* <Button variant="outlined" sx={{ mt: 1 }} size="small" onClick={() => handleOpenDialog("avatar")}>Change photo</Button>
@@ -401,7 +407,7 @@ export default function StudentProfile2() {
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
                   {applicant?.student?.education ? (
-                    applicant?.student?.education.map((item) => (
+                    applicant?.student?.education?.map((item) => (
                       <ListItem>
                         <ListItemIcon>
                           <School />
@@ -454,7 +460,7 @@ export default function StudentProfile2() {
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
                   {applicant?.student?.workingHistory ? (
-                    applicant?.student?.workingHistory.map((item) => (
+                    applicant?.student?.workingHistory?.map((item) => (
                       <ListItem>
                         <ListItemIcon>
                           <WorkHistory />
@@ -506,7 +512,7 @@ export default function StudentProfile2() {
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
                   {applicant?.student?.certificate ? (
-                    applicant?.student?.certificate.map((item) => (
+                    applicant?.student?.certificate?.map((item) => (
                       <ListItem>
                         <ListItemIcon>
                           <WorkspacePremium />
@@ -551,7 +557,7 @@ export default function StudentProfile2() {
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
                   {applicant?.student?.skill ? (
-                    applicant?.student?.skill.map((item) => (
+                    applicant?.student?.skill?.map((item) => (
                       <ListItem>
                         <ListItemIcon>
                           <Star />
@@ -592,7 +598,7 @@ export default function StudentProfile2() {
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
                   {applicant?.student?.additionalInformation ? (
-                    applicant?.student?.additionalInformation.map((item) => (
+                    applicant?.student?.additionalInformation?.map((item) => (
                       <ListItem>
                         <ListItemIcon>
                           <More />
@@ -634,7 +640,7 @@ export default function StudentProfile2() {
               <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
                 <List>
                   {applicant?.student?.reference ? (
-                    applicant?.student?.reference.map((item) => (
+                    applicant?.student?.reference?.map((item) => (
                       <ListItem>
                         <ListItemIcon>
                           <Group />

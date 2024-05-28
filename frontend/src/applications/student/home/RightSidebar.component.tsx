@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { Link } from "react-router-dom";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 type companyType = {
   id: string;
@@ -50,12 +51,17 @@ const RightSidebar: React.FC = () => {
       </div>
       <div className="w-10/12 pt-4">
         <ul className="w-full text-gray-600">
-          {randomCompany.map((row) => (
+          {randomCompany?.map((row) => (
             <Link key={row.id} to={`/student/companies/${row.id}`}>
               <li className="h-12 mb-2 flex items-center justify-content cursor-pointer space-x-2 p-2 rounded-md hover:bg-gray-200">
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={row.avatar}
+                  src={
+                    !row?.avatar?.includes("https://scontent")
+                      ? row?.avatar
+                      : DefaultAvatar
+                      ?? DefaultAvatar
+                  }
                   alt="user"
                 />
                 <p className="text-sm font-semibold">{row.name}</p>

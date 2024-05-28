@@ -43,7 +43,7 @@ export function AllJobPage() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredJob, setFilteredJob] = React.useState<jobType[]>([]);
   useEffect(() => {
-    setFilteredJob(companyJobs.filter((job) =>
+    setFilteredJob(companyJobs?.filter((job) =>
       job.title.toLowerCase().includes(searchTerm.toLowerCase()),
     ));
   }, [searchTerm, companyJobs]);
@@ -117,8 +117,8 @@ export function AllJobPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {companyJobs.length > 0 ? (
-                limitedJobs.map((row, index) => (
+              {companyJobs?.length > 0 ? (
+                limitedJobs?.map((row, index) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -156,7 +156,7 @@ export function AllJobPage() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(filteredJob.length / itemsPerPage)}
+              count={Math.ceil(filteredJob?.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>

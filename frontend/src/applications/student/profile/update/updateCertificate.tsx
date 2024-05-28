@@ -83,7 +83,7 @@ export default function UpdateCertificate({
   });
 
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
@@ -165,7 +165,7 @@ export default function UpdateCertificate({
                         name="name"
                         type="string"
                         label="Name"
-                        value={item.name}
+                        value={item?.name}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -173,7 +173,7 @@ export default function UpdateCertificate({
                         id={`${index}-issuedBy`}
                         type="string"
                         label="Issued By"
-                        value={item.issuedBy}
+                        value={item?.issuedBy}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -181,7 +181,7 @@ export default function UpdateCertificate({
                         id={`${index}-time`}
                         type="string"
                         label="Time"
-                        value={item.time}
+                        value={item?.time}
                         onChange={handleInputChange}
                       />
                     </Grid>

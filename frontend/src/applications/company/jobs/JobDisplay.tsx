@@ -20,6 +20,8 @@ import CompanyAppBar from "../CompanyAppBar.component";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import UpdateDialog from "./UpdateDialog.component";
 import DeleteDialog from "./DeleteDialog.component";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+
 
 const JobDisplayCompany: React.FC = () => {
   const { jobId } = useParams();
@@ -144,13 +146,13 @@ const JobDisplayCompany: React.FC = () => {
     onSuccess: (data) => {
       setApplicationList(data.data);
       // Count number of applied students
-      setApplied(data.data.length);
+      setApplied(data.data?.length);
       // Count number of accepted students
       setAccepted(
-        data.data.filter(
+        data.data?.filter(
           (application: jobApplicationType) =>
             application.status === "Accepted",
-        ).length,
+        )?.length,
       );
     },
   });
@@ -321,7 +323,7 @@ const JobDisplayCompany: React.FC = () => {
             <Typography variant="h6">Responsibilities</Typography>
             <List sx={{ mb: 2 }}>
               {job?.descriptions?.responsibilities ? (
-                job?.descriptions?.responsibilities.map(
+                job?.descriptions?.responsibilities?.map(
                   (responsibility, index) => (
                     <ListItem key={job?.id + "responsibility" + index}>
                       <ListItemIcon>
@@ -338,7 +340,7 @@ const JobDisplayCompany: React.FC = () => {
             <Typography variant="h6">Requirements</Typography>
             <List sx={{ mb: 2 }}>
               {job?.descriptions?.requirements ? (
-                job?.descriptions?.requirements.map((requirement, index) => (
+                job?.descriptions?.requirements?.map((requirement, index) => (
                   <ListItem key={job?.id + "requirement" + index}>
                     <ListItemIcon>
                       <Check />
@@ -374,8 +376,8 @@ const JobDisplayCompany: React.FC = () => {
             <Typography variant="h6">APPLIED STUDENTS</Typography>
             { }
             <List>
-              {applicationList.length
-                ? applicationList.map((application, index) => (
+              {applicationList?.length
+                ? applicationList?.map((application, index) => (
                   <CardActionArea
                     href={`../applicant/${application.id}`}
                     key={application.id + index}
@@ -383,7 +385,12 @@ const JobDisplayCompany: React.FC = () => {
                     <ListItem>
                       <ListItemIcon>
                         <img
-                          src={application.student.avatar}
+                          src={
+                            !application.student?.avatar?.includes("https://scontent")
+                              ? application.student?.avatar
+                              : DefaultAvatar
+                              ?? DefaultAvatar
+                          }
                           className="w-10 h-10 object-cover rounded-full border-2 border-gray-200 mb-2"
                           alt="company avatar"
                         />

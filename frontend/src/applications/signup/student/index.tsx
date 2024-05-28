@@ -349,6 +349,9 @@ export default function StudentSignUp() {
                             id="myfile"
                             type="file"
                             label="Avatar"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
                             name="myfile"
                             onChange={handleFileChange}
                           />

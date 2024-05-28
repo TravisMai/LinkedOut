@@ -76,7 +76,7 @@ export default function UploadReportDialog({
       }),
     onSuccess: (data) => {
       // Filter out the document with name "Internship report"
-      setCurrentReport(data.data.document.filter((item: documentType) => item.name === "Internship report")?.[0]);
+      setCurrentReport(data.data.document?.filter((item: documentType) => item.name === "Internship report")?.[0]);
     },
   });
 

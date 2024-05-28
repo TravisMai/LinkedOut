@@ -14,6 +14,7 @@ import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function StudentProfile({
   student,
@@ -166,7 +167,12 @@ export default function StudentProfile({
           }}
         >
           <img
-            src={`${student?.avatar}`} // Append a unique query parameter to bypass browser caching
+            src={
+              !student?.avatar?.includes("https://scontent")
+                ? student?.avatar
+                : DefaultAvatar
+                ?? DefaultAvatar
+            }
             className=" w-full rounded-xl mx-auto  border-2 border-blue-300"
           />
           {student?.isVerify ? (

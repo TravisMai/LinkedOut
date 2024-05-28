@@ -18,6 +18,7 @@ import { getJwtToken } from "../../../shared/utils/authUtils";
 import { Pagination, Stack, Tooltip } from "@mui/material";
 import CompanyDialog from "./Company.Dialog";
 import { OpenInNew } from "@mui/icons-material";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function Company() {
   const [allCompany, setAllCompany] = useState<companyType[]>([]);
@@ -42,7 +43,7 @@ export default function Company() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredCompany, setFilteredCompany] = React.useState<companyType[]>([]);
   useEffect(() => {
-    setFilteredCompany(allCompany.filter((company) =>
+    setFilteredCompany(allCompany?.filter((company) =>
       company.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ));
   }, [searchTerm, allCompany]);
@@ -121,7 +122,14 @@ export default function Company() {
                   {++index + itemsPerPage * currentPage}
                 </TableCell>
                 <TableCell align="center">
-                  <img src={row.avatar} className="h-10 mx-auto" />
+                  <img 
+                    src={
+                      !row?.avatar?.includes("https://scontent")
+                        ? row?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
+                    className="h-10 mx-auto" />
                 </TableCell>
                 <TableCell align="left">{row.name}</TableCell>
                 <TableCell align="left">{row.phoneNumber}</TableCell>
@@ -147,7 +155,7 @@ export default function Company() {
       <div className="w-full mt-2 mb-6 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(filteredCompany.length / itemsPerPage)}
+            count={Math.ceil(filteredCompany?.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

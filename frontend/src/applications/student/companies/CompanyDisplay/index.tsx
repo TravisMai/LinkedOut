@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getJwtToken } from "../../../../shared/utils/authUtils";
 import ContentCard from "./ContentCard.component";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 const CompanyDisplay: React.FC = () => {
   // Get jwt token
@@ -46,7 +47,7 @@ const CompanyDisplay: React.FC = () => {
     },
   });
   // Extract job of current company
-  const companyJobs = jobs.filter((job) => job.company.id === companyId);
+  const companyJobs = jobs?.filter((job) => job.company.id === companyId);
 
   // Handle pagination
   const itemsPerPage = 5; // Number of items per page
@@ -72,7 +73,12 @@ const CompanyDisplay: React.FC = () => {
           <Grid item>
             <Box display="flex" gap={4} sx={{ alignItems: "center" }}>
               <img
-                src={company?.avatar}
+                src={
+                  !company?.avatar?.includes("https://scontent")
+                    ? company?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                }
                 className="w-fit max-h-32 object-cover rounded-xl border-2 border-gray-200 mb-2 "
                 alt="company avatar"
               />
@@ -117,19 +123,19 @@ const CompanyDisplay: React.FC = () => {
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h5">Posted jobs</Typography>
-          {/* Display if companyJobs.length >0, else display text "No posted job" */}
-          {companyJobs.length > 0 ? (
+          {/* Display if companyJobs?.length >0, else display text "No posted job" */}
+          {companyJobs?.length > 0 ? (
             <>
               <div className="w-full mt-2 flex justify-center ">
                 <Stack spacing={2}>
                   <Pagination
-                    count={Math.ceil(companyJobs.length / itemsPerPage)}
+                    count={Math.ceil(companyJobs?.length / itemsPerPage)}
                     onChange={(_event, value) => handlePageChange(value - 1)}
                   />
                 </Stack>
               </div>
               <List>
-                {limitedJobs.map((job) => (
+                {limitedJobs?.map((job) => (
                   <ContentCard key={job.id} job={job} />
                 ))}
               </List>

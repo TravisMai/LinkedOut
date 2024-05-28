@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { getJwtToken } from "../../../shared/utils/authUtils";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 const LeftSidebar: React.FC = () => {
   const [showContent] = useState(false);
@@ -18,9 +19,7 @@ const LeftSidebar: React.FC = () => {
 
   // Fetch for student info
   // Get Student information
-  const [studentData, setStudentData] = React.useState<studentType | null>(
-    null,
-  );
+  const [studentData, setStudentData] = React.useState<studentType>();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
     queryFn: () =>
@@ -69,10 +68,10 @@ const LeftSidebar: React.FC = () => {
   // Count jobs with status
   const countAppliedJobs = appliedJobs?.filter(
     (job) => job.status === "Applied",
-  ).length;
+  )?.length;
   const countApprovedJobs = appliedJobs?.filter(
     (job) => job.status === "Approved",
-  ).length;
+  )?.length;
 
   // Mutation to logout
 
@@ -85,7 +84,12 @@ const LeftSidebar: React.FC = () => {
             className="w-full h-24 rounded-t-lg"
           />
           <img
-            src={studentData?.avatar}
+            src={
+              !studentData?.avatar?.includes("https://scontent")
+                ? studentData?.avatar
+                : DefaultAvatar
+                ?? DefaultAvatar
+            }
             className=" w-20 h-20 lg:w-36 lg:h-36 rounded-full mx-auto my-3 -mt-10 lg:-mt-16 border-2 border-white"
           />
         </div>

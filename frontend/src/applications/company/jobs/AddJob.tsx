@@ -86,7 +86,7 @@ export default function AddJob() {
         ...prevData,
         descriptions: {
           ...prevData.descriptions,
-          [name]: value.split(",").map((item) => item.trim()), // Assuming responsibilities and requirements are comma-separated lists
+          [name]: value.split(",")?.map((item) => item?.trim()), // Assuming responsibilities and requirements are comma-separated lists
         },
       }));
     } else if (name === "aboutUs") {
@@ -295,6 +295,9 @@ export default function AddJob() {
                       fullWidth
                       name="internshipPrograme"
                       label="Internship Program"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                       type="file"
                       autoComplete="internshipPrograme"
                       onChange={handleFileChange}

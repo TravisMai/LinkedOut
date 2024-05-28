@@ -79,7 +79,7 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
   });
 
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
@@ -161,7 +161,7 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
                         name="name"
                         type="string"
                         label="Name"
-                        value={item.name}
+                        value={item?.name}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -170,7 +170,7 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
                         name="email"
                         type="string"
                         label="Email"
-                        value={item.email}
+                        value={item?.email}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -190,7 +190,7 @@ export default function UpdateReference({ onClose }: { onClose: () => void }) {
                         color="error"
                         onClick={() => {
                           const updatedFormData = { ...formData };
-                          updatedFormData.reference.splice(index, 1);
+                          updatedFormData.reference?.splice(index, 1);
                           setFormData(updatedFormData);
                         }}
                       // sx={{ mt: 1, mb: 2 }}

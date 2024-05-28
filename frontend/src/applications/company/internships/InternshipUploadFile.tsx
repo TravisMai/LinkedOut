@@ -83,7 +83,7 @@ export default function UploadFile({
       setCurrentDocuments(data.data.document);
       // Remove document with name "Internship report"
       setCurrentDocuments((prevData) =>
-        prevData.filter((item) => item.name !== "Internship report")
+        prevData?.filter((item) => item.name !== "Internship report")
       );
     },
   });
@@ -102,7 +102,7 @@ export default function UploadFile({
           }
           else if (key === "deleteDocumentID") // add deleteDocumentID array as an array
           {
-            (value as string[]).forEach((id) => {
+            (value as string[])?.forEach((id) => {
               formDataToSend.append("deleteDocumentID[]", id);
             })
           }

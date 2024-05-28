@@ -7,6 +7,7 @@ import { Check, Search } from "@mui/icons-material";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { getJwtToken } from "../../../shared/utils/authUtils";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function JobDialog({
     job,
@@ -69,11 +70,16 @@ export default function JobDialog({
                     </IconButton>
                     <Container className="my-5">
                         <img
-                            src={job?.company.avatar}
+                            src={
+                                !job?.company?.avatar?.includes("https://scontent")
+                                    ? job?.company?.avatar
+                                    : DefaultAvatar
+                                    ?? DefaultAvatar
+                            }
                             className="w-1/5 object-cover rounded-xl border-2 border-gray-200 mb-2"
                             alt="company avatar"
                         />
-                        <Typography variant="h6" sx={{mb:1}}>{job?.company.name}</Typography>
+                        <Typography variant="h6" sx={{ mb: 1 }}>{job?.company.name}</Typography>
 
                         <Box display="flex" gap={3}>
                             <Typography variant="h4">{job?.title}</Typography>

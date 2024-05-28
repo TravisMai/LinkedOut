@@ -27,7 +27,7 @@ export function AllInternshipJobsPage() {
   });
 
   // Filter out internships
-  const internshipJobs = companyJobs.filter(
+  const internshipJobs = companyJobs?.filter(
     (job) => job.workType === "Internship",
   );
   // Sort descending by date
@@ -39,7 +39,7 @@ export function AllInternshipJobsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStudent, setFilteredStudent] = useState<jobType[]>([]);
   useEffect(() => {
-    setFilteredStudent(internshipJobs.filter((job) =>
+    setFilteredStudent(internshipJobs?.filter((job) =>
       job.title.toLowerCase().includes(searchTerm.toLowerCase()),
     ));
   }, [searchTerm, internshipJobs]);
@@ -76,8 +76,8 @@ export function AllInternshipJobsPage() {
           />
         </div>
         <div className="mt-3 mx-auto h-fit flex flex-col space-y-3 pb-10">
-          {filteredStudent.length > 0 ? (
-            filteredStudent.map((job: jobType) => (
+          {filteredStudent?.length > 0 ? (
+            filteredStudent?.map((job: jobType) => (
               <InternshipJobCard key={job.id} job={job} />
             ))
           ) : (

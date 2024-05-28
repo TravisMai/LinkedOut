@@ -79,7 +79,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
   });
   
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
@@ -160,7 +160,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                         name="level"
                         type="string"
                         label="Level"
-                        value={item.id}
+                        value={item?.id}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -169,7 +169,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                         id={`${index}-school`}
                         type="string"
                         label="School"
-                        value={item.school}
+                        value={item?.school}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -177,7 +177,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                         id={`${index}-major`}
                         type="string"
                         label="Major"
-                        value={item.major}
+                        value={item?.major}
                         onChange={handleInputChange}
                       />
                       <Grid container columnSpacing={1}>
@@ -187,7 +187,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                             id={`${index}-startTime`}
                             type="string"
                             label="Start Time"
-                            value={item.startTime}
+                            value={item?.startTime}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -197,7 +197,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                             id={`${index}-endTime`}
                             type="string"
                             label="End Time"
-                            value={item.endTime}
+                            value={item?.endTime}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -207,7 +207,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
                         id={`${index}-gpa`}
                         type="number"
                         label="GPA"
-                        value={item.gpa}
+                        value={item?.gpa}
                         onChange={handleInputChange}
                       />
                     </Grid>

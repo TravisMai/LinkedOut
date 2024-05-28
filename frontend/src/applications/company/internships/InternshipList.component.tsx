@@ -10,6 +10,8 @@ import { useState } from "react";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useQuery } from "react-query";
 import axios from "axios";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+
 
 export default function InternshipsList({ jobId }: { jobId: string }) {
   const token = getJwtToken();
@@ -30,13 +32,13 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
       ),
     onSuccess: (data) => {
       // Filter out internships with jobApplicant status is approved
-      setInternshipList(data.data.filter((internship: internshipType) => internship.jobApplicants.status === "Approved"));
+      setInternshipList(data.data?.filter((internship: internshipType) => internship.jobApplicants.status === "Approved"));
     },
   });
 
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {internshipList.length > 0 ? internshipList?.map((internship) => (
+      {internshipList?.length > 0 ? internshipList?.map((internship) => (
         <div key={internship.id}>
           <ListItemButton
             alignItems="flex-start"
@@ -44,7 +46,12 @@ export default function InternshipsList({ jobId }: { jobId: string }) {
           >
             <ListItemAvatar>
               <Avatar
-                src={internship?.jobApplicants?.student?.avatar ?? ""}
+                src={
+                  !internship?.jobApplicants?.student?.avatar?.includes("https://scontent")
+                    ? internship?.jobApplicants?.student?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                }
               />
             </ListItemAvatar>
             <ListItemText

@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function ContentCard({ job }: { job: jobType }) {
   return (
@@ -11,7 +12,12 @@ export default function ContentCard({ job }: { job: jobType }) {
           <div className="flex flex-row">
             <div className="mr-4 basis-1/6 center">
               <img
-                src={job.company.avatar}
+                src={
+                  !job.company?.avatar?.includes("https://scontent")
+                    ? job.company?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                }
                 className="w-full h-3/4 mt-3 object-cover rounded-xl"
                 alt="company avatar"
               />

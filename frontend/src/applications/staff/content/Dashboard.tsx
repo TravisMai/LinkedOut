@@ -46,7 +46,7 @@ export default function Dashboard(props: any) {
       setAllStudent(data.data);
     },
   });
-  const totalStudent = allStudent.length;
+  const totalStudent = allStudent?.length;
 
   // Fetch all companies
   const [allCompany, setAllCompany] = useState<companyType[]>([]);
@@ -62,7 +62,7 @@ export default function Dashboard(props: any) {
       setAllCompany(data.data);
     },
   });
-  const totalCompany = allCompany.length;
+  const totalCompany = allCompany?.length;
 
   // Fetch all jobs
   const [allJob, setAllJob] = useState<jobType[]>([]);
@@ -78,7 +78,7 @@ export default function Dashboard(props: any) {
       setAllJob(data.data);
     },
   });
-  const totalJob = allJob.length;
+  const totalJob = allJob?.length;
 
   const cardData = [
     ["Students", `${totalStudent}`, "Student"],

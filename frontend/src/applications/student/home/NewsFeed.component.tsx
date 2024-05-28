@@ -42,8 +42,8 @@ const NewsFeed: React.FC = () => {
 
   return (
     <div className="mt-6 w-full h-fit flex flex-col space-y-3 pb-10">
-      {limitedJobs.length > 0 ? (
-        limitedJobs.map((job: jobType) => (
+      {limitedJobs?.length > 0 ? (
+        limitedJobs?.map((job: jobType) => (
           <ContentCard key={job.id} job={job} />
         ))
       ) : (
@@ -52,7 +52,7 @@ const NewsFeed: React.FC = () => {
       <div className="w-full mt-2 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(allJobs.length / itemsPerPage)}
+            count={Math.ceil(allJobs?.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

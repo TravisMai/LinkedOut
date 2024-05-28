@@ -378,6 +378,9 @@ export default function CompanySignUp() {
                       id="myfile"
                       type="file"
                       label="Logo"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                       name="myfile"
                       onChange={handleFileChange} // Handle file input change
                     />

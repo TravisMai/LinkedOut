@@ -172,7 +172,7 @@ export default function CompanyProfile() {
       // Remove first character if it is 0
       formData.phoneNumber = formData.phoneNumber.substring(
         1,
-        formData.phoneNumber.length,
+        formData.phoneNumber?.length,
       );
 
     formData.phoneNumber = "+84" + formData.phoneNumber;

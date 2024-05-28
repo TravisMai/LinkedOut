@@ -35,8 +35,8 @@ type ErrorType = {
 
 interface updateForm {
   resume: File | null;
-  deleteResumeID: string[] | null;
-  resumeObjective: string | null;
+  deleteResumeID: string[];
+  resumeObjective: string;
 }
 
 export default function UpdateResume({ onClose }: { onClose: () => void }) {
@@ -53,12 +53,12 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
 
   const [formData, setFormData] = useState<{
     resume: File | null;
-    deleteResumeID: string[] | null;
-    resumeObjective: string | null;
+    deleteResumeID: string[];
+    resumeObjective: string;
   }>({
     resume: null,
-    deleteResumeID: null,
-    resumeObjective: null,
+    deleteResumeID: [],
+    resumeObjective: "",
   });
 
   // Get jwt token
@@ -74,10 +74,12 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
         },
       }),
     onSuccess: (data) => {
-      // Set student id
-      setStudentId(data.data.id);
-      // Set current resume
-      setCurrentResume(data.data.resume);
+      if (data.data) {
+        // Set student id
+        setStudentId(data.data.id);
+        // Set current resume
+        setCurrentResume(data.data?.resume ?? []);
+      }
     },
   });
 
@@ -87,14 +89,23 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null) {
-          if (key === "myfile") {
+          if (key === "resume") {
             formDataToSend.append(key, value as File); // Append file to FormData
+          }
+          else if (key === "resumeObjective") {
+            formDataToSend.append(key, value);
+          }
+          else if (key === "deleteResumeID") // add deleteDocumentID array as an array
+          {
+            (value as string[])?.forEach((id) => {
+              formDataToSend.append("deleteResumeID[]", id);
+            })
           }
         }
       });
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
-        formData,
+        formDataToSend,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Set content type for file upload
@@ -185,8 +196,8 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                         <AttachFile />
                       </Grid>
                       <Grid item xs={9} sx={{ minWidth: "250px" }}>
-                        <Link href={item.url} target="_blank" rel="noreferrer">
-                          <Typography variant="h6">{item.title}</Typography>
+                        <Link href={item?.url} target="_blank" rel="noreferrer">
+                          <Typography variant="h6">{item?.title}</Typography>
                         </Link>
                       </Grid>
                       <Grid item xs={1} sx={{ justifyItems: "right" }}>
@@ -199,13 +210,13 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
                             const updatedFormData = { ...formData };
                             // Add new field to delete list
                             if (updatedFormData?.deleteResumeID === null) {
-                              updatedFormData.deleteResumeID = [item.id];
+                              updatedFormData.deleteResumeID = [item?.id];
                             } else {
-                              updatedFormData.deleteResumeID.push(item.id);
+                              updatedFormData.deleteResumeID?.push(item?.id);
                             }
                             setFormData(updatedFormData);
                             // Also delete the field from current resume
-                            currentResume.splice(index, 1);
+                            currentResume?.splice(index, 1);
                           }}
                         >
                           <Delete />

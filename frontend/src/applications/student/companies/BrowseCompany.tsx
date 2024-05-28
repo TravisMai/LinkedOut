@@ -44,8 +44,8 @@ const BrowseCompany: React.FC = () => {
 
   return (
     <div className="mt-6 w-full h-fit flex flex-col space-y-3 pb-10">
-      {limitedCompanies.length > 0 ? (
-        limitedCompanies.map((company: companyType) => (
+      {limitedCompanies?.length > 0 ? (
+        limitedCompanies?.map((company: companyType) => (
           <ContentCard key={company.id} company={company} />
         ))
       ) : (
@@ -54,7 +54,7 @@ const BrowseCompany: React.FC = () => {
       <div className="w-full mt-2 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(allCompanies.length / itemsPerPage)}
+            count={Math.ceil(allCompanies?.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

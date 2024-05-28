@@ -46,12 +46,12 @@ type ErrorType = {
 
 interface updateForm {
   socialMedia: {
-    github: string | null;
-    linkedin: string | null;
-    google: string | null;
-    facebook: string | null;
-    twitter: string | null;
-  } | null;
+    github: string;
+    linkedin: string;
+    google: string;
+    facebook: string;
+    twitter: string;
+  };
 }
 
 export default function UpdateSocialMedia({
@@ -70,11 +70,11 @@ export default function UpdateSocialMedia({
 
   const [formData, setFormData] = useState({
     socialMedia: {
-      github: null,
-      linkedin: null,
-      google: null,
-      facebook: null,
-      twitter: null,
+      github: "",
+      linkedin: "",
+      google: "",
+      facebook: "",
+      twitter: "",
     },
   });
 
@@ -98,11 +98,11 @@ export default function UpdateSocialMedia({
       const updatedFormData = {
         ...formData,
         socialMedia: {
-          github: data.data.socialMedia?.github ?? null,
-          linkedin: data.data.socialMedia?.linkedin ?? null,
-          google: data.data.socialMedia?.google ?? null,
-          facebook: data.data.socialMedia?.facebook ?? null,
-          twitter: data.data.socialMedia?.twitter ?? null,
+          github: data.data.socialMedia?.github ?? "",
+          linkedin: data.data.socialMedia?.linkedin ?? "",
+          google: data.data.socialMedia?.google ?? "",
+          facebook: data.data.socialMedia?.facebook ?? "",
+          twitter: data.data.socialMedia?.twitter ?? "",
         },
       };
       setFormData(updatedFormData);
@@ -110,7 +110,7 @@ export default function UpdateSocialMedia({
   });
 
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
@@ -186,7 +186,7 @@ export default function UpdateSocialMedia({
                       name="github"
                       autoComplete="github"
                       label="GitHub"
-                      value={formData.socialMedia.github}
+                      value={formData?.socialMedia?.github}
                       onChange={handleInputChange}
                     />
                   </Grid>
@@ -203,7 +203,7 @@ export default function UpdateSocialMedia({
                       name="linkedin"
                       autoComplete="linkedin"
                       label="LinkedIn"
-                      value={formData.socialMedia.linkedin}
+                      value={formData?.socialMedia?.linkedin}
                       onChange={handleInputChange}
                     />
                   </Grid>
@@ -220,7 +220,7 @@ export default function UpdateSocialMedia({
                       name="google"
                       autoComplete="google"
                       label="Google"
-                      value={formData.socialMedia.google}
+                      value={formData?.socialMedia?.google}
                       onChange={handleInputChange}
                     />
                   </Grid>
@@ -237,7 +237,7 @@ export default function UpdateSocialMedia({
                       name="facebook"
                       autoComplete="facebook"
                       label="Facebook"
-                      value={formData.socialMedia.facebook}
+                      value={formData?.socialMedia?.facebook}
                       onChange={handleInputChange}
                     />
                   </Grid>
@@ -254,7 +254,7 @@ export default function UpdateSocialMedia({
                       name="twitter"
                       autoComplete="twitter"
                       label="Twitter"
-                      value={formData.socialMedia.twitter}
+                      value={formData?.socialMedia?.twitter}
                       onChange={handleInputChange}
                     />
                   </Grid>

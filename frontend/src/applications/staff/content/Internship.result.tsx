@@ -32,7 +32,7 @@ export default function InternshipResult() {
       }),
     onSuccess: (data) => {
       // Filter only internships that have jobApplicants with status "Approved"
-      setAllInternship(data.data.filter((internship: internshipType) => internship.jobApplicants.status === "Approved"));
+      setAllInternship(data.data?.filter((internship: internshipType) => internship.jobApplicants.status === "Approved"));
     },
   });
 
@@ -69,7 +69,7 @@ export default function InternshipResult() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {limitedJobs.map((row, index) => (
+              {limitedJobs?.map((row, index) => (
                 <TableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -104,7 +104,7 @@ export default function InternshipResult() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(allInternship.length / itemsPerPage)}
+              count={Math.ceil(allInternship?.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>

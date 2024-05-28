@@ -97,7 +97,7 @@ export default function Pending(props: any) {
         },
       }),
     onSuccess: (data) => {
-      const pendingStudent = data.data.filter(
+      const pendingStudent = data.data?.filter(
         (student: studentType) => student.isVerify === false,
       );
       setAllPendingStudent(pendingStudent);
