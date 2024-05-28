@@ -6,10 +6,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getJwtToken } from "../../../../shared/utils/authUtils";
 
@@ -53,35 +53,28 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
   const token = getJwtToken();
 
   // Fetch current information
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://linkedout-hcmut.feedme.io.vn/api/v1/student/me",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  useQuery({
+    queryKey: "studentInfo",
+    queryFn: () =>
+      axios.get(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/student/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        const data = response.data;
-
-        // Set student id
-        setStudentId(data.id);
-
-        // Update formData with social media data
-        const updatedFormData = {
-          objective: data.objective ?? null,
-        };
-
-        setFormData(updatedFormData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [token]);
+        },
+      ),
+    onSuccess: (data) => {
+      setStudentId(data.data.id);
+      const updatedFormData = {
+        objective: data.data?.objective ?? null,
+      };
+      setFormData(updatedFormData);
+    },
+    onError: (error) => {
+      console.error("Error fetching data", error);
+    }
+  });
 
   // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({

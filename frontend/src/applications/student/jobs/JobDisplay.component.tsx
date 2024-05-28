@@ -164,7 +164,7 @@ const JobDisplay: React.FC = () => {
         <Typography variant="h5" className="pt-4">
           Applied internship job
         </Typography>
-        {appliedInternships.length > 0 ? (
+        {appliedInternships?.length > 0 ? (
           limitedAppliedInternships.map((internship: internshipType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
@@ -198,11 +198,11 @@ const JobDisplay: React.FC = () => {
         ) : (
           <p>No internship applied</p>
         )}
-        {appliedInternships.length > 0 && (
+        {appliedInternships?.length > 0 && (
           <div className="w-full mt-2 flex justify-center ">
             <Stack spacing={2}>
               <Pagination
-                count={Math.ceil(appliedInternships.length / itemsPerPage)}
+                count={Math.ceil(appliedInternships?.length / itemsPerPage)}
                 onChange={(_event, value) =>
                   handlePageChange(value - 1, "internship")
                 }
@@ -218,7 +218,7 @@ const JobDisplay: React.FC = () => {
           Applied Jobs
         </Typography>
         <Typography variant="caption">Jobs that you have applied</Typography>
-        {appliedList.length > 0 ? (
+        {appliedList?.length > 0 ? (
           limitedAppliedJobs.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
@@ -252,11 +252,11 @@ const JobDisplay: React.FC = () => {
         ) : (
           <p>No applied job</p>
         )}
-        {appliedList.length > 0 && (
+        {appliedList?.length > 0 && (
           <div className="w-full mt-2 flex justify-center ">
             <Stack spacing={2}>
               <Pagination
-                count={Math.ceil(appliedList.length / itemsPerPage)}
+                count={Math.ceil(appliedList?.length / itemsPerPage)}
                 onChange={(_event, value) =>
                   handlePageChange(value - 1, "applied")
                 }
@@ -272,7 +272,7 @@ const JobDisplay: React.FC = () => {
           Approved Jobs
         </Typography>
         <Typography variant="caption">Jobs that you have qualified</Typography>
-        {approvedList.length > 0 ? (
+        {approvedList?.length > 0 ? (
           limitedApprovedJobs.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
@@ -306,11 +306,11 @@ const JobDisplay: React.FC = () => {
         ) : (
           <p>No approved job</p>
         )}
-        {approvedList.length > 0 && (
+        {approvedList?.length > 0 && (
           <div className="w-full mt-2 flex justify-center ">
             <Stack spacing={2}>
               <Pagination
-                count={Math.ceil(approvedList.length / itemsPerPage)}
+                count={Math.ceil(approvedList?.length / itemsPerPage)}
                 onChange={(_event, value) =>
                   handlePageChange(value - 1, "approved")
                 }
@@ -326,7 +326,7 @@ const JobDisplay: React.FC = () => {
           Processing Jobs
         </Typography>
         <Typography variant="caption">Jobs that processing</Typography>
-        {pendingList.length > 0 ? (
+        {pendingList?.length > 0 ? (
           limitedPendingJobs.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
@@ -360,11 +360,11 @@ const JobDisplay: React.FC = () => {
         ) : (
           <p>No pricessing job</p>
         )}
-        {pendingList.length > 0 && (
+        {pendingList?.length > 0 && (
           <div className="w-full mt-2 flex justify-center ">
             <Stack spacing={2}>
               <Pagination
-                count={Math.ceil(pendingList.length / itemsPerPage)}
+                count={Math.ceil(pendingList?.length / itemsPerPage)}
                 onChange={(_event, value) =>
                   handlePageChange(value - 1, "pending")
                 }
@@ -380,7 +380,7 @@ const JobDisplay: React.FC = () => {
           Rejected Jobs
         </Typography>
         <Typography variant="caption">Jobs that rejected</Typography>
-        {rejectedList.length > 0 ? (
+        {rejectedList?.length > 0 ? (
           limitedRejectedJobs.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
@@ -414,11 +414,11 @@ const JobDisplay: React.FC = () => {
         ) : (
           <p>No rejected job</p>
         )}
-        {rejectedList.length > 0 && (
+        {rejectedList?.length > 0 && (
           <div className="w-full mt-2 flex justify-center ">
             <Stack spacing={2}>
               <Pagination
-                count={Math.ceil(rejectedList.length / itemsPerPage)}
+                count={Math.ceil(rejectedList?.length / itemsPerPage)}
                 onChange={(_event, value) =>
                   handlePageChange(value - 1, "rejected")
                 }

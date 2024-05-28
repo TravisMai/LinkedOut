@@ -113,22 +113,22 @@ const LeftSidebar: React.FC = () => {
       <div className="flex flex-col bg-white rounded-lg ">
         <List component="nav" aria-label="mailbox folders" hidden={showContent}>
           <ListItem
-            secondaryAction={<Typography>{appliedList.length}</Typography>}
+            secondaryAction={<Typography>{appliedList?.length}</Typography>}
           >
             <ListItemText primary="Applied"></ListItemText>
           </ListItem>
           <ListItem
-            secondaryAction={<Typography>{approvedList.length}</Typography>}
+            secondaryAction={<Typography>{approvedList?.length}</Typography>}
           >
             <ListItemText primary="Approved" />
           </ListItem>
           <ListItem
-            secondaryAction={<Typography>{pendingList.length}</Typography>}
+            secondaryAction={<Typography>{pendingList?.length}</Typography>}
           >
             <ListItemText primary="Pending" />
           </ListItem>
           <ListItem
-            secondaryAction={<Typography>{rejectedList.length}</Typography>}
+            secondaryAction={<Typography>{rejectedList?.length}</Typography>}
           >
             <ListItemText primary="Rejected" />
           </ListItem>

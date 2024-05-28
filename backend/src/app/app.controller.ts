@@ -2,12 +2,12 @@ import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { Request, Response } from 'express';
 import {
   Controller,
-  Get,
   Res,
   HttpStatus,
   UseGuards,
   Req,
   Body,
+  Post,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -15,7 +15,7 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
+  @Post()
   @UseGuards(JwtGuard)
   async search(
     @Req() req: Request,

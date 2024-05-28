@@ -300,6 +300,7 @@ export class JobController {
     }
     await this.jobService.delete(id);
     await this.redisService.deleteObjectByKey(`JOB:${id}`);
+    await this.redisService.deleteObjectByKey(JobListKey);
     return response
       .status(HttpStatus.OK)
       .json({ message: 'Job deleted successfully!' });
