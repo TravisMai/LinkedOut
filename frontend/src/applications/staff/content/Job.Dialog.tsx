@@ -149,7 +149,7 @@ export default function JobDialog({
                                 </List>
                             </>
                         )}
-                        <Typography variant="h6">Responsibities</Typography>
+                        <Typography variant="h6">Responsibilities</Typography>
                         <List sx={{ mb: 2 }}>
                             {job?.descriptions?.responsibilities?.map(
                                 (responsibility, index) => (
