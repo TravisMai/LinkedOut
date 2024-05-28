@@ -173,7 +173,11 @@ export default function UpdateProfile() {
               formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.substring(1).toString());
             else
               formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.toString());
-          } else if (key === "newPassword" && value === "") { } // Skip empty new password
+          } else if (key === "newPassword") {
+            if (value !== "") {
+              formDataToSend.append(key, value.toString()); // Convert other fields to string
+            }
+          } // Skip empty new password
           else {
             formDataToSend.append(key, value.toString()); // Convert other fields to string
           }
@@ -403,7 +407,7 @@ export default function UpdateProfile() {
                       shrink: true,
                     }}
                     onChange={handleFileChange} // Handle file input change
-                    inputProps={{ accept: "image/*" }}                   
+                    inputProps={{ accept: "image/*" }}
                   />
                 </Grid>
               </Grid>
