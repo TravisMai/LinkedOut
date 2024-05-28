@@ -161,6 +161,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
                     autoComplete="avatar"
                     onChange={handleFileChange}
                     style={{ width: "500px" }}
+                    inputProps={{ accept: "image/*" }}  
                   />
                 </Grid>
               </Grid>

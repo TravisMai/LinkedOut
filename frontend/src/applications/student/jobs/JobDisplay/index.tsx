@@ -30,7 +30,7 @@ import ApplyDialog from "./applyDialog";
 import UploadReportDialog from "./uploadReportDialog";
 import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
-const processList = ["Intern", "Received"];
+const processList = ["Intern", "Registered"];
 
 const JobDisplay: React.FC = () => {
   // Get jwt token

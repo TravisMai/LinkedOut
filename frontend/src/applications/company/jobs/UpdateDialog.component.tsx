@@ -304,6 +304,9 @@ export default function UpdateDialog({
                       autoComplete="title"
                       value={formData.title}
                       onChange={handleInputChange}
+                      inputProps={{
+                        minLength: 5,
+                      }}
                     />
                   </Grid>
 

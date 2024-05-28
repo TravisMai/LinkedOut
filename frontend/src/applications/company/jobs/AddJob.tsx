@@ -242,6 +242,9 @@ export default function AddJob() {
                     autoComplete="title"
                     value={formData.title}
                     onChange={handleInputChange}
+                    inputProps={{
+                      minLength: 5,
+                    }}
                   />
                 </Grid>
 
@@ -293,6 +296,7 @@ export default function AddJob() {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
+                      required={isInternship}
                       name="internshipPrograme"
                       label="Internship Program"
                       InputLabelProps={{

@@ -78,6 +78,12 @@ export default function CompanyProfile({
     onMutate: () => { },
   });
 
+  // Handle visible
+  const [isVisible, setIsVisible] = useState(false);
+  const handleVisible = () => {
+    setIsVisible(!isVisible);
+  };
+
   return (
     <Grid container>
       <Grid item xs={8}>
@@ -155,10 +161,20 @@ export default function CompanyProfile({
             variant="contained"
             color="error"
             sx={{ width: "inherit", marginX: "auto" }}
-            onClick={handleDelete}
+            onClick={handleVisible}
           >
             Delete
           </LoadingButton>
+          {isVisible &&
+            <LoadingButton
+              variant="contained"
+              color="error"
+              sx={{ width: "1/5", marginX: "auto" }}
+              onClick={handleDelete}
+            >
+              Confirm
+            </LoadingButton>
+          }
         </Container>
       </Grid>
       <Grid item xs={4}>

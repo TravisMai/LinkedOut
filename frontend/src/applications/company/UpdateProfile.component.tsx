@@ -403,6 +403,7 @@ export default function UpdateProfile() {
                       shrink: true,
                     }}
                     onChange={handleFileChange} // Handle file input change
+                    inputProps={{ accept: "image/*" }}                   
                   />
                 </Grid>
               </Grid>

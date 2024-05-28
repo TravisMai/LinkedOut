@@ -144,7 +144,13 @@ export default function CompanySignUp() {
         if (value !== null && value !== "") {
           if (key === "myfile") {
             formDataToSend.append(key, value as File); // Append file to FormData
-          } else {
+          } else if (key === "phoneNumber") {
+            if (formData.phoneNumber?.length === 10)
+              // Remove 0 and add country code
+              formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.substring(1).toString());
+            else
+              formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.toString());
+          } {
             formDataToSend.append(key, value.toString()); // Convert other fields to string
           }
         }
@@ -182,10 +188,6 @@ export default function CompanySignUp() {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Add country code to phone number
-    if (formData.phoneNumber.charAt(0) !== "0")
-      formData.phoneNumber = "0" + formData.phoneNumber;
-
     mutation.mutate(formData);
   };
 
@@ -309,7 +311,7 @@ export default function CompanySignUp() {
                         ),
                       }}
                       inputProps={{
-                        pattern: "^[0-9]{9,10}$", // Only allows numeric characters
+                        pattern: "^(0[0-9]{9}|[0-9]{9})$", // Only allows numeric characters
                       }}
                     />
                   </Grid>
@@ -383,6 +385,7 @@ export default function CompanySignUp() {
                       }}
                       name="myfile"
                       onChange={handleFileChange} // Handle file input change
+                      inputProps={{ accept: "image/*" }}
                     />
                   </Grid>
                 </Grid>
