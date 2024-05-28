@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Grid } from "@mui/material";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function StudentCard({
   application,
@@ -15,7 +16,12 @@ export default function StudentCard({
           <Grid container spacing={4}>
             <Grid item xs={2}>
               <img
-                src={application.student.avatar}
+                src={
+                  !application.student?.avatar?.includes("https://scontent")
+                    ? application.student?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                }
                 className="w-full h-full object-cover rounded-xl"
                 alt="company avatar"
               />

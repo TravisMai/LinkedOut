@@ -40,16 +40,16 @@ type ErrorType = {
 
 interface updateForm {
   name: string;
-  taxId: number | null;
-  workField: string | null;
-  address: string | null;
-  website: string | null;
+  taxId: number;
+  workField: string;
+  address: string;
+  website: string;
   myfile: File | null;
-  description: string | null;
+  description: string;
   email: string;
   phoneNumber: string;
   password: string;
-  newPassword: string | null;
+  newPassword: string;
 }
 
 const countryCode = [
@@ -83,13 +83,13 @@ export default function UpdateProfile() {
     email: "",
     phoneNumber: "",
     password: "",
-    taxId: null as number | null,
-    workField: null as string | null,
-    address: null as string | null,
-    website: null as string | null,
+    taxId: 0,
+    workField: "",
+    address: "",
+    website: "",
     myfile: null as File | null,
-    description: null as string | null,
-    newPassword: null as string | null,
+    description: "",
+    newPassword: "",
   });
 
   const token = getJwtToken();
@@ -112,15 +112,15 @@ export default function UpdateProfile() {
         name: data.data?.name,
         email: data.data?.email,
         // Cut out country code head from phone Number
-        phoneNumber: data.data?.phoneNumber?.substring(3),
+        phoneNumber: data.data?.phoneNumber?.substring(3) ?? "0",
         password: "",
-        taxId: data.data?.taxId,
-        workField: data.data?.workField,
-        address: data.data?.address,
-        website: data.data?.website,
+        taxId: data.data?.taxId ?? 0,
+        workField: data.data?.workField ?? "",
+        address: data.data?.address ?? "",
+        website: data.data?.website ?? "",
         myfile: null,
-        description: data.data?.description,
-        newPassword: null,
+        description: data.data?.description ?? "",
+        newPassword: "",
       };
       setFormData(updatedFormData);
     },
@@ -168,21 +168,17 @@ export default function UpdateProfile() {
           if (key === "myfile") {
             formDataToSend.append(key, value as File); // Append file to FormData
           } else if (key === "phoneNumber") {
-            if (formData.phoneNumber.charAt(0) !== "+") {
-              if (
-                formData.phoneNumber.length === 10 &&
-                formData.phoneNumber.charAt(0) === "0"
-              ) {
-                // Remove 0 and add country code
-                formData.phoneNumber =
-                  countryCode[country].numberPrefix +
-                  formData.phoneNumber.substring(1);
-              }
-              formData.phoneNumber =
-                countryCode[country].numberPrefix + formData.phoneNumber;
-              formDataToSend.append(key, formData.phoneNumber.toString());
+            if (formData.phoneNumber?.length === 10)
+              // Remove 0 and add country code
+              formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.substring(1).toString());
+            else
+              formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.toString());
+          } else if (key === "newPassword") {
+            if (value !== "") {
+              formDataToSend.append(key, value.toString()); // Convert other fields to string
             }
-          } else {
+          } // Skip empty new password
+          else {
             formDataToSend.append(key, value.toString()); // Convert other fields to string
           }
         }
@@ -217,11 +213,6 @@ export default function UpdateProfile() {
       setShowError(false);
     },
   });
-
-  // Function to store JWT token in cookie
-  // const storeJwtToken = (token: string) => {
-  //   document.cookie = `jwtToken=${token}; expires=${new Date(Date.now() + 60 * 60 * 1000)}; path=/`;
-  // };
 
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
@@ -313,7 +304,7 @@ export default function UpdateProfile() {
                       ),
                     }}
                     inputProps={{
-                      pattern: "^[0-9]{9,10}$", // Only allows numeric characters
+                      pattern: "^(0[0-9]{9}|[0-9]{9})$", // Only allows numeric characters
                     }}
                   />
                 </Grid>
@@ -351,9 +342,6 @@ export default function UpdateProfile() {
                     label="Address"
                     name="address"
                     autoComplete="address"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
                     value={formData.address}
                     onChange={handleInputChange}
                   />
@@ -366,9 +354,6 @@ export default function UpdateProfile() {
                     label="Work Field"
                     name="workField"
                     autoComplete="workField"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
                     value={formData.workField}
                     onChange={handleInputChange}
                   />
@@ -383,9 +368,6 @@ export default function UpdateProfile() {
                     autoComplete="description"
                     multiline
                     rows={4}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
                     value={formData.description}
                     onChange={handleInputChange}
                   />
@@ -398,9 +380,6 @@ export default function UpdateProfile() {
                     label="Tax ID"
                     name="taxId"
                     autoComplete="taxId"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
                     value={formData.taxId}
                     onChange={handleInputChange}
                   />
@@ -413,9 +392,6 @@ export default function UpdateProfile() {
                     label="Website"
                     name="website"
                     autoComplete="website"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
                     value={formData.website}
                     onChange={handleInputChange}
                   />
@@ -431,6 +407,7 @@ export default function UpdateProfile() {
                       shrink: true,
                     }}
                     onChange={handleFileChange} // Handle file input change
+                    inputProps={{ accept: "image/*" }}
                   />
                 </Grid>
               </Grid>

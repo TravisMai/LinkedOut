@@ -60,7 +60,7 @@ export default function Student() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredStudent, setFilteredStudent] = React.useState<studentType[]>([]);
   useEffect(() => {
-    setFilteredStudent(allStudent.filter((student) =>
+    setFilteredStudent(allStudent?.filter((student) =>
       student.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ));
   }, [searchTerm, allStudent]);
@@ -154,7 +154,7 @@ export default function Student() {
       <div className="w-full mt-2 mb-6 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(filteredStudent.length / itemsPerPage)}
+            count={Math.ceil(filteredStudent?.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

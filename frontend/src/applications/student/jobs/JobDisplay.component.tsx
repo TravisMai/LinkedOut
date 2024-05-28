@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { OpenInNew } from "@mui/icons-material";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 const JobDisplay: React.FC = () => {
   // Get jwt token
@@ -102,16 +103,16 @@ const JobDisplay: React.FC = () => {
 
 
   // Get all job with status
-  const appliedList = appliedJobs.filter(
+  const appliedList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Applied",
   );
-  const approvedList = appliedJobs.filter(
+  const approvedList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Approved",
   );
-  const pendingList = appliedJobs.filter(
+  const pendingList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Processing",
   );
-  const rejectedList = appliedJobs.filter(
+  const rejectedList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Rejected",
   );
 
@@ -165,12 +166,17 @@ const JobDisplay: React.FC = () => {
           Applied internship job
         </Typography>
         {appliedInternships?.length > 0 ? (
-          limitedAppliedInternships.map((internship: internshipType) => (
+          limitedAppliedInternships?.map((internship: internshipType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
                 <div className="mr-4 basis-1/12 center">
                   <img
-                    src={internship.jobApplicants.job.company?.avatar}
+                    src={
+                      !internship.jobApplicants.job.company?.avatar?.includes("https://scontent")
+                        ? internship.jobApplicants.job.company?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
                     className="w-full h-3/4 object-cover rounded-xl"
                     alt="company avatar"
                   />
@@ -219,12 +225,17 @@ const JobDisplay: React.FC = () => {
         </Typography>
         <Typography variant="caption">Jobs that you have applied</Typography>
         {appliedList?.length > 0 ? (
-          limitedAppliedJobs.map((application: jobApplicationType) => (
+          limitedAppliedJobs?.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
                 <div className="mr-4 basis-1/12 center">
                   <img
-                    src={application.job.company.avatar}
+                    src={
+                      !application.job.company?.avatar?.includes("https://scontent")
+                        ? application.job.company?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
                     className="w-full h-3/4 object-cover rounded-xl"
                     alt="company avatar"
                   />
@@ -273,12 +284,17 @@ const JobDisplay: React.FC = () => {
         </Typography>
         <Typography variant="caption">Jobs that you have qualified</Typography>
         {approvedList?.length > 0 ? (
-          limitedApprovedJobs.map((application: jobApplicationType) => (
+          limitedApprovedJobs?.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
                 <div className="mr-4 basis-1/12 center">
                   <img
-                    src={application.job.company.avatar}
+                    src={
+                      !application.job.company?.avatar?.includes("https://scontent")
+                        ? application.job.company?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
                     className="w-full h-3/4 object-cover rounded-xl"
                     alt="company avatar"
                   />
@@ -327,12 +343,17 @@ const JobDisplay: React.FC = () => {
         </Typography>
         <Typography variant="caption">Jobs that processing</Typography>
         {pendingList?.length > 0 ? (
-          limitedPendingJobs.map((application: jobApplicationType) => (
+          limitedPendingJobs?.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
                 <div className="mr-4 basis-1/12 center">
                   <img
-                    src={application.job.company.avatar}
+                    src={
+                      !application.job.company?.avatar?.includes("https://scontent")
+                        ? application.job.company?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
                     className="w-full h-3/4 object-cover rounded-xl"
                     alt="company avatar"
                   />
@@ -381,12 +402,17 @@ const JobDisplay: React.FC = () => {
         </Typography>
         <Typography variant="caption">Jobs that rejected</Typography>
         {rejectedList?.length > 0 ? (
-          limitedRejectedJobs.map((application: jobApplicationType) => (
+          limitedRejectedJobs?.map((application: jobApplicationType) => (
             <>
               <div className="flex flex-row mt-5 mb-3">
                 <div className="mr-4 basis-1/12 center">
                   <img
-                    src={application.job.company.avatar}
+                    src={
+                      !application.job.company?.avatar?.includes("https://scontent")
+                        ? application.job.company?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
                     className="w-full h-3/4 object-cover rounded-xl"
                     alt="company avatar"
                   />

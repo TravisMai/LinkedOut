@@ -79,7 +79,7 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
   });
 
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
@@ -161,7 +161,7 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
                         name="name"
                         type="string"
                         label="Name"
-                        value={item.name}
+                        value={item?.name}
                         onChange={handleInputChange}
                       />
                       <TextField
@@ -169,7 +169,7 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
                         id={`${index}-level`}
                         type="string"
                         label="Level"
-                        value={item.level}
+                        value={item?.level}
                         onChange={handleInputChange}
                       />
                     </Grid>
@@ -181,7 +181,7 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
                         color="error"
                         onClick={() => {
                           const updatedFormData = { ...formData };
-                          updatedFormData.skill.splice(index, 1);
+                          updatedFormData.skill?.splice(index, 1);
                           setFormData(updatedFormData);
                         }}
                       // sx={{ mt: 1, mb: 2 }}

@@ -32,7 +32,7 @@ type ErrorType = {
 };
 
 interface updateForm {
-  objective: string | null;
+  objective: string;
 }
 
 export default function UpdateObjective({ onClose }: { onClose: () => void }) {
@@ -46,7 +46,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
   const [studentId, setStudentId] = useState("");
 
   const [formData, setFormData] = useState({
-    objective: null,
+    objective: "",
   });
 
   // Get jwt token
@@ -67,7 +67,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
     onSuccess: (data) => {
       setStudentId(data.data.id);
       const updatedFormData = {
-        objective: data.data?.objective ?? null,
+        objective: data.data?.objective ?? "",
       };
       setFormData(updatedFormData);
     },
@@ -77,7 +77,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
   });
 
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,

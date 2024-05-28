@@ -3,6 +3,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { Grid, List, ListItemButton, Typography } from "@mui/material";
 import { getJwtToken } from "../../../shared/utils/authUtils";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 const RightSidebar: React.FC = () => {
   const numberOfRandom =7;
@@ -37,7 +38,7 @@ const RightSidebar: React.FC = () => {
         </Typography>
         <List className="w-11/12 justify-center">
           {randomJobs?.length > 0 ? (
-            randomJobs.map((job: jobType) => (
+            randomJobs?.map((job: jobType) => (
               <>
                 <ListItemButton
                   className="rounded-xl"
@@ -46,7 +47,12 @@ const RightSidebar: React.FC = () => {
                   <Grid container spacing={2}>
                     <Grid item xs={2}>
                       <img
-                        src={job.company.avatar}
+                        src={
+                          !job.company?.avatar?.includes("https://scontent")
+                            ? job.company?.avatar
+                            : DefaultAvatar
+                            ?? DefaultAvatar
+                        }
                         className="w-fit h-fit"
                         alt="company avatar"
                       />

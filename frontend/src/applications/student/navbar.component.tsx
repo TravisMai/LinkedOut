@@ -17,6 +17,8 @@ import {
   Search,
   WorkOutline,
 } from "@mui/icons-material";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+
 
 type SearchResultsType = {
   entity: string;
@@ -70,11 +72,11 @@ const Navbar: React.FC = () => {
   const handleSearchStringChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setSearchString(event.target.value);
+    setSearchString(event.target?.value ?? "");
   };
 
   // Mutation to get search results
-  const mutation = useMutation<ResponseType, ErrorType, string | null>({
+  const mutation = useMutation<ResponseType, ErrorType, string>({
     mutationFn: (searchString) => {
       return axios.post(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/app/`,
@@ -87,7 +89,7 @@ const Navbar: React.FC = () => {
       );
     },
     onSuccess: (data) => {
-      setSearchResults(data.data.filter((result: SearchResultsType) => result.entity !== "student"));
+      setSearchResults(data.data?.filter((result: SearchResultsType) => result.entity !== "student"));
     },
     onError: () => {
       console.log(mutation.error);
@@ -298,7 +300,12 @@ const Navbar: React.FC = () => {
               </p>
               <div>
                 <img
-                  src={studentAvatar}
+                  src={
+                    !studentAvatar?.includes("https://scontent")
+                      ? studentAvatar
+                      : DefaultAvatar
+                      ?? DefaultAvatar
+                  }
                   className="w-8 h-8 rounded-full col-span-1"
                   alt="dp"
                 />

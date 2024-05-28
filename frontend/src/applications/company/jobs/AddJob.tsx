@@ -86,7 +86,7 @@ export default function AddJob() {
         ...prevData,
         descriptions: {
           ...prevData.descriptions,
-          [name]: value.split(",").map((item) => item.trim()), // Assuming responsibilities and requirements are comma-separated lists
+          [name]: value.split(",")?.map((item) => item?.trim()), // Assuming responsibilities and requirements are comma-separated lists
         },
       }));
     } else if (name === "aboutUs") {
@@ -242,6 +242,9 @@ export default function AddJob() {
                     autoComplete="title"
                     value={formData.title}
                     onChange={handleInputChange}
+                    inputProps={{
+                      minLength: 5,
+                    }}
                   />
                 </Grid>
 
@@ -293,8 +296,12 @@ export default function AddJob() {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
+                      required={isInternship}
                       name="internshipPrograme"
                       label="Internship Program"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                       type="file"
                       autoComplete="internshipPrograme"
                       onChange={handleFileChange}

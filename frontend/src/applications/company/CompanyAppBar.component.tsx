@@ -18,6 +18,7 @@ import FormDialog from "./UpdateDialog.component";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { getJwtToken } from "../../shared/utils/authUtils";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 const pages = [
   ["Home", "/company"],
@@ -102,7 +103,7 @@ const CompanyAppBar = () => {
   };
 
   // Fetch company data
-  const [companyData, setcompanyData] = React.useState<companyType | null>();
+  const [companyData, setcompanyData] = React.useState<companyType>();
   const token = getJwtToken();
 
   // Fetch company data
@@ -217,7 +218,12 @@ const CompanyAppBar = () => {
             <Typography sx={{ mr: 1 }}>{companyData?.name ?? ""}</Typography>
             <Box sx={{ flexGrow: 0 }}>
               <Button onClick={(event) => setAnchorElUser(event.currentTarget)}>
-                <Avatar alt="Remy Sharp" src={companyData?.avatar ?? ""} />
+                <Avatar alt="Remy Sharp" src={
+                  !companyData?.avatar?.includes("https://scontent")
+                    ? companyData?.avatar
+                    : DefaultAvatar
+                    ?? DefaultAvatar
+                } />
               </Button>
               <Menu
                 sx={{ mt: "45px" }}

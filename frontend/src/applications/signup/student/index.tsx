@@ -134,6 +134,12 @@ export default function StudentSignUp() {
           } else if (key === "studentId") {
             // const blobValue = new Blob([new Uint8Array([value])]);
             formDataToSend.append(key, value);
+          } if (key === "phoneNumber") {
+            if (formData.phoneNumber?.length === 10)
+              // Remove 0 and add country code
+              formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.substring(1).toString());
+            else
+              formDataToSend.append(key, countryCode[country].numberPrefix + formData.phoneNumber.toString());
           } else {
             formDataToSend.append(key, value.toString()); // Convert other fields to string
           }
@@ -172,13 +178,6 @@ export default function StudentSignUp() {
   // Handlde submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
-    // Add country code to phone number
-    if (formData.phoneNumber.charAt(0) !== "0")
-      formData.phoneNumber = "0" + formData.phoneNumber;
-
-    // Change studentId to number
-    formData.studentId = Number(formData.studentId);
     mutation.mutate(formData);
   };
 
@@ -278,22 +277,10 @@ export default function StudentSignUp() {
                           ),
                         }}
                         inputProps={{
-                          pattern: "^[0-9]{9,10}$", // Only allows numeric characters
+                          pattern: "^(0[0-9]{9}|[0-9]{9})$", // Only allows numeric characters
                         }}
                       />
                     </Grid>
-                    {/* <Grid item xs={12}>
-                                            <TextField
-                                                required
-                                                fullWidth
-                                                id="faculty"
-                                                label="Faculty"
-                                                name="faculty"
-                                                autoComplete="faculty"
-                                                value={formData.faculty}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Grid> */}
                     <Grid item xs={12}>
                       <TextField
                         required
@@ -349,8 +336,12 @@ export default function StudentSignUp() {
                             id="myfile"
                             type="file"
                             label="Avatar"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
                             name="myfile"
                             onChange={handleFileChange}
+                            inputProps={{ accept: "image/*" }}
                           />
                         </Grid>
                       </Grid>

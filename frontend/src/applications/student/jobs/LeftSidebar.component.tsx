@@ -91,16 +91,16 @@ const LeftSidebar: React.FC = () => {
   }, [studentData, fetchAppliedJobs]);
 
   // Get all job with status
-  const appliedList = appliedJobs.filter(
+  const appliedList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Applied",
   );
-  const approvedList = appliedJobs.filter(
+  const approvedList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Approved",
   );
-  const pendingList = appliedJobs.filter(
+  const pendingList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Pending",
   );
-  const rejectedList = appliedJobs.filter(
+  const rejectedList = appliedJobs?.filter(
     (job: jobApplicationType) => job.status === "Rejected",
   );
 

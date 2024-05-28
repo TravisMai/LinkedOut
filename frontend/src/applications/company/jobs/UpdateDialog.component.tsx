@@ -144,7 +144,7 @@ export default function UpdateDialog({
         ...prevData,
         descriptions: {
           ...prevData.descriptions,
-          [name]: value.split(",").map((item) => item.trim()), // Assuming responsibilities and requirements are comma-separated lists
+          [name]: value.split(",")?.map((item) => item?.trim()), // Assuming responsibilities and requirements are comma-separated lists
         },
       }));
     } else if (name === "aboutUs") {
@@ -304,6 +304,9 @@ export default function UpdateDialog({
                       autoComplete="title"
                       value={formData.title}
                       onChange={handleInputChange}
+                      inputProps={{
+                        minLength: 5,
+                      }}
                     />
                   </Grid>
 
@@ -358,6 +361,9 @@ export default function UpdateDialog({
                         fullWidth
                         name="internshipPrograme"
                         label="Internship Program"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
                         type="file"
                         autoComplete="internshipPrograme"
                         onChange={handleFileChange}

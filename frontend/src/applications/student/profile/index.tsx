@@ -41,6 +41,8 @@ import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import UpdateDialog from "./update/updateDialog.component";
 import { useNavigate } from "react-router-dom";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+
 
 type ResponseType = {
   data: any;
@@ -52,7 +54,7 @@ export default function StudentProfile() {
   // Fetch for student info
   const token = getJwtToken();
 
-  const [studentData, setStudentData] = React.useState<studentType | null>();
+  const [studentData, setStudentData] = React.useState<studentType>();
 
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
@@ -65,7 +67,7 @@ export default function StudentProfile() {
   });
 
   useEffect(() => {
-    if (getStudentInfo.isSuccess) {
+    if (getStudentInfo.isSuccess && getStudentInfo.data?.data) {
       setStudentData(getStudentInfo.data.data);
     }
   }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
@@ -145,7 +147,12 @@ export default function StudentProfile() {
             }}
           >
             <img
-              src={`${studentData?.avatar}`} // Append a unique query parameter to bypass browser caching
+              src={
+                !studentData?.avatar?.includes("https://scontent")
+                  ? studentData?.avatar
+                  : DefaultAvatar
+                  ?? DefaultAvatar
+              }
               className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
             />
             <Button
@@ -244,7 +251,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.resume ? (
-                  studentData?.resume.map((item) => (
+                  studentData?.resume?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <AttachFile />
@@ -392,7 +399,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.education ? (
-                  studentData?.education.map((item) => (
+                  studentData?.education?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <School />
@@ -444,7 +451,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.workingHistory ? (
-                  studentData?.workingHistory.map((item) => (
+                  studentData?.workingHistory?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <WorkHistory />
@@ -495,7 +502,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.certificate ? (
-                  studentData?.certificate.map((item) => (
+                  studentData?.certificate?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <WorkspacePremium />
@@ -537,7 +544,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.skill ? (
-                  studentData?.skill.map((item) => (
+                  studentData?.skill?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <Star />
@@ -577,7 +584,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.additionalInformation ? (
-                  studentData?.additionalInformation.map((item) => (
+                  studentData?.additionalInformation?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <More />
@@ -618,7 +625,7 @@ export default function StudentProfile() {
             <Typography variant="body2" sx={{ pl: 2, pb: 2 }}>
               <List>
                 {studentData?.reference ? (
-                  studentData?.reference.map((item) => (
+                  studentData?.reference?.map((item) => (
                     <ListItem>
                       <ListItemIcon>
                         <Group />

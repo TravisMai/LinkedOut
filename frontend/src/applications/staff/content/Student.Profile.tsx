@@ -14,6 +14,7 @@ import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 export default function StudentProfile({
   student,
@@ -139,6 +140,12 @@ export default function StudentProfile({
 
   console.log("status", status)
 
+  // Handle visible
+  const [isVisible, setIsVisible] = useState(false);
+  const handleVisible = () => {
+    setIsVisible(!isVisible);
+  };
+
   return (
     <Grid container direction={"column"}>
       <Container
@@ -166,7 +173,12 @@ export default function StudentProfile({
           }}
         >
           <img
-            src={`${student?.avatar}`} // Append a unique query parameter to bypass browser caching
+            src={
+              !student?.avatar?.includes("https://scontent")
+                ? student?.avatar
+                : DefaultAvatar
+                ?? DefaultAvatar
+            }
             className=" w-full rounded-xl mx-auto  border-2 border-blue-300"
           />
           {student?.isVerify ? (
@@ -274,10 +286,20 @@ export default function StudentProfile({
           variant="contained"
           color="error"
           sx={{ width: "inherit", marginX: "auto" }}
-          onClick={handleDelete}
+          onClick={handleVisible}
         >
           Delete
         </LoadingButton>
+        {isVisible &&
+          <LoadingButton
+            variant="contained"
+            color="error"
+            sx={{ width: "1/5", marginX: "auto" }}
+            onClick={handleDelete}
+          >
+            Confirm
+          </LoadingButton>
+        }
       </Container>
     </Grid>
   );

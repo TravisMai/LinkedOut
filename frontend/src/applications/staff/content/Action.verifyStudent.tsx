@@ -19,6 +19,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { Check, Close } from "@mui/icons-material";
 import { getJwtToken } from "../../../shared/utils/authUtils";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+
 
 type ResponseType = {
   data: {
@@ -52,7 +54,7 @@ export default function Verify() {
       }),
     onSuccess: (data) => {
       // Filter only student with isVerify = false
-      setAllPendingStudent(data.data.filter((student: studentType) => !student.isVerify));
+      setAllPendingStudent(data.data?.filter((student: studentType) => !student.isVerify));
     },
   });
 
@@ -123,7 +125,7 @@ export default function Verify() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredVerify, setFilteredVerify] = React.useState<studentType[]>([]);
   useEffect(() => {
-    setFilteredVerify(allPendingStudent.filter((verify) =>
+    setFilteredVerify(allPendingStudent?.filter((verify) =>
       verify.email.toLowerCase().includes(searchTerm.toLowerCase()),
     ));
   }, [searchTerm, allPendingStudent]);
@@ -186,7 +188,14 @@ export default function Verify() {
               >
                 <TableCell align="center">{++index + itemsPerPage * currentPage}</TableCell>
                 <TableCell align="center">
-                  <img src={row.avatar} className="h-10 mx-auto" />
+                  <img
+                    src={
+                      !row?.avatar?.includes("https://scontent")
+                        ? row?.avatar
+                        : DefaultAvatar
+                        ?? DefaultAvatar
+                    }
+                    className="h-10 mx-auto" />
                 </TableCell>
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center">{row.email}</TableCell>
@@ -211,7 +220,7 @@ export default function Verify() {
       <div className="w-full mt-2 mb-6 flex justify-center ">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(filteredVerify.length / itemsPerPage)}
+            count={Math.ceil(filteredVerify?.length / itemsPerPage)}
             onChange={(_event, value) => handlePageChange(value - 1)}
           />
         </Stack>

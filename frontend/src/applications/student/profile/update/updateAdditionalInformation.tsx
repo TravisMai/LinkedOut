@@ -85,7 +85,7 @@ export default function UpdateAdditionalInformation({
   });
 
   // Mutation to send form data to server
-  const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
+  const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: (formData) => {
       return axios.put(
         `https://linkedout-hcmut.feedme.io.vn/api/v1/student/${studentId}`,
@@ -170,7 +170,7 @@ export default function UpdateAdditionalInformation({
                           name="name"
                           type="string"
                           label="Field"
-                          value={item.name}
+                          value={item?.name}
                           onChange={handleInputChange}
                         />
                         <TextField
@@ -178,7 +178,7 @@ export default function UpdateAdditionalInformation({
                           id={`${index}-level`}
                           type="string"
                           label="Content"
-                          value={item.level}
+                          value={item?.level}
                           onChange={handleInputChange}
                         />
                       </Grid>
@@ -190,7 +190,7 @@ export default function UpdateAdditionalInformation({
                           color="error"
                           onClick={() => {
                             const updatedFormData = { ...formData };
-                            updatedFormData.additionalInformation.splice(
+                            updatedFormData.additionalInformation?.splice(
                               index,
                               1,
                             );

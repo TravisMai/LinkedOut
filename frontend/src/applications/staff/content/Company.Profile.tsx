@@ -4,6 +4,8 @@ import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+
 
 export default function CompanyProfile({
   company,
@@ -30,7 +32,7 @@ export default function CompanyProfile({
     },
   });
   // Extract job of current company
-  const companyJobs = jobs.filter((job) => job.company.id === company.id);
+  const companyJobs = jobs?.filter((job) => job.company.id === company.id);
 
   // Handle pagination
   const itemsPerPage = 3; // Number of items per page
@@ -76,6 +78,12 @@ export default function CompanyProfile({
     onMutate: () => { },
   });
 
+  // Handle visible
+  const [isVisible, setIsVisible] = useState(false);
+  const handleVisible = () => {
+    setIsVisible(!isVisible);
+  };
+
   return (
     <Grid container>
       <Grid item xs={8}>
@@ -104,7 +112,12 @@ export default function CompanyProfile({
             }}
           >
             <img
-              src={`${company?.avatar}`} // Append a unique query parameter to bypass browser caching
+              src={
+                !company?.avatar?.includes("https://scontent")
+                  ? company?.avatar
+                  : DefaultAvatar
+                  ?? DefaultAvatar
+              }
               className=" w-full rounded-xl mx-auto  border-2 border-blue-300"
             />
           </Container>
@@ -148,10 +161,20 @@ export default function CompanyProfile({
             variant="contained"
             color="error"
             sx={{ width: "inherit", marginX: "auto" }}
-            onClick={handleDelete}
+            onClick={handleVisible}
           >
             Delete
           </LoadingButton>
+          {isVisible &&
+            <LoadingButton
+              variant="contained"
+              color="error"
+              sx={{ width: "1/5", marginX: "auto" }}
+              onClick={handleDelete}
+            >
+              Confirm
+            </LoadingButton>
+          }
         </Container>
       </Grid>
       <Grid item xs={4}>
@@ -173,12 +196,12 @@ export default function CompanyProfile({
             {" "}
             Posted Jobs
           </Typography>
-          {companyJobs.length > 0 ? (
+          {companyJobs?.length > 0 ? (
             <>
               <div className="w-full mt-2 flex justify-center ">
                 <Stack spacing={2}>
                   <Pagination
-                    count={Math.ceil(companyJobs.length / itemsPerPage)}
+                    count={Math.ceil(companyJobs?.length / itemsPerPage)}
                     onChange={(_event, value) => handlePageChange(value - 1)}
                     boundaryCount={0}
                     siblingCount={0}
@@ -186,7 +209,7 @@ export default function CompanyProfile({
                 </Stack>
               </div>
               <List>
-                {limitedJobs.map((job) => (
+                {limitedJobs?.map((job) => (
                   <Card sx={{ width: 170, mt: 2 }}>
                     <CardContent>
                       <div className="flex flex-row">

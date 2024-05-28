@@ -77,7 +77,7 @@ export function ApplicantsPage() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredStudent, setFilteredStudent] = React.useState<jobApplicationType[]>([]);
   useEffect(() => {
-    setFilteredStudent(allApplications.filter((applicant) =>
+    setFilteredStudent(allApplications?.filter((applicant) =>
       applicant.student.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ));
   }, [searchTerm, allApplications]);
@@ -143,8 +143,8 @@ export function ApplicantsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {limitedApplications.length > 0 ? (
-                limitedApplications.map((row, index) => (
+              {limitedApplications?.length > 0 ? (
+                limitedApplications?.map((row, index) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -180,7 +180,7 @@ export function ApplicantsPage() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(filteredStudent.length / itemsPerPage)}
+              count={Math.ceil(filteredStudent?.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>

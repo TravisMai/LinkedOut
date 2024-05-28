@@ -47,7 +47,7 @@ const ChatHistory: React.FC = () => {
         </Paper>
         <Paper className="flex-grow mt-2">
           <List>
-            {messages.map((message) => (
+            {messages?.map((message) => (
               <ListItem key={message.id}>
                 <ListItemText primary={message.user} secondary={message.text} />
               </ListItem>

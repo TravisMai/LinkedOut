@@ -27,6 +27,7 @@ import { useMutation } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../../../shared/utils/authUtils";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 type ResponeType = {
   data: {
@@ -299,7 +300,12 @@ export default function StudentProfile2() {
             }}
           >
             <img
-              src={data.avatar}
+              src={
+                !data?.avatar?.includes("https://scontent")
+                  ? data?.avatar
+                  : DefaultAvatar
+                  ?? DefaultAvatar
+              }
               className=" w-full  rounded-t-xl mx-auto  border-2 border-blue-300"
             />
             <Button

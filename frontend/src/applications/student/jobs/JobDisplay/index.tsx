@@ -28,8 +28,9 @@ import { useParams } from "react-router-dom";
 import { getJwtToken } from "../../../../shared/utils/authUtils";
 import ApplyDialog from "./applyDialog";
 import UploadReportDialog from "./uploadReportDialog";
+import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
-const processList = ["Intern", "Received"];
+const processList = ["Intern", "Registered"];
 
 const JobDisplay: React.FC = () => {
   // Get jwt token
@@ -144,9 +145,7 @@ const JobDisplay: React.FC = () => {
   });
 
   // Get Student information
-  const [studentData, setStudentData] = React.useState<studentType | null>(
-    null,
-  );
+  const [studentData, setStudentData] = React.useState<studentType>();
   const getStudentInfo = useQuery({
     queryKey: "studentInfo",
     queryFn: () =>
@@ -157,13 +156,7 @@ const JobDisplay: React.FC = () => {
       }),
   });
   useEffect(() => {
-    if (getStudentInfo.isSuccess) {
-      setStudentData(getStudentInfo.data.data);
-    }
-  }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
-
-  useEffect(() => {
-    if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
+    if (getStudentInfo.isSuccess && getStudentInfo.data?.data) {
       setStudentData(getStudentInfo.data.data);
     }
   }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
@@ -173,7 +166,7 @@ const JobDisplay: React.FC = () => {
 
   // Check if student can apply for intern (check within a list)
   useEffect(() => {
-    if (studentData && processList.includes(studentData.process)) {
+    if (studentData && processList.includes(studentData?.process ?? "")) {
       setIsInternStudent(true);
     }
   }, [studentData]);
@@ -538,7 +531,12 @@ const JobDisplay: React.FC = () => {
         <Grid item xs={4}>
           <Link href={"/student/companies/" + job?.company.id}>
             <img
-              src={job?.company.avatar}
+              src={
+                !job?.company?.avatar?.includes("https://scontent")
+                  ? job?.company?.avatar
+                  : DefaultAvatar
+                  ?? DefaultAvatar
+              }
               className="w-full object-cover rounded-xl border-2 border-gray-200 mb-2"
               alt="company avatar"
             />

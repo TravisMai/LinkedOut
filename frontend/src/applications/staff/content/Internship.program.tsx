@@ -32,7 +32,7 @@ export default function InternshipProgram() {
       }),
     onSuccess: (data) => {
       // Filter only jobs that are internships
-      setAllJob(data.data.filter((job: jobType) => job.workType === "Internship"));
+      setAllJob(data.data?.filter((job: jobType) => job.workType === "Internship"));
     },
   });
 
@@ -66,7 +66,7 @@ export default function InternshipProgram() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {limitedJobs.map((row, index) => (
+              {limitedJobs?.map((row, index) => (
                 <TableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -93,7 +93,7 @@ export default function InternshipProgram() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(allJob.length / itemsPerPage)}
+              count={Math.ceil(allJob?.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>
