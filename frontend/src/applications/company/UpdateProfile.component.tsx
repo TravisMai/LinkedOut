@@ -6,10 +6,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import MenuItem from "@mui/material/MenuItem";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -94,42 +94,39 @@ export default function UpdateProfile() {
 
   const token = getJwtToken();
 
-  // Fetch current information
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://linkedout-hcmut.feedme.io.vn/api/v1/company/me",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  useQuery({
+    queryKey: "companyInfo",
+    queryFn: () =>
+      axios.get(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/company/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        const data = response.data;
-
-        // Set student id
-        setFormData({
-          name: data.name,
-          email: data.email,
-          // Cut out country code head from phone Number
-          phoneNumber: data.phoneNumber.substring(3),
-          password: "",
-          taxId: data.taxId,
-          workField: data.workField,
-          address: data.address,
-          website: data.website,
-          myfile: null,
-          description: data.description,
-          newPassword: null,
-        });
-        setCompanyId(data.id);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+        },
+      ),
+    onSuccess: (data) => {
+      setCompanyId(data.data.id);
+      const updatedFormData = {
+        ...formData,
+        name: data.data?.name,
+        email: data.data?.email,
+        // Cut out country code head from phone Number
+        phoneNumber: data.data?.phoneNumber?.substring(3),
+        password: "",
+        taxId: data.data?.taxId,
+        workField: data.data?.workField,
+        address: data.data?.address,
+        website: data.data?.website,
+        myfile: null,
+        description: data.data?.description,
+        newPassword: null,
+      };
+      setFormData(updatedFormData);
+    },
+    onError: (error) => {
+      console.error("Error fetching data: ", error);
+    },
   });
 
   // Handle input change

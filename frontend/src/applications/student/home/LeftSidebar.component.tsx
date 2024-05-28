@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
+import background from "@/shared/assets/background_student.jpeg"
 import {
   Container,
   Divider,
@@ -80,7 +81,7 @@ const LeftSidebar: React.FC = () => {
       <div className="flex flex-col bg-white rounded-lg ">
         <div className="flex flex-col">
           <img
-            src="https://source.unsplash.com/random?wallpapers"
+            src={background}
             className="w-full h-24 rounded-t-lg"
           />
           <img

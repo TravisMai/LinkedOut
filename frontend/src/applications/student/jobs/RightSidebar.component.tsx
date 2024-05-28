@@ -36,7 +36,7 @@ const RightSidebar: React.FC = () => {
           Discover more jobs
         </Typography>
         <List className="w-11/12 justify-center">
-          {randomJobs.length > 0 ? (
+          {randomJobs?.length > 0 ? (
             randomJobs.map((job: jobType) => (
               <>
                 <ListItemButton

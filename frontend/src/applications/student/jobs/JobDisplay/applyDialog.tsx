@@ -159,7 +159,7 @@ export default function ApplyDialog({
                     value={resumeChoice}
                     onChange={handleChange}
                   >
-                    {currentResume.length > 0 ? currentResume?.map((resume, index) => (
+                    {currentResume?.length > 0 ? currentResume?.map((resume, index) => (
                       <Link href={resume.url} key={index}>
                         <FormControlLabel
                           value={resume.id}
@@ -172,7 +172,7 @@ export default function ApplyDialog({
                                         <FormControlLabel value="male" control={<Radio />} label="Male" /> */}
                   </RadioGroup>
                 </FormControl>
-                {currentResume.length > 0 ?
+                {currentResume?.length > 0 ?
                   <Box
                     sx={{
                       display: "flex",
