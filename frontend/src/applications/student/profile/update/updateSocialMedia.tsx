@@ -6,10 +6,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getJwtToken } from "../../../../shared/utils/authUtils";
 import {
@@ -82,41 +82,32 @@ export default function UpdateSocialMedia({
   const token = getJwtToken();
 
   // Fetch current information
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://linkedout-hcmut.feedme.io.vn/api/v1/student/me",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  useQuery({
+    queryKey: "studentInfo",
+    queryFn: () =>
+      axios.get(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/student/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        const data = response.data;
-
-        // Set student id
-        setStudentId(data.id);
-
-        // Update formData with social media data
-        const updatedFormData = {
-          ...formData,
-          socialMedia: {
-            github: data.socialMedia?.github ?? null,
-            linkedin: data.socialMedia?.linkedin ?? null,
-            google: data.socialMedia?.google ?? null,
-            facebook: data.socialMedia?.facebook ?? null,
-            twitter: data.socialMedia?.twitter ?? null,
-          },
-        };
-        setFormData(updatedFormData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [token, formData]);
+        },
+      ),
+    onSuccess: (data) => {
+      setStudentId(data.data.id);
+      const updatedFormData = {
+        ...formData,
+        socialMedia: {
+          github: data.data.socialMedia?.github ?? null,
+          linkedin: data.data.socialMedia?.linkedin ?? null,
+          google: data.data.socialMedia?.google ?? null,
+          facebook: data.data.socialMedia?.facebook ?? null,
+          twitter: data.data.socialMedia?.twitter ?? null,
+        },
+      };
+      setFormData(updatedFormData);
+    },
+  });
 
   // Mutation to send form data to server
   const mutation = useMutation<ResponseType, ErrorType, updateForm | null>({
