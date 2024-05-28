@@ -1,5 +1,6 @@
 import {
   Apartment,
+  AttachFile,
   Check,
   Email,
   FileUpload,
@@ -26,6 +27,7 @@ import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getJwtToken } from "../../../../shared/utils/authUtils";
 import ApplyDialog from "./applyDialog";
+import UploadReportDialog from "./uploadReportDialog";
 
 const processList = ["Intern", "Received"];
 
@@ -277,6 +279,24 @@ const JobDisplay: React.FC = () => {
     setLoading(false);
   };
 
+  // Handle Report Upload Dialog
+  const [openUploadReportDialog, setOpenUploadReportDialog] = React.useState(false);
+  const handleOpenUploadReportDialog = () => {
+    setOpenUploadReportDialog(true);
+  };
+
+  const handleCloseUploadReportDialog = () => {
+    setOpenUploadReportDialog(false);
+    // Force the page to reload
+    window.location.reload();
+    // Forece refetch the data
+
+  };
+
+  const handleExitUploadReportDialog = () => {
+    setOpenUploadReportDialog(false);
+  };
+
   return (
     <Container>
       <Grid container spacing={2} sx={{ mt: 3 }}>
@@ -383,7 +403,8 @@ const JobDisplay: React.FC = () => {
                 <IconButton
                   size="small"
                   sx={{ mt: 1, ml: 1 }}
-                // onClick={() => handleOpenDialog("resume")}
+                  title="Upload Internship Report"
+                  onClick={() => handleOpenUploadReportDialog()}
                 >
                   <FileUpload />
                 </IconButton>
@@ -392,9 +413,11 @@ const JobDisplay: React.FC = () => {
                 {thisIntern?.document?.map((document, index) => (
                   <ListItem key={index}>
                     <ListItemIcon>
-                      <Search />
+                      <AttachFile />
                     </ListItemIcon>
-                    <ListItemText primary={document.name}></ListItemText>
+                    <Link href={document.url}>
+                      <ListItemText primary={document.name} ></ListItemText>
+                    </Link>
                   </ListItem>
                 )) ?? "No document uploaded"}
               </List>
@@ -561,6 +584,14 @@ const JobDisplay: React.FC = () => {
         onExit={handleExit}
         onClose={handleCloseDialog}
       />
+      {status === "Approved" && isInternship && (
+        <UploadReportDialog
+          state={openUploadReportDialog}
+          onExit={handleExitUploadReportDialog}
+          onClose={handleCloseUploadReportDialog}
+          internshipId={thisIntern?.id ? thisIntern.id : ""}
+        />
+      )}
     </Container >
   );
 };

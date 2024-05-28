@@ -12,7 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import CompanyAppBar from "../CompanyAppBar.component";
@@ -39,6 +39,15 @@ export function AllJobPage() {
     },
   });
 
+  // Filter jobs that have name match partially or all of the searchTerm
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filteredJob, setFilteredJob] = React.useState<jobType[]>([]);
+  useEffect(() => {
+    setFilteredJob(companyJobs.filter((job) =>
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    ));
+  }, [searchTerm, companyJobs]);
+
   // Handle pagination
   const itemsPerPage = 7;
   const [currentPage, setCurrentPage] = useState(0);
@@ -48,12 +57,11 @@ export function AllJobPage() {
     setCurrentPage(value);
   };
 
-  const limitedJobs = companyJobs.slice(
+  const limitedJobs = filteredJob.slice(
     itemsPerPage * currentPage,
     itemsPerPage * currentPage + itemsPerPage,
   );
 
-  const [searchTerm, setSearchTerm] = React.useState("");
   return (
     <>
       <CompanyAppBar />
@@ -72,7 +80,7 @@ export function AllJobPage() {
           <TextField
             id="search"
             type="search"
-            label="Search"
+            label="Search by job title"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 500 }}
@@ -118,12 +126,6 @@ export function AllJobPage() {
                     <TableCell align="center">
                       {itemsPerPage * currentPage + ++index}
                     </TableCell>
-                    {/* <TableCell align="center">
-                                    <img
-                                        src={row.avatar}
-                                        className='h-10 mx-auto'
-                                    />
-                                </TableCell> */}
                     <TableCell align="center">{row.title}</TableCell>
                     <TableCell align="center">{row.level}</TableCell>
                     <TableCell align="center">{row.workType}</TableCell>
@@ -154,7 +156,7 @@ export function AllJobPage() {
         <div className="w-full mt-2 flex justify-center ">
           <Stack spacing={2}>
             <Pagination
-              count={Math.ceil(companyJobs.length / itemsPerPage)}
+              count={Math.ceil(filteredJob.length / itemsPerPage)}
               onChange={(_event, value) => handlePageChange(value - 1)}
             />
           </Stack>

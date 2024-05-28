@@ -22,7 +22,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import Dashboard from "./content/Dashboard";
 import Student from "./content/Student";
 import Company from "./content/Company";
-import Verify from "./content/Action.verify";
+import VerifyStudent from "./content/Action.verifyStudent";
 import Update from "./content/Action.update";
 import AllJob from "./content/Job.all";
 import ManageJob from "./content/Job.manage";
@@ -31,7 +31,6 @@ import InternshipRecruitment from "./content/Internship.recruitment";
 import InternshipResult from "./content/Internship.result";
 import InternshipReport from "./content/Internship.report";
 import AllDocument from "./content/Document.all";
-import UploadDocument from "./content/Document.upload";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { useEffect } from "react";
@@ -43,7 +42,6 @@ import SubjectIcon from "@mui/icons-material/Subject";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import GradingIcon from "@mui/icons-material/Grading";
 import DescriptionIcon from "@mui/icons-material/Description";
-import UploadIcon from "@mui/icons-material/Upload";
 import { getJwtToken, validateJwtToken } from "../../shared/utils/authUtils";
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
 
@@ -333,7 +331,6 @@ export default function StaffPage() {
               section="Documents"
               subSection={[
                 { icon: <DashboardIcon />, label: "All documents" },
-                { icon: <UploadIcon />, label: "Upload" },
               ]}
             />
           </List>
@@ -380,7 +377,7 @@ export default function StaffPage() {
                 <Company />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={"Action / Verify"}>
-                <Verify />
+                <VerifyStudent />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={"Action / Update"}>
                 <Update />
@@ -414,9 +411,6 @@ export default function StaffPage() {
               </CustomTabPanel>
               <CustomTabPanel value={value} index={"Documents / All documents"}>
                 <AllDocument />
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={"Documents / Upload"}>
-                <UploadDocument />
               </CustomTabPanel>
             </Grid>
           </Container>

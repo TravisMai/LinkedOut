@@ -1,23 +1,13 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import { Alert, Box, Container, CssBaseline, Grid, IconButton, Link, TextField, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { AttachFile } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { useMutation, useQuery } from "react-query";
-import axios from "axios";
-import Alert from "@mui/material/Alert";
+import { getJwtToken } from "../../../../shared/utils/authUtils";
 import { useState } from "react";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { getJwtToken } from "../../../shared/utils/authUtils";
-import { AttachFile, Delete } from "@mui/icons-material";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+import axios from "axios";
 
 type ResponseType = {
   data: {
@@ -39,13 +29,20 @@ interface updateForm {
   documentName: string;
 }
 
-export default function UploadFile({
+export default function UploadReportDialog({
+  state,
+  onExit,
   onClose,
   internshipId,
 }: {
+  state: boolean;
+  onExit: () => void;
   onClose: () => void;
   internshipId: string;
 }) {
+  const handleExit = () => {
+    onExit();
+  };
   const handleClose = () => {
     onClose();
   };
@@ -53,7 +50,7 @@ export default function UploadFile({
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [currentDocuments, setCurrentDocuments] = useState<documentType[]>([]); // State to store current documents
+  const [currentReport, setCurrentReport] = useState<documentType>(); // State to store current documents
   const [showAddNew, setShowAddNew] = useState(false); // State to show/hide add new working history button
 
   const [formData, setFormData] = useState<{
@@ -63,12 +60,11 @@ export default function UploadFile({
   }>({
     document: null,
     deleteDocumentID: [],
-    documentName: "Recruiting result",
+    documentName: "Internship report",
   });
 
   // Get jwt token
   const token = getJwtToken();
-
   // Fetch current information
   useQuery({
     queryKey: "internshipInfo",
@@ -79,12 +75,8 @@ export default function UploadFile({
         },
       }),
     onSuccess: (data) => {
-      // Set current document
-      setCurrentDocuments(data.data.document);
-      // Remove document with name "Internship report"
-      setCurrentDocuments((prevData) =>
-        prevData.filter((item) => item.name !== "Internship report")
-      );
+      // Filter out the document with name "Internship report"
+      setCurrentReport(data.data.document.filter((item: documentType) => item.name === "Internship report")?.[0]);
     },
   });
 
@@ -96,15 +88,9 @@ export default function UploadFile({
         if (value !== null) {
           if (key === "document") {
             formDataToSend.append(key, value as File); // Append file to FormData
-          }
-          else if (key === "documentName") {
-            formDataToSend.append(key, value);
-          }
-          else if (key === "deleteDocumentID") // add deleteDocumentID array as an array
-          {
-            (value as string[]).forEach((id) => {
-              formDataToSend.append("deleteDocumentID[]", id);
-            })
+            formDataToSend.append("documentName", "Internship report"); // Append document name
+            if (currentReport)
+              formDataToSend.append("deleteDocumentID[]", currentReport.id);
           }
         }
       });
@@ -151,18 +137,20 @@ export default function UploadFile({
     }));
   };
 
-  // Handle document type change
-  const handleChooseDocumentName = (event: SelectChangeEvent) => {
-    const { value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      documentName: value,
-    }));
-  };
 
   return (
-    <>
-      <ThemeProvider theme={defaultTheme}>
+    <React.Fragment>
+      <Dialog open={state}>
+        <IconButton
+          edge="end"
+          color="inherit"
+          onClick={handleExit}
+          aria-label="close"
+          style={{ position: "absolute", right: 15, top: 15 }}
+        >
+          <CloseIcon />
+        </IconButton>
+
         <Container component="main" style={{ width: "600px" }}>
           <CssBaseline />
           <Box
@@ -174,7 +162,7 @@ export default function UploadFile({
             }}
           >
             <Typography component="h1" variant="h5">
-              Upload File
+              Upload Report
             </Typography>
             <Box
               component="form"
@@ -187,49 +175,32 @@ export default function UploadFile({
                 rowSpacing={3}
                 justifyContent="center"
               >
-                {currentDocuments?.map((item: documentType, index) => (
-                  <>
-                    <Grid
-                      item
-                      container
-                      columnSpacing={3}
-                      alignItems={"center"}
-                      justifyContent={"between"}
-                      className="pl-5"
-                    >
-                      <Grid item xs={1}>
-                        <AttachFile />
+                {// Only display document with name "Internship report "
+                  currentReport ?
+                    <>
+                      <Grid
+                        item
+                        container
+                        columnSpacing={3}
+                        alignItems={"center"}
+                        justifyContent={"between"}
+                        className="pl-5"
+                      >
+                        <Grid item xs={1}>
+                          <AttachFile />
+                        </Grid>
+                        <Grid item xs={9} sx={{ minWidth: "250px" }}>
+                          <Link href={currentReport.url} target="_blank" rel="noreferrer">
+                            <Typography variant="h6">{currentReport.name}</Typography>
+                          </Link>
+                        </Grid>
+                        <Grid item xs={1} sx={{ justifyItems: "right" }}>
+
+                        </Grid>
                       </Grid>
-                      <Grid item xs={9} sx={{ minWidth: "250px" }}>
-                        <Link href={item.url} target="_blank" rel="noreferrer">
-                          <Typography variant="h6">{item.name}</Typography>
-                        </Link>
-                      </Grid>
-                      <Grid item xs={1} sx={{ justifyItems: "right" }}>
-                        {/* Delete current field */}
-                        <LoadingButton
-                          loading={sending}
-                          variant="outlined"
-                          color="error"
-                          onClick={() => {
-                            const updatedFormData = { ...formData };
-                            // Add new field to delete list
-                            if (updatedFormData?.deleteDocumentID === null) {
-                              updatedFormData.deleteDocumentID = [item.id];
-                            } else {
-                              updatedFormData.deleteDocumentID.push(item.id);
-                            }
-                            setFormData(updatedFormData);
-                            // Also delete the field from current documents
-                            currentDocuments.splice(index, 1);
-                          }}
-                        >
-                          <Delete />
-                        </LoadingButton>
-                      </Grid>
-                    </Grid>
-                  </>
-                )) ?? ""}
+                    </>
+                    : " No Internship report uploaded"
+                }
               </Grid>
               {/* Add new document */}
               {!showAddNew && (
@@ -243,39 +214,20 @@ export default function UploadFile({
                     }}
                     sx={{ mt: 2, mb: 2 }}
                   >
-                    Upload new file
+                    Upload new report
                   </LoadingButton>
                 </Grid>
               )}
               {showAddNew && (
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                  <Grid container direction={"column"} spacing={2}>
-                    <Grid item>
-                      <FormControl sx={{ minWidth: 200 }}>
-                        <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
-                        <Select
-                          labelId="documentName-select"
-                          id="documentName-select"
-                          value={formData.documentName}
-                          label="Type"
-                          onChange={handleChooseDocumentName}
-                        >
-                          <MenuItem value={"Recruiting result"}>Recruiting result</MenuItem>
-                          <MenuItem value={"Internship result"}>Internship result</MenuItem>
-                          <MenuItem value={"Internship evaluation"}>Internship evaluation</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <Grid item>
-                      <TextField
-                        required
-                        id="document"
-                        type="file"
-                        name="document"
-                        onChange={handleFileChange}
-                      />
-                    </Grid>
-                  </Grid>
+                  <TextField
+                    required
+                    fullWidth
+                    id="document"
+                    type="file"
+                    name="document"
+                    onChange={handleFileChange}
+                  />
                 </Box>
               )}
               <Box
@@ -310,7 +262,8 @@ export default function UploadFile({
             )}
           </Box>
         </Container>
-      </ThemeProvider>
-    </>
+
+      </Dialog>
+    </React.Fragment>
   );
 }

@@ -127,6 +127,7 @@ export default function Pending(props: any) {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -155,6 +156,7 @@ export default function Pending(props: any) {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         },
       );
@@ -191,11 +193,6 @@ export default function Pending(props: any) {
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.phoneNumber}</TableCell>
-                {/* <TableCell>
-                                <Link color="primary" href={row.file} target="_blank" onClick={handleDisplay("Action / Verify")} sx={{ mt: 3 }}>
-                                    File
-                                </Link>
-                            </TableCell> */}
                 <TableCell align="right">
                   <Box sx={{ "& > :not(style)": { m: 0.1 } }}>
                     <IconButton
