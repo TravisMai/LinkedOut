@@ -35,6 +35,7 @@ import {
 import { CompanyUpdateDto } from './dto/companyUpdate.dto';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { StaffUpdateCompanyDto } from './dto/staffUpdateCompany.dto';
 
 @Controller('company')
 export class CompanyController {
@@ -204,7 +205,7 @@ export class CompanyController {
 
   // update an company
   @Put(':id')
-  @AllowRoles(['company', 'staff'])
+  @AllowRoles(['company'])
   @UseGuards(JwtGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('myfile'))
   async update(
@@ -252,6 +253,43 @@ export class CompanyController {
         company.avatar = await this.azureBlobService.upload(file);
       }
       const updateCompany = await this.companyService.update(id, company);
+      if (!updateCompany) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Company not found!' });
+      }
+      const limitedData = CompanyResponseDto.fromCompany(updateCompany);
+      await this.redisService.setObjectByKeyValue(
+        `COMPANY:${id}`,
+        limitedData,
+        expireTimeOneHour,
+      );
+      return response.status(HttpStatus.OK).json(limitedData);
+    } catch (error) {
+      return response
+        .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
+    }
+  }
+
+  // update an company by staff
+  @Put('staff/:id')
+  @AllowRoles(['staff'])
+  @UseGuards(JwtGuard, RolesGuard)
+  async staffUpdateCompany(
+    @Param('id') id: string,
+    @Body() company: StaffUpdateCompanyDto,
+    @Res() response: Response,
+  ): Promise<Response> {
+    try {
+      if (!validate(id)) {
+        return response
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: 'Invalid UUID format' });
+      }
+      console.log(company);
+      const updateCompany = await this.companyService.staffUpdate(id, company);
+      console.log(updateCompany);
       if (!updateCompany) {
         return response
           .status(HttpStatus.NOT_FOUND)

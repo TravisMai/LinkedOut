@@ -11,6 +11,8 @@ export class CompanyResponseDto {
   website: string;
   description: string;
   taxId: string;
+  isActive: boolean;
+  isVerify: boolean;
 
   static fromCompany(company: Company): CompanyResponseDto {
     const dto = new CompanyResponseDto();
@@ -24,6 +26,8 @@ export class CompanyResponseDto {
     dto.website = company.website;
     dto.description = company.description;
     dto.taxId = company.taxId;
+    dto.isActive = company.isActive;
+    dto.isVerify = company.isVerify;
     return dto;
   }
 

@@ -2,6 +2,7 @@ import { Company } from './company.entity';
 import { Injectable } from '@nestjs/common';
 import { CompanyRepository } from './company.repository';
 import { CompanyUpdateDto } from './dto/companyUpdate.dto';
+import { StaffUpdateCompanyDto } from './dto/staffUpdateCompany.dto';
 
 @Injectable()
 export class CompanyService {
@@ -25,6 +26,12 @@ export class CompanyService {
 
   // update an company
   async update(id: string, company: CompanyUpdateDto): Promise<Company> {
+    await this.companyRepository.update(id, company);
+    return await this.companyRepository.findOne({ where: { id } });
+  }
+
+  // staff can update the company without the password
+  async staffUpdate(id: string, company: StaffUpdateCompanyDto): Promise<Company> {
     await this.companyRepository.update(id, company);
     return await this.companyRepository.findOne({ where: { id } });
   }
