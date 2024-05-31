@@ -190,6 +190,15 @@ export default function StudentProfile({
               label="Not Verified"
             />
           )}
+          {student?.isActive ? (
+            <Chip color="primary" icon={<Check />} label="Active" />
+          ) : (
+            <Chip
+              color="error"
+              icon={<ExclamationCircleOutlined />}
+              label="Deactivated"
+            />
+          )}
           {/* <Chip color="success" icon={<Check />} label="Verified" /> */}
         </Container>
 

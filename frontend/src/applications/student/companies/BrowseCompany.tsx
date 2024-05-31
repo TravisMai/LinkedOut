@@ -38,7 +38,10 @@ const BrowseCompany: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
-      setAllCompanies(data.data);
+      // Get only companies with isVerify = true and isActive = true
+      setAllCompanies(data.data?.filter(
+        (company: companyType) => company?.isVerify && company?.isActive,
+      ));
     },
   });
 

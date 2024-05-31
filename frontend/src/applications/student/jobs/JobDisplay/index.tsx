@@ -305,7 +305,7 @@ const JobDisplay: React.FC = () => {
                     color={showError ? "error" : "primary"}
                     onClick={handleClickApply}
                     loading={loading}
-                    disabled={!studentData?.isVerify}
+                    disabled={!studentData?.isVerify || !studentData?.isActive}
                     type="button"
                   >
                     {!applied && !showError ? (
@@ -329,7 +329,7 @@ const JobDisplay: React.FC = () => {
                       color="success"
                       onClick={handleClickApplyInternship}
                       loading={loading}
-                      disabled={!studentData?.isVerify}
+                      disabled={!studentData?.isVerify || !studentData?.isActive}
                     >
                       {!appliedIntern && !showError ? (
                         "Apply Intern"

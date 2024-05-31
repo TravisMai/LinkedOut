@@ -5,19 +5,6 @@ import { getJwtToken } from "../../../shared/utils/authUtils";
 import { Link } from "react-router-dom";
 import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
-type companyType = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  avatar: string;
-  workField: string;
-  address: string;
-  website: null;
-  description: string;
-  taxId: null;
-};
-
 const RightSidebar: React.FC = () => {
   const numberOfRandom = 10;
   const [randomCompany, setRandomCompany] = useState<companyType[]>([]);
@@ -36,10 +23,12 @@ const RightSidebar: React.FC = () => {
         },
       }),
     onSuccess: (data) => {
+      // Get only company with isVerify = true
+      const verifiedCompanies = data.data?.filter((company: companyType) => company?.isVerify && company?.isActive);
       // Set random 10 companies from all companies
-      const randomCompany = data.data
-        .sort(() => Math.random() - Math.random())
-        .slice(0, numberOfRandom);
+      const randomCompany = verifiedCompanies
+        ?.sort(() => Math.random() - Math.random())
+        ?.slice(0, numberOfRandom);
       setRandomCompany(randomCompany);
     },
   });

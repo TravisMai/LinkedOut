@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
-import { Tag } from "antd";
 import {
-  CheckCircleOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
-import { IconButton, InputBase, Paper, Menu, MenuItem, CardActionArea } from "@mui/material";
+import { IconButton, InputBase, Paper, Menu, MenuItem, CardActionArea, Chip } from "@mui/material";
 import { getJwtToken } from "../../shared/utils/authUtils";
 import {
   ApartmentOutlined,
   BusinessOutlined,
+  Check,
   HomeOutlined,
   Search,
   WorkOutline,
@@ -32,8 +31,9 @@ type ResponseType = {
 
 const Navbar: React.FC = () => {
   const [studentEmail, setStudentEmail] = useState("");
-  const [studentStatus, setStudentStatus] = useState(false);
-  const [, setStudentProcess] = useState("");
+  const [studentVerify, setStudentVerify] = useState(false);
+  const [studentActive, setStudentActive] = useState(false);
+  const [studentProcess, setStudentProcess] = useState("");
   const [studentAvatar, setStudentAvatar] = useState("");
 
   // Fetch for student info
@@ -51,7 +51,8 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     if (getStudentInfo.isSuccess) {
       setStudentEmail(getStudentInfo.data.data.email);
-      setStudentStatus(getStudentInfo.data.data.isVerify);
+      setStudentVerify(getStudentInfo.data.data.isVerify);
+      setStudentActive(getStudentInfo.data.data.isActive);
       setStudentProcess(getStudentInfo.data.data.process);
       setStudentAvatar(getStudentInfo.data.data.avatar);
     }
@@ -185,35 +186,12 @@ const Navbar: React.FC = () => {
             </IconButton>
           </Paper>
 
-          {/* <Paper
-            component="form"
-            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400, height:'fit' }}
-          >
-            <IconButton sx={{ p: '10px' }} aria-label="menu">
-              <Menu />
-            </IconButton>
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search Google Maps"
-              inputProps={{ 'aria-label': 'search google maps' }}
-            />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-              <Search />
-            </IconButton>
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
-              <Directions />
-            </IconButton>
-          </Paper> */}
         </div>
       </div>
       <div className="col-span-3 flex items-center justify-evenly">
         <Link to="/student">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
-              {/* <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
-                99+
-              </div> */}
               <div
                 className={`${pathName === "" || undefined
                   ? "text-primary"
@@ -228,9 +206,6 @@ const Navbar: React.FC = () => {
         <Link to="/student/jobs">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
-              {/* <div className="absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
-                99+
-              </div> */}
               <div
                 className={`${pathName === "watch" ? "text-primary" : "text-gray-400"
                   }`}
@@ -243,9 +218,6 @@ const Navbar: React.FC = () => {
         <Link to="/student/companies">
           <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <div className="w-14 h-auto relative flex items-center justify-center">
-              {/* <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
-                99+
-              </div> */}
               <div
                 className={`${pathName === "marketplace" ? "text-primary" : "text-gray-400"
                   }`}
@@ -255,42 +227,19 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </Link>
-        {/* <Link to="/student/notification">
-          <div className="w-24 h-12 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
-            <div className="w-14 h-auto relative flex items-center justify-center">
-              <div className=" absolute bg-red-500 text-white text-xs font-bold px-1 rounded-lg top-0 right-0 opacity-70">
-                99+
-              </div>
-              <div
-                className={`${pathName === 'marketplace' ? 'text-primary' : 'text-gray-400'
-                  }`}
-              >
-                <BellRing size={30} />
-              </div>
-            </div>
-          </div>
-        </Link> */}
       </div>
       <div className="col-span-2 grid grid-cols-10 items-center justify-end">
         <div className="w-fit col-span-3 items-center mt-1">
-          {studentStatus === true ? (
-            <Tag
-              icon={<CheckCircleOutlined />}
-              color="success"
-              className="w-full overflow-hidden"
-            >
-              Verified
-            </Tag>
-          ) : (
-            <Tag
-              icon={<ExclamationCircleOutlined />}
-              color="warning"
-              className="w-full overflow-hidden"
-            >
-              Not Verified
-            </Tag>
-          )}
-          {/* <Tag icon={<SyncOutlined spin />} color="processing" className='w-full overflow-hidden'>Processing</Tag> */}
+          {!studentActive ?
+            (<Chip color="error" variant="outlined" icon={<ExclamationCircleOutlined />} label="Deactivated" />)
+            : !studentVerify ?
+              (<Chip color="warning" variant="outlined" icon={<ExclamationCircleOutlined />} label="Not Verified" />)
+              : studentProcess === "Intern" ?
+                (<Chip color="success" variant="outlined" icon={<Check />} label="Intern" />)
+                : studentProcess === "Registered" ?
+                  (<Chip color="primary" variant="outlined" icon={<Check />} label="Enrolled" />)
+                  : (<Chip color="primary" variant="outlined" icon={<Check />} label="Verified" />)
+          }
         </div>
         <div className="h-10 w-full col-span-7 mx-1 pr-2 ">
           <Link to="/student/profile">
@@ -312,9 +261,6 @@ const Navbar: React.FC = () => {
               </div>
             </button>
           </Link>
-          {/* <button className="w-10 h-10 bg-gray-200 focus:outline-none hover:bg-gray-300 rounded-full">
-            <i className="fas fa-sort-down"></i>
-          </button> */}
         </div>
       </div>
     </div>

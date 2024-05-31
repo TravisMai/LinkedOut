@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
@@ -70,6 +70,23 @@ export default function AddJob() {
 
   // Get jwt token
   const token = getJwtToken();
+
+  // Handle check isVerified
+  const [isVerified, setIsVerified] = useState(false);
+  // Fetch company's info
+  useQuery({
+    queryKey: "currentInfo",
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    onSuccess: (data) => {
+      // Set company id
+      setIsVerified(data.data.isVerify);
+    },
+  });
 
   // Handle input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -281,7 +298,7 @@ export default function AddJob() {
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={isInternship}
+                                checked={isInternship || formData.workType === "Internship"}
                                 onChange={handleCheckboxChange}
                               />
                             }
@@ -292,11 +309,11 @@ export default function AddJob() {
                     </Grid>
                   </FormControl>
                 </Grid>
-                {isInternship && (
+                {(isInternship || formData.workType === "Internship") && (
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
-                      required={isInternship}
+                      required={isInternship || formData.workType === "Internship"}
                       name="internshipPrograme"
                       label="Internship Program"
                       InputLabelProps={{
@@ -363,14 +380,6 @@ export default function AddJob() {
                     autoComplete="salary"
                     onChange={handleInputChange}
                   />
-                  {/* <TextField
-                                        fullWidth
-                                        name="salary"
-                                        label="Salary"
-                                        type="number"
-                                        autoComplete="salary"
-                                        onChange={handleInputChange}
-                                    /> */}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -426,7 +435,7 @@ export default function AddJob() {
                   fullWidth
                   type="submit"
                   variant="contained"
-                  disabled={showSuccess}
+                  disabled={showSuccess || !isVerified}
                   sx={{ mt: 2, mb: 2 }}
                 >
                   Create

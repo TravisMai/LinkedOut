@@ -44,6 +44,7 @@ import GradingIcon from "@mui/icons-material/Grading";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { getJwtToken, validateJwtToken } from "../../shared/utils/authUtils";
 import Logo from "@/shared/assets/LinkedOut-Logo.svg";
+import VerifyCompany from "./content/Action.verifyCompany";
 
 type ResponseType = {
   response: {
@@ -306,7 +307,7 @@ export default function StaffPage() {
             <ToggleList
               display={setValue}
               section="Action"
-              subSection={[{ icon: <ChecklistIcon />, label: "Verify" }]}
+              subSection={[{ icon: <ChecklistIcon />, label: "Verify student" }, { icon: <ChecklistIcon />, label: "Verify company" }]}
             />
             <ToggleList
               display={setValue}
@@ -376,8 +377,11 @@ export default function StaffPage() {
               <CustomTabPanel value={value} index={"Company"}>
                 <Company />
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={"Action / Verify"}>
+              <CustomTabPanel value={value} index={"Action / Verify student"}>
                 <VerifyStudent />
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={"Action / Verify company"}>
+                <VerifyCompany />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={"Action / Update"}>
                 <Update />
