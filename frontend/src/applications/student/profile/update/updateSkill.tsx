@@ -67,7 +67,7 @@ export default function UpdateSKill({ onClose }: { onClose: () => void }) {
         },
       ),
     onSuccess: (data) => {
-      setStudentId(data.data.id);
+      setStudentId(data.data?.id);
       const updatedFormData = {
         skill: data.data?.skill ?? [],
       };

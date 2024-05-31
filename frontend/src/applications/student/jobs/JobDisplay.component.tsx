@@ -36,7 +36,7 @@ const JobDisplay: React.FC = () => {
   }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);
 
   useEffect(() => {
-    if (getStudentInfo.isSuccess && getStudentInfo.data.data.id) {
+    if (getStudentInfo.isSuccess && getStudentInfo.data.data?.id) {
       setStudentData(getStudentInfo.data.data);
     }
   }, [getStudentInfo.isSuccess, getStudentInfo.data?.data]);

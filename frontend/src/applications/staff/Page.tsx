@@ -233,7 +233,7 @@ export default function StaffPage() {
       }),
     onSuccess: (data) => {
       console.log(data);
-      setStaffName(data.data.name);
+      setStaffName(data.data?.name);
     },
   });
 

@@ -32,7 +32,7 @@ const StudentList: React.FC = () => {
   useEffect(() => {
     setAllApplications([]);
     const fetchApplications = async () => {
-      companyJobs.forEach(async (job) => {
+      companyJobs?.forEach(async (job) => {
         try {
           const response = await axios.get(
             `https://linkedout-hcmut.feedme.io.vn/api/v1/job_applicants/${job.id}`,

@@ -50,11 +50,11 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     if (getStudentInfo.isSuccess) {
-      setStudentEmail(getStudentInfo.data.data.email);
-      setStudentVerify(getStudentInfo.data.data.isVerify);
-      setStudentActive(getStudentInfo.data.data.isActive);
-      setStudentProcess(getStudentInfo.data.data.process);
-      setStudentAvatar(getStudentInfo.data.data.avatar);
+      setStudentEmail(getStudentInfo.data.data?.email);
+      setStudentVerify(getStudentInfo.data.data?.isVerify);
+      setStudentActive(getStudentInfo.data.data?.isActive);
+      setStudentProcess(getStudentInfo.data.data?.process);
+      setStudentAvatar(getStudentInfo.data.data?.avatar);
     }
   }, [
     getStudentInfo.isSuccess,

@@ -77,7 +77,7 @@ export default function InternshipDisplay() {
       ),
     onSuccess: (data) => {
       setInternship(data.data);
-      // setStatus(data.data.status);
+      // setStatus(data.data?.status);
     },
   });
 

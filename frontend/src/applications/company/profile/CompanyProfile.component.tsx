@@ -99,8 +99,8 @@ export default function CompanyProfile() {
       }),
     onSuccess: (data) => {
       // Set company id
-      setCompanyId(data.data.id);
-      setCompanyStatus(data.data.isVerify);
+      setCompanyId(data.data?.id);
+      setCompanyStatus(data.data?.isVerify);
 
       // Set form data
       if (
@@ -109,9 +109,9 @@ export default function CompanyProfile() {
         formData.phoneNumber === ""
       )
         setFormData({
-          name: data.data.name,
-          email: data.data.email,
-          phoneNumber: data.data.phoneNumber,
+          name: data.data?.name,
+          email: data.data?.email,
+          phoneNumber: data.data?.phoneNumber,
           password: "",
           newPassword: "",
         });

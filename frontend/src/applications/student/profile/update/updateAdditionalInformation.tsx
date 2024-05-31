@@ -73,7 +73,7 @@ export default function UpdateAdditionalInformation({
         },
       ),
     onSuccess: (data) => {
-      setStudentId(data.data.id);
+      setStudentId(data.data?.id);
       const updatedFormData = {
         additionalInformation: data.data?.additionalInformation ?? []
       };

@@ -193,7 +193,7 @@ const JobDisplay: React.FC = () => {
         )
         .then((response) => {
           if (response.data && response.data?.length > 0) {
-            response.data.forEach((job: jobApplicationType) => {
+            response.data?.forEach((job: jobApplicationType) => {
               if (job.job.id === jobId) {
                 setApplied(true);
                 setStatus(job.status);
@@ -222,7 +222,7 @@ const JobDisplay: React.FC = () => {
         )
         .then((response) => {
           if (response.data && response.data?.length > 0) {
-            response.data.forEach((intern: internshipType) => {
+            response.data?.forEach((intern: internshipType) => {
               if (intern.jobApplicants.job.id === jobId) {
                 setThisIntern(intern);
                 setAppliedIntern(true);

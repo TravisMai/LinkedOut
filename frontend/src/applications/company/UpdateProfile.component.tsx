@@ -111,8 +111,8 @@ export default function UpdateProfile() {
         },
       ),
     onSuccess: (data) => {
-      setCompanyId(data.data.id);
-      setCompanyStatus(data.data.isVerify);
+      setCompanyId(data.data?.id);
+      setCompanyStatus(data.data?.isVerify);
       const updatedFormData = {
         ...formData,
         name: data.data?.name,
@@ -169,7 +169,7 @@ export default function UpdateProfile() {
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: () => {
       const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
+      Object.entries(formData)?.forEach(([key, value]) => {
         if (value !== null) {
           if (key === "myfile") {
             formDataToSend.append(key, value as File); // Append file to FormData

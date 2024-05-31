@@ -84,7 +84,7 @@ export default function AddJob() {
       }),
     onSuccess: (data) => {
       // Set company id
-      setIsVerified(data.data.isVerify);
+      setIsVerified(data.data?.isVerify);
     },
   });
 
@@ -175,7 +175,7 @@ export default function AddJob() {
 
     mutationFn: (formData) => {
       const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
+      Object.entries(formData)?.forEach(([key, value]) => {
         if (value !== null) {
           if (key === "internshipPrograme" || key === "images") {
             formDataToSend.append(key, value as File); // Append file to FormData

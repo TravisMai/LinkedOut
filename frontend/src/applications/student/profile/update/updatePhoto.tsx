@@ -69,7 +69,7 @@ export default function UpdatePhoto({ onClose }: { onClose: () => void }) {
       }),
     onSuccess: (data) => {
       // Set student id
-      setStudentId(data.data.id);
+      setStudentId(data.data?.id);
     },
   });
 

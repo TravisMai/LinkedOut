@@ -38,7 +38,7 @@ export function AllJobPage() {
       }),
     onSuccess: (data) => {
       // Set company id
-      setIsVerified(data.data.isVerify);
+      setIsVerified(data.data?.isVerify);
     },
   });
 

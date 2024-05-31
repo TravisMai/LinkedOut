@@ -67,7 +67,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
         },
       ),
     onSuccess: (data) => {
-      setStudentId(data.data.id);
+      setStudentId(data.data?.id);
       const updatedFormData = {
         education: data.data?.education ?? [],
       };
