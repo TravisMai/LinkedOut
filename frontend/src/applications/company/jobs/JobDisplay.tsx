@@ -117,7 +117,7 @@ const JobDisplayCompany: React.FC = () => {
       setIsActive(!isActive);
     },
     onError: () => {
-      // console.log(mutation.error);
+      console.log(mutation.error);
       setLoading(false);
     },
     onMutate: () => {

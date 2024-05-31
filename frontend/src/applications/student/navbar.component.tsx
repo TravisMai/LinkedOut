@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
       setSearchResults(data.data?.filter((result: SearchResultsType) => result.entity !== "student"));
     },
     onError: () => {
-      // console.log(mutation.error);
+      console.log(mutation.error);
     },
   });
 

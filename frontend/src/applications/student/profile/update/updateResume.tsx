@@ -121,7 +121,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
       handleClose();
     },
     onError: () => {
-      // console.log(mutation.error);
+      console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },

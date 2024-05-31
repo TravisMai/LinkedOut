@@ -94,7 +94,7 @@ const CompanyAppBar = () => {
       }, 1000);
     },
     onError: (error) => {
-      // console.log(error);
+      console.log(error);
     },
   });
 

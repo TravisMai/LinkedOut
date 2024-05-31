@@ -106,7 +106,7 @@ const JobDisplay: React.FC = () => {
       }
     },
     onError: () => {
-      // console.log(mutationApply.error);
+      console.log(mutationApply.error);
       setApplyingInternship(false);
       setLoading(false);
       setShowError(true);
@@ -133,7 +133,7 @@ const JobDisplay: React.FC = () => {
       setApplyingInternship(false);
     },
     onError: () => {
-      // console.log(mutationApplyInternship.error);
+      console.log(mutationApplyInternship.error);
       setLoading(false);
       setShowError(true);
       setApplyingInternship(false);
@@ -202,7 +202,7 @@ const JobDisplay: React.FC = () => {
           }
         })
         .catch((error) => {
-          // console.error("Error fetching applied jobs:", error);
+          console.error("Error fetching applied jobs:", error);
         });
     },
     [token, jobId, setApplied, setStatus],
@@ -231,7 +231,7 @@ const JobDisplay: React.FC = () => {
           }
         })
         .catch((error) => {
-          // console.error("Error fetching applied jobs:", error);
+          console.error("Error fetching applied jobs:", error);
         });
     },
     [token, jobId, setAppliedIntern],

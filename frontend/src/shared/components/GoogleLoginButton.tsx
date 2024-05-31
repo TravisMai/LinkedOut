@@ -22,7 +22,7 @@ const GoogleLoginButton = (params: { role: string }) => {
         navigate("/" + role);
       }}
       onError={() => {
-        // console.log("Login Failed");
+        console.log("Login Failed");
       }}
     />
   );

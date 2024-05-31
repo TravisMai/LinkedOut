@@ -131,7 +131,7 @@ export default function UpdateProfile() {
       setFormData(updatedFormData);
     },
     onError: (error) => {
-      // console.error("Error fetching data: ", error);
+      console.error("Error fetching data: ", error);
     },
   });
 
@@ -210,7 +210,7 @@ export default function UpdateProfile() {
       }, 2000);
     },
     onError: () => {
-      // console.log(mutation.error);
+      console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },

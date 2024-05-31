@@ -113,7 +113,7 @@ export default function StudentProfile() {
       }, 1000);
     },
     onError: (error) => {
-      // console.log(error);
+      console.log(error);
     },
   });
   const handleLogout = () => {

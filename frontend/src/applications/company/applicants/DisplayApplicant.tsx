@@ -97,7 +97,7 @@ export default function StudentProfile2() {
       setLoading(false);
     },
     onError: () => {
-      // console.log(mutation.error);
+      console.log(mutation.error);
       setLoading(false);
     },
     onMutate: () => {

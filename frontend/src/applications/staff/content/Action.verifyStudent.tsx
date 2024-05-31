@@ -85,7 +85,7 @@ export default function Verify() {
     },
     onError: () => {
       // Log the error if mutation fails
-      // console.error(mutationVerifyStudent.error);
+      console.error(mutationVerifyStudent.error);
     },
     onMutate: () => {
       // Optional callback to perform actions just before the mutation
@@ -111,7 +111,7 @@ export default function Verify() {
       queryClient.invalidateQueries("allStudent");
     },
     onError: () => {
-      // console.log(mutationDeleteStudent.error);
+      console.log(mutationDeleteStudent.error);
     },
     onMutate: () => { },
   });

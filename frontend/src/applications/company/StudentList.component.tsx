@@ -47,7 +47,7 @@ const StudentList: React.FC = () => {
             ...response.data,
           ]);
         } catch (error) {
-          // console.error(
+          console.error(
             `Error fetching applications for job ${job.id}:`,
             error,
           );

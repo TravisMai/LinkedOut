@@ -50,7 +50,7 @@ export default function JobDialog({
             handleClose();
         },
         onError: () => {
-            // console.log(mutationDelete.error);
+            console.log(mutationDelete.error);
         },
         onMutate: () => { },
     });

@@ -62,7 +62,7 @@ export function ApplicantsPage() {
             ...response.data,
           ]);
         } catch (error) {
-          // console.error(
+          console.error(
             `Error fetching applications for job ${job.id}:`,
             error,
           );

@@ -265,7 +265,7 @@ export default function StudentProfile2() {
       }, 1000);
     },
     onError: (error) => {
-      // console.log(error);
+      console.log(error);
     },
   });
 

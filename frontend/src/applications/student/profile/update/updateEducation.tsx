@@ -74,7 +74,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
       setFormData(updatedFormData);
     },
     onError: (error) => {
-      // console.error("Error fetching data", error);
+      console.error("Error fetching data", error);
     }
   });
   
@@ -98,7 +98,7 @@ export default function UpdateEducation({ onClose }: { onClose: () => void }) {
       handleClose();
     },
     onError: () => {
-      // console.log(mutation.error);
+      console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },
