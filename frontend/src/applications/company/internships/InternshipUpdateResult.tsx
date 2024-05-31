@@ -87,7 +87,7 @@ export default function UpdateResult({
       handleClose();
     },
     onError: () => {
-      console.log(mutation.error);
+      // console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },

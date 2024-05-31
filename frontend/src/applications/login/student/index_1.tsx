@@ -88,7 +88,7 @@ export default function StudentLogin() {
     onError: (error) => {
       setSending(false);
       setShowError(true);
-      console.log(error);
+      // console.log(error);
     },
     onMutate: () => {
       setSending(true);

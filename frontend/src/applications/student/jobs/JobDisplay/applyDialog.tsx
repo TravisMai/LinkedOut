@@ -74,7 +74,7 @@ export default function ApplyDialog({
       );
     },
     onError: (error: ErrorType) => {
-      console.log(error.response.data.message);
+      // console.log(error.response.data.message);
     },
   });
 

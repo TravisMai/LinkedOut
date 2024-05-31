@@ -48,7 +48,7 @@ export default function StudentProfile({
       handleClose();
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
     onMutate: () => { },
   });
@@ -75,7 +75,7 @@ export default function StudentProfile({
       handleClose();
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 
@@ -98,7 +98,7 @@ export default function StudentProfile({
       handleClose();
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 
@@ -122,7 +122,7 @@ export default function StudentProfile({
       handleClose();
     },
     onError: () => {
-      console.log(mutationDelete.error);
+      // console.log(mutationDelete.error);
     },
     onMutate: () => { },
   });
@@ -138,7 +138,7 @@ export default function StudentProfile({
     setStatus(event.target.value);
   };
 
-  console.log("status", status)
+  // console.log("status", status)
 
   // Handle visible
   const [isVisible, setIsVisible] = useState(false);

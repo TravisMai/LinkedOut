@@ -116,7 +116,7 @@ export default function Pending(props: any) {
     },
     onError: () => {
       // Log the error if mutation fails
-      console.error(mutationVerify.error);
+      // console.error(mutationVerify.error);
     },
     onMutate: () => {
       // Optional callback to perform actions just before the mutation
@@ -148,7 +148,7 @@ export default function Pending(props: any) {
     },
     onError: () => {
       // Log the error if mutation fails
-      console.error(mutationVerify.error);
+      // console.error(mutationVerify.error);
     },
     onMutate: () => {
       // Optional callback to perform actions just before the mutation
@@ -181,7 +181,7 @@ export default function Pending(props: any) {
       queryClient.invalidateQueries("allStudent");
     },
     onError: () => {
-      console.log(mutationDelete.error);
+      // console.log(mutationDelete.error);
     },
     onMutate: () => { },
   });
@@ -202,7 +202,7 @@ export default function Pending(props: any) {
       queryClient.invalidateQueries("allCompany");
     },
     onError: () => {
-      console.log(mutationDelete.error);
+      // console.log(mutationDelete.error);
     },
     onMutate: () => { },
   });

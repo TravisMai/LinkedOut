@@ -53,7 +53,7 @@ const LeftSidebar: React.FC = () => {
           setAppliedJobs(response.data);
         })
         .catch((error) => {
-          console.error("Error fetching applied jobs:", error);
+          // console.error("Error fetching applied jobs:", error);
         });
     },
     [token, setAppliedJobs],

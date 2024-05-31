@@ -56,7 +56,7 @@ export default function DeleteDialog({
       navigate("/company/jobs");
     },
     onError: () => {
-      console.log(mutationDelete.error);
+      // console.log(mutationDelete.error);
     },
     onMutate: () => {},
   });

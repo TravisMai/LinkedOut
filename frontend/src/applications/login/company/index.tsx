@@ -85,7 +85,7 @@ export default function CompanyLogin() {
     onError: (error) => {
       setSending(false);
       setShowError(true);
-      console.log(error);
+      // console.log(error);
     },
     onMutate: () => {
       setSending(true);

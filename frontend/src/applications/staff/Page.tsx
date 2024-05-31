@@ -212,7 +212,7 @@ export default function StaffPage() {
       }, 1000);
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 
@@ -232,7 +232,7 @@ export default function StaffPage() {
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
       setStaffName(data.data?.name);
     },
   });

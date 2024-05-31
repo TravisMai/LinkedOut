@@ -138,7 +138,7 @@ export default function StudentSignUp() {
       }, 5000);
     },
     onError: () => {
-      console.log(mutation.error);
+      // console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },

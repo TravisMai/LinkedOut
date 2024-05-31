@@ -60,7 +60,7 @@ const JobDisplay: React.FC = () => {
           setAppliedJobs(response.data);
         })
         .catch((error) => {
-          console.error("Error fetching applied jobs:", error);
+          // console.error("Error fetching applied jobs:", error);
         });
     },
     [token, setAppliedJobs],
@@ -90,7 +90,7 @@ const JobDisplay: React.FC = () => {
           setAppliedInternships(response.data);
         })
         .catch((error) => {
-          console.error("Error fetching applied jobs:", error);
+          // console.error("Error fetching applied jobs:", error);
         });
     },
     [token, setAppliedInternships],

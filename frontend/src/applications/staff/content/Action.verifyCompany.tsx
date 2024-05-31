@@ -75,7 +75,7 @@ export default function VerifyCompany() {
         },
         onError: () => {
             // Log the error if mutation fails
-            console.error(mutationVerifyCompany.error);
+            // console.error(mutationVerifyCompany.error);
         },
         onMutate: () => {
             // Optional callback to perform actions just before the mutation
@@ -101,7 +101,7 @@ export default function VerifyCompany() {
             queryClient.invalidateQueries("allCompany");
         },
         onError: () => {
-            console.log(mutationDeleteCompany.error);
+            // console.log(mutationDeleteCompany.error);
         },
         onMutate: () => { },
     });

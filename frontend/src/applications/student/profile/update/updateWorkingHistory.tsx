@@ -80,7 +80,7 @@ export default function UpdateWorkingHistory({
       setFormData(updatedFormData);
     },
     onError: (error) => {
-      console.error("Error fetching data", error);
+      // console.error("Error fetching data", error);
     }
   });
 
@@ -104,7 +104,7 @@ export default function UpdateWorkingHistory({
       handleClose();
     },
     onError: () => {
-      console.log(mutation.error);
+      // console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },

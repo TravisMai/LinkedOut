@@ -75,7 +75,7 @@ export default function CompanyProfile({
 
     },
     onError: () => {
-      console.log(mutationDelete.error);
+      // console.log(mutationDelete.error);
     },
     onMutate: () => { },
   });
@@ -108,7 +108,7 @@ export default function CompanyProfile({
       handleClose();
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 
@@ -134,7 +134,7 @@ export default function CompanyProfile({
       handleClose();
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 

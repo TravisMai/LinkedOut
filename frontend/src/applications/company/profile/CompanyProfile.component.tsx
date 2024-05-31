@@ -159,7 +159,7 @@ export default function CompanyProfile() {
       }, 5000);
     },
     onError: () => {
-      console.log(mutation.error);
+      // console.log(mutation.error);
       setSending(false);
       setShowError(true);
     },
