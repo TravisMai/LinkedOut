@@ -23,8 +23,7 @@ import DefaultAvatar from "@/shared/assets/default-image.jpeg";
 
 
 type ResponseType = {
-    data: {
-    };
+    data: any;
 };
 
 export default function VerifyCompany() {
