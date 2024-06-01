@@ -89,7 +89,7 @@ export class StudentController {
 
   // get all the student
   @Get()
-  @AllowRoles(['staff', 'company'])
+  @AllowRoles(['staff'])
   @UseGuards(JwtGuard, RolesGuard)
   async findAll(
     @Req() req: Request,
@@ -206,6 +206,8 @@ export class StudentController {
       { name: 'resume', maxCount: 1 },
     ]),
   )
+  @AllowRoles(['staff', 'student'])
+  @UseGuards(JwtGuard, RolesGuard)
   async update(
     @UploadedFiles()
     files: { avatar?: Express.Multer.File[]; resume?: Express.Multer.File[] },
@@ -219,12 +221,6 @@ export class StudentController {
         return response
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
-      }
-      if (student.isActive && typeof student.isActive === 'string') {
-        student.isActive = student.isActive === 'true';
-      }
-      if (student.isVerify && typeof student.isVerify === 'string') {
-        student.isVerify = student.isVerify === 'true';
       }
       const findStudent = await this.studentService.findOne(id);
       if (!findStudent) {

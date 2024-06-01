@@ -25,13 +25,9 @@ export class RolesGuard implements CanActivate {
       return false;
     }
 
-    try {
-      const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
-      const userRole = decodedToken.role;
+    const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
+    const userRole = decodedToken.role;
 
-      return allowedRoles.includes(userRole);
-    } catch (error) {
-      return false;
-    }
+    return allowedRoles.includes(userRole) ?? false;
   }
 }

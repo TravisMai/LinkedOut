@@ -29,12 +29,15 @@ export class JobRepository extends Repository<Job> {
       });
     }
 
+    query
+      .innerJoin('job.company', 'company')
+      .andWhere('company.isActive = :isActive', { isActive: true })
+      .andWhere('company.isVerify = :isVerify', { isVerify: true });
+
     if (criteria.company) {
-      query
-        .innerJoin('job.company', 'company')
-        .andWhere('company.name LIKE :companyName', {
-          companyName: `%${criteria.company}%`,
-        });
+      query.andWhere('company.name LIKE :companyName', {
+        companyName: `%${criteria.company}%`,
+      });
     }
 
     return await query.getMany();
@@ -44,6 +47,8 @@ export class JobRepository extends Repository<Job> {
     return await this.createQueryBuilder('job')
       .innerJoin('job.company', 'company')
       .where('company.id = :companyId', { companyId })
+      .andWhere('company.isActive = :isActive', { isActive: true })
+      .andWhere('company.isVerify = :isVerify', { isVerify: true })
       .getMany();
   }
 }

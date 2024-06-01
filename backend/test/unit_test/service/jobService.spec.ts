@@ -46,6 +46,8 @@ describe('JobService', () => {
     const queryBuilderMock = {
       leftJoinAndSelect: jest.fn().mockReturnThis(),
       select: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
       getMany: jest.fn().mockResolvedValue(jobs),
     };
     jest
@@ -55,6 +57,14 @@ describe('JobService', () => {
     expect(result).toBe(jobs);
     expect(queryBuilderMock.leftJoinAndSelect).toHaveBeenCalled();
     expect(queryBuilderMock.select).toHaveBeenCalled();
+    expect(queryBuilderMock.where).toHaveBeenCalledWith(
+      'company.isActive = :isActive',
+      { isActive: true },
+    );
+    expect(queryBuilderMock.andWhere).toHaveBeenCalledWith(
+      'company.isVerify = :isVerify',
+      { isVerify: true },
+    );
     expect(queryBuilderMock.getMany).toHaveBeenCalled();
   });
 
@@ -64,6 +74,7 @@ describe('JobService', () => {
       leftJoinAndSelect: jest.fn().mockReturnThis(),
       select: jest.fn().mockReturnThis(),
       where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
       getOne: jest.fn().mockResolvedValue(job),
     };
     jest
@@ -76,6 +87,14 @@ describe('JobService', () => {
     expect(queryBuilderMock.where).toHaveBeenCalledWith('job.id = :id', {
       id: 'some-id',
     });
+    expect(queryBuilderMock.andWhere).toHaveBeenCalledWith(
+      'company.isActive = :isActive',
+      { isActive: true },
+    );
+    expect(queryBuilderMock.andWhere).toHaveBeenCalledWith(
+      'company.isVerify = :isVerify',
+      { isVerify: true },
+    );
     expect(queryBuilderMock.getOne).toHaveBeenCalled();
   });
 

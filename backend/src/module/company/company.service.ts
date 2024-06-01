@@ -31,7 +31,10 @@ export class CompanyService {
   }
 
   // staff can update the company without the password
-  async staffUpdate(id: string, company: StaffUpdateCompanyDto): Promise<Company> {
+  async staffUpdate(
+    id: string,
+    company: StaffUpdateCompanyDto,
+  ): Promise<Company> {
     await this.companyRepository.update(id, company);
     return await this.companyRepository.findOne({ where: { id } });
   }

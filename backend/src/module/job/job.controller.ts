@@ -34,7 +34,7 @@ import { JobResponseDto } from './dto/JobResponse.dto';
 import { CompanyResponseDto } from '../company/dto/companyResponse.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
-import { plainToClass } from 'class-transformer';
+import { AccessGuard } from 'src/common/guards/access.guard';
 
 @Controller('job')
 export class JobController {
@@ -86,8 +86,8 @@ export class JobController {
 
   // Get all jobs by company id
   @Get('company')
-  @AllowRoles(['company'])
-  @UseGuards(JwtGuard)
+  @AllowRoles(['company', 'staff'])
+  @UseGuards(JwtGuard, RolesGuard)
   async findAllByCompanyId(
     @Req() req: any,
     @Res() response: Response,
@@ -113,7 +113,7 @@ export class JobController {
   // create a job
   @Post()
   @AllowRoles(['company'])
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'images', maxCount: 4 },
