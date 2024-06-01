@@ -73,6 +73,7 @@ export default function AddJob() {
 
   // Handle check isVerified
   const [isVerified, setIsVerified] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   // Fetch company's info
   useQuery({
     queryKey: "currentInfo",
@@ -85,6 +86,7 @@ export default function AddJob() {
     onSuccess: (data) => {
       // Set company id
       setIsVerified(data.data?.isVerify);
+      setIsActive(data.data?.isActive);
     },
   });
 
@@ -435,7 +437,7 @@ export default function AddJob() {
                   fullWidth
                   type="submit"
                   variant="contained"
-                  disabled={showSuccess || !isVerified}
+                  disabled={showSuccess || !isVerified || !isActive}
                   sx={{ mt: 2, mb: 2 }}
                 >
                   Create

@@ -128,7 +128,7 @@ export default function Student() {
                 </TableCell>
                 <TableCell align="left">
                   {row.name} {row.isVerify ? "" : "(Not verified)"}{" "}
-                  {!row.isActive && "(Disabled)"}
+                  {!row.isActive && "(Deactivated)"}
                 </TableCell>
                 <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="left">{row.phoneNumber}</TableCell>

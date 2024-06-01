@@ -215,7 +215,7 @@ const CompanyAppBar = () => {
                 </Button>
               ))}
             </Box>
-            <Typography sx={{ mr: 1 }}>{companyData?.name ?? ""}{!companyData?.isVerify && "  (Not verified)"}</Typography>
+            <Typography sx={{ mr: 1 }}>{companyData?.name ?? ""}{!companyData?.isVerify && "  (Not verified)"} {!companyData?.isActive && " (Deactivated) "}</Typography>
             <Box sx={{ flexGrow: 0 }}>
               <Button onClick={(event) => setAnchorElUser(event.currentTarget)}>
                 <Avatar alt="Remy Sharp" src={

@@ -184,7 +184,7 @@ const JobDisplay: React.FC = () => {
                 <div className="basis-11/12">
                   <Typography variant="h5">{internship.jobApplicants.job.title}{" "}({internship.jobApplicants.status})</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {internship.jobApplicants.job.company.name}
+                    {internship.jobApplicants.job.company.name} {!internship.jobApplicants.job.company?.isActive && " (Deactivated)"} {!internship.jobApplicants.job.company?.isVerify && " (Not verified)"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {internship.jobApplicants.job?.descriptions?.aboutUs ?? ""}
@@ -243,7 +243,7 @@ const JobDisplay: React.FC = () => {
                 <div className="basis-11/12">
                   <Typography variant="h5">{application.job.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {application.job.company.name}
+                    {application.job.company.name} {!application.job.company?.isActive && " (Deactivated)"} {!application.job.company?.isVerify && " (Not verified)"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {application.job?.descriptions?.aboutUs ?? ""}
@@ -302,7 +302,7 @@ const JobDisplay: React.FC = () => {
                 <div className="basis-11/12">
                   <Typography variant="h5">{application.job.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {application.job.company.name}
+                    {application.job.company.name} {!application.job.company?.isActive && " (Deactivated)"} {!application.job.company?.isVerify && " (Not verified)"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {application.job?.descriptions?.aboutUs ?? ""}
@@ -361,7 +361,7 @@ const JobDisplay: React.FC = () => {
                 <div className="basis-11/12">
                   <Typography variant="h5">{application.job.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {application.job.company.name}
+                    {application.job.company.name} {!application.job.company?.isActive && " (Deactivated)"} {!application.job.company?.isVerify && " (Not verified)"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {application.job?.descriptions?.aboutUs ?? ""}
@@ -420,7 +420,7 @@ const JobDisplay: React.FC = () => {
                 <div className="basis-11/12">
                   <Typography variant="h5">{application.job.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {application.job.company.name}
+                    {application.job.company.name} {!application.job.company?.isActive && " (Deactivated)"} {!application.job.company?.isVerify && " (Not verified)"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {application.job?.descriptions?.aboutUs ?? ""}
