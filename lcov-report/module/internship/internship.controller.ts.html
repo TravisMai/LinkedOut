@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.3% </span>
+                <span class="strong">94.01% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>108/117</span>
+                <span class='fraction'>110/117</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.92% </span>
+                <span class="strong">94.69% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>105/113</span>
+                <span class='fraction'>107/113</span>
             </div>
         
             
@@ -330,8 +330,7 @@
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
 <a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a>
-<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L268'></a><a href='#L268'>268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -348,6 +347,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -401,12 +401,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -631,6 +629,7 @@ import { InternshipUpdateDto } from './dto/internshipUpdate.dto';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 import { InternshipDocumentDTO } from './dto/document.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { AccessGuard } from 'src/common/guards/access.guard';
 &nbsp;
 @Controller('internship')
 export class InternshipController {
@@ -648,7 +647,7 @@ export class InternshipController {
   // apply for an internship, when the student applies for an internship, the student will be added to the internship and the jobApplicants table
   @Post(':id')
   @AllowRoles(['student'])
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   async applyInternship(
     @Req() req: Request,
     @Res() response: Response,
@@ -669,16 +668,14 @@ export class InternshipController {
         await this.jobApplicantsService.findJobApplicantsByCandidateId(
           decodedToken.id,
         );
+      const job = findJobApplicant.find(<span class="fstat-no" title="function not covered" >(j</span>ob) =&gt; <span class="cstat-no" title="statement not covered" >job.job.id === id)</span>;
       let newJobApplicants;
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (findJobApplicant &amp;&amp; findJobApplicant.length &gt; 0) {
-        const job = <span class="cstat-no" title="statement not covered" >findJobApplicant.find(<span class="fstat-no" title="function not covered" >(j</span>ob) =&gt; <span class="cstat-no" title="statement not covered" >job.job.id === id)</span>;</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (job) {</span>
-<span class="cstat-no" title="statement not covered" >          newJobApplicants =</span>
-            await this.jobApplicantsService.findJobApplicantsByJobIdAndCandidateId(
-              job.job.id,
-              student.id,
-            );
-        }
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (findJobApplicant &amp;&amp; findJobApplicant.length &gt; 0 &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >job)</span> {
+<span class="cstat-no" title="statement not covered" >        newJobApplicants =</span>
+          await this.jobApplicantsService.findJobApplicantsByJobIdAndCandidateId(
+            job.job.id,
+            student.id,
+          );
       } else {
         // create a new jobApplicants
         const jobApplicants = new JobApplicants();
@@ -771,7 +768,7 @@ export class InternshipController {
   @Put(':id')
   @AllowRoles(['staff', 'company', 'student'])
   @UseInterceptors(FileFieldsInterceptor([{ name: 'document', maxCount: 1 }]))
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   async update(
     @UploadedFiles()
     files: { document?: Express.Multer.File[] },
@@ -874,7 +871,7 @@ export class InternshipController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-01T04:49:13.305Z
+                at 2024-06-01T06:09:09.430Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
