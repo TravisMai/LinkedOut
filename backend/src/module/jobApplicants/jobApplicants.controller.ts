@@ -20,6 +20,7 @@ import { AllowRoles } from 'src/common/decorators/role.decorator';
 import { JobApplicantsService } from './jobApplicants.service';
 import { JobService } from '../job/job.service';
 import { ApplyJobDTO } from './dto/applyJob.dto';
+import { AccessGuard } from 'src/common/guards/access.guard';
 
 @Controller('job_applicants')
 export class JobApplicantsController {
@@ -32,7 +33,7 @@ export class JobApplicantsController {
 
   @Post(':id')
   @AllowRoles(['student'])
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   async applyJob(
     @Req() req: Request,
     @Res() response: Response,
@@ -162,7 +163,7 @@ export class JobApplicantsController {
   // update a job applicant
   @Put('update/:id')
   @AllowRoles(['company'])
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   async update(
     @Req() req: Request,
     @Res() response: Response,

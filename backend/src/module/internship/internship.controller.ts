@@ -30,6 +30,7 @@ import { InternshipUpdateDto } from './dto/internshipUpdate.dto';
 import { AzureBlobService } from 'src/common/service/azureBlob.service';
 import { InternshipDocumentDTO } from './dto/document.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { AccessGuard } from 'src/common/guards/access.guard';
 
 @Controller('internship')
 export class InternshipController {
@@ -47,7 +48,7 @@ export class InternshipController {
   // apply for an internship, when the student applies for an internship, the student will be added to the internship and the jobApplicants table
   @Post(':id')
   @AllowRoles(['student'])
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   async applyInternship(
     @Req() req: Request,
     @Res() response: Response,
@@ -68,16 +69,14 @@ export class InternshipController {
         await this.jobApplicantsService.findJobApplicantsByCandidateId(
           decodedToken.id,
         );
+      const job = findJobApplicant.find((job) => job.job.id === id);
       let newJobApplicants;
-      if (findJobApplicant && findJobApplicant.length > 0) {
-        const job = findJobApplicant.find((job) => job.job.id === id);
-        if (job) {
-          newJobApplicants =
-            await this.jobApplicantsService.findJobApplicantsByJobIdAndCandidateId(
-              job.job.id,
-              student.id,
-            );
-        }
+      if (findJobApplicant && findJobApplicant.length > 0 && job) {
+        newJobApplicants =
+          await this.jobApplicantsService.findJobApplicantsByJobIdAndCandidateId(
+            job.job.id,
+            student.id,
+          );
       } else {
         // create a new jobApplicants
         const jobApplicants = new JobApplicants();
@@ -170,7 +169,7 @@ export class InternshipController {
   @Put(':id')
   @AllowRoles(['staff', 'company', 'student'])
   @UseInterceptors(FileFieldsInterceptor([{ name: 'document', maxCount: 1 }]))
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard, RolesGuard, AccessGuard)
   async update(
     @UploadedFiles()
     files: { document?: Express.Multer.File[] },

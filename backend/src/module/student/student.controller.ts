@@ -89,7 +89,7 @@ export class StudentController {
 
   // get all the student
   @Get()
-  @AllowRoles(['staff', 'company'])
+  @AllowRoles(['staff'])
   @UseGuards(JwtGuard, RolesGuard)
   async findAll(
     @Req() req: Request,
@@ -206,6 +206,8 @@ export class StudentController {
       { name: 'resume', maxCount: 1 },
     ]),
   )
+  @AllowRoles(['staff', 'student'])
+  @UseGuards(JwtGuard, RolesGuard)
   async update(
     @UploadedFiles()
     files: { avatar?: Express.Multer.File[]; resume?: Express.Multer.File[] },
