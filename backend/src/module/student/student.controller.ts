@@ -220,12 +220,6 @@ export class StudentController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
-      if (student.isActive && typeof student.isActive === 'string') {
-        student.isActive = student.isActive === 'true';
-      }
-      if (student.isVerify && typeof student.isVerify === 'string') {
-        student.isVerify = student.isVerify === 'true';
-      }
       const findStudent = await this.studentService.findOne(id);
       if (!findStudent) {
         return response

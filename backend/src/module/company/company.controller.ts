@@ -264,6 +264,7 @@ export class CompanyController {
         limitedData,
         expireTimeOneHour,
       );
+      await this.redisService.deleteObjectByKey(CompanyListKey);
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
       return response
@@ -287,9 +288,7 @@ export class CompanyController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
-      console.log(company);
       const updateCompany = await this.companyService.staffUpdate(id, company);
-      console.log(updateCompany);
       if (!updateCompany) {
         return response
           .status(HttpStatus.NOT_FOUND)
@@ -301,6 +300,7 @@ export class CompanyController {
         limitedData,
         expireTimeOneHour,
       );
+      await this.redisService.deleteObjectByKey(CompanyListKey);
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
       return response
