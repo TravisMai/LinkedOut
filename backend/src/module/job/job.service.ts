@@ -20,6 +20,8 @@ export class JobService {
         'company.address',
         'company.workField',
       ])
+      .where('company.isActive = :isActive', { isActive: true })
+      .andWhere('company.isVerify = :isVerify', { isVerify: true })
       .getMany();
 
     return jobs;
@@ -40,6 +42,8 @@ export class JobService {
         'company.workField',
       ])
       .where('job.id = :id', { id })
+      .andWhere('company.isActive = :isActive', { isActive: true })
+      .andWhere('company.isVerify = :isVerify', { isVerify: true })
       .getOne();
 
     return job;
