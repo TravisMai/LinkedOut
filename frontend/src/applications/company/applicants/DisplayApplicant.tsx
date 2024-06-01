@@ -65,7 +65,7 @@ export default function StudentProfile2() {
       ),
     onSuccess: (data) => {
       setApplicant(data.data);
-      setStatus(data.data.status);
+      setStatus(data.data?.status);
     },
   });
 

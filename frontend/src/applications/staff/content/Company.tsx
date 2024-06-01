@@ -69,7 +69,7 @@ export default function Company() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const queryClient = useQueryClient();
   const handleCloseDialog = () => {
-    queryClient.invalidateQueries("allcompany123");
+    queryClient.invalidateQueries("allCompany");
     setOpenDialog(false);
   };
 
@@ -122,7 +122,7 @@ export default function Company() {
                   {++index + itemsPerPage * currentPage}
                 </TableCell>
                 <TableCell align="center">
-                  <img 
+                  <img
                     src={
                       !row?.avatar?.includes("https://scontent")
                         ? row?.avatar
@@ -131,7 +131,7 @@ export default function Company() {
                     }
                     className="h-10 mx-auto" />
                 </TableCell>
-                <TableCell align="left">{row.name}</TableCell>
+                <TableCell align="left">{row.name} {!row.isVerify && " (Not verified)"} {!row.isActive && " (Disabled)"}</TableCell>
                 <TableCell align="left">{row.phoneNumber}</TableCell>
                 <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="left">

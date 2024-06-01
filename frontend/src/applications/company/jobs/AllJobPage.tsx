@@ -25,6 +25,24 @@ export function AllJobPage() {
 
   const token = getJwtToken();
 
+  const [isVerified, setIsVerified] = useState(false);
+
+  // Fetch company's info
+  useQuery({
+    queryKey: "currentInfo",
+    queryFn: () =>
+      axios.get("https://linkedout-hcmut.feedme.io.vn/api/v1/company/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    onSuccess: (data) => {
+      // Set company id
+      setIsVerified(data.data?.isVerify);
+    },
+  });
+
+
   // Fetch company's jobs
   useQuery({
     queryKey: "companyJobs",
@@ -98,6 +116,7 @@ export function AllJobPage() {
             color="success"
             sx={{}}
             href="/company/jobs/add"
+            disabled={!isVerified}
           >
             <Add />
             Add

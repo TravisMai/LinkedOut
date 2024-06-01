@@ -94,15 +94,15 @@ export default function UpdateSocialMedia({
         },
       ),
     onSuccess: (data) => {
-      setStudentId(data.data.id);
+      setStudentId(data.data?.id);
       const updatedFormData = {
         ...formData,
         socialMedia: {
-          github: data.data.socialMedia?.github ?? "",
-          linkedin: data.data.socialMedia?.linkedin ?? "",
-          google: data.data.socialMedia?.google ?? "",
-          facebook: data.data.socialMedia?.facebook ?? "",
-          twitter: data.data.socialMedia?.twitter ?? "",
+          github: data.data?.socialMedia?.github ?? "",
+          linkedin: data.data?.socialMedia?.linkedin ?? "",
+          google: data.data?.socialMedia?.google ?? "",
+          facebook: data.data?.socialMedia?.facebook ?? "",
+          twitter: data.data?.socialMedia?.twitter ?? "",
         },
       };
       setFormData(updatedFormData);

@@ -76,7 +76,7 @@ export default function UpdateResume({ onClose }: { onClose: () => void }) {
     onSuccess: (data) => {
       if (data.data) {
         // Set student id
-        setStudentId(data.data.id);
+        setStudentId(data.data?.id);
         // Set current resume
         setCurrentResume(data.data?.resume ?? []);
       }

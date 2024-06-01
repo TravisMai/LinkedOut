@@ -53,6 +53,8 @@ export default function ApplyDialog({
   // Fetch resumes
   const token = getJwtToken();
   const [currentResume, setCurrentResume] = useState<resumeType[]>([]); // State to store current resume
+  const [isActive, setIsActive] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
 
   useQuery({
     queryKey: "studentInfo2",
@@ -64,7 +66,9 @@ export default function ApplyDialog({
       }),
     onSuccess: (data) => {
       // Set current resumes
-      setCurrentResume(data.data.resume);
+      setCurrentResume(data.data?.resume);
+      setIsActive(data.data?.isActive);
+      setIsVerify(data.data?.isVerify);
       setResumeChoice(
         data.data?.resume?.[0]?.id ?? "You don't have any resume yet",
       );
@@ -185,13 +189,13 @@ export default function ApplyDialog({
                       fullWidth
                       type="submit"
                       variant="contained"
-                      // disabled={showSuccess}
+                      disabled={!isVerify || !isActive}
                       sx={{ mt: 2, mb: 2 }}
                     >
                       Apply
                     </LoadingButton>
                   </Box>
-                : <div className="mt-3"></div>}
+                  : <div className="mt-3"></div>}
                 {/* {showError && <Alert sx={{ mb: 2 }} severity="error">{mutation.error?.response.data.message}</Alert>}
                             {showSuccess && <Alert sx={{ mb: 2 }} severity="success">Update successfully. Back to main page...</Alert>} */}
               </Box>

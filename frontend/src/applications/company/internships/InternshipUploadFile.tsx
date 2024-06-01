@@ -80,7 +80,7 @@ export default function UploadFile({
       }),
     onSuccess: (data) => {
       // Set current document
-      setCurrentDocuments(data.data.document);
+      setCurrentDocuments(data.data?.document);
       // Remove document with name "Internship report"
       setCurrentDocuments((prevData) =>
         prevData?.filter((item) => item.name !== "Internship report")

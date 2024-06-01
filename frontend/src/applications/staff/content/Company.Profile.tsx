@@ -1,10 +1,12 @@
-import { Card, CardContent, Container, Grid, List, Pagination, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Chip, Container, Grid, List, Pagination, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { getJwtToken } from "../../../shared/utils/authUtils";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import DefaultAvatar from "@/shared/assets/default-image.jpeg";
+import { Check } from "@mui/icons-material";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 
 export default function CompanyProfile({
@@ -84,6 +86,58 @@ export default function CompanyProfile({
     setIsVisible(!isVisible);
   };
 
+  // Handle verify
+  const [verifyData] = useState({
+    isVerify: company.isVerify,
+  });
+  const handleVerify = () => {
+    mutationVerify.mutate();
+  };
+  const mutationVerify = useMutation<ResponseType, ErrorType>({
+    mutationFn: () =>
+      axios.put(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/company/staff/${company.id}`,
+        { isVerify: !verifyData.isVerify },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ),
+    onSuccess: () => {
+      handleClose();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  // Handle disable
+  const [disableData] = useState({
+    isActive: company.isActive,
+  });
+  const handleDisable = () => {
+    mutationDisable.mutate();
+  };
+  const mutationDisable = useMutation<ResponseType, ErrorType>({
+    mutationFn: () =>
+      axios.put(
+        `https://linkedout-hcmut.feedme.io.vn/api/v1/company/staff/${company.id}`,
+        { isActive: !disableData.isActive },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ),
+    onSuccess: () => {
+      handleClose();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   return (
     <Grid container>
       <Grid item xs={8}>
@@ -120,6 +174,24 @@ export default function CompanyProfile({
               }
               className=" w-full rounded-xl mx-auto  border-2 border-blue-300"
             />
+            {company?.isVerify ? (
+              <Chip color="success" icon={<Check />} label="Verified" />
+            ) : (
+              <Chip
+                color="warning"
+                icon={<ExclamationCircleOutlined />}
+                label="Not Verified"
+              />
+            )}
+            {company?.isActive ? (
+              <Chip color="primary" icon={<Check />} label="Active" />
+            ) : (
+              <Chip
+                color="error"
+                icon={<ExclamationCircleOutlined />}
+                label="Deactivated"
+              />
+            )}
           </Container>
 
           <Typography variant="body1" className="pl-5">
@@ -147,16 +219,39 @@ export default function CompanyProfile({
           <Typography variant="body1" className="pl-5">
             Tax ID: <span className="font-bold">{company?.taxId} </span>
           </Typography>
-
-          <Container
-            disableGutters={true}
-            sx={{
-              alignContent: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          ></Container>
+          {!company.isVerify && (
+            <LoadingButton
+              variant="contained"
+              color="success"
+              sx={{ width: "inherit", marginX: "auto" }}
+              onClick={handleVerify}
+            >
+              Verify
+            </LoadingButton>
+          )}
+          {!company.isActive ? (
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              sx={{ width: "inherit", marginX: "auto" }}
+              onClick={() => {
+                handleDisable();
+              }}
+            >
+              Re-enable account
+            </LoadingButton>
+          ) : (
+            <LoadingButton
+              variant="contained"
+              color="secondary"
+              sx={{ width: "inherit", marginX: "auto" }}
+              onClick={() => {
+                handleDisable();
+              }}
+            >
+              Disable
+            </LoadingButton>
+          )}
           <LoadingButton
             variant="contained"
             color="error"

@@ -14,6 +14,9 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import MenuItem from "@mui/material/MenuItem";
 import InputAdornment from "@mui/material/InputAdornment";
 import { getJwtToken } from "../../shared/utils/authUtils";
+import { Chip } from "@mui/material";
+import { Check } from "@mui/icons-material";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -76,6 +79,8 @@ export default function UpdateProfile() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [companyId, setCompanyId] = useState("");
+  const [companyStatus, setCompanyStatus] = useState(false);
+
 
   const [country, countryChange] = useState(0);
   const [formData, setFormData] = useState({
@@ -106,7 +111,8 @@ export default function UpdateProfile() {
         },
       ),
     onSuccess: (data) => {
-      setCompanyId(data.data.id);
+      setCompanyId(data.data?.id);
+      setCompanyStatus(data.data?.isVerify);
       const updatedFormData = {
         ...formData,
         name: data.data?.name,
@@ -163,7 +169,7 @@ export default function UpdateProfile() {
   const mutation = useMutation<ResponseType, ErrorType, updateForm>({
     mutationFn: () => {
       const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
+      Object.entries(formData)?.forEach(([key, value]) => {
         if (value !== null) {
           if (key === "myfile") {
             formDataToSend.append(key, value as File); // Append file to FormData
@@ -241,6 +247,15 @@ export default function UpdateProfile() {
             <Typography component="h1" variant="h5">
               UPDATE INFORMATION
             </Typography>
+            {companyStatus ? (
+              <Chip color="success" icon={<Check />} label="Verified" />
+            ) : (
+              <Chip
+                color="warning"
+                icon={<ExclamationCircleOutlined />}
+                label="Not Verified"
+              />
+            )}
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>

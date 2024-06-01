@@ -65,7 +65,7 @@ export default function UpdateObjective({ onClose }: { onClose: () => void }) {
         },
       ),
     onSuccess: (data) => {
-      setStudentId(data.data.id);
+      setStudentId(data.data?.id);
       const updatedFormData = {
         objective: data.data?.objective ?? "",
       };

@@ -163,16 +163,18 @@ export default function StudentProfile() {
             >
               Change photo
             </Button>
-            {studentData?.isVerify ? (
-              <Chip color="success" icon={<Check />} label="Verified" />
-            ) : (
-              <Chip
-                color="warning"
-                icon={<ExclamationCircleOutlined />}
-                label="Not Verified"
-              />
-            )}
-            {/* <Chip color="success" icon={<Check />} label="Verified" /> */}
+
+            {/* Deactivated -> Not verified -> Verified (Received) -> Enrolled -> Intern  */}
+            {!studentData?.isActive ?
+              (<Chip color="error" icon={<ExclamationCircleOutlined />} label="Deactivated" />)
+              : !studentData?.isVerify ?
+                (<Chip color="warning" icon={<ExclamationCircleOutlined />} label="Not Verified" />)
+                : studentData?.process === "Intern" ?
+                  (<Chip color="success" icon={<Check />} label="Intern" />)
+                  : studentData?.process === "Registered" ?
+                    (<Chip color="primary" icon={<Check />} label="Enrolled" />)
+                    : (<Chip color="primary" icon={<Check />} label="Verified" />)
+            }
           </Container>
 
           <Typography variant="body2" className="pl-5">

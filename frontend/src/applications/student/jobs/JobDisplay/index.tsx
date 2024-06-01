@@ -193,7 +193,7 @@ const JobDisplay: React.FC = () => {
         )
         .then((response) => {
           if (response.data && response.data?.length > 0) {
-            response.data.forEach((job: jobApplicationType) => {
+            response.data?.forEach((job: jobApplicationType) => {
               if (job.job.id === jobId) {
                 setApplied(true);
                 setStatus(job.status);
@@ -222,7 +222,7 @@ const JobDisplay: React.FC = () => {
         )
         .then((response) => {
           if (response.data && response.data?.length > 0) {
-            response.data.forEach((intern: internshipType) => {
+            response.data?.forEach((intern: internshipType) => {
               if (intern.jobApplicants.job.id === jobId) {
                 setThisIntern(intern);
                 setAppliedIntern(true);
@@ -305,7 +305,7 @@ const JobDisplay: React.FC = () => {
                     color={showError ? "error" : "primary"}
                     onClick={handleClickApply}
                     loading={loading}
-                    disabled={!studentData?.isVerify}
+                    disabled={!studentData?.isVerify || !studentData?.isActive}
                     type="button"
                   >
                     {!applied && !showError ? (
@@ -329,7 +329,7 @@ const JobDisplay: React.FC = () => {
                       color="success"
                       onClick={handleClickApplyInternship}
                       loading={loading}
-                      disabled={!studentData?.isVerify}
+                      disabled={!studentData?.isVerify || !studentData?.isActive}
                     >
                       {!appliedIntern && !showError ? (
                         "Apply Intern"
