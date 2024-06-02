@@ -42,6 +42,8 @@ export class AppService {
       .where('public.unaccent(company.name) ILIKE :keyword', {
         keyword: `%${keyword}%`,
       })
+      .andWhere('company.isVerify = true')
+      .andWhere('company.isActive = true')
       .getRawMany();
   }
 
@@ -55,9 +57,12 @@ export class AppService {
         'job.created AS created',
         'job.updated AS updated',
       ])
+      .innerJoin('job.company', 'company')
       .where('public.unaccent(job.title) ILIKE :keyword', {
         keyword: `%${keyword}%`,
       })
+      .andWhere('company.isVerify = true')
+      .andWhere('company.isActive = true')
       .getRawMany();
   }
 

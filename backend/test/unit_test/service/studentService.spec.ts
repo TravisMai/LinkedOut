@@ -99,6 +99,25 @@ describe('StudentService', () => {
       isVerify: false,
       isActive: false,
       resume: [],
+      process: '',
+      gpa: 0,
+      year: 0,
+      major: '',
+      classCode: '',
+      socialMedia: {
+        github: '',
+        linkedin: '',
+        google: '',
+        facebook: '',
+        twitter: ''
+      },
+      objective: '',
+      education: [],
+      workingHistory: [],
+      certificate: [],
+      skill: [],
+      additionalInformation: [],
+      reference: []
     };
 
     jest

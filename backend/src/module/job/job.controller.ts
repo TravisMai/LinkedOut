@@ -187,24 +187,18 @@ export class JobController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
-      const cachedData = await this.redisService.getObjectByKey(`JOB:${id}`);
-      if (cachedData) {
-        return response.status(HttpStatus.OK).json(cachedData);
-      } else {
-        const job = await this.jobService.findOne(id);
-        if (!job) {
-          return response
-            .status(HttpStatus.NOT_FOUND)
-            .json({ message: 'Job not found!' });
-        }
-        // const limitedData = JobResponseDto.fromJob(job);
-        await this.redisService.setObjectByKeyValue(
-          `JOB:${id}`,
-          job,
-          expireTimeOneHour,
-        );
-        return response.status(HttpStatus.OK).json(job);
+      const job = await this.jobService.findOne(id);
+      if (!job) {
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Job not found!' });
       }
+      await this.redisService.setObjectByKeyValue(
+        `JOB:${id}`,
+        job,
+        expireTimeOneHour,
+      );
+      return response.status(HttpStatus.OK).json(job);
     } catch (error) {
       return response
         .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)

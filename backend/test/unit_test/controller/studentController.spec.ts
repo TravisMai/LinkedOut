@@ -94,6 +94,25 @@ describe('StudentController', () => {
       { id: '2', title: 'title2', url: 'resumeUrl2' },
     ],
     resumeObjective: 'objective',
+    process: '',
+    gpa: 0,
+    year: 0,
+    major: '',
+    classCode: '',
+    socialMedia: {
+      github: '',
+      linkedin: '',
+      google: '',
+      facebook: '',
+      twitter: ''
+    },
+    objective: '',
+    education: [],
+    workingHistory: [],
+    certificate: [],
+    skill: [],
+    additionalInformation: [],
+    reference: []
   };
 
   beforeEach(() => {

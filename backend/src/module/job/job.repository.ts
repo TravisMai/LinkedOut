@@ -47,8 +47,6 @@ export class JobRepository extends Repository<Job> {
     return await this.createQueryBuilder('job')
       .innerJoin('job.company', 'company')
       .where('company.id = :companyId', { companyId })
-      .andWhere('company.isActive = :isActive', { isActive: true })
-      .andWhere('company.isVerify = :isVerify', { isVerify: true })
       .getMany();
   }
 }

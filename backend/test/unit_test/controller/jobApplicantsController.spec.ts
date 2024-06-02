@@ -109,6 +109,7 @@ describe('JobApplicantsController', () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      findOneIncludeDeactiveAccount: jest.fn(),
     };
     const mockJobApplicantsService: Partial<JobApplicantsService> = {
       findJobApplicantsByCandidateId: jest.fn(),
@@ -250,7 +251,7 @@ describe('JobApplicantsController', () => {
       } as any;
       const job = new Job();
 
-      jest.spyOn(jobService, 'findOne').mockResolvedValue(job);
+      jest.spyOn(jobService, 'findOneIncludeDeactiveAccount').mockResolvedValue(job);
       jest
         .spyOn(jobApplicantsService, 'findJobApplicantsByJobId')
         .mockResolvedValue([job_applicants]);
@@ -268,7 +269,7 @@ describe('JobApplicantsController', () => {
         json: jest.fn(),
       } as any;
 
-      jest.spyOn(jobService, 'findOne').mockResolvedValue(null);
+      jest.spyOn(jobService, 'findOneIncludeDeactiveAccount').mockResolvedValue(null);
 
       await controller.findAllCandidateByJobId(req, res, 'job-id');
 
@@ -284,7 +285,7 @@ describe('JobApplicantsController', () => {
       } as any;
       const job = new Job();
 
-      jest.spyOn(jobService, 'findOne').mockResolvedValue(job);
+      jest.spyOn(jobService, 'findOneIncludeDeactiveAccount').mockResolvedValue(job);
       jest
         .spyOn(jobApplicantsService, 'findJobApplicantsByJobId')
         .mockResolvedValue([]);
@@ -305,7 +306,7 @@ describe('JobApplicantsController', () => {
       } as any;
       const job = new Job();
 
-      jest.spyOn(jobService, 'findOne').mockResolvedValue(job);
+      jest.spyOn(jobService, 'findOneIncludeDeactiveAccount').mockResolvedValue(job);
       jest
         .spyOn(jobApplicantsService, 'findJobApplicantsByJobId')
         .mockRejectedValue(new Error('Unexpected error'));
