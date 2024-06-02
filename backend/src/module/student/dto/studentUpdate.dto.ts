@@ -16,6 +16,24 @@ import { EducationDTO } from './education.dto';
 import { ReferenceDTO } from './reference.dto';
 import { SkillDTO } from './skill.dto';
 import { WorkingHistoryDTO } from './workingHistory.dto';
+import { TransformJson } from 'src/common/decorators/toJson.decorator';
+
+class SocialMedia {
+  @IsString()
+  github: string;
+
+  @IsString()
+  linkedin: string;
+
+  @IsString()
+  google: string;
+
+  @IsString()
+  facebook: string;
+
+  @IsString()
+  twitter: string;
+}
 
 export class StudentUpdateDto {
   @IsString()
@@ -86,14 +104,9 @@ export class StudentUpdateDto {
   @IsOptional()
   classCode: string;
 
-  @ValidateNested()
-  socialMedia: {
-    github: string;
-    linkedin: string;
-    google: string;
-    facebook: string;
-    twitter: string;
-  };
+  @TransformJson()
+  @IsOptional()
+  socialMedia: SocialMedia;
 
   @IsString()
   @IsOptional()
