@@ -305,7 +305,7 @@ const JobDisplay: React.FC = () => {
                     color={showError ? "error" : "primary"}
                     onClick={handleClickApply}
                     loading={loading}
-                    disabled={!studentData?.isVerify || !studentData?.isActive}
+                    disabled={!studentData?.isVerify || !studentData?.isActive || !job?.company?.isVerify || !job?.company?.isActive}
                     type="button"
                   >
                     {!applied && !showError ? (
@@ -329,7 +329,7 @@ const JobDisplay: React.FC = () => {
                       color="success"
                       onClick={handleClickApplyInternship}
                       loading={loading}
-                      disabled={!studentData?.isVerify || !studentData?.isActive}
+                      disabled={!studentData?.isVerify || !studentData?.isActive || !job?.company?.isVerify || !job?.company?.isActive}
                     >
                       {!appliedIntern && !showError ? (
                         "Apply Intern"
@@ -541,7 +541,7 @@ const JobDisplay: React.FC = () => {
               alt="company avatar"
             />
           </Link>
-          <Typography variant="h6">{job?.company.name}</Typography>
+          <Typography variant="h6">{job?.company.name} {!job?.company?.isVerify && " (Not verified) "} {!job?.company?.isActive && " (Deactivated) "}</Typography>
 
           <List>
             <Typography variant="h6">Work Field</Typography>

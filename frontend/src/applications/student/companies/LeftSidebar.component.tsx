@@ -103,7 +103,7 @@ const LeftSidebar: React.FC = () => {
                     }
                     alt="user"
                   />
-                  <p className="text-sm font-semibold">{row.name}</p>
+                  <p className="text-sm font-semibold">{row.name} {!row?.isActive && " (Deactivated) "} {!row?.isVerify && " (Not verified) "} </p>
                 </li>
               </Link>
             ))

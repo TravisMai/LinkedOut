@@ -26,6 +26,7 @@ export function AllJobPage() {
   const token = getJwtToken();
 
   const [isVerified, setIsVerified] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   // Fetch company's info
   useQuery({
@@ -39,6 +40,7 @@ export function AllJobPage() {
     onSuccess: (data) => {
       // Set company id
       setIsVerified(data.data?.isVerify);
+      setIsActive(data.data?.isActive);
     },
   });
 
@@ -116,7 +118,7 @@ export function AllJobPage() {
             color="success"
             sx={{}}
             href="/company/jobs/add"
-            disabled={!isVerified}
+            disabled={!isVerified || !isActive}
           >
             <Add />
             Add

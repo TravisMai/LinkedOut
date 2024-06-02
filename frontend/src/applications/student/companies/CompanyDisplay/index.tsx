@@ -83,7 +83,7 @@ const CompanyDisplay: React.FC = () => {
                 alt="company avatar"
               />
               <Typography variant="h4" className="my-auto">
-                {company?.name} {!company?.isVerify && " (Not verified)"} {!company?.isActive && " (Disabled)"}
+                {company?.name} {!company?.isVerify && " (Not verified)"} {!company?.isActive && " (Deactivated)"}
               </Typography>
             </Box>
           </Grid>
