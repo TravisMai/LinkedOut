@@ -51,6 +51,7 @@ describe('JobController', () => {
       delete: jest.fn(),
       findAllByCompanyId: jest.fn(),
       findJobsWithCriteria: jest.fn(),
+      findOneIncludeDeactiveAccount: jest.fn(),
     };
     const mockCompanyService: Partial<CompanyService> = {
       findAll: jest.fn(),
@@ -206,7 +207,7 @@ describe('JobController', () => {
 
       (validate as unknown as jest.Mock).mockReturnValue(true);
       jest.spyOn(redisService, 'getObjectByKey').mockResolvedValue(null);
-      jest.spyOn(jobService, 'findOne').mockResolvedValue(job);
+      jest.spyOn(jobService, 'findOneIncludeDeactiveAccount').mockResolvedValue(job);
       jest.spyOn(redisService, 'setObjectByKeyValue').mockResolvedValue(null);
 
       await controller.findOne(id, res as any);
@@ -221,7 +222,7 @@ describe('JobController', () => {
       const id = 'valid-uuid';
 
       jest.spyOn(redisService, 'getObjectByKey').mockResolvedValue(null);
-      jest.spyOn(jobService, 'findOne').mockResolvedValue(null);
+      jest.spyOn(jobService, 'findOneIncludeDeactiveAccount').mockResolvedValue(null);
 
       await controller.findOne(id, res as any);
 
@@ -234,7 +235,7 @@ describe('JobController', () => {
       const id = 'valid-uuid';
 
       jest
-        .spyOn(jobService, 'findOne')
+        .spyOn(jobService, 'findOneIncludeDeactiveAccount')
         .mockRejectedValue(new Error('Test error'));
 
       await controller.findOne(id, res as any);

@@ -187,7 +187,7 @@ export class JobController {
           .status(HttpStatus.BAD_REQUEST)
           .json({ message: 'Invalid UUID format' });
       }
-      const job = await this.jobService.findOne(id);
+      const job = await this.jobService.findOneIncludeDeactiveAccount(id);
       if (!job) {
         return response
           .status(HttpStatus.NOT_FOUND)
