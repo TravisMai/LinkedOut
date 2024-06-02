@@ -139,7 +139,7 @@ export default function CompanyProfile({
   });
 
   return (
-    <Grid container>
+    <Grid container sx={{width: 600}}>
       <Grid item xs={8}>
         <Container
           disableGutters={true}
@@ -320,9 +320,10 @@ export default function CompanyProfile({
               </List>
 
             </>
-          ) : (
-            <Typography>No posted job</Typography>
-          )}
+          ) :
+            (
+                <Typography>No job to display</Typography>
+            )}
         </Container>
       </Grid>
     </Grid>
