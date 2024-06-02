@@ -13,6 +13,7 @@ import { CompanyResponseDto } from 'src/module/company/dto/companyResponse.dto';
 import validate = require('uuid-validate');
 import { CompanyUpdateDto } from 'src/module/company/dto/companyUpdate.dto';
 import { CompanyRepository } from 'src/module/company/company.repository';
+import { StaffUpdateCompanyDto } from 'src/module/company/dto/staffUpdateCompany.dto';
 
 jest.mock('uuid-validate');
 jest.mock('bcrypt');
@@ -65,6 +66,7 @@ describe('CompanyController', () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      staffUpdate: jest.fn(),
     };
     const mockAzureBlobService: Partial<AzureBlobService> = {
       upload: jest.fn(),
@@ -729,6 +731,136 @@ describe('CompanyController', () => {
         companyId,
         companyUpdateData,
         req as any,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Invalid UUID format' });
+    });
+  });
+
+  describe('staffUpdateCompany', () => {
+    it('should update the status of company', async () => {
+      const staffUpdateCompanyData = {
+        isActive: true,
+        isVerify: true,
+      } as unknown as StaffUpdateCompanyDto;
+
+      const companyId = 'company-id';
+      const existingCompany = new Company();
+      const updatedCompany = {
+        ...existingCompany,
+        ...staffUpdateCompanyData,
+      };
+      const companyResponse = CompanyResponseDto.fromCompany(updatedCompany);
+
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(true);
+      jest.spyOn(companyService, 'staffUpdate').mockResolvedValue(updatedCompany);
+      jest
+        .spyOn(redisService, 'deleteObjectByKey')
+        .mockResolvedValue(undefined);
+
+      await controller.staffUpdateCompany(
+        companyId,
+        staffUpdateCompanyData,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith(companyResponse);
+    });
+
+    it('should throw error if unexpected error occur', async () => {
+      const staffUpdateCompanyData = {
+        isActive: true,
+        isVerify: true,
+      } as unknown as StaffUpdateCompanyDto;
+
+      const companyId = 'company-id';
+      const existingCompany = new Company();
+      const updatedCompany = {
+        ...existingCompany,
+        ...staffUpdateCompanyData,
+      };
+      const companyResponse = CompanyResponseDto.fromCompany(updatedCompany);
+
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(true);
+      jest.spyOn(companyService, 'staffUpdate').mockResolvedValue(updatedCompany);
+      jest
+        .spyOn(redisService, 'deleteObjectByKey')
+        .mockRejectedValue(new Error('Test error'));
+
+      await controller.staffUpdateCompany(
+        companyId,
+        staffUpdateCompanyData,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Test error' });
+    });
+
+    it('should throw error if no company found', async () => {
+      const staffUpdateCompanyData = {
+        isActive: true,
+        isVerify: true,
+      } as unknown as StaffUpdateCompanyDto;
+
+      const companyId = 'company-id';
+      const existingCompany = new Company();
+      const updatedCompany = {
+        ...existingCompany,
+        ...staffUpdateCompanyData,
+      };
+      const companyResponse = CompanyResponseDto.fromCompany(updatedCompany);
+
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(true);
+      jest.spyOn(companyService, 'staffUpdate').mockResolvedValue(null);
+      jest
+        .spyOn(redisService, 'deleteObjectByKey')
+        .mockResolvedValue(undefined);
+
+      await controller.staffUpdateCompany(
+        companyId,
+        staffUpdateCompanyData,
+        res as any,
+      );
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Company not found!' });
+    });
+
+    it('should throw error if uuid is invalid', async () => {
+      const staffUpdateCompanyData = {
+        isActive: true,
+        isVerify: true,
+      } as unknown as StaffUpdateCompanyDto;
+
+      const companyId = 'company-id';
+      const existingCompany = new Company();
+      const updatedCompany = {
+        ...existingCompany,
+        ...staffUpdateCompanyData,
+      };
+      const companyResponse = CompanyResponseDto.fromCompany(updatedCompany);
+
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      (validate as unknown as jest.Mock).mockReturnValue(false);
+      jest.spyOn(companyService, 'staffUpdate').mockResolvedValue(null);
+      jest
+        .spyOn(redisService, 'deleteObjectByKey')
+        .mockResolvedValue(undefined);
+
+      await controller.staffUpdateCompany(
+        companyId,
+        staffUpdateCompanyData,
         res as any,
       );
 

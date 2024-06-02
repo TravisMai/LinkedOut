@@ -216,19 +216,6 @@ describe('JobController', () => {
       expect(redisService.setObjectByKeyValue).toHaveBeenCalled();
     });
 
-    it('should return cached job by id', async () => {
-      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-      const cachedJob = { id: 'valid-uuid', title: 'Test Job' };
-      const id = 'valid-uuid';
-
-      jest.spyOn(redisService, 'getObjectByKey').mockResolvedValue(cachedJob);
-
-      await controller.findOne(id, res as any);
-
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
-      expect(res.json).toHaveBeenCalledWith(cachedJob);
-    });
-
     it('should return 404 if job not found', async () => {
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
       const id = 'valid-uuid';
@@ -247,7 +234,7 @@ describe('JobController', () => {
       const id = 'valid-uuid';
 
       jest
-        .spyOn(redisService, 'getObjectByKey')
+        .spyOn(jobService, 'findOne')
         .mockRejectedValue(new Error('Test error'));
 
       await controller.findOne(id, res as any);

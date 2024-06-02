@@ -59,11 +59,14 @@ describe('AppService', () => {
     jest.spyOn(companyRepo, 'createQueryBuilder').mockReturnValue({
       select: jest.fn().mockReturnThis(),
       where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
       getRawMany: jest.fn().mockResolvedValue(companyResults),
     } as any);
     jest.spyOn(jobRepo, 'createQueryBuilder').mockReturnValue({
       select: jest.fn().mockReturnThis(),
       where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
+      innerJoin: jest.fn().mockReturnThis(),
       getRawMany: jest.fn().mockResolvedValue(jobResults),
     } as any);
     jest.spyOn(studentRepo, 'createQueryBuilder').mockReturnValue({
