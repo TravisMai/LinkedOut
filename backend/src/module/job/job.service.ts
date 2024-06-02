@@ -19,6 +19,8 @@ export class JobService {
         'company.avatar',
         'company.address',
         'company.workField',
+        'company.isActive',
+        'company.isVerify',
       ])
       .where('company.isActive = :isActive', { isActive: true })
       .andWhere('company.isVerify = :isVerify', { isVerify: true })
@@ -27,7 +29,7 @@ export class JobService {
     return jobs;
   }
 
-  // get a job by id
+  // get a job by id when its company is not deactivated
   async findOne(id: string): Promise<Job> {
     const job = await this.jobRepository
       .createQueryBuilder('job')
@@ -40,10 +42,34 @@ export class JobService {
         'company.avatar',
         'company.address',
         'company.workField',
+        'company.isActive',
+        'company.isVerify',
       ])
       .where('job.id = :id', { id })
       .andWhere('company.isActive = :isActive', { isActive: true })
       .andWhere('company.isVerify = :isVerify', { isVerify: true })
+      .getOne();
+
+    return job;
+  }
+
+  // get a job by id dont care if its company is not deactivated
+  async findOneIncludeDeactiveAccount(id: string): Promise<Job> {
+    const job = await this.jobRepository
+      .createQueryBuilder('job')
+      .leftJoinAndSelect('job.company', 'company')
+      .select([
+        'job',
+        'company.id',
+        'company.name',
+        'company.email',
+        'company.avatar',
+        'company.address',
+        'company.workField',
+        'company.isActive',
+        'company.isVerify',
+      ])
+      .where('job.id = :id', { id })
       .getOne();
 
     return job;

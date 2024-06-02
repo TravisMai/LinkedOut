@@ -16,6 +16,7 @@ import {
   expireTimeOneDay,
   expireTimeOneHour,
   CompanyListKey,
+  JobListKey,
 } from 'src/common/variables/constVariable';
 import {
   Controller,
@@ -301,6 +302,8 @@ export class CompanyController {
         expireTimeOneHour,
       );
       await this.redisService.deleteObjectByKey(CompanyListKey);
+      await this.redisService.deleteObjectByKey(`COMPANY:${id}`);
+      await this.redisService.deleteObjectByKey(JobListKey);
       return response.status(HttpStatus.OK).json(limitedData);
     } catch (error) {
       return response
